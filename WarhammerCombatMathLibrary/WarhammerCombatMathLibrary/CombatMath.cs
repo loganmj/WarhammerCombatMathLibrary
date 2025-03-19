@@ -259,6 +259,28 @@ namespace WarhammerCombatMathLibrary
             return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
         }
 
+        /// <summary>
+        /// Gets the average amount of damage done after all rolls have been completed.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        public static int GetMeanDamage(AttackerDTO attacker, DefenderDTO defender) 
+        {
+            return (int)Math.Truncate(GetMeanFailedSaves(attacker, defender) * attacker.WeaponDamage);
+        }
+
+        /// <summary>
+        /// Gets the standard deviation of damage done after all rolls have been completed.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        public static double GetStandardDeviationDamage(AttackerDTO attacker, DefenderDTO defender)
+        {
+            return GetStandardDeviationFailedSaves(attacker, defender) * attacker.WeaponDamage;
+        }
+
         #endregion
     }
 }
