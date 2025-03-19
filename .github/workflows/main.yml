@@ -30,14 +30,6 @@ jobs:
         
       - name: Run tests
         run: dotnet test ./WarhammerCombatMathLibrary/UnitTests/UnitTests.csproj --no-restore --verbosity normal
-        
-      - name: Test Report
-        uses: dorny/test-reporter@v1
-        if: success() || failure()
-        with:
-            name: MSTest Results
-            path: '**./WarhammerCombatMathLibrary/TestResults/*.trx'
-            reporter: dotnet-trx
 
       - name: Pack NuGet package
         run: dotnet pack --configuration Release --no-build --output ./nupkg ./WarhammerCombatMathLibrary/WarhammerCombatMathLibrary/WarhammerCombatMathLibrary.csproj
