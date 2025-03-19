@@ -21,13 +21,13 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore ./WarhammerCombatMathLibrary/WarhammerCombatMathLibrary.sln
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build --configuration Release --no-restore ./WarhammerCombatMathLibrary/WarhammerCombatMathLibrary.sln
 
       - name: Pack NuGet package
-        run: dotnet pack --configuration Release --no-build --output ./nupkg
+        run: dotnet pack --configuration Release --no-build --output ./nupkg ./WarhammerCombatMathLibrary/WarhammerCombatMathLibrary.csproj
 
       - name: Publish NuGet package
         env:
