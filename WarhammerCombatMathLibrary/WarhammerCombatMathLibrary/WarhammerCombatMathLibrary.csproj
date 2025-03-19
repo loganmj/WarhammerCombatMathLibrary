@@ -5,11 +5,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>WarhammerCombatMathLibrary</PackageId>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Authors>Michael Logan</Authors>
     <Description>A set of library files used for calculating combat math for Warhammer 40k.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/loganmj/WarhammerCombatMathLibrary</RepositoryUrl>
   </PropertyGroup>
    
   <ItemGroup>
