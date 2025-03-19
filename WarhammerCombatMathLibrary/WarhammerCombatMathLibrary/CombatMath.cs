@@ -13,7 +13,7 @@ namespace WarhammerCombatMathLibrary
         /// The number of possible results of rolling a six-sided die.
         /// </summary>
         private const int POSSIBLE_RESULTS_SIX_SIDED_DIE = 6;
-        
+
         #endregion
 
         #region Private Methods
@@ -126,6 +126,16 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Gets the discrete expected number of successful hit rolls, based on the average probability.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static int GetExpectedHits(AttackerDTO attacker)
+        {
+            return (int)Math.Floor(GetMeanHits(attacker));
+        }
+
+        /// <summary>
         /// Returns the standard deviation of the attacker's hit roll distribution.
         /// </summary>
         /// <param name="attacker"></param>
@@ -133,6 +143,18 @@ namespace WarhammerCombatMathLibrary
         public static double GetStandardDeviationHits(AttackerDTO attacker)
         {
             return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
+        }
+
+        /// <summary>
+        /// Returns the lower and upper range for expected successful hits.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns>A Tuple containing the lower and upper range values. Item1 is the lower bound, Item2 is the upper bound.</returns>
+        public static Tuple<int, int> GetExpectedRangeHits(AttackerDTO attacker)
+        {
+            var lowerBound = GetExpectedHits(attacker) - (int)Math.Floor(GetStandardDeviationHits(attacker));
+            var upperBound = GetExpectedHits(attacker) + (int)Math.Floor(GetStandardDeviationHits(attacker));
+            return Tuple.Create(lowerBound, upperBound);
         }
 
         /// <summary>
@@ -167,6 +189,16 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Gets the discrete expected number of successful wound rolls, based on the average probability.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static int GetExpectedWounds(AttackerDTO attacker, DefenderDTO defender)
+        {
+            return (int)Math.Floor(GetMeanWounds(attacker, defender));
+        }
+
+        /// <summary>
         /// Returns the standard deviation of the attacker's wound roll distribution.
         /// </summary>
         /// <param name="attacker"></param>
@@ -175,6 +207,19 @@ namespace WarhammerCombatMathLibrary
         public static double GetStandardDeviationWounds(AttackerDTO attacker, DefenderDTO defender)
         {
             return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
+        }
+
+        /// <summary>
+        /// Returns the lower and upper range for expected successful wounds.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns>A Tuple containing the lower and upper range values. Item1 is the lower bound, Item2 is the upper bound.</returns>
+        public static Tuple<int, int> GetExpectedRangeWounds(AttackerDTO attacker, DefenderDTO defender)
+        {
+            var expectedDeviation = (int)Math.Floor(GetStandardDeviationWounds(attacker, defender));
+            var lowerBound = GetExpectedWounds(attacker, defender) - expectedDeviation;
+            var upperBound = GetExpectedWounds(attacker, defender) + expectedDeviation;
+            return Tuple.Create(lowerBound, upperBound);
         }
 
         /// <summary>
@@ -194,7 +239,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static int GetAdjustedArmorSave(AttackerDTO attacker, DefenderDTO defender) 
+        public static int GetAdjustedArmorSave(AttackerDTO attacker, DefenderDTO defender)
         {
             // If the defender has an invulnerable save, and the invulnerable save is lower than the regular save after applying armor pierce,
             // then use the invulnerable save.
@@ -238,6 +283,16 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Gets the discrete expected number of failed save rolls, based on the average probability.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static int GetExpectedFailedSaves(AttackerDTO attacker, DefenderDTO defender)
+        {
+            return (int)Math.Floor(GetMeanFailedSaves(attacker, defender));
+        }
+
+        /// <summary>
         /// Returns the standard deviation of the failed save roll distribution.
         /// </summary>
         /// <param name="attacker"></param>
@@ -246,6 +301,19 @@ namespace WarhammerCombatMathLibrary
         public static double GetStandardDeviationFailedSaves(AttackerDTO attacker, DefenderDTO defender)
         {
             return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
+        }
+
+        /// <summary>
+        /// Returns the lower and upper range for expected failed saves.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns>A Tuple containing the lower and upper range values. Item1 is the lower bound, Item2 is the upper bound.</returns>
+        public static Tuple<int, int> GetExpectedRangeFailedSaves(AttackerDTO attacker, DefenderDTO defender)
+        {
+            var expectedDeviation = (int)Math.Floor(GetStandardDeviationFailedSaves(attacker, defender));
+            var lowerBound = GetExpectedFailedSaves(attacker, defender) - expectedDeviation;
+            var upperBound = GetExpectedFailedSaves(attacker, defender) + expectedDeviation;
+            return Tuple.Create(lowerBound, upperBound);
         }
 
         /// <summary>
@@ -265,9 +333,19 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static int GetMeanDamage(AttackerDTO attacker, DefenderDTO defender) 
+        public static double GetMeanDamage(AttackerDTO attacker, DefenderDTO defender)
         {
-            return (int)Math.Truncate(GetMeanFailedSaves(attacker, defender) * attacker.WeaponDamage);
+            return GetMeanFailedSaves(attacker, defender) * attacker.WeaponDamage;
+        }
+
+        /// <summary>
+        /// Gets the discrete expected total amount of damage, based on the average probability and the amount of damage per attack.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static int GetExpectedDamage(AttackerDTO attacker, DefenderDTO defender)
+        {
+            return (int)Math.Floor(GetMeanDamage(attacker, defender));
         }
 
         /// <summary>
@@ -279,6 +357,19 @@ namespace WarhammerCombatMathLibrary
         public static double GetStandardDeviationDamage(AttackerDTO attacker, DefenderDTO defender)
         {
             return GetStandardDeviationFailedSaves(attacker, defender) * attacker.WeaponDamage;
+        }
+
+        /// <summary>
+        /// Returns the lower and upper range for expected total damage.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns>A Tuple containing the lower and upper range values. Item1 is the lower bound, Item2 is the upper bound.</returns>
+        public static Tuple<int, int> GetExpectedRangeDamage(AttackerDTO attacker, DefenderDTO defender)
+        {
+            var expectedDeviation = (int)Math.Floor(GetStandardDeviationDamage(attacker, defender));
+            var lowerBound = GetExpectedDamage(attacker, defender) - expectedDeviation;
+            var upperBound = GetExpectedDamage(attacker, defender) + expectedDeviation;
+            return Tuple.Create(lowerBound, upperBound);
         }
 
         #endregion
