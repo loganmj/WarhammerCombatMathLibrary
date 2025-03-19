@@ -34,6 +34,9 @@ jobs:
           useConfigFile: true
           configFilePath: ./WarhammerCombatMathLibrary/GitVersion.yml
 
+      - name: Set GitVersion output
+        run: echo "VERSION=${{ steps.gitversion.outputs.semVer }}" >> $GITHUB_ENV
+
       - name: Restore dependencies
         run: dotnet restore ./WarhammerCombatMathLibrary/WarhammerCombatMathLibrary.sln
 
@@ -41,7 +44,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore ./WarhammerCombatMathLibrary/WarhammerCombatMathLibrary.sln
 
       - name: Pack NuGet package
-        run: dotnet pack --configuration Release --no-build --output ./nupkg ./WarhammerCombatMathLibrary/WarhammerCombatMathLibrary.csproj /p:Version=${{ steps.gitversion.outputs.semVer }}
+        run: dotnet pack --configuration Release --no-build --output ./nupkg ./WarhammerCombatMathLibrary/WarhammerCombatMathLibrary/WarhammerCombatMathLibrary.csproj /p:Version=${{ env.VERSION }}
 
       - name: Publish NuGet package
         env:
