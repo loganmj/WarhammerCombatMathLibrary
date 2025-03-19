@@ -5,16 +5,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>WarhammerCombatMathLibrary</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>Michael Logan</Authors>
     <Description>A set of library files used for calculating combat math for Warhammer 40k.</Description>
-    <PackageReadmeFile>../../README.md</PackageReadmeFile>
-    <PackageLicenseFile>../../LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>../README.md</PackageReadmeFile>
+    <PackageLicenseFile>../LICENSE</PackageLicenseFile>
   </PropertyGroup>
    
   <ItemGroup>
-    <None Include="../../README.md" Pack="true" PackagePath=""/>
-    <None Include="../../LICENSE" Pack="true" PackagePath=""/>
+    <None Include="../README.md" Pack="true" PackagePath=""/>
+    <None Include="../LICENSE" Pack="true" PackagePath=""/>
   </ItemGroup>
 
 </Project>
