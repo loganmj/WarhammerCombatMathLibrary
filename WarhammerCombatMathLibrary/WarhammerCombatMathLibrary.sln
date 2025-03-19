@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35913.81 d17.13
+VisualStudioVersion = 17.13.35913.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarhammerCombatMathLibrary", "WarhammerCombatMathLibrary\WarhammerCombatMathLibrary.csproj", "{B1DDBBEB-5C5B-4122-B7BC-65989BD58451}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{449D2746-7048-4F7D-998E-6FD91D1BCCA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B1DDBBEB-5C5B-4122-B7BC-65989BD58451}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1DDBBEB-5C5B-4122-B7BC-65989BD58451}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1DDBBEB-5C5B-4122-B7BC-65989BD58451}.Release|Any CPU.Build.0 = Release|Any CPU
+		{449D2746-7048-4F7D-998E-6FD91D1BCCA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{449D2746-7048-4F7D-998E-6FD91D1BCCA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{449D2746-7048-4F7D-998E-6FD91D1BCCA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{449D2746-7048-4F7D-998E-6FD91D1BCCA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
