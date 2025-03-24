@@ -29,6 +29,11 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A double value containing the binomial coefficient.</returns>
         public static double BinomialCoefficient(int totalPopulation, int combinationSize)
         {
+            if (combinationSize > totalPopulation || totalPopulation < 0 || combinationSize < 0)
+            {
+                throw new ArgumentException("Invalid input: combinationSize must be <= totalPopulation, and both must be non-negative.");
+            }
+
             return MathUtilities.Factorial(totalPopulation) / (MathUtilities.Factorial(combinationSize) * MathUtilities.Factorial(totalPopulation - combinationSize));
         }
 
