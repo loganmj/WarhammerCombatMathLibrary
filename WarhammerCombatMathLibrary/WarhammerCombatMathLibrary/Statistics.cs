@@ -17,6 +17,16 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double ProbabilityOfSuccess(int numberOfPossibleResults, int numberOfSuccessfulResults)
         {
+            // Validate parameters
+            ArgumentOutOfRangeException.ThrowIfLessThan(numberOfPossibleResults, 1);
+            ArgumentOutOfRangeException.ThrowIfNegative(numberOfSuccessfulResults);
+
+            if (numberOfSuccessfulResults > numberOfPossibleResults)
+            {
+                throw new ArgumentException("Number of successful results must be less than or equal to the number of possible results.");
+            }
+
+            // Perform calculation
             return (double)numberOfSuccessfulResults / numberOfPossibleResults;
         }
 
@@ -29,11 +39,16 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A double value containing the binomial coefficient.</returns>
         public static double BinomialCoefficient(int totalPopulation, int combinationSize)
         {
-            if (combinationSize > totalPopulation || totalPopulation < 0 || combinationSize < 0)
+            // Validate parameters
+            ArgumentOutOfRangeException.ThrowIfNegative(totalPopulation);
+            ArgumentOutOfRangeException.ThrowIfNegative(combinationSize);
+
+            if (combinationSize > totalPopulation)
             {
-                throw new ArgumentException("Invalid input: combinationSize must be <= totalPopulation, and both must be non-negative.");
+                throw new ArgumentException("Combination size must be less than or equal to the total population.");
             }
 
+            // Perform calculation
             return MathUtilities.Factorial(totalPopulation) / (MathUtilities.Factorial(combinationSize) * MathUtilities.Factorial(totalPopulation - combinationSize));
         }
 
@@ -46,6 +61,12 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A double value containing the probability that all trials will be successful.</returns>
         public static double ProbabilityOfMultipleSuccesses(double probability, int numberOfTrials)
         {
+            // Validate parameters
+            ArgumentOutOfRangeException.ThrowIfNegative(probability);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
+            ArgumentOutOfRangeException.ThrowIfLessThan(numberOfTrials, 1);
+
+            // Perform calculation
             return Math.Pow(probability, numberOfTrials);
         }
 
@@ -82,32 +103,17 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double ProbabilityMassFunction(int numberOfTrials, int numberOfSuccesses, double probability)
         {
+            // Validate parameters
+            ArgumentOutOfRangeException.ThrowIfLessThan(numberOfTrials, 1);
+            ArgumentOutOfRangeException.ThrowIfNegative(numberOfSuccesses);
+            ArgumentOutOfRangeException.ThrowIfNegative(probability);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
+
+            // Perform calculation
             return BinomialCoefficient(numberOfTrials, numberOfSuccesses)
                    * ProbabilityOfMultipleSuccesses(probability, numberOfSuccesses)
                    * ProbabilityOfMultipleSuccesses(1 - probability, numberOfTrials - numberOfSuccesses);
         }
-
-        /*
-
-        /// <summary>
-        /// Calculates the binomial distribution of trial data.
-        /// </summary>
-        /// <param name="numberOfTrials">The number of trials in the process.</param>
-        /// <param name="probability">The probability of success for a single trial.</param>
-        /// <returns>A binomial distribution of trial results and their respective probabilities.</returns>
-        public static ProbabilityDistribution BinomialDistribution(int numberOfTrials, double probability)
-        {
-            var distribution = new ProbabilityDistribution();
-
-            for (int k = 0; k <= numberOfTrials; k++)
-            {
-                distribution.Add(k, ProbabilityMassFunction(numberOfTrials, k, probability));
-            }
-
-            return distribution;
-        }
-
-        */
 
         /// <summary>
         /// Calculates the binomial distribution of trial data.
@@ -117,6 +123,12 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A binomial distribution of trial results and their respective probabilities.</returns>
         public static List<BinomialData> BinomialDistribution(int numberOfTrials, double probability)
         {
+            // Validate parameters
+            ArgumentOutOfRangeException.ThrowIfLessThan(numberOfTrials, 1);
+            ArgumentOutOfRangeException.ThrowIfNegative(probability);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
+
+            // Create distribution
             var distribution = new List<BinomialData>();
 
             for (int k = 0; k <= numberOfTrials; k++)
@@ -146,28 +158,6 @@ namespace WarhammerCombatMathLibrary
 
             return cumulativeProbability;
         }
-
-        /*
-
-        /// <summary>
-        /// Calculates the lower cumulative distribution of trial data.
-        /// </summary>
-        /// <param name="numberOfTrials"></param>
-        /// <param name="probability"></param>
-        /// <returns>A cumulative distribution of trial results and their respective probabilities.</returns>
-        public static ProbabilityDistribution LowerCumulativeDistribution(int numberOfTrials, double probability)
-        {
-            var distribution = new ProbabilityDistribution();
-
-            for (int k = 0; k <= numberOfTrials; k++)
-            {
-                distribution.Add(k, LowerCumulativeProbability(numberOfTrials, k, probability));
-            }
-
-            return distribution;
-        }
-
-        */
 
         /// <summary>
         /// Calculates the lower cumulative distribution of trial data.
@@ -206,28 +196,6 @@ namespace WarhammerCombatMathLibrary
 
             return cumulativeProbability;
         }
-
-        /*
-
-        /// <summary>
-        /// Calculates the upper cumulative distribution of trial data.
-        /// </summary>
-        /// <param name="numberOfTrials"></param>
-        /// <param name="probability"></param>
-        /// <returns></returns>
-        public static ProbabilityDistribution UpperCumulativeDistribution(int numberOfTrials, double probability)
-        {
-            var distribution = new ProbabilityDistribution();
-
-            for (int k = 0; k <= numberOfTrials; k++)
-            {
-                distribution.Add(k, UpperCumulativeProbability(numberOfTrials, k, probability));
-            }
-
-            return distribution;
-        }
-
-        */
 
         /// <summary>
         /// Calculates the lower cumulative distribution of trial data.

@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace WarhammerCombatMathLibrary.Data
+﻿namespace WarhammerCombatMathLibrary.Data
 {
     /// <summary>
     /// Data object for binomial data.

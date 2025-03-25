@@ -106,19 +106,6 @@ namespace WarhammerCombatMathLibrary
             return GetProbabilityOfHit(attacker) * Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
         }
 
-        /*
-
-        /// <summary>
-        /// Returns a binomial distribution of attack roll results based on the process data.
-        /// </summary>
-        /// <returns>A BinomialDistribution object containing the hit success data.</returns>
-        public static ProbabilityDistribution GetBinomialDistributionOfHits(AttackerDTO attacker)
-        {
-            return Statistics.BinomialDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
-        }
-
-        */
-
         /// <summary>
         /// Returns a binomial distribution of attack roll results based on the process data.
         /// </summary>
@@ -170,19 +157,6 @@ namespace WarhammerCombatMathLibrary
             return Tuple.Create(lowerBound, upperBound);
         }
 
-        /*
-
-        /// <summary>
-        /// Returns the upper cumulative distribution of the attacker's hit roll.
-        /// </summary>
-        /// <returns></returns>
-        public static ProbabilityDistribution GetUpperCumulativeDistributionOfHits(AttackerDTO attacker)
-        {
-            return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
-        }
-
-        */
-
         /// <summary>
         /// Returns the upper cumulative distribution of the attacker's hit roll.
         /// </summary>
@@ -191,21 +165,6 @@ namespace WarhammerCombatMathLibrary
         {
             return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
         }
-
-        /*
-
-        /// <summary>
-        /// Returns a binomial distribution of wound roll results based on the process data.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static ProbabilityDistribution GetBinomialDistributionOfWounds(AttackerDTO attacker, DefenderDTO defender)
-        {
-            return Statistics.BinomialDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
-        }
-
-        */
 
         /// <summary>
         /// Returns a binomial distribution of wound roll results based on the process data.
@@ -263,21 +222,6 @@ namespace WarhammerCombatMathLibrary
             return Tuple.Create(lowerBound, upperBound);
         }
 
-        /*
-
-        /// <summary>
-        /// Returns the upper cumulative distribution of the attacker's wound roll.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static ProbabilityDistribution GetUpperCumulativeDistributionOfWounds(AttackerDTO attacker, DefenderDTO defender)
-        {
-            return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
-        }
-
-        */
-
         /// <summary>
         /// Returns the upper cumulative distribution of the attacker's wound roll.
         /// </summary>
@@ -315,21 +259,6 @@ namespace WarhammerCombatMathLibrary
             var probabilityOfSuccessfulSave = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
             return GetProbabilityOfWound(attacker, defender) * (1 - probabilityOfSuccessfulSave);
         }
-
-        /*
-
-        /// <summary>
-        /// Returns a binomial distribution of rolls where the hit and wound have succeeded, and the opponent failed their save.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static ProbabilityDistribution GetBinomialDistributionOfFailSaves(AttackerDTO attacker, DefenderDTO defender)
-        {
-            return Statistics.BinomialDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
-        }
-
-        */
 
         /// <summary>
         /// Returns a binomial distribution of rolls where the hit and wound have succeeded, and the opponent failed their save.
@@ -386,21 +315,6 @@ namespace WarhammerCombatMathLibrary
             var upperBound = GetExpectedFailedSaves(attacker, defender) + expectedDeviation;
             return Tuple.Create(lowerBound, upperBound);
         }
-
-        /*
-
-        /// <summary>
-        /// Returns the upper cumulative distribution of the failed save roll.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static ProbabilityDistribution GetUpperCumulativeDistributionOfFailedSaves(AttackerDTO attacker, DefenderDTO defender)
-        {
-            return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
-        }
-
-        */
 
         /// <summary>
         /// Returns the upper cumulative distribution of the failed save roll.
