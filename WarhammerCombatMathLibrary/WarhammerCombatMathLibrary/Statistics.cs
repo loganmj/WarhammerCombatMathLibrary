@@ -56,9 +56,9 @@ namespace WarhammerCombatMathLibrary
             double factorialCombination = MathUtilities.Factorial(combinationSize);
             double factorialDifference = MathUtilities.Factorial(totalPopulation - combinationSize);
 
-            Console.WriteLine($"FactorialTotal: {factorialTotal}, FactorialCombination: {factorialCombination}, FactorialDifference: {factorialDifference}");
+            Debug.WriteLine($"FactorialTotal: {factorialTotal}, FactorialCombination: {factorialCombination}, FactorialDifference: {factorialDifference}");
 
-            return (double)factorialTotal / (factorialCombination * factorialDifference);
+            return factorialTotal / (factorialCombination * factorialDifference);
         }
 
         /// <summary>
