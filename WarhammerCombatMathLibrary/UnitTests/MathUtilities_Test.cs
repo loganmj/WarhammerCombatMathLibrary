@@ -1,4 +1,5 @@
-﻿using WarhammerCombatMathLibrary;
+﻿using System.Numerics;
+using WarhammerCombatMathLibrary;
 
 namespace UnitTests
 {
@@ -14,7 +15,7 @@ namespace UnitTests
         [TestMethod]
         public void Factorial_TestParameter3()
         {
-            Assert.AreEqual<int>(6, MathUtilities.Factorial(3));
+            Assert.AreEqual(6, MathUtilities.Factorial(3));
         }
 
         /// <summary>
@@ -23,7 +24,7 @@ namespace UnitTests
         [TestMethod]
         public void Factorial_TestParameter5()
         {
-            Assert.AreEqual<int>(120, MathUtilities.Factorial(5));
+            Assert.AreEqual(120, MathUtilities.Factorial(5));
         }
 
         /// <summary>
@@ -32,7 +33,16 @@ namespace UnitTests
         [TestMethod]
         public void Factorial_TestParameter9()
         {
-            Assert.AreEqual<int>(362880, MathUtilities.Factorial(9));
+            Assert.AreEqual(362880, MathUtilities.Factorial(9));
+        }
+
+        /// <summary>
+        /// Tests that the Factorial method correctly computes the value of 9!.
+        /// </summary>
+        [TestMethod]
+        public void Factorial_TestBitParam()
+        {
+            Assert.AreEqual(BigInteger.Parse("815915283247897734345611269596115894272000000000"), MathUtilities.Factorial(40));
         }
 
         /// <summary>
@@ -41,7 +51,7 @@ namespace UnitTests
         [TestMethod]
         public void Factorial_TestParameter0()
         {
-            Assert.AreEqual<int>(1, MathUtilities.Factorial(0));
+            Assert.AreEqual(1, MathUtilities.Factorial(0));
         }
 
         /// <summary>

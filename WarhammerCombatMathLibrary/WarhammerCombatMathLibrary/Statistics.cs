@@ -52,13 +52,13 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Perform calculation
-            double factorialTotal = MathUtilities.Factorial(totalPopulation);
-            double factorialCombination = MathUtilities.Factorial(combinationSize);
-            double factorialDifference = MathUtilities.Factorial(totalPopulation - combinationSize);
+            var factorialTotal = MathUtilities.Factorial(totalPopulation);
+            var factorialCombination = MathUtilities.Factorial(combinationSize);
+            var factorialDifference = MathUtilities.Factorial(totalPopulation - combinationSize);
 
             Debug.WriteLine($"FactorialTotal: {factorialTotal}, FactorialCombination: {factorialCombination}, FactorialDifference: {factorialDifference}");
 
-            return factorialTotal / (factorialCombination * factorialDifference);
+            return (double)(factorialTotal / (factorialCombination * factorialDifference));
         }
 
         /// <summary>

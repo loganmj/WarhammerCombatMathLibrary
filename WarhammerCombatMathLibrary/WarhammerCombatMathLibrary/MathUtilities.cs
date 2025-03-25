@@ -1,4 +1,6 @@
-﻿namespace WarhammerCombatMathLibrary
+﻿using System.Numerics;
+
+namespace WarhammerCombatMathLibrary
 {
     /// <summary>
     /// A static helper class that provides basic math functions.
@@ -16,7 +18,7 @@
         /// The method will use the absolute value of the integer, in case the user passes in a negative value.
         /// </param>
         /// <returns>An int containing the factorial of the passed in value.</returns>
-        public static int Factorial(int number)
+        public static BigInteger Factorial(int number)
         {
             Console.WriteLine($"Factorial - number: {number}");
 
