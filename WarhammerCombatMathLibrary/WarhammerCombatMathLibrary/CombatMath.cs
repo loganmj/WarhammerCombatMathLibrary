@@ -40,10 +40,7 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static int GetTotalNumberOfAttacks(AttackerDTO attacker)
         {
-            Debug.WriteLine($"GetTotalNumberOfAttacks - attacker.NumberOfModels: {attacker.NumberOfModels}, attacker.WeaponAttacks: {attacker.WeaponAttacks}");
-            int totalAttacks = attacker.NumberOfModels * attacker.WeaponAttacks;
-            Debug.WriteLine($"TotalAttacks: {totalAttacks}");
-            return totalAttacks;
+            return attacker.NumberOfModels * attacker.WeaponAttacks;
         }
 
         /// <summary>
@@ -116,17 +113,8 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A BinomialDistribution object containing the hit success data.</returns>
         public static List<BinomialData> GetBinomialDistributionOfHits(AttackerDTO attacker)
         {
-            Console.WriteLine($"GetTotalNumberOfAttacks - attacker.NumberOfModels: {attacker.NumberOfModels}, attacker.WeaponAttacks: {attacker.WeaponAttacks}, attacker.WeaponSkill: {attacker.WeaponSkill}");
-
-            int totalAttacks = GetTotalNumberOfAttacks(attacker);
-            double probabilityOfHit = GetProbabilityOfHit(attacker);
-
-            Console.WriteLine($"GetBinomialDistributionOfHits - TotalAttacks: {totalAttacks}, ProbabilityOfHit: {probabilityOfHit}");
-
-            ArgumentOutOfRangeException.ThrowIfLessThan(totalAttacks, 1);
-            ArgumentOutOfRangeException.ThrowIfLessThan(probabilityOfHit, 0);
-            ArgumentOutOfRangeException.ThrowIfGreaterThan(probabilityOfHit, 1);
-
+            var totalAttacks = GetTotalNumberOfAttacks(attacker);
+            var probabilityOfHit = GetProbabilityOfHit(attacker);
             return Statistics.BinomialDistribution(totalAttacks, probabilityOfHit);
         }
 

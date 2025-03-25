@@ -1,4 +1,5 @@
-﻿using WarhammerCombatMathLibrary;
+﻿using System.Numerics;
+using WarhammerCombatMathLibrary;
 
 namespace UnitTests
 {
@@ -123,6 +124,33 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the probability mass function with given inputs.
+        /// </summary>
+        [TestMethod]
+        public void ProbabilityMassFunction_TestParams_1_1_05() 
+        {
+            Assert.AreEqual(0.5, Statistics.ProbabilityMassFunction(1, 1, 0.5));
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given inputs.
+        /// </summary>
+        [TestMethod]
+        public void ProbabilityMassFunction_TestParams_10_5_025()
+        {
+            Assert.AreEqual(0.0584, Math.Round(Statistics.ProbabilityMassFunction(10, 5, 0.25), 4));
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given large inputs.
+        /// </summary>
+        [TestMethod]
+        public void ProbabilityMassFunction_BigParams_50_32_05()
+        {
+            Assert.AreEqual(0.016, Math.Round(Statistics.ProbabilityMassFunction(50, 32, 0.5), 3));
+        }
+
+        /// <summary>
         /// Tests the case where the totalPopulation argument is out of range.
         /// </summary>
         [TestMethod]
@@ -147,6 +175,33 @@ namespace UnitTests
         public void BinomialCoefficient_ArgumentException_CombinationSizeBiggerThanTotalPopulation()
         {
             Assert.ThrowsException<ArgumentException>(() => Statistics.BinomialCoefficient(1, 2));
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given inputs.
+        /// </summary>
+        [TestMethod]
+        public void BinomialCoefficient_TestParams_1_1_05()
+        {
+            Assert.AreEqual(1, Statistics.BinomialCoefficient(1, 1));
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given inputs.
+        /// </summary>
+        [TestMethod]
+        public void BinomialCoefficient_TestParams_10_5_025()
+        {
+            Assert.AreEqual(252, Statistics.BinomialCoefficient(10, 5));
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given large inputs.
+        /// </summary>
+        [TestMethod]
+        public void BinomialCoefficient_TestBigParams_50_32_05()
+        {
+            Assert.AreEqual(BigInteger.Parse("18053528883775"), Statistics.BinomialCoefficient(50, 32));
         }
 
         /// <summary>

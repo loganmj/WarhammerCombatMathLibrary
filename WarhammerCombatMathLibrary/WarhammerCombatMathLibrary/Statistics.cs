@@ -20,7 +20,6 @@ namespace WarhammerCombatMathLibrary
         public static double ProbabilityOfSuccess(int numberOfPossibleResults, int numberOfSuccessfulResults)
         {
             // Validate parameters
-            Console.WriteLine($"ProbabilityOfSuccess - numberOfPossibleResults: {numberOfPossibleResults}, numberOfSuccessfulResults: {numberOfSuccessfulResults}");
             ArgumentOutOfRangeException.ThrowIfLessThan(numberOfPossibleResults, 1);
             ArgumentOutOfRangeException.ThrowIfNegative(numberOfSuccessfulResults);
 
@@ -72,7 +71,6 @@ namespace WarhammerCombatMathLibrary
         public static double ProbabilityOfMultipleSuccesses(double probability, int numberOfSuccesses)
         {
             // Validate parameters
-            Console.WriteLine($"ProbabilityOfMultipleSuccesses - Probability: {probability}, NumberOfTrials: {numberOfSuccesses}");
             ArgumentOutOfRangeException.ThrowIfNegative(probability);
             ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
             ArgumentOutOfRangeException.ThrowIfNegative(numberOfSuccesses);
@@ -108,11 +106,10 @@ namespace WarhammerCombatMathLibrary
             var failureProbability = ProbabilityOfMultipleSuccesses(1 - probability, numberOfTrials - numberOfSuccesses);
 
             Console.WriteLine($"BinomialCoefficient: {binomialCoefficient}, SuccessProbability: {successProbability}, FailureProbability: {failureProbability}");
-
-            var result = (double)BigInteger.Multiply((BigInteger.Multiply(binomialCoefficient, (BigInteger)successProbability)), (BigInteger)failureProbability);
+            var result = (double)binomialCoefficient * successProbability * failureProbability;
             Console.WriteLine($"Result = {result}");
 
-            return result;
+            return (double)result;
         }
 
         /// <summary>
