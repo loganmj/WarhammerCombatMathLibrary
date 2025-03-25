@@ -1,4 +1,5 @@
-﻿using WarhammerCombatMathLibrary.Data;
+﻿using System.Diagnostics;
+using WarhammerCombatMathLibrary.Data;
 
 namespace WarhammerCombatMathLibrary
 {

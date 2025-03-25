@@ -1,4 +1,5 @@
-﻿using WarhammerCombatMathLibrary.Data;
+﻿using System.Diagnostics;
+using WarhammerCombatMathLibrary.Data;
 
 namespace WarhammerCombatMathLibrary
 {
@@ -112,7 +113,16 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A BinomialDistribution object containing the hit success data.</returns>
         public static List<BinomialData> GetBinomialDistributionOfHits(AttackerDTO attacker)
         {
-            return Statistics.BinomialDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
+            int totalAttacks = GetTotalNumberOfAttacks(attacker);
+            double probabilityOfHit = GetProbabilityOfHit(attacker);
+
+            Debug.WriteLine($"GetBinomialDistributionOfHits - TotalAttacks: {totalAttacks}, ProbabilityOfHit: {probabilityOfHit}");
+
+            ArgumentOutOfRangeException.ThrowIfLessThan(totalAttacks, 1);
+            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(probabilityOfHit, 0);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(probabilityOfHit, 1);
+
+            return Statistics.BinomialDistribution(totalAttacks, probabilityOfHit);
         }
 
         /// <summary>
