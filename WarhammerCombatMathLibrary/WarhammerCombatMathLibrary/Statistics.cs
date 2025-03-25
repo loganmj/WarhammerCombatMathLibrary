@@ -121,7 +121,7 @@ namespace WarhammerCombatMathLibrary
         {
             // Validate parameters
             Debug.WriteLine($"BinomialDistribution - numberOfTrials: {numberOfTrials}, probability: {probability}");
-            ArgumentOutOfRangeException.ThrowIfLessThan(numberOfTrials, 1);
+            ArgumentOutOfRangeException.ThrowIfNegative(numberOfTrials);
             ArgumentOutOfRangeException.ThrowIfNegative(probability);
             ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
 
