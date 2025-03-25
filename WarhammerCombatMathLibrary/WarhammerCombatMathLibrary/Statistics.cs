@@ -50,7 +50,14 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Perform calculation
-            return MathUtilities.Factorial(totalPopulation) / (MathUtilities.Factorial(combinationSize) * MathUtilities.Factorial(totalPopulation - combinationSize));
+            double factorialTotal = MathUtilities.Factorial(totalPopulation);
+            double factorialCombination = MathUtilities.Factorial(combinationSize);
+            double factorialDifference = MathUtilities.Factorial(totalPopulation - combinationSize);
+
+            Debug.WriteLine($"BinomialCoefficient - TotalPopulation: {totalPopulation}, CombinationSize: {combinationSize}");
+            Debug.WriteLine($"FactorialTotal: {factorialTotal}, FactorialCombination: {factorialCombination}, FactorialDifference: {factorialDifference}");
+
+            return (double)factorialTotal / (factorialCombination * factorialDifference);
         }
 
         /// <summary>
@@ -67,27 +74,10 @@ namespace WarhammerCombatMathLibrary
             ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
             ArgumentOutOfRangeException.ThrowIfLessThan(numberOfTrials, 1);
 
+            Debug.WriteLine($"ProbabilityOfMultipleSuccesses - Probability: {probability}, NumberOfTrials: {numberOfTrials}");
+
             // Perform calculation
             return Math.Pow(probability, numberOfTrials);
-        }
-
-        /// <summary>
-        /// Calculates the probability for the success of a given number of trials
-        /// using an array of probabilities that represent the probability of each successful trial.
-        /// </summary>
-        /// <param name="probability">Probability of success for a single trial.</param>
-        /// <param name="numberOfTrials">Number of trials.</param>
-        /// <returns>A double value containing the probability that all trials will be successful.</returns>
-        public static double ProbabilityOfMultipleSuccesses(double[] probabilities)
-        {
-            double result = 1;
-
-            foreach (var probability in probabilities)
-            {
-                result *= Math.Pow(probability, probabilities.Length);
-            }
-
-            return result;
         }
 
         /// <summary>
@@ -110,10 +100,16 @@ namespace WarhammerCombatMathLibrary
             ArgumentOutOfRangeException.ThrowIfNegative(probability);
             ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
 
+            Debug.WriteLine($"ProbabilityMassFunction - NumberOfTrials: {numberOfTrials}, NumberOfSuccesses: {numberOfSuccesses}, Probability: {probability}");
+
             // Perform calculation
-            return BinomialCoefficient(numberOfTrials, numberOfSuccesses)
-                   * ProbabilityOfMultipleSuccesses(probability, numberOfSuccesses)
-                   * ProbabilityOfMultipleSuccesses(1 - probability, numberOfTrials - numberOfSuccesses);
+            double binomialCoefficient = BinomialCoefficient(numberOfTrials, numberOfSuccesses);
+            double successProbability = ProbabilityOfMultipleSuccesses(probability, numberOfSuccesses);
+            double failureProbability = ProbabilityOfMultipleSuccesses(1 - probability, numberOfTrials - numberOfSuccesses);
+
+            Debug.WriteLine($"BinomialCoefficient: {binomialCoefficient}, SuccessProbability: {successProbability}, FailureProbability: {failureProbability}");
+
+            return binomialCoefficient * successProbability * failureProbability;
         }
 
         /// <summary>
