@@ -40,7 +40,10 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static int GetTotalNumberOfAttacks(AttackerDTO attacker)
         {
-            return attacker.NumberOfModels * attacker.WeaponAttacks;
+            Debug.WriteLine($"GetTotalNumberOfAttacks - attacker.NumberOfModels: {attacker.NumberOfModels}, attacker.WeaponAttacks: {attacker.WeaponAttacks}");
+            int totalAttacks = attacker.NumberOfModels * attacker.WeaponAttacks;
+            Debug.WriteLine($"TotalAttacks: {totalAttacks}");
+            return totalAttacks;
         }
 
         /// <summary>

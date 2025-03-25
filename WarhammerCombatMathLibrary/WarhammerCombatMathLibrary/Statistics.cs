@@ -19,6 +19,7 @@ namespace WarhammerCombatMathLibrary
         public static double ProbabilityOfSuccess(int numberOfPossibleResults, int numberOfSuccessfulResults)
         {
             // Validate parameters
+            Debug.WriteLine($"ProbabilityOfSuccess - numberOfPossibleResults: {numberOfPossibleResults}, numberOfSuccessfulResults: {numberOfSuccessfulResults}");
             ArgumentOutOfRangeException.ThrowIfLessThan(numberOfPossibleResults, 1);
             ArgumentOutOfRangeException.ThrowIfNegative(numberOfSuccessfulResults);
 
@@ -41,6 +42,7 @@ namespace WarhammerCombatMathLibrary
         public static double BinomialCoefficient(int totalPopulation, int combinationSize)
         {
             // Validate parameters
+            Debug.WriteLine($"BinomialCoefficient - TotalPopulation: {totalPopulation}, CombinationSize: {combinationSize}");
             ArgumentOutOfRangeException.ThrowIfNegative(totalPopulation);
             ArgumentOutOfRangeException.ThrowIfNegative(combinationSize);
 
@@ -54,7 +56,6 @@ namespace WarhammerCombatMathLibrary
             double factorialCombination = MathUtilities.Factorial(combinationSize);
             double factorialDifference = MathUtilities.Factorial(totalPopulation - combinationSize);
 
-            Debug.WriteLine($"BinomialCoefficient - TotalPopulation: {totalPopulation}, CombinationSize: {combinationSize}");
             Debug.WriteLine($"FactorialTotal: {factorialTotal}, FactorialCombination: {factorialCombination}, FactorialDifference: {factorialDifference}");
 
             return (double)factorialTotal / (factorialCombination * factorialDifference);
@@ -70,11 +71,10 @@ namespace WarhammerCombatMathLibrary
         public static double ProbabilityOfMultipleSuccesses(double probability, int numberOfTrials)
         {
             // Validate parameters
+            Debug.WriteLine($"ProbabilityOfMultipleSuccesses - Probability: {probability}, NumberOfTrials: {numberOfTrials}");
             ArgumentOutOfRangeException.ThrowIfNegative(probability);
             ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
             ArgumentOutOfRangeException.ThrowIfLessThan(numberOfTrials, 1);
-
-            Debug.WriteLine($"ProbabilityOfMultipleSuccesses - Probability: {probability}, NumberOfTrials: {numberOfTrials}");
 
             // Perform calculation
             return Math.Pow(probability, numberOfTrials);
@@ -95,12 +95,11 @@ namespace WarhammerCombatMathLibrary
         public static double ProbabilityMassFunction(int numberOfTrials, int numberOfSuccesses, double probability)
         {
             // Validate parameters
+            Debug.WriteLine($"ProbabilityMassFunction - NumberOfTrials: {numberOfTrials}, NumberOfSuccesses: {numberOfSuccesses}, Probability: {probability}");
             ArgumentOutOfRangeException.ThrowIfLessThan(numberOfTrials, 1);
             ArgumentOutOfRangeException.ThrowIfNegative(numberOfSuccesses);
             ArgumentOutOfRangeException.ThrowIfNegative(probability);
             ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
-
-            Debug.WriteLine($"ProbabilityMassFunction - NumberOfTrials: {numberOfTrials}, NumberOfSuccesses: {numberOfSuccesses}, Probability: {probability}");
 
             // Perform calculation
             double binomialCoefficient = BinomialCoefficient(numberOfTrials, numberOfSuccesses);
@@ -121,6 +120,7 @@ namespace WarhammerCombatMathLibrary
         public static List<BinomialData> BinomialDistribution(int numberOfTrials, double probability)
         {
             // Validate parameters
+            Debug.WriteLine($"BinomialDistribution - numberOfTrials: {numberOfTrials}, probability: {probability}");
             ArgumentOutOfRangeException.ThrowIfLessThan(numberOfTrials, 1);
             ArgumentOutOfRangeException.ThrowIfNegative(probability);
             ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
