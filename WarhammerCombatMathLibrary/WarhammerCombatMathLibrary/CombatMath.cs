@@ -124,7 +124,7 @@ namespace WarhammerCombatMathLibrary
             Console.WriteLine($"GetBinomialDistributionOfHits - TotalAttacks: {totalAttacks}, ProbabilityOfHit: {probabilityOfHit}");
 
             ArgumentOutOfRangeException.ThrowIfLessThan(totalAttacks, 1);
-            ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(probabilityOfHit, 0);
+            ArgumentOutOfRangeException.ThrowIfLessThan(probabilityOfHit, 0);
             ArgumentOutOfRangeException.ThrowIfGreaterThan(probabilityOfHit, 1);
 
             return Statistics.BinomialDistribution(totalAttacks, probabilityOfHit);
