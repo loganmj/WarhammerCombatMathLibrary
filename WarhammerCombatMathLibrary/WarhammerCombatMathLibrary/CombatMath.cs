@@ -116,6 +116,8 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A BinomialDistribution object containing the hit success data.</returns>
         public static List<BinomialData> GetBinomialDistributionOfHits(AttackerDTO attacker)
         {
+            Debug.WriteLine($"GetTotalNumberOfAttacks - attacker.NumberOfModels: {attacker.NumberOfModels}, attacker.WeaponAttacks: {attacker.WeaponAttacks}, attacker.WeaponSkill: {attacker.WeaponSkill}");
+
             int totalAttacks = GetTotalNumberOfAttacks(attacker);
             double probabilityOfHit = GetProbabilityOfHit(attacker);
 
