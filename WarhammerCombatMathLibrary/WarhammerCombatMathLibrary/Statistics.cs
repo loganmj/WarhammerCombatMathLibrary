@@ -67,18 +67,18 @@ namespace WarhammerCombatMathLibrary
         /// using a specified probability of success for a single trial.
         /// </summary>
         /// <param name="probability">Probability of success for a single trial.</param>
-        /// <param name="numberOfTrials">Number of trials.</param>
+        /// <param name="numberOfSuccesses">Number of trials.</param>
         /// <returns>A double value containing the probability that all trials will be successful.</returns>
-        public static double ProbabilityOfMultipleSuccesses(double probability, int numberOfTrials)
+        public static double ProbabilityOfMultipleSuccesses(double probability, int numberOfSuccesses)
         {
             // Validate parameters
-            Console.WriteLine($"ProbabilityOfMultipleSuccesses - Probability: {probability}, NumberOfTrials: {numberOfTrials}");
+            Console.WriteLine($"ProbabilityOfMultipleSuccesses - Probability: {probability}, NumberOfTrials: {numberOfSuccesses}");
             ArgumentOutOfRangeException.ThrowIfNegative(probability);
             ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
-            ArgumentOutOfRangeException.ThrowIfLessThan(numberOfTrials, 1);
+            ArgumentOutOfRangeException.ThrowIfNegative(numberOfSuccesses);
 
             // Perform calculation
-            return Math.Pow(probability, numberOfTrials);
+            return Math.Pow(probability, numberOfSuccesses);
         }
 
         /// <summary>
