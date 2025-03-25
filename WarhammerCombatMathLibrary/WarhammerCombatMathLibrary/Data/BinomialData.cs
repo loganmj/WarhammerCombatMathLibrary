@@ -1,4 +1,6 @@
-﻿namespace WarhammerCombatMathLibrary.Data
+﻿using System.Text;
+
+namespace WarhammerCombatMathLibrary.Data
 {
     /// <summary>
     /// Data object for binomial data.
@@ -16,6 +18,16 @@
         /// The probability of getting the number of successful trials.
         /// </summary>
         public double Probability { get; set; }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"P({Successes}) = {Probability * 100:F2}%";
+        }
 
         #endregion
     }

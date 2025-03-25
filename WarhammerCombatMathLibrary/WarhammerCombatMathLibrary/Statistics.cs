@@ -87,6 +87,8 @@ namespace WarhammerCombatMathLibrary
                    * ProbabilityOfMultipleSuccesses(1 - probability, numberOfTrials - numberOfSuccesses);
         }
 
+        /*
+
         /// <summary>
         /// Calculates the binomial distribution of trial data.
         /// </summary>
@@ -100,6 +102,26 @@ namespace WarhammerCombatMathLibrary
             for (int k = 0; k <= numberOfTrials; k++)
             {
                 distribution.Add(k, ProbabilityMassFunction(numberOfTrials, k, probability));
+            }
+
+            return distribution;
+        }
+
+        */
+
+        /// <summary>
+        /// Calculates the binomial distribution of trial data.
+        /// </summary>
+        /// <param name="numberOfTrials">The number of trials in the process.</param>
+        /// <param name="probability">The probability of success for a single trial.</param>
+        /// <returns>A binomial distribution of trial results and their respective probabilities.</returns>
+        public static List<BinomialData> BinomialDistribution(int numberOfTrials, double probability)
+        {
+            var distribution = new List<BinomialData>();
+
+            for (int k = 0; k <= numberOfTrials; k++)
+            {
+                distribution.Add(new BinomialData { Successes = k, Probability = ProbabilityMassFunction(numberOfTrials, k, probability) });
             }
 
             return distribution;
@@ -125,6 +147,8 @@ namespace WarhammerCombatMathLibrary
             return cumulativeProbability;
         }
 
+        /*
+
         /// <summary>
         /// Calculates the lower cumulative distribution of trial data.
         /// </summary>
@@ -138,6 +162,26 @@ namespace WarhammerCombatMathLibrary
             for (int k = 0; k <= numberOfTrials; k++)
             {
                 distribution.Add(k, LowerCumulativeProbability(numberOfTrials, k, probability));
+            }
+
+            return distribution;
+        }
+
+        */
+
+        /// <summary>
+        /// Calculates the lower cumulative distribution of trial data.
+        /// </summary>
+        /// <param name="numberOfTrials"></param>
+        /// <param name="probability"></param>
+        /// <returns>A cumulative distribution of trial results and their respective probabilities.</returns>
+        public static List<BinomialData> LowerCumulativeDistribution(int numberOfTrials, double probability)
+        {
+            var distribution = new List<BinomialData>();
+
+            for (int k = 0; k <= numberOfTrials; k++)
+            {
+                distribution.Add(new BinomialData { Successes = k, Probability = LowerCumulativeProbability(numberOfTrials, k, probability) });
             }
 
             return distribution;
@@ -163,6 +207,8 @@ namespace WarhammerCombatMathLibrary
             return cumulativeProbability;
         }
 
+        /*
+
         /// <summary>
         /// Calculates the upper cumulative distribution of trial data.
         /// </summary>
@@ -181,6 +227,26 @@ namespace WarhammerCombatMathLibrary
             return distribution;
         }
 
+        */
+
+        /// <summary>
+        /// Calculates the lower cumulative distribution of trial data.
+        /// </summary>
+        /// <param name="numberOfTrials"></param>
+        /// <param name="probability"></param>
+        /// <returns>A cumulative distribution of trial results and their respective probabilities.</returns>
+        public static List<BinomialData> UpperCumulativeDistribution(int numberOfTrials, double probability)
+        {
+            var distribution = new List<BinomialData>();
+
+            for (int k = 0; k <= numberOfTrials; k++)
+            {
+                distribution.Add(new BinomialData { Successes = k, Probability = UpperCumulativeProbability(numberOfTrials, k, probability) });
+            }
+
+            return distribution;
+        }
+
         /// <summary>
         /// Calculates the mean value of a probability distribution.
         /// </summary>
@@ -190,45 +256,6 @@ namespace WarhammerCombatMathLibrary
         public static double GetMean(int numberOfTrials, double probability)
         {
             return numberOfTrials * probability;
-        }
-
-        /// <summary>
-        /// Calculates the mean value of a probability distribution.
-        /// </summary>
-        /// <param name="distribution"></param>
-        /// <returns></returns>
-        public static double GetMean(this ProbabilityDistribution distribution)
-        {
-            double mean = 0;
-
-            foreach (var result in distribution)
-            {
-                mean += result.Key * (double)result.Value;
-            }
-
-            return mean;
-        }
-
-        /// <summary>
-        /// Calculates the median value of a probability distribution.
-        /// </summary>
-        /// <param name="distribution"></param>
-        /// <returns></returns>
-        public static int GetMedian(this ProbabilityDistribution distribution)
-        {
-            double cumulativeProbability = 0.5;
-
-            foreach (var result in distribution)
-            {
-                cumulativeProbability -= result.Value;
-
-                if (cumulativeProbability <= 0)
-                {
-                    return result.Key;
-                }
-            }
-
-            return 0;
         }
 
         /// <summary>
@@ -243,16 +270,6 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Calculates the mode value of a probability distribution.
-        /// </summary>
-        /// <param name="distribution"></param>
-        /// <returns></returns>
-        public static int GetMode(this ProbabilityDistribution distribution)
-        {
-            return distribution.Aggregate((max, result) => result.Value > max.Value ? result : max).Key;
-        }
-
-        /// <summary>
         /// Calculates the standard deviation of a probability distribution.
         /// </summary>
         /// <param name="numberOfTrials"></param>
@@ -261,23 +278,6 @@ namespace WarhammerCombatMathLibrary
         public static double GetStandardDeviation(int numberOfTrials, double probability)
         {
             return Math.Sqrt(numberOfTrials * probability * (1 - probability));
-        }
-
-        /// <summary>
-        /// Calculates the standard deviation of a probability distribution.
-        /// </summary>
-        /// <param name="distribution"></param>
-        /// <returns></returns>
-        public static double GetStandardDeviation(this ProbabilityDistribution distribution)
-        {
-            double variance = 0;
-
-            foreach (var result in distribution)
-            {
-                variance += Math.Pow(result.Key - (double)distribution.GetMean(), 2) * result.Value;
-            }
-
-            return Math.Sqrt(variance);
         }
 
         #endregion
