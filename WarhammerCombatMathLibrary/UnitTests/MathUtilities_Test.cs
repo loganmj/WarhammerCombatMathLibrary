@@ -40,7 +40,7 @@ namespace UnitTests
         /// Tests that the Factorial method correctly computes the value of 9!.
         /// </summary>
         [TestMethod]
-        public void Factorial_TestBitParam()
+        public void Factorial_TestBigParam()
         {
             Assert.AreEqual(BigInteger.Parse("815915283247897734345611269596115894272000000000"), MathUtilities.Factorial(40));
         }

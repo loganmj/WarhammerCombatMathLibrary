@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 using WarhammerCombatMathLibrary.Data;
 
 namespace WarhammerCombatMathLibrary
@@ -39,7 +40,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="totalPopulation">The population of the group or set.</param>
         /// <param name="combinationSize">The number elements in a unique combination.</param>
         /// <returns>A double value containing the binomial coefficient.</returns>
-        public static double BinomialCoefficient(int totalPopulation, int combinationSize)
+        public static BigInteger BinomialCoefficient(int totalPopulation, int combinationSize)
         {
             // Validate parameters
             Console.WriteLine($"BinomialCoefficient - TotalPopulation: {totalPopulation}, CombinationSize: {combinationSize}");
@@ -58,7 +59,7 @@ namespace WarhammerCombatMathLibrary
 
             Debug.WriteLine($"FactorialTotal: {factorialTotal}, FactorialCombination: {factorialCombination}, FactorialDifference: {factorialDifference}");
 
-            return (double)(factorialTotal / (factorialCombination * factorialDifference));
+            return (factorialTotal / (factorialCombination * factorialDifference));
         }
 
         /// <summary>
@@ -102,13 +103,16 @@ namespace WarhammerCombatMathLibrary
             ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
 
             // Perform calculation
-            double binomialCoefficient = BinomialCoefficient(numberOfTrials, numberOfSuccesses);
-            double successProbability = ProbabilityOfMultipleSuccesses(probability, numberOfSuccesses);
-            double failureProbability = ProbabilityOfMultipleSuccesses(1 - probability, numberOfTrials - numberOfSuccesses);
+            var binomialCoefficient = BinomialCoefficient(numberOfTrials, numberOfSuccesses);
+            var successProbability = ProbabilityOfMultipleSuccesses(probability, numberOfSuccesses);
+            var failureProbability = ProbabilityOfMultipleSuccesses(1 - probability, numberOfTrials - numberOfSuccesses);
 
             Console.WriteLine($"BinomialCoefficient: {binomialCoefficient}, SuccessProbability: {successProbability}, FailureProbability: {failureProbability}");
 
-            return binomialCoefficient * successProbability * failureProbability;
+            var result = (double)BigInteger.Multiply((BigInteger.Multiply(binomialCoefficient, (BigInteger)successProbability)), (BigInteger)failureProbability);
+            Console.WriteLine($"Result = {result}");
+
+            return result;
         }
 
         /// <summary>

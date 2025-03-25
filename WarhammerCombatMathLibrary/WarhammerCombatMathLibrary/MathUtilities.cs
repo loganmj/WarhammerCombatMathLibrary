@@ -33,7 +33,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Multiply together all integers from 1 to the passed in number.
-            int result = 1;
+            BigInteger result = 1;
 
             for (int i = 1; i <= number; i++)
             {
