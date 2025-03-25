@@ -35,9 +35,13 @@
 
             for (int i = 1; i <= number; i++)
             {
+                Console.WriteLine($"Factorial iteration: {i}");
+                Console.WriteLine($"Multiplying {result} by {i} ...");
                 result *= i;
+                Console.WriteLine($"New result: {result}");
             }
 
+            Console.WriteLine($"Factorial - input: {number}, result: {result}");
             return result;
         }
 
