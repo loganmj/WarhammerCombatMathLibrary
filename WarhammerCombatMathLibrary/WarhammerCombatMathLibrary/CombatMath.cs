@@ -29,12 +29,14 @@ namespace WarhammerCombatMathLibrary
             // If the success threshold is greater than 6, there are no successful results
             if (successThreshold > POSSIBLE_RESULTS_SIX_SIDED_DIE)
             {
+                Console.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is greater than {POSSIBLE_RESULTS_SIX_SIDED_DIE}, returning 0 ...");
                 return 0;
             }
 
             // If the success threshold is less than 2, there are no fail results
             if (successThreshold < 2)
             {
+                Console.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is less than two, returning {POSSIBLE_RESULTS_SIX_SIDED_DIE} ...");
                 return POSSIBLE_RESULTS_SIX_SIDED_DIE;
             }
 
@@ -46,11 +48,25 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static int GetTotalNumberOfAttacks(AttackerDTO attacker)
+        public static int GetTotalNumberOfAttacks(AttackerDTO? attacker)
         {
+            // If attacker parameter is null, return 0
+            if (attacker == null) 
+            {
+                Console.WriteLine($"GetTotalNumberOfAttacks() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
             // If either the number of models or the weapon attacks is less than 1, return 0.
             if (attacker.NumberOfModels < 1 || attacker.WeaponAttacks < 1) 
             {
+                Console.WriteLine($"GetTotalNumberOfAttacks() | Number of models is less than 1, returning 0 ...");
+                return 0;
+            }
+
+            if (attacker.WeaponAttacks < 1)
+            {
+                Console.WriteLine($"GetTotalNumberOfAttacks() | Weapon Attacks is less than 1, returning 0 ...");
                 return 0;
             }
 
@@ -62,9 +78,77 @@ namespace WarhammerCombatMathLibrary
         /// Returns the probability of succeeding a roll with a single dice, given the desired success threshold.
         /// </summary>
         /// <returns>A double value containing the probability of success for a single trial.</returns>
-        public static double GetProbabilityOfHit(AttackerDTO attacker)
+        public static double GetProbabilityOfHit(AttackerDTO? attacker)
         {
+            if (attacker == null) 
+            {
+                Console.WriteLine($"GetProbabilityOfHit() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
             return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(attacker.WeaponSkill));
+        }
+
+        /// <summary>
+        /// Returns the mean of the attacker's hit roll distribution.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static double GetMeanHits(AttackerDTO attacker)
+        {
+            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
+        }
+
+        /// <summary>
+        /// Gets the discrete expected number of successful hit rolls, based on the average probability.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static int GetExpectedHits(AttackerDTO attacker)
+        {
+            return (int)Math.Floor(GetMeanHits(attacker));
+        }
+
+        /// <summary>
+        /// Returns the standard deviation of the attacker's hit roll distribution.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static double GetStandardDeviationHits(AttackerDTO attacker)
+        {
+            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
+        }
+
+        /// <summary>
+        /// Returns the lower and upper range for expected successful hits.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns>A Tuple containing the lower and upper range values. Item1 is the lower bound, Item2 is the upper bound.</returns>
+        public static Tuple<int, int> GetExpectedRangeHits(AttackerDTO attacker)
+        {
+            var lowerBound = GetExpectedHits(attacker) - (int)Math.Floor(GetStandardDeviationHits(attacker));
+            var upperBound = GetExpectedHits(attacker) + (int)Math.Floor(GetStandardDeviationHits(attacker));
+            return Tuple.Create(lowerBound, upperBound);
+        }
+
+        /// <summary>
+        /// Returns a binomial distribution of attack roll results based on the process data.
+        /// </summary>
+        /// <returns>A BinomialDistribution object containing the hit success data.</returns>
+        public static List<BinomialData> GetBinomialDistributionOfHits(AttackerDTO attacker)
+        {
+            var totalAttacks = GetTotalNumberOfAttacks(attacker);
+            var probabilityOfHit = GetProbabilityOfHit(attacker);
+            return Statistics.BinomialDistribution(totalAttacks, probabilityOfHit);
+        }
+
+        /// <summary>
+        /// Returns the upper cumulative distribution of the attacker's hit roll.
+        /// </summary>
+        /// <returns></returns>
+        public static List<BinomialData> GetUpperCumulativeDistributionOfHits(AttackerDTO attacker)
+        {
+            return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
         }
 
         /// <summary>
@@ -120,68 +204,6 @@ namespace WarhammerCombatMathLibrary
             var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker, defender);
             var numberOfSuccessfulResults = GetNumberOfSuccessfulResults(woundSuccessThreshold);
             return GetProbabilityOfHit(attacker) * Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
-        }
-
-        /// <summary>
-        /// Returns a binomial distribution of attack roll results based on the process data.
-        /// </summary>
-        /// <returns>A BinomialDistribution object containing the hit success data.</returns>
-        public static List<BinomialData> GetBinomialDistributionOfHits(AttackerDTO attacker)
-        {
-            var totalAttacks = GetTotalNumberOfAttacks(attacker);
-            var probabilityOfHit = GetProbabilityOfHit(attacker);
-            return Statistics.BinomialDistribution(totalAttacks, probabilityOfHit);
-        }
-
-        /// <summary>
-        /// Returns the mean of the attacker's hit roll distribution.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns></returns>
-        public static double GetMeanHits(AttackerDTO attacker)
-        {
-            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
-        }
-
-        /// <summary>
-        /// Gets the discrete expected number of successful hit rolls, based on the average probability.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns></returns>
-        public static int GetExpectedHits(AttackerDTO attacker)
-        {
-            return (int)Math.Floor(GetMeanHits(attacker));
-        }
-
-        /// <summary>
-        /// Returns the standard deviation of the attacker's hit roll distribution.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns></returns>
-        public static double GetStandardDeviationHits(AttackerDTO attacker)
-        {
-            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
-        }
-
-        /// <summary>
-        /// Returns the lower and upper range for expected successful hits.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns>A Tuple containing the lower and upper range values. Item1 is the lower bound, Item2 is the upper bound.</returns>
-        public static Tuple<int, int> GetExpectedRangeHits(AttackerDTO attacker)
-        {
-            var lowerBound = GetExpectedHits(attacker) - (int)Math.Floor(GetStandardDeviationHits(attacker));
-            var upperBound = GetExpectedHits(attacker) + (int)Math.Floor(GetStandardDeviationHits(attacker));
-            return Tuple.Create(lowerBound, upperBound);
-        }
-
-        /// <summary>
-        /// Returns the upper cumulative distribution of the attacker's hit roll.
-        /// </summary>
-        /// <returns></returns>
-        public static List<BinomialData> GetUpperCumulativeDistributionOfHits(AttackerDTO attacker)
-        {
-            return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
         }
 
         /// <summary>

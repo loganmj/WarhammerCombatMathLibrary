@@ -63,6 +63,15 @@ namespace UnitTests
         /// Tests the case where the attacker has 0 models.
         /// </summary>
         [TestMethod]
+        public void GetTotalNumberOfAttacks_NullAttacker()
+        {
+            Assert.AreEqual(0, CombatMath.GetTotalNumberOfAttacks(null));
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has 0 models.
+        /// </summary>
+        [TestMethod]
         public void GetTotalNumberOfAttacks_ZeroModels()
         {
             var attacker = new AttackerDTO()
@@ -162,6 +171,87 @@ namespace UnitTests
             };
 
             Assert.AreEqual(200, CombatMath.GetTotalNumberOfAttacks(attacker));
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has 0 models.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_NullAttacker()
+        {
+            Assert.AreEqual(0, CombatMath.GetProbabilityOfHit(null));
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has 0 models.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_ZeroWeaponSkill()
+        {
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 0
+            };
+
+            Assert.AreEqual(1, CombatMath.GetProbabilityOfHit(attacker));
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has a negative number of models.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_NegativeWeaponSkill()
+        {
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = -1
+            };
+
+            Assert.AreEqual(1, CombatMath.GetProbabilityOfHit(attacker));
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_WeaponSKill2()
+        {
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 2
+            };
+
+            Console.WriteLine($"TEST - Attacker: {attacker}");
+
+            Assert.AreEqual(0.83, Math.Round(CombatMath.GetProbabilityOfHit(attacker)), 2);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_WeaponSKill3()
+        {
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3
+            };
+
+            Assert.AreEqual(0.67, Math.Round(CombatMath.GetProbabilityOfHit(attacker)), 2);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_WeaponSKill5()
+        {
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 5
+            };
+
+            Assert.AreEqual(0.33, Math.Round(CombatMath.GetProbabilityOfHit(attacker)), 2);
         }
     }
 }

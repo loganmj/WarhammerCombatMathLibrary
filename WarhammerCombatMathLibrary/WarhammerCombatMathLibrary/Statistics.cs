@@ -19,6 +19,8 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double ProbabilityOfSuccess(int numberOfPossibleResults, int numberOfSuccessfulResults)
         {
+            Console.WriteLine($"ProbabilityOfSuccess - NumberOfPossibleResults: {numberOfPossibleResults}, NumberOfSuccessfulResults: {numberOfSuccessfulResults}");
+
             // Validate parameters
             ArgumentOutOfRangeException.ThrowIfLessThan(numberOfPossibleResults, 1);
             ArgumentOutOfRangeException.ThrowIfNegative(numberOfSuccessfulResults);
