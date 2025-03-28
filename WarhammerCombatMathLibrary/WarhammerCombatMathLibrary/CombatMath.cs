@@ -48,6 +48,13 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static int GetTotalNumberOfAttacks(AttackerDTO attacker)
         {
+            // If either the number of models or the weapon attacks is less than 1, return 0.
+            if (attacker.NumberOfModels < 1 || attacker.WeaponAttacks < 1) 
+            {
+                return 0;
+            }
+
+            // Perform calculation
             return attacker.NumberOfModels * attacker.WeaponAttacks;
         }
 
