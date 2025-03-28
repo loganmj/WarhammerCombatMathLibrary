@@ -317,8 +317,20 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetMeanFailedSaves(AttackerDTO attacker, DefenderDTO defender)
+        public static double GetMeanFailedSaves(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null) 
+            {
+                Console.WriteLine($"GetMeanFailedSaves() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null) 
+            {
+                Console.WriteLine($"GetMeanFailedSaves() | Defender is null, returning 0 ...");
+                return 0;
+            }
+
             return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
         }
 

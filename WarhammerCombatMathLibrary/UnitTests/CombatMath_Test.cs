@@ -253,5 +253,25 @@ namespace UnitTests
 
             Assert.AreEqual(0.33, Math.Round(CombatMath.GetProbabilityOfHit(attacker)), 2);
         }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetMeanFailedSaves_NullAttacker() 
+        {
+            var defender = new DefenderDTO();
+            Assert.AreEqual(0, CombatMath.GetMeanFailedSaves(null, defender));
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetMeanFailedSaves_NullDefender()
+        {
+            var attacker = new AttackerDTO();
+            Assert.AreEqual(0, CombatMath.GetMeanFailedSaves(attacker, null));
+        }
     }
 }

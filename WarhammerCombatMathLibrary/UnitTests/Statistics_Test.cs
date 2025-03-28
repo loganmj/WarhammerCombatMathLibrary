@@ -233,5 +233,50 @@ namespace UnitTests
         {
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => Statistics.ProbabilityOfMultipleSuccesses(1, -1));
         }
+
+        /// <summary>
+        /// Tests the case where the number of trials is less than 1.
+        /// </summary>
+        [TestMethod]
+        public void GetMean_NumberOfTrialsLessThan1()
+        {
+            Assert.AreEqual(0, Statistics.GetMean(0, 1));
+        }
+
+        /// <summary>
+        /// Tests the case where the probability is less than 0.
+        /// </summary>
+        [TestMethod]
+        public void GetMean_ProbabilityLessThan0()
+        {
+            Assert.AreEqual(0, Statistics.GetMean(1, -1));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMean_Trials1Probability05()
+        {
+            Assert.AreEqual(0.5, Statistics.GetMean(1, 0.5));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMean_Trials10Probability05()
+        {
+            Assert.AreEqual(5, Statistics.GetMean(10, 0.5));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMean_Trials100Probability025()
+        {
+            Assert.AreEqual(25, Statistics.GetMean(100, 0.25));
+        }
     }
 }
