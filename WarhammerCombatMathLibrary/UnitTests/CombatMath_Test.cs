@@ -258,6 +258,46 @@ namespace UnitTests
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]
+        public void GetAdjustedArmorSave_NullAttacker()
+        {
+            var defender = new DefenderDTO();
+            Assert.AreEqual(0, CombatMath.GetAdjustedArmorSave(null, defender));
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedArmorSave_NullDefender()
+        {
+            var attacker = new AttackerDTO();
+            Assert.AreEqual(0, CombatMath.GetAdjustedArmorSave(attacker, null));
+        }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfFailedSave_NullAttacker()
+        {
+            var defender = new DefenderDTO();
+            Assert.AreEqual(0, CombatMath.GetProbabilityOfFailedSave(null, defender));
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfFailedSave_NullDefender()
+        {
+            var attacker = new AttackerDTO();
+            Assert.AreEqual(0, CombatMath.GetProbabilityOfFailedSave(attacker, null));
+        }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
         public void GetMeanFailedSaves_NullAttacker() 
         {
             var defender = new DefenderDTO();
