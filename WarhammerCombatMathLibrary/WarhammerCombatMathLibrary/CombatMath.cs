@@ -279,8 +279,20 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static int GetAdjustedArmorSave(AttackerDTO attacker, DefenderDTO defender)
+        public static int GetAdjustedArmorSave(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null)
+            {
+                Console.WriteLine($"GetAdjustedArmorSave() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Console.WriteLine($"GetAdjustedArmorSave() | Defender is null, returning 0 ...");
+                return 0;
+            }
+
             // If the defender has an invulnerable save, and the invulnerable save is lower than the regular save after applying armor pierce,
             // then use the invulnerable save.
             return Math.Min(defender.ArmorSave + attacker.WeaponArmorPierce, defender.InvulnerableSave);
@@ -292,8 +304,20 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetProbabilityOfFailedSave(AttackerDTO attacker, DefenderDTO defender)
+        public static double GetProbabilityOfFailedSave(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null)
+            {
+                Console.WriteLine($"GetProbabilityOfFailedSave() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Console.WriteLine($"GetProbabilityOfFailedSave() | Defender is null, returning 0 ...");
+                return 0;
+            }
+
             var adjustedArmorSave = GetAdjustedArmorSave(attacker, defender);
             var numberOfSuccessfulResults = GetNumberOfSuccessfulResults(adjustedArmorSave);
             var probabilityOfSuccessfulSave = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
