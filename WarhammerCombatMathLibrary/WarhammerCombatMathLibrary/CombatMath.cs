@@ -27,7 +27,7 @@ namespace WarhammerCombatMathLibrary
         public static int GetNumberOfSuccessfulResults(int successThreshold)
         {
             // If the success threshold is greater than 6, there are no successful results
-            if (successThreshold > 6)
+            if (successThreshold > POSSIBLE_RESULTS_SIX_SIDED_DIE)
             {
                 return 0;
             }
@@ -35,10 +35,10 @@ namespace WarhammerCombatMathLibrary
             // If the success threshold is less than 2, there are no fail results
             if (successThreshold < 2)
             {
-                return 6;
+                return POSSIBLE_RESULTS_SIX_SIDED_DIE;
             }
 
-            return 6 - (successThreshold - 1);
+            return POSSIBLE_RESULTS_SIX_SIDED_DIE - (successThreshold - 1);
         }
 
         /// <summary>
