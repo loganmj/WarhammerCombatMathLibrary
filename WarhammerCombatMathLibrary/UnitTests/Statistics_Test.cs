@@ -3,6 +3,9 @@ using WarhammerCombatMathLibrary;
 
 namespace UnitTests
 {
+    /// <summary>
+    /// Tests the Statistics class.
+    /// </summary>
     [TestClass]
     public sealed class Statistics_Test
     {

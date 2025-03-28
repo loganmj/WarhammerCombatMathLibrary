@@ -17,21 +17,29 @@ namespace WarhammerCombatMathLibrary
 
         #endregion
 
-        #region Private Methods
+        #region Public Methods
 
         /// <summary>
         /// Returns the success threshold for succeeding a hit roll.
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        private static int GetNumberOfSuccessfulResults(int successThreshold)
+        public static int GetNumberOfSuccessfulResults(int successThreshold)
         {
+            // If the success threshold is greater than 6, there are no successful results
+            if (successThreshold > 6)
+            {
+                return 0;
+            }
+
+            // If the success threshold is less than 2, there are no fail results
+            if (successThreshold < 2)
+            {
+                return 6;
+            }
+
             return 6 - (successThreshold - 1);
         }
-
-        #endregion
-
-        #region Public Methods
 
         /// <summary>
         /// Returns the total number of attack rolls the attacker is making.
