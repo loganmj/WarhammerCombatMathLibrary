@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using WarhammerCombatMathLibrary.Data;
+﻿using WarhammerCombatMathLibrary.Data;
 
 namespace WarhammerCombatMathLibrary
 {
@@ -51,14 +50,14 @@ namespace WarhammerCombatMathLibrary
         public static int GetTotalNumberOfAttacks(AttackerDTO? attacker)
         {
             // If attacker parameter is null, return 0
-            if (attacker == null) 
+            if (attacker == null)
             {
                 Console.WriteLine($"GetTotalNumberOfAttacks() | Attacker is null, returning 0 ...");
                 return 0;
             }
 
             // If either the number of models or the weapon attacks is less than 1, return 0.
-            if (attacker.NumberOfModels < 1 || attacker.WeaponAttacks < 1) 
+            if (attacker.NumberOfModels < 1 || attacker.WeaponAttacks < 1)
             {
                 Console.WriteLine($"GetTotalNumberOfAttacks() | Number of models is less than 1, returning 0 ...");
                 return 0;
@@ -80,7 +79,7 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A double value containing the probability of success for a single trial.</returns>
         public static double GetProbabilityOfHit(AttackerDTO? attacker)
         {
-            if (attacker == null) 
+            if (attacker == null)
             {
                 Console.WriteLine($"GetProbabilityOfHit() | Attacker is null, returning 0 ...");
                 return 0;
@@ -343,13 +342,13 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double GetMeanFailedSaves(AttackerDTO? attacker, DefenderDTO? defender)
         {
-            if (attacker == null) 
+            if (attacker == null)
             {
                 Console.WriteLine($"GetMeanFailedSaves() | Attacker is null, returning 0 ...");
                 return 0;
             }
 
-            if (defender == null) 
+            if (defender == null)
             {
                 Console.WriteLine($"GetMeanFailedSaves() | Defender is null, returning 0 ...");
                 return 0;

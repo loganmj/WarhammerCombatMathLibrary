@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WarhammerCombatMathLibrary;
+﻿using WarhammerCombatMathLibrary;
 using WarhammerCombatMathLibrary.Data;
 
 namespace UnitTests
@@ -132,7 +127,7 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetTotalNumberOfAttacks_1Models_2Weapons() 
+        public void GetTotalNumberOfAttacks_1Models_2Weapons()
         {
             var attacker = new AttackerDTO()
             {
@@ -298,7 +293,7 @@ namespace UnitTests
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]
-        public void GetMeanFailedSaves_NullAttacker() 
+        public void GetMeanFailedSaves_NullAttacker()
         {
             var defender = new DefenderDTO();
             Assert.AreEqual(0, CombatMath.GetMeanFailedSaves(null, defender));

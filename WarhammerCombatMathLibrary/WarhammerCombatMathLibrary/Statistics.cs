@@ -223,7 +223,7 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double GetMean(int numberOfTrials, double probability)
         {
-            if (numberOfTrials < 1) 
+            if (numberOfTrials < 1)
             {
                 Console.WriteLine($"GetMean() | Number of trials is less than 1. Returning 0 ...");
                 return 0;

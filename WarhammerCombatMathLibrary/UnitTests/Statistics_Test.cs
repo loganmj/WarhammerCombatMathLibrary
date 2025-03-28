@@ -130,7 +130,7 @@ namespace UnitTests
         /// Tests the probability mass function with given inputs.
         /// </summary>
         [TestMethod]
-        public void ProbabilityMassFunction_TestParams_1_1_05() 
+        public void ProbabilityMassFunction_TestParams_1_1_05()
         {
             Assert.AreEqual(0.5, Statistics.ProbabilityMassFunction(1, 1, 0.5));
         }
@@ -220,7 +220,7 @@ namespace UnitTests
         /// Tests the case where the probability argument is greater than 1.
         /// </summary>
         [TestMethod]
-        public void ProbabilityOfMultipleSuccesses_ArgumentOutOfRange_ProbabilityIsGreaterThan1() 
+        public void ProbabilityOfMultipleSuccesses_ArgumentOutOfRange_ProbabilityIsGreaterThan1()
         {
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => Statistics.ProbabilityOfMultipleSuccesses(2, 1));
         }
