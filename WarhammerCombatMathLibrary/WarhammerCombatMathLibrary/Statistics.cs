@@ -26,9 +26,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            if (numberOfSuccessfulResults <= 0)
+            if (numberOfSuccessfulResults < 1)
             {
-                Debug.WriteLine($"ProbabilityOfSuccess() | Number of successful results is less than or equal to 0. Returning 0 ...");
+                Debug.WriteLine($"ProbabilityOfSuccess() | Number of successful results is less than 1. Returning 0 ...");
                 return 0;
             }
 
@@ -136,6 +136,12 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
+            if (numberOfSuccesses > numberOfTrials) 
+            {
+                Debug.WriteLine($"ProbabilityMassFunction() | Number of successes is greater than number of trials. Returning 0 ...");
+                return 0;
+            }
+
             if (probability <= 0)
             {
                 Debug.WriteLine($"ProbabilityMassFunction() | Probability is less than or equal to 0. Returning 0 ...");
@@ -226,6 +232,46 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A double containing the cumulative probability value.</returns>
         public static double LowerCumulativeProbability(int numberOfTrials, int numberOfSuccesses, double probability)
         {
+            // Validate parameters
+            if (numberOfTrials < 1)
+            {
+                Debug.WriteLine($"LowerCumulativeProbability() | Number of trials is less than 1. Returning 0 ...");
+                return 0;
+            }
+
+            if (numberOfSuccesses < 0) 
+            {
+                Debug.WriteLine($"LowerCumulativeProbability() | Number of successes is less than 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (numberOfSuccesses > numberOfTrials)
+            {
+                Debug.WriteLine($"LowerCumulativeProbability() | Number of successes is greater than number of trials. Returning 0 ...");
+                return 0;
+            }
+
+            if (probability <= 0)
+            {
+                Debug.WriteLine($"LowerCumulativeProbability() | Probability is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
+
+            // In the case where probability is greater than or equal to 1, all discrete values up to the max possible successes are equal to 0,
+            // and the max possible successes has a probability of 1.
+            // Therefore, the sum of all values up to the max number of successes is 0.
+            if (probability >= 1)
+            {
+                if (numberOfSuccesses == numberOfTrials) 
+                {
+                    Debug.WriteLine($"LowerCumulativeProbability() | Probability is greater than or equal to 1, and the number of successes equals the number of trials. Returning 1 ...");
+                    return 1;
+                }
+
+                Debug.WriteLine($"LowerCumulativeProbability() | Probability is greater than or equal to 1, and the number of successes does not equal the number of trials. Returning 1 ...");
+                return 0;
+            }
+
             double cumulativeProbability = 0;
 
             for (int i = 0; i <= numberOfSuccesses; i++)
@@ -244,6 +290,49 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A cumulative distribution of trial results and their respective probabilities.</returns>
         public static List<BinomialData> LowerCumulativeDistribution(int numberOfTrials, double probability)
         {
+            // Validate parameters
+            if (numberOfTrials < 1)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Number of trials is less than 1.");
+                return [new(0, 1)];
+            }
+
+            if (probability <= 0)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Probability is less than or equal to 0.");
+
+                // The probability of 0 successes should be 1, all other probabilities should be 0.
+                // So the lower cumulative probability for all entries should be 1.
+                var adjustedDistribution = new List<BinomialData>
+                {
+                    new(0, 1)
+                };
+
+                for (int k = 1; k <= numberOfTrials; k++)
+                {
+                    adjustedDistribution.Add(new BinomialData(k, 1));
+                }
+
+                return adjustedDistribution;
+            }
+
+            if (probability >= 1)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Probability is greater than or equal to 1.");
+
+                // All probabilities should be 0, except the probability of all successes should be 1.
+                var adjustedDistribution = new List<BinomialData>();
+
+                for (int k = 0; k <= numberOfTrials - 1; k++)
+                {
+                    adjustedDistribution.Add(new BinomialData(k, 0));
+                }
+
+                adjustedDistribution.Add(new BinomialData(numberOfTrials, 1));
+
+                return adjustedDistribution;
+            }
+
             var distribution = new List<BinomialData>();
 
             for (int k = 0; k <= numberOfTrials; k++)
