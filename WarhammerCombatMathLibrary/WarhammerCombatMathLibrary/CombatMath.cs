@@ -126,8 +126,14 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static double GetStandardDeviationHits(AttackerDTO attacker)
+        public static double GetStandardDeviationHits(AttackerDTO? attacker)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetStandardDeviationHits() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
             return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
         }
 

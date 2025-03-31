@@ -24,7 +24,7 @@
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"P({Successes}) = {Probability * 100:F2}%";
+            return $"P({Successes}) = {Probability:F2}";
         }
 
         #endregion
