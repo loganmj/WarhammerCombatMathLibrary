@@ -66,6 +66,96 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the case where the number of trials is less than 1.
+        /// </summary>
+        [TestMethod]
+        public void GetMean_NumberOfTrialsLessThan1()
+        {
+            Assert.AreEqual(0, Statistics.GetMean(0, 1));
+        }
+
+        /// <summary>
+        /// Tests the case where the probability is less than 0.
+        /// </summary>
+        [TestMethod]
+        public void GetMean_ProbabilityLessThan0()
+        {
+            Assert.AreEqual(0, Statistics.GetMean(1, -1));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMean_TestParams1()
+        {
+            Assert.AreEqual(0.5, Statistics.GetMean(1, 0.5));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMean_TestParams2()
+        {
+            Assert.AreEqual(5, Statistics.GetMean(10, 0.5));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMean_TestParams3()
+        {
+            Assert.AreEqual(25, Statistics.GetMean(100, 0.25));
+        }
+
+        /// <summary>
+        /// Tests the case where the number of trials is less than 1.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviation_NumberOfTrialsLessThan1()
+        {
+            Assert.AreEqual(0, Statistics.GetStandardDeviation(0, 1));
+        }
+
+        /// <summary>
+        /// Tests the case where the probability is less than 0.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviation_ProbabilityLessThan0()
+        {
+            Assert.AreEqual(0, Statistics.GetStandardDeviation(1, -1));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviation_TestParams1()
+        {
+            Assert.AreEqual(0.5, Statistics.GetMean(1, 0.5));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviation_TestParams2()
+        {
+            Assert.AreEqual(1.58, Math.Round(Statistics.GetStandardDeviation(10, 0.5), 2));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviation_TestParams3()
+        {
+            Assert.AreEqual(4.33, Math.Round(Statistics.GetStandardDeviation(100, 0.25), 2));
+        }
+
+        /// <summary>
         /// Tests the case where the totalPopulation argument is out of range.
         /// </summary>
         [TestMethod]
@@ -242,7 +332,7 @@ namespace UnitTests
         [TestMethod]
         public void BinomialDistribution_NumberOfTrialsLessThan1()
         {
-            var expected = new List<BinomialData>() { new(0,1) };
+            var expected = new List<BinomialData>() { new(0, 1) };
             var actual = Statistics.BinomialDistribution(0, 1);
 
             // Print expected
@@ -268,12 +358,18 @@ namespace UnitTests
         [TestMethod]
         public void BinomialDistribution_ProbabilityLessThanOrEqualTo0()
         {
-            var expected = new List<BinomialData>() { new(0, 1) };
-            var actual = Statistics.BinomialDistribution(1, -1);
+            var expected = new List<BinomialData>() 
+            {
+                new(0, 1),
+                new(1,0),
+                new(2,0),
+                new(3,0)
+            };
+            var actual = Statistics.BinomialDistribution(3, -1);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
-            foreach (var value in expected) 
+            foreach (var value in expected)
             {
                 Debug.WriteLine(value);
             }
@@ -294,9 +390,15 @@ namespace UnitTests
         [TestMethod]
         public void BinomialDistribution_ProbabilityGreaterThanOrEqualTo1()
         {
-            var numberOfTrials = 10;
-            var expected = new List<BinomialData>() { new(numberOfTrials, 1) };
-            var actual = Statistics.BinomialDistribution(numberOfTrials, 2);
+            var expected = new List<BinomialData>() 
+            {
+                new(0, 0),
+                new(1, 0),
+                new(2, 0),
+                new(3, 1) 
+            };
+
+            var actual = Statistics.BinomialDistribution(3, 1);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -316,93 +418,103 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the case where the number of trials is less than 1.
+        /// Tests the probability mass function with given inputs.
         /// </summary>
         [TestMethod]
-        public void GetMean_NumberOfTrialsLessThan1()
+        public void BinomialDistribution_TestParams1()
         {
-            Assert.AreEqual(0, Statistics.GetMean(0, 1));
+            var numberOfTrials = 1;
+            var probability = 0.5;
+            var expected = new List<BinomialData>() 
+            {
+                new(0, 0.5),
+                new(1, 0.5) 
+            };
+
+            var actual = Statistics.BinomialDistribution(numberOfTrials, probability);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the case where the probability is less than 0.
+        /// Tests the probability mass function with given inputs.
         /// </summary>
         [TestMethod]
-        public void GetMean_ProbabilityLessThan0()
+        public void BinomialDistribution_TestParams2()
         {
-            Assert.AreEqual(0, Statistics.GetMean(1, -1));
+            var numberOfTrials = 1;
+            var probability = 0.1;
+            var expected = new List<BinomialData>() 
+            { 
+                new(0, 0.9), 
+                new(1, 0.1)
+            };
+
+            var actual = Statistics.BinomialDistribution(numberOfTrials, probability);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the probability mass function with given large inputs.
         /// </summary>
         [TestMethod]
-        public void GetMean_TestParams1()
+        public void BinomialDistribution_TestParams3()
         {
-            Assert.AreEqual(0.5, Statistics.GetMean(1, 0.5));
-        }
+            var numberOfTrials = 2;
+            var probability = 0.5;
+            var expected = new List<BinomialData>()
+            {
+                new(0, 0.25),
+                new(1, 0.5),
+                new(2, 0.25)
+            };
 
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMean_TestParams2()
-        {
-            Assert.AreEqual(5, Statistics.GetMean(10, 0.5));
-        }
+            var actual = Statistics.BinomialDistribution(numberOfTrials, probability);
 
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMean_TestParams3()
-        {
-            Assert.AreEqual(25, Statistics.GetMean(100, 0.25));
-        }
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
 
-        /// <summary>
-        /// Tests the case where the number of trials is less than 1.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviation_NumberOfTrialsLessThan1()
-        {
-            Assert.AreEqual(0, Statistics.GetStandardDeviation(0, 1));
-        }
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
 
-        /// <summary>
-        /// Tests the case where the probability is less than 0.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviation_ProbabilityLessThan0()
-        {
-            Assert.AreEqual(0, Statistics.GetStandardDeviation(1, -1));
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviation_TestParams1()
-        {
-            Assert.AreEqual(0.5, Statistics.GetMean(1, 0.5));
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviation_TestParams2()
-        {
-            Assert.AreEqual(1.58, Math.Round(Statistics.GetStandardDeviation(10, 0.5), 2));
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviation_TestParams3()
-        {
-            Assert.AreEqual(4.33, Math.Round(Statistics.GetStandardDeviation(100, 0.25), 2));
+            CollectionAssert.AreEqual(expected, actual);
         }
     }
 }

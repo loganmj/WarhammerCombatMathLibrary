@@ -74,8 +74,6 @@ namespace WarhammerCombatMathLibrary
             var factorialTotal = MathUtilities.Factorial(population);
             var factorialCombination = MathUtilities.Factorial(combinationSize);
             var factorialDifference = MathUtilities.Factorial(population - combinationSize);
-            Debug.WriteLine($"FactorialTotal: {factorialTotal}, FactorialCombination: {factorialCombination}, FactorialDifference: {factorialDifference}");
-
             return (factorialTotal / (factorialCombination * factorialDifference));
         }
 
@@ -132,7 +130,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            if (numberOfSuccesses < 0) 
+            if (numberOfSuccesses < 0)
             {
                 Debug.WriteLine($"ProbabilityMassFunction() | Number of successes is less than 0. Returning 0 ...");
                 return 0;
@@ -166,22 +164,45 @@ namespace WarhammerCombatMathLibrary
         public static List<BinomialData> BinomialDistribution(int numberOfTrials, double probability)
         {
             // Validate parameters
-            if (numberOfTrials < 1) 
+            if (numberOfTrials < 1)
             {
                 Debug.WriteLine($"BinomialDistribution() | Number of trials is less than 1.");
-                return [new(0,1)];
+                return [new(0, 1)];
             }
 
             if (probability <= 0)
             {
                 Debug.WriteLine($"BinomialDistribution() | Probability is less than or equal to 0.");
-                return [new(0, 1)];
+
+                // The probability of 0 successes should be 1, all other probabilities should be 0.
+                var adjustedDistribution = new List<BinomialData>
+                {
+                    new(0, 1)
+                };
+
+                for (int k = 1; k <= numberOfTrials; k++)
+                {
+                    adjustedDistribution.Add(new BinomialData(k, 0));
+                }
+
+                return adjustedDistribution;
             }
 
             if (probability >= 1)
             {
                 Debug.WriteLine($"BinomialDistribution() | Probability is greater than or equal to 1.");
-                return [new(numberOfTrials, 1)];
+
+                // All probabilities should be 0, except the probability of all successes should be 1.
+                var adjustedDistribution = new List<BinomialData>();
+
+                for (int k = 0; k <= numberOfTrials-1; k++)
+                {
+                    adjustedDistribution.Add(new BinomialData(k, 0));
+                }
+
+                adjustedDistribution.Add(new BinomialData(numberOfTrials, 1));
+
+                return adjustedDistribution;
             }
 
             // Create distribution
@@ -189,7 +210,7 @@ namespace WarhammerCombatMathLibrary
 
             for (int k = 0; k <= numberOfTrials; k++)
             {
-                distribution.Add(new BinomialData { Successes = k, Probability = ProbabilityMassFunction(numberOfTrials, k, probability) });
+                distribution.Add(new BinomialData(k, ProbabilityMassFunction(numberOfTrials, k, probability)));
             }
 
             return distribution;
@@ -285,9 +306,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            if (probability < 0)
+            if (probability <= 0)
             {
-                Debug.WriteLine($"GetMean() | Probability is less than 0. Returning 0 ...");
+                Debug.WriteLine($"GetMean() | Probability is less or equal to 0. Returning 0 ...");
                 return 0;
             }
 
@@ -313,13 +334,13 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double GetStandardDeviation(int numberOfTrials, double probability)
         {
-            if (numberOfTrials < 0) 
+            if (numberOfTrials < 0)
             {
                 Debug.WriteLine($"GetStandardDeviation() | Number of trials is less than 0. Returning 0 ...");
                 return 0;
             }
 
-            if (probability < 0) 
+            if (probability < 0)
             {
                 Debug.WriteLine($"GetStandardDeviation() | Probability is less than 0. Returning 0 ...");
                 return 0;

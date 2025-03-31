@@ -1,4 +1,5 @@
-﻿using WarhammerCombatMathLibrary;
+﻿using System.Diagnostics;
+using WarhammerCombatMathLibrary;
 using WarhammerCombatMathLibrary.Data;
 
 namespace UnitTests
@@ -426,7 +427,24 @@ namespace UnitTests
         [TestMethod]
         public void GetBinomialDistributionOfHits_AttackerIsNull()
         {
-            Assert.AreEqual([], CombatMath.GetBinomialDistributionOfHits(null));
+            var expected = new List<BinomialData>();
+            var actual = CombatMath.GetBinomialDistributionOfHits(null);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -442,14 +460,29 @@ namespace UnitTests
                 WeaponSkill = 4
             };
 
-            var expected = new List<BinomialData> 
+            var expected = new List<BinomialData>
             {
-                new(0,0),
-                new(0,0),
-                new(0,0)
+                new(0, 0.5),
+                new(1, 0.5)
             };
+            
+            var actual = CombatMath.GetBinomialDistributionOfHits(attacker);
 
-            Assert.AreEqual(expected, CombatMath.GetBinomialDistributionOfHits(attacker));
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -461,18 +494,35 @@ namespace UnitTests
             var attacker = new AttackerDTO()
             {
                 NumberOfModels = 1,
-                WeaponAttacks = 1,
+                WeaponAttacks = 3,
                 WeaponSkill = 4
             };
 
-            var expected = new List<BinomialData>
+            var expected = new List<BinomialData>()
             {
-                new(0,0),
-                new(0,0),
-                new(0,0)
+                new(0, 0.125),
+                new(1, 0.375),
+                new(2, 0.375),
+                new(3, 0.125)
             };
 
-            Assert.AreEqual(expected, CombatMath.GetBinomialDistributionOfHits(attacker));
+            var actual = CombatMath.GetBinomialDistributionOfHits(attacker);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -483,19 +533,37 @@ namespace UnitTests
         {
             var attacker = new AttackerDTO()
             {
-                NumberOfModels = 1,
-                WeaponAttacks = 1,
+                NumberOfModels = 2,
+                WeaponAttacks = 2,
                 WeaponSkill = 4
             };
 
-            var expected = new List<BinomialData>
+            var expected = new List<BinomialData>()
             {
-                new(0,0),
-                new(0,0),
-                new(0,0)
+                new(0, 0.0625),
+                new(1, 0.25),
+                new(2, 0.375),
+                new(3, 0.25),
+                new(4, 0.0625)
             };
 
-            Assert.AreEqual(expected, CombatMath.GetBinomialDistributionOfHits(attacker));
+            var actual = CombatMath.GetBinomialDistributionOfHits(attacker);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         /// <summary>

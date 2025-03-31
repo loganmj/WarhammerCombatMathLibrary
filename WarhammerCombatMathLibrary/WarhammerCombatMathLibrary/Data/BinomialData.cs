@@ -24,7 +24,7 @@
         /// <summary>
         /// Parameterless constructor. Sets properties to default values.
         /// </summary>
-        public BinomialData() 
+        public BinomialData()
         {
             Successes = 0;
             Probability = 0;
@@ -35,7 +35,7 @@
         /// </summary>
         /// <param name="successes"></param>
         /// <param name="probability"></param>
-        public BinomialData(int successes, double probability) 
+        public BinomialData(int successes, double probability)
         {
             Successes = successes;
             Probability = probability;
@@ -48,7 +48,7 @@
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"P({Successes}) = {Probability:F2}";
+            return $"P({Successes}) = {Probability:F4}";
         }
 
         /// <inheritdoc/>
