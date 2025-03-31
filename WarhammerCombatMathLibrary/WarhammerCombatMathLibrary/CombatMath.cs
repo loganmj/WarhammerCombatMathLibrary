@@ -58,7 +58,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // If either the number of models or the weapon attacks is less than 1, return 0.
-            if (attacker.NumberOfModels < 1 || attacker.WeaponAttacks < 1)
+            if (attacker.NumberOfModels < 1)
             {
                 Debug.WriteLine($"GetTotalNumberOfAttacks() | Number of models is less than 1, returning 0 ...");
                 return 0;
@@ -110,8 +110,14 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static int GetExpectedHits(AttackerDTO attacker)
+        public static int GetExpectedHits(AttackerDTO? attacker)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetExpectedHits() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
             return (int)Math.Floor(GetMeanHits(attacker));
         }
 

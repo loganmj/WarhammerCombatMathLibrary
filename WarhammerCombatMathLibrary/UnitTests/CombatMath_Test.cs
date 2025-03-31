@@ -127,7 +127,7 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetTotalNumberOfAttacks_1Models_2Weapons()
+        public void GetTotalNumberOfAttacks_TestParams1()
         {
             var attacker = new AttackerDTO()
             {
@@ -142,7 +142,7 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetTotalNumberOfAttacks_2Models_1Weapons()
+        public void GetTotalNumberOfAttacks_TestParams2()
         {
             var attacker = new AttackerDTO()
             {
@@ -157,7 +157,7 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetTotalNumberOfAttacks_10Models_20Weapons()
+        public void GetTotalNumberOfAttacks_TestParams3()
         {
             var attacker = new AttackerDTO()
             {
@@ -252,10 +252,115 @@ namespace UnitTests
         /// <summary>
         /// Tests the case where the attacker parameter is null.
         /// </summary>
-        [TestMethod] 
+        [TestMethod]
         public void GetMeanHits_AttackerIsNull()
         {
             Assert.AreEqual(0, CombatMath.GetMeanHits(null));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanHits_TestParams1()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponAttacks = 1,
+                WeaponSkill = 4
+            };
+
+            Assert.AreEqual(0.5, CombatMath.GetMeanHits(attacker));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanHits_TestParams2()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 10,
+                WeaponAttacks = 10,
+                WeaponSkill = 4
+            };
+
+            Assert.AreEqual(50, CombatMath.GetMeanHits(attacker));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanHits_TestParams3()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 10,
+                WeaponAttacks = 4,
+                WeaponSkill = 3
+            };
+
+            Assert.AreEqual(26.67, Math.Round(CombatMath.GetMeanHits(attacker), 2));
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedHits_AttackerIsNull()
+        {
+            Assert.AreEqual(0, CombatMath.GetExpectedHits(null));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedHits_TestParams1()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponAttacks = 1,
+                WeaponSkill = 4
+            };
+
+            Assert.AreEqual(0, CombatMath.GetExpectedHits(attacker));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedHits_TestParams2()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 10,
+                WeaponAttacks = 10,
+                WeaponSkill = 4
+            };
+
+            Assert.AreEqual(50, CombatMath.GetExpectedHits(attacker));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedHits_TestParams3()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 10,
+                WeaponAttacks = 4,
+                WeaponSkill = 3
+            };
+
+            Assert.AreEqual(26, CombatMath.GetExpectedHits(attacker));
         }
 
         /// <summary>
