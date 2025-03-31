@@ -257,6 +257,18 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double GetStandardDeviation(int numberOfTrials, double probability)
         {
+            if (numberOfTrials < 0) 
+            {
+                Debug.WriteLine($"GetStandardDeviation() | Number of trials is less than 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (probability < 0) 
+            {
+                Debug.WriteLine($"GetStandardDeviation() | Probability is less than 0. Returning 0 ...");
+                return 0;
+            }
+
             return Math.Sqrt(numberOfTrials * probability * (1 - probability));
         }
 

@@ -130,7 +130,7 @@ namespace WarhammerCombatMathLibrary
         {
             if (attacker == null)
             {
-                Debug.WriteLine($"GetStandardDeviationHits() | Attacker is null, returning 0 ...");
+                Debug.WriteLine($"GetStandardDeviationHits() | Attacker is null. Returning 0 ...");
                 return 0;
             }
 
