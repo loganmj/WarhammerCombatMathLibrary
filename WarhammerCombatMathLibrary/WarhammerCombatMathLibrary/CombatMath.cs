@@ -1,4 +1,5 @@
-﻿using WarhammerCombatMathLibrary.Data;
+﻿using System.Diagnostics;
+using WarhammerCombatMathLibrary.Data;
 
 namespace WarhammerCombatMathLibrary
 {
@@ -28,14 +29,14 @@ namespace WarhammerCombatMathLibrary
             // If the success threshold is greater than 6, there are no successful results
             if (successThreshold > POSSIBLE_RESULTS_SIX_SIDED_DIE)
             {
-                Console.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is greater than {POSSIBLE_RESULTS_SIX_SIDED_DIE}, returning 0 ...");
+                Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is greater than {POSSIBLE_RESULTS_SIX_SIDED_DIE}, returning 0 ...");
                 return 0;
             }
 
             // If the success threshold is less than 2, there are no fail results
             if (successThreshold < 2)
             {
-                Console.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is less than two, returning {POSSIBLE_RESULTS_SIX_SIDED_DIE} ...");
+                Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is less than two, returning {POSSIBLE_RESULTS_SIX_SIDED_DIE} ...");
                 return POSSIBLE_RESULTS_SIX_SIDED_DIE;
             }
 
@@ -52,20 +53,20 @@ namespace WarhammerCombatMathLibrary
             // If attacker parameter is null, return 0
             if (attacker == null)
             {
-                Console.WriteLine($"GetTotalNumberOfAttacks() | Attacker is null, returning 0 ...");
+                Debug.WriteLine($"GetTotalNumberOfAttacks() | Attacker is null, returning 0 ...");
                 return 0;
             }
 
             // If either the number of models or the weapon attacks is less than 1, return 0.
             if (attacker.NumberOfModels < 1 || attacker.WeaponAttacks < 1)
             {
-                Console.WriteLine($"GetTotalNumberOfAttacks() | Number of models is less than 1, returning 0 ...");
+                Debug.WriteLine($"GetTotalNumberOfAttacks() | Number of models is less than 1, returning 0 ...");
                 return 0;
             }
 
             if (attacker.WeaponAttacks < 1)
             {
-                Console.WriteLine($"GetTotalNumberOfAttacks() | Weapon Attacks is less than 1, returning 0 ...");
+                Debug.WriteLine($"GetTotalNumberOfAttacks() | Weapon Attacks is less than 1, returning 0 ...");
                 return 0;
             }
 
@@ -81,7 +82,7 @@ namespace WarhammerCombatMathLibrary
         {
             if (attacker == null)
             {
-                Console.WriteLine($"GetProbabilityOfHit() | Attacker is null, returning 0 ...");
+                Debug.WriteLine($"GetProbabilityOfHit() | Attacker is null, returning 0 ...");
                 return 0;
             }
 
@@ -97,6 +98,7 @@ namespace WarhammerCombatMathLibrary
         {
             if (attacker == null) 
             {
+                Debug.WriteLine($"GetMeanHits() | Attacker is null, returning 0 ...");
                 return 0;
             }
 
@@ -287,13 +289,13 @@ namespace WarhammerCombatMathLibrary
         {
             if (attacker == null)
             {
-                Console.WriteLine($"GetAdjustedArmorSave() | Attacker is null, returning 0 ...");
+                Debug.WriteLine($"GetAdjustedArmorSave() | Attacker is null, returning 0 ...");
                 return 0;
             }
 
             if (defender == null)
             {
-                Console.WriteLine($"GetAdjustedArmorSave() | Defender is null, returning 0 ...");
+                Debug.WriteLine($"GetAdjustedArmorSave() | Defender is null, returning 0 ...");
                 return 0;
             }
 
@@ -312,13 +314,13 @@ namespace WarhammerCombatMathLibrary
         {
             if (attacker == null)
             {
-                Console.WriteLine($"GetProbabilityOfFailedSave() | Attacker is null, returning 0 ...");
+                Debug.WriteLine($"GetProbabilityOfFailedSave() | Attacker is null, returning 0 ...");
                 return 0;
             }
 
             if (defender == null)
             {
-                Console.WriteLine($"GetProbabilityOfFailedSave() | Defender is null, returning 0 ...");
+                Debug.WriteLine($"GetProbabilityOfFailedSave() | Defender is null, returning 0 ...");
                 return 0;
             }
 
@@ -349,13 +351,13 @@ namespace WarhammerCombatMathLibrary
         {
             if (attacker == null)
             {
-                Console.WriteLine($"GetMeanFailedSaves() | Attacker is null, returning 0 ...");
+                Debug.WriteLine($"GetMeanFailedSaves() | Attacker is null, returning 0 ...");
                 return 0;
             }
 
             if (defender == null)
             {
-                Console.WriteLine($"GetMeanFailedSaves() | Defender is null, returning 0 ...");
+                Debug.WriteLine($"GetMeanFailedSaves() | Defender is null, returning 0 ...");
                 return 0;
             }
 

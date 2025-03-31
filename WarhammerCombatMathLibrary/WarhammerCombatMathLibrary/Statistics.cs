@@ -19,7 +19,7 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double ProbabilityOfSuccess(int numberOfPossibleResults, int numberOfSuccessfulResults)
         {
-            Console.WriteLine($"ProbabilityOfSuccess - NumberOfPossibleResults: {numberOfPossibleResults}, NumberOfSuccessfulResults: {numberOfSuccessfulResults}");
+            Debug.WriteLine($"ProbabilityOfSuccess - NumberOfPossibleResults: {numberOfPossibleResults}, NumberOfSuccessfulResults: {numberOfSuccessfulResults}");
 
             // Validate parameters
             ArgumentOutOfRangeException.ThrowIfLessThan(numberOfPossibleResults, 1);
@@ -44,7 +44,7 @@ namespace WarhammerCombatMathLibrary
         public static BigInteger BinomialCoefficient(int totalPopulation, int combinationSize)
         {
             // Validate parameters
-            Console.WriteLine($"BinomialCoefficient - TotalPopulation: {totalPopulation}, CombinationSize: {combinationSize}");
+            Debug.WriteLine($"BinomialCoefficient - TotalPopulation: {totalPopulation}, CombinationSize: {combinationSize}");
             ArgumentOutOfRangeException.ThrowIfNegative(totalPopulation);
             ArgumentOutOfRangeException.ThrowIfNegative(combinationSize);
 
@@ -96,7 +96,7 @@ namespace WarhammerCombatMathLibrary
         public static double ProbabilityMassFunction(int numberOfTrials, int numberOfSuccesses, double probability)
         {
             // Validate parameters
-            Console.WriteLine($"ProbabilityMassFunction - NumberOfTrials: {numberOfTrials}, NumberOfSuccesses: {numberOfSuccesses}, Probability: {probability}");
+            Debug.WriteLine($"ProbabilityMassFunction - NumberOfTrials: {numberOfTrials}, NumberOfSuccesses: {numberOfSuccesses}, Probability: {probability}");
             ArgumentOutOfRangeException.ThrowIfLessThan(numberOfTrials, 1);
             ArgumentOutOfRangeException.ThrowIfNegative(numberOfSuccesses);
             ArgumentOutOfRangeException.ThrowIfNegative(probability);
@@ -107,9 +107,9 @@ namespace WarhammerCombatMathLibrary
             var successProbability = ProbabilityOfMultipleSuccesses(probability, numberOfSuccesses);
             var failureProbability = ProbabilityOfMultipleSuccesses(1 - probability, numberOfTrials - numberOfSuccesses);
 
-            Console.WriteLine($"BinomialCoefficient: {binomialCoefficient}, SuccessProbability: {successProbability}, FailureProbability: {failureProbability}");
+            Debug.WriteLine($"BinomialCoefficient: {binomialCoefficient}, SuccessProbability: {successProbability}, FailureProbability: {failureProbability}");
             var result = (double)binomialCoefficient * successProbability * failureProbability;
-            Console.WriteLine($"Result = {result}");
+            Debug.WriteLine($"Result = {result}");
 
             return (double)result;
         }
@@ -123,7 +123,7 @@ namespace WarhammerCombatMathLibrary
         public static List<BinomialData> BinomialDistribution(int numberOfTrials, double probability)
         {
             // Validate parameters
-            Console.WriteLine($"BinomialDistribution - numberOfTrials: {numberOfTrials}, probability: {probability}");
+            Debug.WriteLine($"BinomialDistribution - numberOfTrials: {numberOfTrials}, probability: {probability}");
             ArgumentOutOfRangeException.ThrowIfNegative(numberOfTrials);
             ArgumentOutOfRangeException.ThrowIfNegative(probability);
             ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
@@ -225,13 +225,13 @@ namespace WarhammerCombatMathLibrary
         {
             if (numberOfTrials < 1)
             {
-                Console.WriteLine($"GetMean() | Number of trials is less than 1. Returning 0 ...");
+                Debug.WriteLine($"GetMean() | Number of trials is less than 1. Returning 0 ...");
                 return 0;
             }
 
             if (probability < 0)
             {
-                Console.WriteLine($"GetMean() | Probability is less than 0. Returning 0 ...");
+                Debug.WriteLine($"GetMean() | Probability is less than 0. Returning 0 ...");
                 return 0;
             }
 
