@@ -364,6 +364,63 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the case where the attacker parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationHits_AttackerIsNull()
+        {
+            Assert.AreEqual(0, CombatMath.GetStandardDeviationHits(null));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationHits_TestParams1()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponAttacks = 1,
+                WeaponSkill = 4
+            };
+
+            Assert.AreEqual(0.5, CombatMath.GetStandardDeviationHits(attacker));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationHits_TestParams2()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 10,
+                WeaponAttacks = 10,
+                WeaponSkill = 4
+            };
+
+            Assert.AreEqual(5, CombatMath.GetStandardDeviationHits(attacker));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationHits_TestParams3()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 10,
+                WeaponAttacks = 4,
+                WeaponSkill = 3
+            };
+
+            Assert.AreEqual(2.98, Math.Round(CombatMath.GetStandardDeviationHits(attacker), 2));
+        }
+
+        /// <summary>
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]

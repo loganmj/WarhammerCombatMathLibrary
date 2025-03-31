@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WarhammerCombatMathLibrary.Data
+﻿namespace WarhammerCombatMathLibrary.Data
 {
     /// <summary>
     /// A data object that describes the upper and lower bounds of a range of numberical values

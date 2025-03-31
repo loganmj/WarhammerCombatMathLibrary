@@ -96,7 +96,7 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double GetMeanHits(AttackerDTO? attacker)
         {
-            if (attacker == null) 
+            if (attacker == null)
             {
                 Debug.WriteLine($"GetMeanHits() | Attacker is null, returning 0 ...");
                 return 0;
@@ -142,11 +142,11 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns>A Tuple containing the lower and upper range values. Item1 is the lower bound, Item2 is the upper bound.</returns>
-        public static Tuple<int, int> GetExpectedRangeHits(AttackerDTO attacker)
+        public static Range<int> GetExpectedRangeHits(AttackerDTO attacker)
         {
             var lowerBound = GetExpectedHits(attacker) - (int)Math.Floor(GetStandardDeviationHits(attacker));
             var upperBound = GetExpectedHits(attacker) + (int)Math.Floor(GetStandardDeviationHits(attacker));
-            return Tuple.Create(lowerBound, upperBound);
+            return new Range<int>(lowerBound, upperBound);
         }
 
         /// <summary>
