@@ -421,6 +421,84 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the case where the attacker parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionOfHits_AttackerIsNull()
+        {
+            Assert.AreEqual([], CombatMath.GetBinomialDistributionOfHits(null));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionOfHits_TestParams1()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponAttacks = 1,
+                WeaponSkill = 4
+            };
+
+            var expected = new List<BinomialData> 
+            {
+                new(0,0),
+                new(0,0),
+                new(0,0)
+            };
+
+            Assert.AreEqual(expected, CombatMath.GetBinomialDistributionOfHits(attacker));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionOfHits_TestParams2()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponAttacks = 1,
+                WeaponSkill = 4
+            };
+
+            var expected = new List<BinomialData>
+            {
+                new(0,0),
+                new(0,0),
+                new(0,0)
+            };
+
+            Assert.AreEqual(expected, CombatMath.GetBinomialDistributionOfHits(attacker));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionOfHits_TestParams3()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponAttacks = 1,
+                WeaponSkill = 4
+            };
+
+            var expected = new List<BinomialData>
+            {
+                new(0,0),
+                new(0,0),
+                new(0,0)
+            };
+
+            Assert.AreEqual(expected, CombatMath.GetBinomialDistributionOfHits(attacker));
+        }
+
+        /// <summary>
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]

@@ -138,23 +138,17 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns the lower and upper range for expected successful hits.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns>A Tuple containing the lower and upper range values. Item1 is the lower bound, Item2 is the upper bound.</returns>
-        public static Range<int> GetExpectedRangeHits(AttackerDTO attacker)
-        {
-            var lowerBound = GetExpectedHits(attacker) - (int)Math.Floor(GetStandardDeviationHits(attacker));
-            var upperBound = GetExpectedHits(attacker) + (int)Math.Floor(GetStandardDeviationHits(attacker));
-            return new Range<int>(lowerBound, upperBound);
-        }
-
-        /// <summary>
         /// Returns a binomial distribution of attack roll results based on the process data.
         /// </summary>
         /// <returns>A BinomialDistribution object containing the hit success data.</returns>
-        public static List<BinomialData> GetBinomialDistributionOfHits(AttackerDTO attacker)
+        public static List<BinomialData> GetBinomialDistributionOfHits(AttackerDTO? attacker)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetBinomialDistributionOfHits() | Attacker is null. Returning empty list ...");
+                return [];
+            }
+
             var totalAttacks = GetTotalNumberOfAttacks(attacker);
             var probabilityOfHit = GetProbabilityOfHit(attacker);
             return Statistics.BinomialDistribution(totalAttacks, probabilityOfHit);

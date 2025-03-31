@@ -19,15 +19,23 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double ProbabilityOfSuccess(int numberOfPossibleResults, int numberOfSuccessfulResults)
         {
-            Debug.WriteLine($"ProbabilityOfSuccess - NumberOfPossibleResults: {numberOfPossibleResults}, NumberOfSuccessfulResults: {numberOfSuccessfulResults}");
-
             // Validate parameters
-            ArgumentOutOfRangeException.ThrowIfLessThan(numberOfPossibleResults, 1);
-            ArgumentOutOfRangeException.ThrowIfNegative(numberOfSuccessfulResults);
+            if (numberOfPossibleResults <= 0)
+            {
+                Debug.WriteLine($"ProbabilityOfSuccess() | Number of possible results is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (numberOfSuccessfulResults <= 0)
+            {
+                Debug.WriteLine($"ProbabilityOfSuccess() | Number of successful results is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
 
             if (numberOfSuccessfulResults > numberOfPossibleResults)
             {
-                throw new ArgumentException("Number of successful results must be less than or equal to the number of possible results.");
+                Debug.WriteLine($"ProbabilityOfSuccess() | Number of successful results is greater than the number of possible results. Returning 1 ...");
+                return 1;
             }
 
             // Perform calculation
@@ -38,26 +46,34 @@ namespace WarhammerCombatMathLibrary
         /// Calculates the binomial coefficient, determining the number of combinations of k elements
         /// in a population of n, independent of order.
         /// </summary>
-        /// <param name="totalPopulation">The population of the group or set.</param>
+        /// <param name="population">The population of the group or set.</param>
         /// <param name="combinationSize">The number elements in a unique combination.</param>
         /// <returns>A double value containing the binomial coefficient.</returns>
-        public static BigInteger BinomialCoefficient(int totalPopulation, int combinationSize)
+        public static BigInteger BinomialCoefficient(int population, int combinationSize)
         {
             // Validate parameters
-            Debug.WriteLine($"BinomialCoefficient - TotalPopulation: {totalPopulation}, CombinationSize: {combinationSize}");
-            ArgumentOutOfRangeException.ThrowIfNegative(totalPopulation);
-            ArgumentOutOfRangeException.ThrowIfNegative(combinationSize);
-
-            if (combinationSize > totalPopulation)
+            if (population < 0)
             {
-                throw new ArgumentException("Combination size must be less than or equal to the total population.");
+                Debug.WriteLine($"BinomialCoefficient() | Population is less than 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (combinationSize < 0)
+            {
+                Debug.WriteLine($"BinomialCoefficient() | Combination size is less than 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (combinationSize > population)
+            {
+                Debug.WriteLine("BinomialCoefficient() | Combination size must be less than or equal to the total population. Returning 0 ...");
+                return 0;
             }
 
             // Perform calculation
-            var factorialTotal = MathUtilities.Factorial(totalPopulation);
+            var factorialTotal = MathUtilities.Factorial(population);
             var factorialCombination = MathUtilities.Factorial(combinationSize);
-            var factorialDifference = MathUtilities.Factorial(totalPopulation - combinationSize);
-
+            var factorialDifference = MathUtilities.Factorial(population - combinationSize);
             Debug.WriteLine($"FactorialTotal: {factorialTotal}, FactorialCombination: {factorialCombination}, FactorialDifference: {factorialDifference}");
 
             return (factorialTotal / (factorialCombination * factorialDifference));
@@ -73,9 +89,23 @@ namespace WarhammerCombatMathLibrary
         public static double ProbabilityOfMultipleSuccesses(double probability, int numberOfSuccesses)
         {
             // Validate parameters
-            ArgumentOutOfRangeException.ThrowIfNegative(probability);
-            ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
-            ArgumentOutOfRangeException.ThrowIfNegative(numberOfSuccesses);
+            if (probability <= 0)
+            {
+                Debug.WriteLine($"ProbabilityOfMultipleSuccesses() | Probability is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (probability >= 1)
+            {
+                Debug.WriteLine($"ProbabilityOfMultipleSuccesses() | Probability is greater than or equal to 1. Returning 1 ...");
+                return 1;
+            }
+
+            if (numberOfSuccesses < 0)
+            {
+                Debug.WriteLine($"ProbabilityOfMultipleSuccesses() | Number of successes is less than 0. Returning 0 ...");
+                return 0;
+            }
 
             // Perform calculation
             return Math.Pow(probability, numberOfSuccesses);
@@ -96,22 +126,35 @@ namespace WarhammerCombatMathLibrary
         public static double ProbabilityMassFunction(int numberOfTrials, int numberOfSuccesses, double probability)
         {
             // Validate parameters
-            Debug.WriteLine($"ProbabilityMassFunction - NumberOfTrials: {numberOfTrials}, NumberOfSuccesses: {numberOfSuccesses}, Probability: {probability}");
-            ArgumentOutOfRangeException.ThrowIfLessThan(numberOfTrials, 1);
-            ArgumentOutOfRangeException.ThrowIfNegative(numberOfSuccesses);
-            ArgumentOutOfRangeException.ThrowIfNegative(probability);
-            ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
+            if (numberOfTrials < 1)
+            {
+                Debug.WriteLine($"ProbabilityMassFunction() | Number of trials is less than 1. Returning 0 ...");
+                return 0;
+            }
+
+            if (numberOfSuccesses < 0) 
+            {
+                Debug.WriteLine($"ProbabilityMassFunction() | Number of successes is less than 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (probability <= 0)
+            {
+                Debug.WriteLine($"ProbabilityMassFunction() | Probability is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (probability >= 1)
+            {
+                Debug.WriteLine($"ProbabilityMassFunction() | Probability is greater than or equal to 1. Returning 1 ...");
+                return 1;
+            }
 
             // Perform calculation
             var binomialCoefficient = BinomialCoefficient(numberOfTrials, numberOfSuccesses);
             var successProbability = ProbabilityOfMultipleSuccesses(probability, numberOfSuccesses);
             var failureProbability = ProbabilityOfMultipleSuccesses(1 - probability, numberOfTrials - numberOfSuccesses);
-
-            Debug.WriteLine($"BinomialCoefficient: {binomialCoefficient}, SuccessProbability: {successProbability}, FailureProbability: {failureProbability}");
-            var result = (double)binomialCoefficient * successProbability * failureProbability;
-            Debug.WriteLine($"Result = {result}");
-
-            return (double)result;
+            return (double)binomialCoefficient * successProbability * failureProbability;
         }
 
         /// <summary>
@@ -123,10 +166,23 @@ namespace WarhammerCombatMathLibrary
         public static List<BinomialData> BinomialDistribution(int numberOfTrials, double probability)
         {
             // Validate parameters
-            Debug.WriteLine($"BinomialDistribution - numberOfTrials: {numberOfTrials}, probability: {probability}");
-            ArgumentOutOfRangeException.ThrowIfNegative(numberOfTrials);
-            ArgumentOutOfRangeException.ThrowIfNegative(probability);
-            ArgumentOutOfRangeException.ThrowIfGreaterThan(probability, 1);
+            if (numberOfTrials < 1) 
+            {
+                Debug.WriteLine($"BinomialDistribution() | Number of trials is less than 1.");
+                return [new(0,1)];
+            }
+
+            if (probability <= 0)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Probability is less than or equal to 0.");
+                return [new(0, 1)];
+            }
+
+            if (probability >= 1)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Probability is greater than or equal to 1.");
+                return [new(numberOfTrials, 1)];
+            }
 
             // Create distribution
             var distribution = new List<BinomialData>();
