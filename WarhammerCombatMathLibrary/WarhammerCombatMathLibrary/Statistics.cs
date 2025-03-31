@@ -254,7 +254,7 @@ namespace WarhammerCombatMathLibrary
             if (probability <= 0)
             {
                 Debug.WriteLine($"LowerCumulativeProbability() | Probability is less than or equal to 0. Returning 0 ...");
-                return 0;
+                return 1;
             }
 
             // In the case where probability is greater than or equal to 1, all discrete values up to the max possible successes are equal to 0,
@@ -293,13 +293,13 @@ namespace WarhammerCombatMathLibrary
             // Validate parameters
             if (numberOfTrials < 1)
             {
-                Debug.WriteLine($"BinomialDistribution() | Number of trials is less than 1.");
+                Debug.WriteLine($"LowerCumulativeDistribution() | Number of trials is less than 1.");
                 return [new(0, 1)];
             }
 
             if (probability <= 0)
             {
-                Debug.WriteLine($"BinomialDistribution() | Probability is less than or equal to 0.");
+                Debug.WriteLine($"LowerCumulativeDistribution() | Probability is less than or equal to 0.");
 
                 // The probability of 0 successes should be 1, all other probabilities should be 0.
                 // So the lower cumulative probability for all entries should be 1.
@@ -318,7 +318,7 @@ namespace WarhammerCombatMathLibrary
 
             if (probability >= 1)
             {
-                Debug.WriteLine($"BinomialDistribution() | Probability is greater than or equal to 1.");
+                Debug.WriteLine($"LowerCumulativeDistribution() | Probability is greater than or equal to 1.");
 
                 // All probabilities should be 0, except the probability of all successes should be 1.
                 var adjustedDistribution = new List<BinomialData>();
@@ -353,6 +353,46 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A double containing the cumulative probability value.</returns>
         public static double UpperCumulativeProbability(int numberOfTrials, int numberOfSuccesses, double probability)
         {
+            // Validate parameters
+            if (numberOfTrials < 1)
+            {
+                Debug.WriteLine($"UpperCumulativeProbability() | Number of trials is less than 1. Returning 0 ...");
+                return 0;
+            }
+
+            // The sum of all values P(k) for k >= 0 is 1, so any value of k < 0 should also result in 1, if one must define a value.
+            if (numberOfSuccesses < 0)
+            {
+                Debug.WriteLine($"UpperCumulativeProbability() | Number of successes is less than 0. Returning 0 ...");
+                return 1;
+            }
+
+            if (numberOfSuccesses > numberOfTrials)
+            {
+                Debug.WriteLine($"UpperCumulativeProbability() | Number of successes is greater than number of trials. Returning 0 ...");
+                return 0;
+            }
+
+            // In the case where probability is less than or equal to 0, the probability of 0 successes is 1, and all discrete probabilities past that are equal to 0.
+            // Therefore, the cumulative value is always 0, unless it contains the P(0) value, in which case it is 1.
+            if (probability <= 0)
+            {
+                if (numberOfSuccesses == 0)
+                {
+                    Debug.WriteLine($"UpperCumulativeProbability() | Probability is less than or equal to 0, and the number of successes equals 0. Returning 1 ...");
+                    return 1;
+                }
+
+                Debug.WriteLine($"UpperCumulativeProbability() | Probability is less than or equal to 0, and the number of successes does not equal 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (probability >= 1)
+            {
+                Debug.WriteLine($"UpperCumulativeProbability() | Probability is greater than or equal to 1. Returning 1 ...");
+                return 1;
+            }
+
             double cumulativeProbability = 0;
 
             for (int i = numberOfSuccesses; i <= numberOfTrials; i++)

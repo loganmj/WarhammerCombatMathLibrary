@@ -545,21 +545,21 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the case where the probability is less than or equal to 0.
-        /// </summary>
-        [TestMethod]
-        public void LowerCumulativeProbability_ProbabilityLessThanOrEqualTo0() 
-        {
-            Assert.AreEqual(0, Statistics.LowerCumulativeProbability(1, 1, -1));
-        }
-
-        /// <summary>
         /// Tests the case where the number of successes is greater than the number of trials.
         /// </summary>
         [TestMethod]
         public void LowerCumulativeProbability_NumberOfSuccessesGreaterThanNumberOfTrials()
         {
             Assert.AreEqual(0, Statistics.LowerCumulativeProbability(1, 2, 0.5));
+        }
+
+        /// <summary>
+        /// Tests the case where the probability is less than or equal to 0.
+        /// </summary>
+        [TestMethod]
+        public void LowerCumulativeProbability_ProbabilityLessThanOrEqualTo0() 
+        {
+            Assert.AreEqual(1, Statistics.LowerCumulativeProbability(1, 1, -1));
         }
 
         /// <summary>
@@ -797,5 +797,281 @@ namespace UnitTests
 
             CollectionAssert.AreEqual(expected, actual);
         }
+
+        /// <summary>
+        /// Tests the case where the number of trials is less than 1.
+        /// </summary>
+        [TestMethod]
+        public void UpperCumulativeProbability_NumberOfTrialsLessThan1()
+        {
+            Assert.AreEqual(0, Statistics.UpperCumulativeProbability(0, 1, 0.5));
+        }
+
+        /// <summary>
+        /// Tests the case where the number of successes is less than 0.
+        /// </summary>
+        [TestMethod]
+        public void UpperCumulativeProbability_NumberOfSuccessesLessThan0()
+        {
+            Assert.AreEqual(1, Statistics.UpperCumulativeProbability(1, -1, 0.5));
+        }
+
+        /// <summary>
+        /// Tests the case where the number of successes is greater than the number of trials.
+        /// </summary>
+        [TestMethod]
+        public void UpperCumulativeProbability_NumberOfSuccessesGreaterThanNumberOfTrials()
+        {
+            Assert.AreEqual(0, Statistics.UpperCumulativeProbability(1, 2, 0.5));
+        }
+
+        /// <summary>
+        /// Tests the case where the probability is less than or equal to 0.
+        /// </summary>
+        [TestMethod]
+        public void UpperCumulativeProbability_ProbabilityLessThanOrEqualTo0_SuccessesGreaterThan0()
+        {
+            Assert.AreEqual(0, Statistics.UpperCumulativeProbability(1, 1, -1));
+        }
+
+        /// <summary>
+        /// Tests the case where the probability is less than or equal to 0.
+        /// </summary>
+        [TestMethod]
+        public void UpperCumulativeProbability_ProbabilityLessThanOrEqualTo0_SuccessesEquals0()
+        {
+            Assert.AreEqual(1, Statistics.UpperCumulativeProbability(1, 0, -1));
+        }
+
+        /// <summary>
+        /// Tests the case where probability is greater than or equal to 1, and the number of successes is less than the number of trials.
+        /// </summary>
+        [TestMethod]
+        public void UpperCumulativeProbability_ProbabilityGreaterThanOrEqualTo1()
+        {
+            Assert.AreEqual(1, Statistics.UpperCumulativeProbability(2, 1, 1));
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given inputs.
+        /// </summary>
+        [TestMethod]
+        public void UpperCumulativeProbability_TestParams1()
+        {
+            Assert.AreEqual(0.5, Statistics.UpperCumulativeProbability(1, 1, 0.5));
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given inputs.
+        /// </summary>
+        [TestMethod]
+        public void UpperCumulativeProbability_TestParams2()
+        {
+            Assert.AreEqual(0.0781, Math.Round(Statistics.UpperCumulativeProbability(10, 5, 0.25), 4));
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given large inputs.
+        /// </summary>
+        [TestMethod]
+        public void UpperCumulativeProbability_BigParams()
+        {
+            Assert.AreEqual(0.0325, Math.Round(Statistics.UpperCumulativeProbability(50, 32, 0.5), 4));
+        }
+
+        /*
+
+        /// <summary>
+        /// Tests the case where the numberOfTrials argument is out of range.
+        /// </summary>
+        [TestMethod]
+        public void LowerCumulativeDistribution_NumberOfTrialsLessThan1()
+        {
+            var expected = new List<BinomialData>() { new(0, 1) };
+            var actual = Statistics.LowerCumulativeDistribution(0, 0.5);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the probability argument is negative.
+        /// </summary>
+        [TestMethod]
+        public void LowerCumulativeDistribution_ProbabilityLessThanOrEqualTo0()
+        {
+            var expected = new List<BinomialData>()
+            {
+                new(0, 1),
+                new(1,1),
+                new(2,1),
+                new(3,1)
+            };
+            var actual = Statistics.LowerCumulativeDistribution(3, -1);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the probability argument is greater than 1.
+        /// </summary>
+        [TestMethod]
+        public void LowerCumulativeDistribution_ProbabilityGreaterThanOrEqualTo1()
+        {
+            var expected = new List<BinomialData>()
+            {
+                new(0, 0),
+                new(1, 0),
+                new(2, 0),
+                new(3, 1)
+            };
+
+            var actual = Statistics.LowerCumulativeDistribution(3, 1);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given inputs.
+        /// </summary>
+        [TestMethod]
+        public void LowerCumulativeDistribution_TestParams1()
+        {
+            var numberOfTrials = 1;
+            var probability = 0.5;
+            var expected = new List<BinomialData>()
+            {
+                new(0, 0.5),
+                new(1, 1)
+            };
+
+            var actual = Statistics.LowerCumulativeDistribution(numberOfTrials, probability);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given inputs.
+        /// </summary>
+        [TestMethod]
+        public void LowerCumulativeDistribution_TestParams2()
+        {
+            var numberOfTrials = 1;
+            var probability = 0.1;
+            var expected = new List<BinomialData>()
+            {
+                new(0, 0.9),
+                new(1, 1.0)
+            };
+
+            var actual = Statistics.LowerCumulativeDistribution(numberOfTrials, probability);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given large inputs.
+        /// </summary>
+        [TestMethod]
+        public void LowerCumulativeDistribution_TestParams3()
+        {
+            var numberOfTrials = 2;
+            var probability = 0.5;
+            var expected = new List<BinomialData>()
+            {
+                new(0, 0.25),
+                new(1, 0.75),
+                new(2, 1.0)
+            };
+
+            var actual = Statistics.LowerCumulativeDistribution(numberOfTrials, probability);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        */
     }
 }

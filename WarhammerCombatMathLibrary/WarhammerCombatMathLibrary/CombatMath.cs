@@ -155,7 +155,7 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns the upper cumulative distribution of the attacker's hit roll.
+        /// Returns the upper cumulative distribution P(X≥k) of the attacker's hit roll.
         /// </summary>
         /// <returns></returns>
         public static List<BinomialData> GetUpperCumulativeDistributionOfHits(AttackerDTO attacker)
@@ -275,7 +275,7 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns the upper cumulative distribution of the attacker's wound roll.
+        /// Returns the upper cumulative distribution P(X≥k) of the attacker's wound roll.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
@@ -405,7 +405,7 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns the upper cumulative distribution of the failed save roll.
+        /// Returns the upper cumulative distribution P(X≥k) of the failed save roll.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
