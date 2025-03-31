@@ -93,8 +93,13 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static double GetMeanHits(AttackerDTO attacker)
+        public static double GetMeanHits(AttackerDTO? attacker)
         {
+            if (attacker == null) 
+            {
+                return 0;
+            }
+
             return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
         }
 

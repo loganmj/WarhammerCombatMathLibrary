@@ -250,6 +250,15 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the case where the attacker parameter is null.
+        /// </summary>
+        [TestMethod] 
+        public void GetMeanHits_AttackerIsNull()
+        {
+            Assert.AreEqual(0, CombatMath.GetMeanHits(null));
+        }
+
+        /// <summary>
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]
