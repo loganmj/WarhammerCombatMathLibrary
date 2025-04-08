@@ -386,11 +386,11 @@ namespace WarhammerCombatMathLibrary
             {
                 if (numberOfSuccesses == numberOfTrials)
                 {
-                    Debug.WriteLine($"LowerCumulativeProbability() | Probability is greater than or equal to 1, and the number of successes equals the number of trials. Returning 0 ...");
+                    Debug.WriteLine($"UpperCumulativeProbability() | Probability is greater than or equal to 1, and the number of successes equals the number of trials. Returning 0 ...");
                     return 0;
                 }
 
-                Debug.WriteLine($"LowerCumulativeProbability() | Probability is greater than or equal to 1, and the number of successes does not equal the number of trials. Returning 1 ...");
+                Debug.WriteLine($"UpperCumulativeProbability() | Probability is greater than or equal to 1, and the number of successes does not equal the number of trials. Returning 1 ...");
                 return 1;
             }
 
