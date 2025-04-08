@@ -559,7 +559,7 @@ namespace UnitTests
         [TestMethod]
         public void LowerCumulativeProbability_ProbabilityLessThanOrEqualTo0() 
         {
-            Assert.AreEqual(1, Statistics.LowerCumulativeProbability(1, 1, -1));
+            Assert.AreEqual(0, Statistics.LowerCumulativeProbability(1, 1, -1));
         }
 
         /// <summary>
@@ -813,7 +813,7 @@ namespace UnitTests
         [TestMethod]
         public void UpperCumulativeProbability_NumberOfSuccessesLessThan0()
         {
-            Assert.AreEqual(1, Statistics.UpperCumulativeProbability(1, -1, 0.5));
+            Assert.AreEqual(0, Statistics.UpperCumulativeProbability(1, -1, 0.5));
         }
 
         /// <summary>
@@ -840,7 +840,7 @@ namespace UnitTests
         [TestMethod]
         public void UpperCumulativeProbability_ProbabilityLessThanOrEqualTo0_SuccessesEquals0()
         {
-            Assert.AreEqual(1, Statistics.UpperCumulativeProbability(1, 0, -1));
+            Assert.AreEqual(0, Statistics.UpperCumulativeProbability(1, 0, -1));
         }
 
         /// <summary>
@@ -858,7 +858,7 @@ namespace UnitTests
         [TestMethod]
         public void UpperCumulativeProbability_TestParams1()
         {
-            Assert.AreEqual(0.5, Statistics.UpperCumulativeProbability(1, 1, 0.5));
+            Assert.AreEqual(0.25, Statistics.UpperCumulativeProbability(2, 1, 0.5));
         }
 
         /// <summary>
@@ -867,7 +867,7 @@ namespace UnitTests
         [TestMethod]
         public void UpperCumulativeProbability_TestParams2()
         {
-            Assert.AreEqual(0.0781, Math.Round(Statistics.UpperCumulativeProbability(10, 5, 0.25), 4));
+            Assert.AreEqual(0.0197, Math.Round(Statistics.UpperCumulativeProbability(10, 5, 0.25), 4));
         }
 
         /// <summary>
@@ -876,19 +876,17 @@ namespace UnitTests
         [TestMethod]
         public void UpperCumulativeProbability_BigParams()
         {
-            Assert.AreEqual(0.0325, Math.Round(Statistics.UpperCumulativeProbability(50, 32, 0.5), 4));
+            Assert.AreEqual(0.0164, Math.Round(Statistics.UpperCumulativeProbability(50, 32, 0.5), 4));
         }
-
-        /*
 
         /// <summary>
         /// Tests the case where the numberOfTrials argument is out of range.
         /// </summary>
         [TestMethod]
-        public void LowerCumulativeDistribution_NumberOfTrialsLessThan1()
+        public void UpperCumulativeDistribution_NumberOfTrialsLessThan1()
         {
-            var expected = new List<BinomialData>() { new(0, 1) };
-            var actual = Statistics.LowerCumulativeDistribution(0, 0.5);
+            var expected = new List<BinomialOutcome>() { new(0, 1) };
+            var actual = Statistics.UpperCumulativeDistribution(0, 0.5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -906,6 +904,8 @@ namespace UnitTests
 
             CollectionAssert.AreEqual(expected, actual);
         }
+
+        /*
 
         /// <summary>
         /// Tests the case where the probability argument is negative.
