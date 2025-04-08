@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using MathNet.Numerics;
+using MathNet.Numerics.Distributions;
+using System.Diagnostics;
 using WarhammerCombatMathLibrary.Data;
 
 namespace WarhammerCombatMathLibrary
@@ -141,7 +143,7 @@ namespace WarhammerCombatMathLibrary
         /// Returns a binomial distribution of attack roll results based on the process data.
         /// </summary>
         /// <returns>A BinomialDistribution object containing the hit success data.</returns>
-        public static List<BinomialData> GetBinomialDistributionOfHits(AttackerDTO? attacker)
+        public static List<BinomialOutcome> GetBinomialDistributionOfHits(AttackerDTO? attacker)
         {
             if (attacker == null)
             {
@@ -155,12 +157,56 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Gets a binomial distribution of successful hit rolls.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns>A Binomial object for the hit roll.</returns>
+        public static Binomial GetHitsBinomial(AttackerDTO? attacker) 
+        {
+            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var probability = GetProbabilityOfHit(attacker);
+            return new Binomial(probability, numberOfTrials);
+        }
+
+        /// <summary>
         /// Returns the upper cumulative distribution P(X≥k) of the attacker's hit roll.
         /// </summary>
         /// <returns></returns>
-        public static List<BinomialData> GetUpperCumulativeDistributionOfHits(AttackerDTO attacker)
+        public static List<BinomialOutcome> GetUpperCumulativeDistributionOfHits(AttackerDTO attacker)
         {
             return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
+        }
+
+        /// <summary>
+        /// Gets the survivor function probability for the specified number of successes k.
+        /// That is, the cumulative probability of all probabilities P(X≥k) in the distribution.
+        /// </summary>
+        /// <param name="binomial">The distribution to of probabilities.</param>
+        /// <param name="k">The minimum number of successes.</param>
+        /// <returns></returns>
+        public static double GetSurvivorProbability(Binomial binomial, int k)
+        {
+            return 1 - binomial.CumulativeDistribution(k - 1);
+        }
+
+        /// <summary>
+        /// Gets a distribution of all discrete survivor function values for a successful hit roll.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static List<BinomialOutcome> GetHitsSurvivorDistribution(AttackerDTO? attacker) 
+        {
+            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var probability = GetProbabilityOfHit(attacker);
+            var hitBinomial = new Binomial(probability, numberOfTrials);
+            var survivorDistribution = new List<BinomialOutcome>();
+
+            for (int trial = 0; trial <= numberOfTrials; trial++)
+            {
+                survivorDistribution.Add(new BinomialOutcome(trial, GetSurvivorProbability(hitBinomial, trial)));
+            }
+
+            return survivorDistribution;
         }
 
         /// <summary>
@@ -224,7 +270,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static List<BinomialData> GetBinomialDistributionOfWounds(AttackerDTO attacker, DefenderDTO defender)
+        public static List<BinomialOutcome> GetBinomialDistributionOfWounds(AttackerDTO attacker, DefenderDTO defender)
         {
             return Statistics.BinomialDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
         }
@@ -280,7 +326,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static List<BinomialData> GetUpperCumulativeDistributionOfWounds(AttackerDTO attacker, DefenderDTO defender)
+        public static List<BinomialOutcome> GetUpperCumulativeDistributionOfWounds(AttackerDTO attacker, DefenderDTO defender)
         {
             return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
         }
@@ -342,7 +388,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static List<BinomialData> GetBinomialDistributionOfFailSaves(AttackerDTO attacker, DefenderDTO defender)
+        public static List<BinomialOutcome> GetBinomialDistributionOfFailSaves(AttackerDTO attacker, DefenderDTO defender)
         {
             return Statistics.BinomialDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
         }
@@ -410,7 +456,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static List<BinomialData> GetUpperCumulativeDistributionOfFailedSaves(AttackerDTO attacker, DefenderDTO defender)
+        public static List<BinomialOutcome> GetUpperCumulativeDistributionOfFailedSaves(AttackerDTO attacker, DefenderDTO defender)
         {
             return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
         }

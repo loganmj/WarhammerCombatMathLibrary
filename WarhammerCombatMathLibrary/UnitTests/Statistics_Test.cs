@@ -341,7 +341,7 @@ namespace UnitTests
         [TestMethod]
         public void BinomialDistribution_NumberOfTrialsLessThan1()
         {
-            var expected = new List<BinomialData>() { new(0, 1) };
+            var expected = new List<BinomialOutcome>() { new(0, 1) };
             var actual = Statistics.BinomialDistribution(0, 0.5);
 
             // Print expected
@@ -367,7 +367,7 @@ namespace UnitTests
         [TestMethod]
         public void BinomialDistribution_ProbabilityLessThanOrEqualTo0()
         {
-            var expected = new List<BinomialData>() 
+            var expected = new List<BinomialOutcome>() 
             {
                 new(0, 1),
                 new(1,0),
@@ -399,7 +399,7 @@ namespace UnitTests
         [TestMethod]
         public void BinomialDistribution_ProbabilityGreaterThanOrEqualTo1()
         {
-            var expected = new List<BinomialData>() 
+            var expected = new List<BinomialOutcome>() 
             {
                 new(0, 0),
                 new(1, 0),
@@ -434,7 +434,7 @@ namespace UnitTests
         {
             var numberOfTrials = 1;
             var probability = 0.5;
-            var expected = new List<BinomialData>() 
+            var expected = new List<BinomialOutcome>() 
             {
                 new(0, 0.5),
                 new(1, 0.5) 
@@ -467,7 +467,7 @@ namespace UnitTests
         {
             var numberOfTrials = 1;
             var probability = 0.1;
-            var expected = new List<BinomialData>() 
+            var expected = new List<BinomialOutcome>() 
             { 
                 new(0, 0.9), 
                 new(1, 0.1)
@@ -500,7 +500,7 @@ namespace UnitTests
         {
             var numberOfTrials = 2;
             var probability = 0.5;
-            var expected = new List<BinomialData>()
+            var expected = new List<BinomialOutcome>()
             {
                 new(0, 0.25),
                 new(1, 0.5),
@@ -613,7 +613,7 @@ namespace UnitTests
         [TestMethod]
         public void LowerCumulativeDistribution_NumberOfTrialsLessThan1()
         {
-            var expected = new List<BinomialData>() { new(0, 1) };
+            var expected = new List<BinomialOutcome>() { new(0, 1) };
             var actual = Statistics.LowerCumulativeDistribution(0, 0.5);
 
             // Print expected
@@ -639,7 +639,7 @@ namespace UnitTests
         [TestMethod]
         public void LowerCumulativeDistribution_ProbabilityLessThanOrEqualTo0()
         {
-            var expected = new List<BinomialData>()
+            var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
                 new(1,1),
@@ -671,7 +671,7 @@ namespace UnitTests
         [TestMethod]
         public void LowerCumulativeDistribution_ProbabilityGreaterThanOrEqualTo1()
         {
-            var expected = new List<BinomialData>()
+            var expected = new List<BinomialOutcome>()
             {
                 new(0, 0),
                 new(1, 0),
@@ -706,7 +706,7 @@ namespace UnitTests
         {
             var numberOfTrials = 1;
             var probability = 0.5;
-            var expected = new List<BinomialData>()
+            var expected = new List<BinomialOutcome>()
             {
                 new(0, 0.5),
                 new(1, 1)
@@ -739,7 +739,7 @@ namespace UnitTests
         {
             var numberOfTrials = 1;
             var probability = 0.1;
-            var expected = new List<BinomialData>()
+            var expected = new List<BinomialOutcome>()
             {
                 new(0, 0.9),
                 new(1, 1.0)
@@ -772,7 +772,7 @@ namespace UnitTests
         {
             var numberOfTrials = 2;
             var probability = 0.5;
-            var expected = new List<BinomialData>()
+            var expected = new List<BinomialOutcome>()
             {
                 new(0, 0.25),
                 new(1, 0.75),
