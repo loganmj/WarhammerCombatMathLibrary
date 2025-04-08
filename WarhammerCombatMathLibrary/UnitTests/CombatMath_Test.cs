@@ -427,7 +427,7 @@ namespace UnitTests
         [TestMethod]
         public void GetBinomialDistributionOfHits_AttackerIsNull()
         {
-            var expected = new List<BinomialData>();
+            var expected = new List<BinomialOutcome>();
             var actual = CombatMath.GetBinomialDistributionOfHits(null);
 
             // Print expected
@@ -460,7 +460,7 @@ namespace UnitTests
                 WeaponSkill = 4
             };
 
-            var expected = new List<BinomialData>
+            var expected = new List<BinomialOutcome>
             {
                 new(0, 0.5),
                 new(1, 0.5)
@@ -498,7 +498,7 @@ namespace UnitTests
                 WeaponSkill = 4
             };
 
-            var expected = new List<BinomialData>()
+            var expected = new List<BinomialOutcome>()
             {
                 new(0, 0.125),
                 new(1, 0.375),
@@ -538,7 +538,7 @@ namespace UnitTests
                 WeaponSkill = 4
             };
 
-            var expected = new List<BinomialData>()
+            var expected = new List<BinomialOutcome>()
             {
                 new(0, 0.0625),
                 new(1, 0.25),

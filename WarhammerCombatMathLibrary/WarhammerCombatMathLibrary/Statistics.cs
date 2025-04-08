@@ -167,7 +167,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="numberOfTrials">The number of trials in the process.</param>
         /// <param name="probability">The probability of success for a single trial.</param>
         /// <returns>A binomial distribution of trial results and their respective probabilities.</returns>
-        public static List<BinomialData> BinomialDistribution(int numberOfTrials, double probability)
+        public static List<BinomialOutcome> BinomialDistribution(int numberOfTrials, double probability)
         {
             // Validate parameters
             if (numberOfTrials < 1)
@@ -181,14 +181,14 @@ namespace WarhammerCombatMathLibrary
                 Debug.WriteLine($"BinomialDistribution() | Probability is less than or equal to 0.");
 
                 // The probability of 0 successes should be 1, all other probabilities should be 0.
-                var adjustedDistribution = new List<BinomialData>
+                var adjustedDistribution = new List<BinomialOutcome>
                 {
                     new(0, 1)
                 };
 
                 for (int k = 1; k <= numberOfTrials; k++)
                 {
-                    adjustedDistribution.Add(new BinomialData(k, 0));
+                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
                 }
 
                 return adjustedDistribution;
@@ -199,24 +199,24 @@ namespace WarhammerCombatMathLibrary
                 Debug.WriteLine($"BinomialDistribution() | Probability is greater than or equal to 1.");
 
                 // All probabilities should be 0, except the probability of all successes should be 1.
-                var adjustedDistribution = new List<BinomialData>();
+                var adjustedDistribution = new List<BinomialOutcome>();
 
                 for (int k = 0; k <= numberOfTrials-1; k++)
                 {
-                    adjustedDistribution.Add(new BinomialData(k, 0));
+                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
                 }
 
-                adjustedDistribution.Add(new BinomialData(numberOfTrials, 1));
+                adjustedDistribution.Add(new BinomialOutcome(numberOfTrials, 1));
 
                 return adjustedDistribution;
             }
 
             // Create distribution
-            var distribution = new List<BinomialData>();
+            var distribution = new List<BinomialOutcome>();
 
             for (int k = 0; k <= numberOfTrials; k++)
             {
-                distribution.Add(new BinomialData(k, ProbabilityMassFunction(numberOfTrials, k, probability)));
+                distribution.Add(new BinomialOutcome(k, ProbabilityMassFunction(numberOfTrials, k, probability)));
             }
 
             return distribution;
@@ -288,7 +288,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="numberOfTrials"></param>
         /// <param name="probability"></param>
         /// <returns>A cumulative distribution of trial results and their respective probabilities.</returns>
-        public static List<BinomialData> LowerCumulativeDistribution(int numberOfTrials, double probability)
+        public static List<BinomialOutcome> LowerCumulativeDistribution(int numberOfTrials, double probability)
         {
             // Validate parameters
             if (numberOfTrials < 1)
@@ -303,14 +303,14 @@ namespace WarhammerCombatMathLibrary
 
                 // The probability of 0 successes should be 1, all other probabilities should be 0.
                 // So the lower cumulative probability for all entries should be 1.
-                var adjustedDistribution = new List<BinomialData>
+                var adjustedDistribution = new List<BinomialOutcome>
                 {
                     new(0, 1)
                 };
 
                 for (int k = 1; k <= numberOfTrials; k++)
                 {
-                    adjustedDistribution.Add(new BinomialData(k, 1));
+                    adjustedDistribution.Add(new BinomialOutcome(k, 1));
                 }
 
                 return adjustedDistribution;
@@ -321,23 +321,23 @@ namespace WarhammerCombatMathLibrary
                 Debug.WriteLine($"LowerCumulativeDistribution() | Probability is greater than or equal to 1.");
 
                 // All probabilities should be 0, except the probability of all successes should be 1.
-                var adjustedDistribution = new List<BinomialData>();
+                var adjustedDistribution = new List<BinomialOutcome>();
 
                 for (int k = 0; k <= numberOfTrials - 1; k++)
                 {
-                    adjustedDistribution.Add(new BinomialData(k, 0));
+                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
                 }
 
-                adjustedDistribution.Add(new BinomialData(numberOfTrials, 1));
+                adjustedDistribution.Add(new BinomialOutcome(numberOfTrials, 1));
 
                 return adjustedDistribution;
             }
 
-            var distribution = new List<BinomialData>();
+            var distribution = new List<BinomialOutcome>();
 
             for (int k = 0; k <= numberOfTrials; k++)
             {
-                distribution.Add(new BinomialData { Successes = k, Probability = LowerCumulativeProbability(numberOfTrials, k, probability) });
+                distribution.Add(new BinomialOutcome { Successes = k, Probability = LowerCumulativeProbability(numberOfTrials, k, probability) });
             }
 
             return distribution;
@@ -409,13 +409,13 @@ namespace WarhammerCombatMathLibrary
         /// <param name="numberOfTrials"></param>
         /// <param name="probability"></param>
         /// <returns>A cumulative distribution of trial results and their respective probabilities.</returns>
-        public static List<BinomialData> UpperCumulativeDistribution(int numberOfTrials, double probability)
+        public static List<BinomialOutcome> UpperCumulativeDistribution(int numberOfTrials, double probability)
         {
-            var distribution = new List<BinomialData>();
+            var distribution = new List<BinomialOutcome>();
 
             for (int k = 0; k <= numberOfTrials; k++)
             {
-                distribution.Add(new BinomialData { Successes = k, Probability = UpperCumulativeProbability(numberOfTrials, k, probability) });
+                distribution.Add(new BinomialOutcome { Successes = k, Probability = UpperCumulativeProbability(numberOfTrials, k, probability) });
             }
 
             return distribution;

@@ -3,7 +3,7 @@
     /// <summary>
     /// Data object for binomial data.
     /// </summary>
-    public class BinomialData
+    public class BinomialOutcome
     {
         #region Properties
 
@@ -24,7 +24,7 @@
         /// <summary>
         /// Parameterless constructor. Sets properties to default values.
         /// </summary>
-        public BinomialData()
+        public BinomialOutcome()
         {
             Successes = 0;
             Probability = 0;
@@ -35,7 +35,7 @@
         /// </summary>
         /// <param name="successes"></param>
         /// <param name="probability"></param>
-        public BinomialData(int successes, double probability)
+        public BinomialOutcome(int successes, double probability)
         {
             Successes = successes;
             Probability = probability;
@@ -54,7 +54,7 @@
         /// <inheritdoc/>
         public override bool Equals(object? obj)
         {
-            if (obj is BinomialData other)
+            if (obj is BinomialOutcome other)
             {
                 return Successes == other.Successes && Probability == other.Probability;
             }
