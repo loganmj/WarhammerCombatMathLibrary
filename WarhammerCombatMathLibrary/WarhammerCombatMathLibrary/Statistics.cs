@@ -224,7 +224,7 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Calculates the lower cumulative probability of trial data.
-        /// Lower cumulative probability is the probability of achieving a result less than or equal to the given number of successes.
+        /// Lower cumulative probability is the probability of achieving a result less than or equal to X successes such that P(X ≤ k).
         /// </summary>
         /// <param name="numberOfTrials"></param>
         /// <param name="numberOfSuccesses"></param>
@@ -254,7 +254,7 @@ namespace WarhammerCombatMathLibrary
             if (probability <= 0)
             {
                 Debug.WriteLine($"LowerCumulativeProbability() | Probability is less than or equal to 0. Returning 0 ...");
-                return 1;
+                return 0;
             }
 
             // In the case where probability is greater than or equal to 1, all discrete values up to the max possible successes are equal to 0,
@@ -345,7 +345,7 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Calculates the upper cumulative probability of trial data.
-        /// Upper cumulative probability is the probability of achieving a result greater than or equal to the given number of successes.
+        /// Upper cumulative probability is the probability of achieving greater than X successes such that P(X > k).
         /// </summary>
         /// <param name="numberOfTrials"></param>
         /// <param name="numberOfSuccesses"></param>
@@ -353,6 +353,51 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A double containing the cumulative probability value.</returns>
         public static double UpperCumulativeProbability(int numberOfTrials, int numberOfSuccesses, double probability)
         {
+            // Validate parameters
+            if (numberOfTrials < 1)
+            {
+                Debug.WriteLine($"UpperCumulativeProbability() | Number of trials is less than 1. Returning 0 ...");
+                return 0;
+            }
+
+            if (numberOfSuccesses < 0)
+            {
+                Debug.WriteLine($"UpperCumulativeProbability() | Number of successes is less than 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (numberOfSuccesses > numberOfTrials)
+            {
+                Debug.WriteLine($"UpperCumulativeProbability() | Number of successes is greater than number of trials. Returning 0 ...");
+                return 0;
+            }
+
+            if (probability <= 0)
+            {
+                Debug.WriteLine($"UpperCumulativeProbability() | Probability is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
+
+            // In the case where probability is greater than or equal to 1, all discrete values up to the max possible successes are equal to 0,
+            // and the max possible successes has a probability of 1.
+            // Therefore, the sum of all values that include the max value should equal 1.
+            // Additionally P(X > k) should be 0 when k = MaxValue because it is impossible to get more than the max value of successes.
+            if (probability >= 1)
+            {
+                if (numberOfSuccesses == numberOfTrials)
+                {
+                    Debug.WriteLine($"UpperCumulativeProbability() | Probability is greater than or equal to 1, and the number of successes equals the number of trials. Returning 0 ...");
+                    return 0;
+                }
+
+                Debug.WriteLine($"UpperCumulativeProbability() | Probability is greater than or equal to 1, and the number of successes does not equal the number of trials. Returning 1 ...");
+                return 1;
+            }
+
+            return 1 - LowerCumulativeProbability(numberOfTrials, numberOfSuccesses, probability);
+
+            /*
+
             // Validate parameters
             if (numberOfTrials < 1)
             {
@@ -401,6 +446,8 @@ namespace WarhammerCombatMathLibrary
             }
 
             return cumulativeProbability;
+
+            */
         }
 
         /// <summary>
@@ -411,6 +458,46 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A cumulative distribution of trial results and their respective probabilities.</returns>
         public static List<BinomialOutcome> UpperCumulativeDistribution(int numberOfTrials, double probability)
         {
+            // Validate parameters
+            if (numberOfTrials < 1)
+            {
+                Debug.WriteLine($"UpperCumulativeDistribution() | Number of trials is less than 1.");
+                return [new(0, 1)];
+            }
+
+            if (probability <= 0)
+            {
+                Debug.WriteLine($"UpperCumulativeDistribution() | Probability is less than or equal to 0.");
+
+                // The probability of getting greater than 0 is 0%
+                var adjustedDistribution = new List<BinomialOutcome>();
+
+                for (int k = 0; k <= numberOfTrials; k++)
+                {
+                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
+                }
+
+                return adjustedDistribution;
+            }
+
+            if (probability >= 1)
+            {
+                Debug.WriteLine($"UpperCumulativeDistribution() | Probability is greater than or equal to 1.");
+
+                // All probabilities should be 0, except the probability of all successes should be 1.
+                // So the upper cumulative distribution should all be ones, except for the last value because you can't get higher than the last value.
+                var adjustedDistribution = new List<BinomialOutcome>();
+
+                for (int k = 0; k <= numberOfTrials - 1; k++)
+                {
+                    adjustedDistribution.Add(new BinomialOutcome(k, 1));
+                }
+
+                adjustedDistribution.Add(new BinomialOutcome(numberOfTrials, 0));
+
+                return adjustedDistribution;
+            }
+
             var distribution = new List<BinomialOutcome>();
 
             for (int k = 0; k <= numberOfTrials; k++)
