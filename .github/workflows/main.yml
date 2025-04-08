@@ -1,5 +1,7 @@
-name: Publish NuGet Package
+name: Build, Test, and Publish to NuGet
 
+permissions:
+  contents: read
 on:
   push:
     branches:
