@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   release:
     types: [published]
 
@@ -32,9 +35,11 @@ jobs:
         run: dotnet test ./WarhammerCombatMathLibrary/UnitTests/UnitTests.csproj --no-restore --verbosity normal
 
       - name: Pack NuGet package
+        if: github.event_name == 'push'
         run: dotnet pack --configuration Release --no-build --output ./nupkg ./WarhammerCombatMathLibrary/WarhammerCombatMathLibrary/WarhammerCombatMathLibrary.csproj
 
       - name: Publish NuGet package
+        if: github.event_name == 'push'
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: dotnet nuget push ./nupkg/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
