@@ -1477,8 +1477,9 @@ namespace UnitTests
         [TestMethod]
         public void GetAdjustedArmorSave_NullAttacker()
         {
-            var defender = new DefenderDTO();
-            Assert.AreEqual(0, CombatMath.GetAdjustedArmorSave(null, defender));
+            var expected = 0;
+            var actual = CombatMath.GetAdjustedArmorSave(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -1487,8 +1488,42 @@ namespace UnitTests
         [TestMethod]
         public void GetAdjustedArmorSave_NullDefender()
         {
-            var attacker = new AttackerDTO();
-            Assert.AreEqual(0, CombatMath.GetAdjustedArmorSave(attacker, null));
+            var expected = 0;
+            var actual = CombatMath.GetAdjustedArmorSave(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedArmorSave_TestParams1() 
+        {
+            var expected = 5;
+            var actual = CombatMath.GetAdjustedArmorSave(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedArmorSave_TestParams2() 
+        {
+            var expected = 4;
+            var actual = CombatMath.GetAdjustedArmorSave(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedArmorSave_TestParams3() 
+        {
+            var expected = 3;
+            var actual = CombatMath.GetAdjustedArmorSave(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
