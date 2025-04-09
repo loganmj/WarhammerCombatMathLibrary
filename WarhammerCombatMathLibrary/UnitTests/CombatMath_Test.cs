@@ -818,6 +818,106 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the case where the attacker is null.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfWound_AttackerIsNull()
+        {
+            var expected = 0;
+
+            var defender = new DefenderDTO();
+            var actual = CombatMath.GetProbabilityOfWound(null, defender);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender is null.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfWound_DefenderIsNull()
+        {
+            var expected = 0;
+
+            var attacker = new AttackerDTO();
+            var actual = CombatMath.GetProbabilityOfWound(attacker, null);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has a negative number of models.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfWound_TestParams1()
+        {
+            var expected = 0.25;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 4,
+                WeaponStrength = 4
+            };
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = CombatMath.GetProbabilityOfWound(attacker, defender);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfWound_TestParams2()
+        {
+            var expected = 0.3333;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 4
+            };
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfWound_TestParams3()
+        {
+            var expected = 0.5556;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 2,
+                WeaponStrength = 5
+            };
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]

@@ -232,8 +232,20 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetProbabilityOfWound(AttackerDTO attacker, DefenderDTO defender)
+        public static double GetProbabilityOfWound(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetProbabilityOfWound() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetProbabilityOfWound() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
             var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker, defender);
             var numberOfSuccessfulResults = GetNumberOfSuccessfulResults(woundSuccessThreshold);
             return GetProbabilityOfHit(attacker) * Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
