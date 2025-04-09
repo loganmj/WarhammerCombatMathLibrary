@@ -232,7 +232,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetProbabilityOfWound(AttackerDTO? attacker, DefenderDTO? defender)
+        public static double GetProbabilityWound(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -271,7 +271,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
+            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityWound(attacker, defender));
         }
 
         /// <summary>
@@ -316,7 +316,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
+            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityWound(attacker, defender));
         }
 
         /// <summary>
@@ -340,7 +340,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             var numberOfTrials = GetTotalNumberOfAttacks(attacker);
-            var probability = GetProbabilityOfWound(attacker, defender);
+            var probability = GetProbabilityWound(attacker, defender);
             return Statistics.BinomialDistribution(numberOfTrials, probability);
         }
 
@@ -364,7 +364,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             var numberOfTrials = GetTotalNumberOfAttacks(attacker);
-            var probability = GetProbabilityOfWound(attacker, defender);
+            var probability = GetProbabilityWound(attacker, defender);
             return Statistics.SurvivorDistribution(numberOfTrials, probability);
         }
 
@@ -399,7 +399,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetProbabilityOfFailedSave(AttackerDTO? attacker, DefenderDTO? defender)
+        public static double GetProbabilityFailedSave(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -416,18 +416,7 @@ namespace WarhammerCombatMathLibrary
             var adjustedArmorSave = GetAdjustedArmorSave(attacker, defender);
             var numberOfSuccessfulResults = GetNumberOfSuccessfulResults(adjustedArmorSave);
             var probabilityOfSuccessfulSave = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
-            return GetProbabilityOfWound(attacker, defender) * (1 - probabilityOfSuccessfulSave);
-        }
-
-        /// <summary>
-        /// Returns a binomial distribution of rolls where the hit and wound have succeeded, and the opponent failed their save.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static List<BinomialOutcome> GetBinomialDistributionOfFailSaves(AttackerDTO attacker, DefenderDTO defender)
-        {
-            return Statistics.BinomialDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
+            return GetProbabilityWound(attacker, defender) * (1 - probabilityOfSuccessfulSave);
         }
 
         /// <summary>
@@ -450,7 +439,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
+            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
         }
 
         /// <summary>
@@ -458,8 +447,20 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static int GetExpectedFailedSaves(AttackerDTO attacker, DefenderDTO defender)
+        public static int GetExpectedFailedSaves(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetExpectedFailedSaves() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetExpectedFailedSaves() | Defender is null, returning 0 ...");
+                return 0;
+            }
+
             return (int)Math.Floor(GetMeanFailedSaves(attacker, defender));
         }
 
@@ -469,33 +470,32 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetStandardDeviationFailedSaves(AttackerDTO attacker, DefenderDTO defender)
+        public static double GetStandardDeviationFailedSaves(AttackerDTO? attacker, DefenderDTO? defender)
         {
-            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetStandardDeviationFailedSaves() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetStandardDeviationFailedSaves() | Defender is null, returning 0 ...");
+                return 0;
+            }
+
+            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
         }
 
         /// <summary>
-        /// Returns the lower and upper range for expected failed saves.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns>A Tuple containing the lower and upper range values. Item1 is the lower bound, Item2 is the upper bound.</returns>
-        public static Tuple<int, int> GetExpectedRangeFailedSaves(AttackerDTO attacker, DefenderDTO defender)
-        {
-            var expectedDeviation = (int)Math.Floor(GetStandardDeviationFailedSaves(attacker, defender));
-            var lowerBound = GetExpectedFailedSaves(attacker, defender) - expectedDeviation;
-            var upperBound = GetExpectedFailedSaves(attacker, defender) + expectedDeviation;
-            return Tuple.Create(lowerBound, upperBound);
-        }
-
-        /// <summary>
-        /// Returns the upper cumulative distribution P(X≥k) of the failed save roll.
+        /// Returns a binomial distribution of rolls where the hit and wound have succeeded, and the opponent failed their save.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static List<BinomialOutcome> GetUpperCumulativeDistributionOfFailedSaves(AttackerDTO attacker, DefenderDTO defender)
+        public static List<BinomialOutcome> GetBinomialDistributionFailSaves(AttackerDTO attacker, DefenderDTO defender)
         {
-            return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
+            return Statistics.BinomialDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
         }
 
         /// <summary>
@@ -528,19 +528,6 @@ namespace WarhammerCombatMathLibrary
         public static double GetStandardDeviationDamage(AttackerDTO attacker, DefenderDTO defender)
         {
             return GetStandardDeviationFailedSaves(attacker, defender) * attacker.WeaponDamage;
-        }
-
-        /// <summary>
-        /// Returns the lower and upper range for expected total damage.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns>A Tuple containing the lower and upper range values. Item1 is the lower bound, Item2 is the upper bound.</returns>
-        public static Tuple<int, int> GetExpectedRangeDamage(AttackerDTO attacker, DefenderDTO defender)
-        {
-            var expectedDeviation = (int)Math.Floor(GetStandardDeviationDamage(attacker, defender));
-            var lowerBound = GetExpectedDamage(attacker, defender) - expectedDeviation;
-            var upperBound = GetExpectedDamage(attacker, defender) + expectedDeviation;
-            return Tuple.Create(lowerBound, upperBound);
         }
 
         #endregion
