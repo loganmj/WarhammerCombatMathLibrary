@@ -642,6 +642,78 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorProbability_BinomialIsNull()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetSurvivorProbability(null, 1);
+
+            Assert.AreEqual(expected, Math.Round(actual, 4));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorProbability_SuccessesLessThan0()
+        {
+            var expected = 0;
+
+            var binomial = new Binomial(0.5, 2);
+            var successes = -1;
+            var actual = CombatMath.GetSurvivorProbability(binomial, successes);
+
+            Assert.AreEqual(expected, Math.Round(actual, 4));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorProbability_TestParams1() 
+        {
+            var expected = 0.75;
+
+            var binomial = new Binomial(0.5, 2);
+            var successes = 1;
+            var actual = CombatMath.GetSurvivorProbability(binomial, successes);
+
+            Assert.AreEqual(expected, Math.Round(actual, 4));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorProbability_TestParams2() 
+        {
+            var expected = 0.5;
+
+            var binomial = new Binomial(0.5, 5);
+            var successes = 3;
+            var actual = CombatMath.GetSurvivorProbability(binomial, successes);
+
+            Assert.AreEqual(expected, Math.Round(actual, 4));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorProbability_TestParams3() 
+        {
+            var expected = 0.0002;
+
+            var binomial = new Binomial(0.16, 10);
+            var successes = 7;
+            var actual = CombatMath.GetSurvivorProbability(binomial, successes);
+
+            Assert.AreEqual(expected, Math.Round(actual, 4));
+        }
+
+        /// <summary>
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]
