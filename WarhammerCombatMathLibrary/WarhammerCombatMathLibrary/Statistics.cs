@@ -558,7 +558,7 @@ namespace WarhammerCombatMathLibrary
             if (numberOfTrials < 1)
             {
                 Debug.WriteLine($"SurvivorDistribution() | Number of trials is less than 1.");
-                return [new(0, 1)];
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
             }
 
             if (probability <= 0)
