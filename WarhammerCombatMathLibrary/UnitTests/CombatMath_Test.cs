@@ -1281,16 +1281,40 @@ namespace UnitTests
             CollectionAssert.AreEqual(expected, actual);
         }
 
-        /*
-
         /// <summary>
         /// Tests the case where the attacker parameter is null.
         /// </summary>
         [TestMethod]
-        public void GetSurvivorDistributionHits_AttackerIsNull()
+        public void GetSurvivorDistributionWounds_AttackerIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetSurvivorDistributionHits(null);
+            var actual = CombatMath.GetSurvivorDistributionWounds(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionWounds_DefenderIsNull()
+        {
+            var expected = new List<BinomialOutcome>();
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_KHARN_THE_BETRAYER, null);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1313,22 +1337,22 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetSurvivorDistributionHits_TestParams1()
+        public void GetSurvivorDistributionWounds_TestParams1()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 1,
-                WeaponSkill = 4
-            };
-
             var expected = new List<BinomialOutcome>
             {
                 new(0, 1),
-                new(1, 0.5)
+                new(1, 0.9985),
+                new(2, 0.9833),
+                new(3, 0.9166),
+                new(4, 0.7501),
+                new(5, 0.4899),
+                new(6, 0.2298),
+                new(7, 0.0672),
+                new(8, 0.0091)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(attacker);
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1351,24 +1375,34 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetSurvivorDistributionHits_TestParams2()
+        public void GetSurvivorDistributionWounds_TestParams2()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 3,
-                WeaponSkill = 4
-            };
-
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.875),
-                new(2, 0.5),
-                new(3, 0.125)
+                new(1, 0.9997),
+                new(2, 0.9967),
+                new(3, 0.9824),
+                new(4, 0.9396),
+                new(5, 0.8485),
+                new(6, 0.7028),
+                new(7, 0.5207),
+                new(8, 0.3385),
+                new(9, 0.1905),
+                new(10, 0.0919),
+                new(11, 0.0376),
+                new(12, 0.0130),
+                new(13, 0.0037),
+                new(14, 0.0009),
+                new(15, 0.0002),
+                new(16, 0),
+                new(17, 0),
+                new(18, 0),
+                new(19, 0),
+                new(20, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(attacker);
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1391,25 +1425,34 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetSurvivorDistributionHits_TestParams3()
+        public void GetSurvivorDistributionWounds_TestParams3()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 2,
-                WeaponAttacks = 2,
-                WeaponSkill = 4
-            };
-
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9375),
-                new(2, 0.6875),
-                new(3, 0.3125),
-                new(4, 0.0625)
+                new(1, 0.9934),
+                new(2, 0.9559),
+                new(3, 0.8541),
+                new(4, 0.6796),
+                new(5, 0.4677),
+                new(6, 0.2740),
+                new(7, 0.1356),
+                new(8, 0.0565),
+                new(9, 0.0198),
+                new(10, 0.0058),
+                new(11, 0.0014),
+                new(12, 0.0003),
+                new(13, 0),
+                new(14, 0),
+                new(15, 0),
+                new(16, 0),
+                new(17, 0),
+                new(18, 0),
+                new(19, 0),
+                new(20, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(attacker);
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1427,8 +1470,6 @@ namespace UnitTests
 
             CollectionAssert.AreEqual(expected, actual);
         }
-
-        */
 
         /// <summary>
         /// Test the case where the attacker object is null

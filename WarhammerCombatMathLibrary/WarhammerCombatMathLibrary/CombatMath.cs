@@ -345,6 +345,30 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Gets a distribution of all discrete survivor function values for a successful hit and wound roll.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static List<BinomialOutcome> GetSurvivorDistributionWounds(AttackerDTO? attacker, DefenderDTO? defender)
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetSurvivorDistributionWounds() | Attacker is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetSurvivorDistributionWounds() | Defender is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var probability = GetProbabilityOfWound(attacker, defender);
+            return Statistics.SurvivorDistribution(numberOfTrials, probability);
+        }
+
+        /// <summary>
         /// Returns the adjusted armor save of the defender after applying the attacker's armor pierce.
         /// </summary>
         /// <param name="attacker"></param>
