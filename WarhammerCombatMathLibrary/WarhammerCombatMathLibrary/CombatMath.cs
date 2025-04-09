@@ -325,9 +325,23 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static List<BinomialOutcome> GetBinomialDistributionOfWounds(AttackerDTO? attacker, DefenderDTO? defender)
+        public static List<BinomialOutcome> GetBinomialDistributionWounds(AttackerDTO? attacker, DefenderDTO? defender)
         {
-            return Statistics.BinomialDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetBinomialDistributionWounds() | Attacker is null. Returning empty list ...");
+                return [];
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetBinomialDistributionWounds() | Defender is null. Returning empty list ...");
+                return [];
+            }
+
+            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var probability = GetProbabilityOfWound(attacker, defender);
+            return Statistics.BinomialDistribution(numberOfTrials, probability);
         }
 
         /// <summary>

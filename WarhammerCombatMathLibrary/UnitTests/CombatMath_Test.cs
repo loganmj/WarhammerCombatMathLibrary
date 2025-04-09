@@ -1091,17 +1091,40 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
-        /*
-
-
         /// <summary>
         /// Tests the case where the attacker parameter is null.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionHits_AttackerIsNull()
+        public void GetBinomialDistributionWounds_AttackerIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetBinomialDistributionHits(null);
+            var actual = CombatMath.GetBinomialDistributionWounds(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionWounds_DefenderIsNull()
+        {
+            var expected = new List<BinomialOutcome>();
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_KHARN_THE_BETRAYER, null);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1124,22 +1147,22 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionHits_TestParams1()
+        public void GetBinomialDistributionWounds_TestParams1()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 1,
-                WeaponSkill = 4
-            };
-
             var expected = new List<BinomialOutcome>
             {
-                new(0, 0.5),
-                new(1, 0.5)
+                new(0, 0.0015),
+                new(1, 0.0152),
+                new(2, 0.0666),
+                new(3, 0.1665),
+                new(4, 0.2602),
+                new(5, 0.2602),
+                new(6, 0.1626),
+                new(7, 0.0581),
+                new(8, 0.0091)
             };
 
-            var actual = CombatMath.GetBinomialDistributionHits(attacker);
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1162,24 +1185,34 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionHits_TestParams2()
+        public void GetBinomialDistributionWounds_TestParams2()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 3,
-                WeaponSkill = 4
-            };
-
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.125),
-                new(1, 0.375),
-                new(2, 0.375),
-                new(3, 0.125)
+                new(0, 0.0003),
+                new(1, 0.003),
+                new(2, 0.0143),
+                new(3, 0.0429),
+                new(4, 0.0911),
+                new(5, 0.1457),
+                new(6, 0.1821),
+                new(7, 0.1821),
+                new(8, 0.1480),
+                new(9, 0.0987),
+                new(10, 0.0543),
+                new(11, 0.0247),
+                new(12, 0.0092),
+                new(13, 0.0028),
+                new(14, 0.0007),
+                new(15, 0.0001),
+                new(16, 0),
+                new(17, 0),
+                new(18, 0),
+                new(19, 0),
+                new(20, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionHits(attacker);
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1202,25 +1235,34 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionHits_TestParams3()
+        public void GetBinomialDistributionWounds_TestParams3()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 2,
-                WeaponAttacks = 2,
-                WeaponSkill = 4
-            };
-
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0625),
-                new(1, 0.25),
-                new(2, 0.375),
-                new(3, 0.25),
-                new(4, 0.0625)
+                new(0, 0.0066),
+                new(1, 0.0375),
+                new(2, 0.1018),
+                new(3, 0.1745),
+                new(4, 0.2119),
+                new(5, 0.1937),
+                new(6, 0.1384),
+                new(7, 0.0791),
+                new(8, 0.0367),
+                new(9, 0.0140),
+                new(10, 0.0044),
+                new(11, 0.0011),
+                new(12, 0.0002),
+                new(13, 0),
+                new(14, 0),
+                new(15, 0),
+                new(16, 0),
+                new(17, 0),
+                new(18, 0),
+                new(19, 0),
+                new(20, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionHits(attacker);
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1238,6 +1280,8 @@ namespace UnitTests
 
             CollectionAssert.AreEqual(expected, actual);
         }
+
+        /*
 
         /// <summary>
         /// Tests the case where the attacker parameter is null.
