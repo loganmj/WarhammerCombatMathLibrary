@@ -180,7 +180,7 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static int GetSuccessThresholdOfWound(AttackerDTO? attacker, DefenderDTO? defender)
         {
-            if (attacker == null) 
+            if (attacker == null)
             {
                 Debug.WriteLine($"GetSuccessThresholdOfWound() | Attacker is null. Returning 7+ ...");
                 return 7;
@@ -252,24 +252,25 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns a binomial distribution of wound roll results based on the process data.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static List<BinomialOutcome> GetBinomialDistributionOfWounds(AttackerDTO attacker, DefenderDTO defender)
-        {
-            return Statistics.BinomialDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
-        }
-
-        /// <summary>
         /// Returns the mean of the attacker's wound roll distribution.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetMeanWounds(AttackerDTO attacker, DefenderDTO defender)
+        public static double GetMeanWounds(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetMeanWounds() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetMeanWounds() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
             return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
         }
 
@@ -278,8 +279,20 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static int GetExpectedWounds(AttackerDTO attacker, DefenderDTO defender)
+        public static int GetExpectedWounds(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetExpectedWounds() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetExpectedWounds() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
             return (int)Math.Floor(GetMeanWounds(attacker, defender));
         }
 
@@ -289,33 +302,70 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetStandardDeviationWounds(AttackerDTO attacker, DefenderDTO defender)
+        public static double GetStandardDeviationWounds(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetStandardDeviationWounds() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetStandardDeviationWounds() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
             return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
         }
 
         /// <summary>
-        /// Returns the lower and upper range for expected successful wounds.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns>A Tuple containing the lower and upper range values. Item1 is the lower bound, Item2 is the upper bound.</returns>
-        public static Tuple<int, int> GetExpectedRangeWounds(AttackerDTO attacker, DefenderDTO defender)
-        {
-            var expectedDeviation = (int)Math.Floor(GetStandardDeviationWounds(attacker, defender));
-            var lowerBound = GetExpectedWounds(attacker, defender) - expectedDeviation;
-            var upperBound = GetExpectedWounds(attacker, defender) + expectedDeviation;
-            return Tuple.Create(lowerBound, upperBound);
-        }
-
-        /// <summary>
-        /// Returns the upper cumulative distribution P(X≥k) of the attacker's wound roll.
+        /// Returns a binomial distribution of wound roll results based on the process data.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static List<BinomialOutcome> GetUpperCumulativeDistributionOfWounds(AttackerDTO attacker, DefenderDTO defender)
+        public static List<BinomialOutcome> GetBinomialDistributionWounds(AttackerDTO? attacker, DefenderDTO? defender)
         {
-            return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetBinomialDistributionWounds() | Attacker is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetBinomialDistributionWounds() | Defender is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var probability = GetProbabilityOfWound(attacker, defender);
+            return Statistics.BinomialDistribution(numberOfTrials, probability);
+        }
+
+        /// <summary>
+        /// Gets a distribution of all discrete survivor function values for a successful hit and wound roll.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static List<BinomialOutcome> GetSurvivorDistributionWounds(AttackerDTO? attacker, DefenderDTO? defender)
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetSurvivorDistributionWounds() | Attacker is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetSurvivorDistributionWounds() | Defender is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var probability = GetProbabilityOfWound(attacker, defender);
+            return Statistics.SurvivorDistribution(numberOfTrials, probability);
         }
 
         /// <summary>
