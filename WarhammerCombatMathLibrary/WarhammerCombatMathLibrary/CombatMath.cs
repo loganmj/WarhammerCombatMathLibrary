@@ -78,7 +78,7 @@ namespace WarhammerCombatMathLibrary
         /// Returns the probability of succeeding a roll with a single dice, given the desired success threshold.
         /// </summary>
         /// <returns>A double value containing the probability of success for a single trial.</returns>
-        public static double GetProbabilityOfHit(AttackerDTO? attacker)
+        public static double GetHitProbability(AttackerDTO? attacker)
         {
             if (attacker == null)
             {
@@ -102,7 +102,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
+            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetHitProbability(attacker));
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
+            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetHitProbability(attacker));
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             var totalAttacks = GetTotalNumberOfAttacks(attacker);
-            var probabilityOfHit = GetProbabilityOfHit(attacker);
+            var probabilityOfHit = GetHitProbability(attacker);
             return Statistics.BinomialDistribution(totalAttacks, probabilityOfHit);
         }
 
@@ -162,7 +162,7 @@ namespace WarhammerCombatMathLibrary
         public static List<BinomialOutcome> GetHitsSurvivorDistribution(AttackerDTO? attacker)
         {
             var numberOfTrials = GetTotalNumberOfAttacks(attacker);
-            var probability = GetProbabilityOfHit(attacker);
+            var probability = GetHitProbability(attacker);
             var survivorDistribution = new List<BinomialOutcome>();
 
             for (int trial = 0; trial <= numberOfTrials; trial++)
@@ -225,7 +225,7 @@ namespace WarhammerCombatMathLibrary
         {
             var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker, defender);
             var numberOfSuccessfulResults = GetNumberOfSuccessfulResults(woundSuccessThreshold);
-            return GetProbabilityOfHit(attacker) * Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
+            return GetHitProbability(attacker) * Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
         }
 
         /// <summary>

@@ -176,7 +176,7 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfHit_NullAttacker()
         {
-            Assert.AreEqual(0, CombatMath.GetProbabilityOfHit(null));
+            Assert.AreEqual(0, CombatMath.GetHitProbability(null));
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace UnitTests
                 WeaponSkill = 0
             };
 
-            Assert.AreEqual(1, CombatMath.GetProbabilityOfHit(attacker));
+            Assert.AreEqual(1, CombatMath.GetHitProbability(attacker));
         }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace UnitTests
                 WeaponSkill = -1
             };
 
-            Assert.AreEqual(1, CombatMath.GetProbabilityOfHit(attacker));
+            Assert.AreEqual(1, CombatMath.GetHitProbability(attacker));
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace UnitTests
 
             Console.WriteLine($"TEST - Attacker: {attacker}");
 
-            Assert.AreEqual(0.83, Math.Round(CombatMath.GetProbabilityOfHit(attacker)), 2);
+            Assert.AreEqual(0.83, Math.Round(CombatMath.GetHitProbability(attacker)), 2);
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace UnitTests
                 WeaponSkill = 3
             };
 
-            Assert.AreEqual(0.67, Math.Round(CombatMath.GetProbabilityOfHit(attacker)), 2);
+            Assert.AreEqual(0.67, Math.Round(CombatMath.GetHitProbability(attacker)), 2);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace UnitTests
                 WeaponSkill = 5
             };
 
-            Assert.AreEqual(0.33, Math.Round(CombatMath.GetProbabilityOfHit(attacker)), 2);
+            Assert.AreEqual(0.33, Math.Round(CombatMath.GetHitProbability(attacker)), 2);
         }
 
         /// <summary>
