@@ -178,8 +178,20 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static int GetSuccessThresholdOfWound(AttackerDTO attacker, DefenderDTO defender)
+        public static int GetSuccessThresholdOfWound(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null) 
+            {
+                Debug.WriteLine($"GetSuccessThresholdOfWound() | Attacker is null. Returning 7+ ...");
+                return 7;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetSuccessThresholdOfWound() | Defender is null. Returning 7+ ...");
+                return 7;
+            }
+
             var strength = attacker.WeaponStrength;
             var toughness = defender.Toughness;
 

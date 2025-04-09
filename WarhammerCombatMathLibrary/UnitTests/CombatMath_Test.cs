@@ -713,6 +713,111 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the case where the attacker is null.
+        /// </summary>
+        [TestMethod]
+        public void GetSuccessThresholdOfWound_AttackerIsNull() 
+        {
+            var expected = 7;
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = CombatMath.GetSuccessThresholdOfWound(null, defender);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender is null.
+        /// </summary>
+        [TestMethod]
+        public void GetSuccessThresholdOfWound_DefenderIsNull() 
+        {
+            var expected = 7;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponStrength = 4
+            };
+
+            var actual = CombatMath.GetSuccessThresholdOfWound(attacker, null);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSuccessThresholdOfWound_TestParams1() 
+        {
+            var expected = 4;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponStrength = 4
+            };
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = CombatMath.GetSuccessThresholdOfWound(attacker, defender);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSuccessThresholdOfWound_TestParams2() 
+        {
+            var expected = 5;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponStrength = 4
+            };
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 5
+            };
+
+            var actual = CombatMath.GetSuccessThresholdOfWound(attacker, defender);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSuccessThresholdOfWound_TestParams3() 
+        {
+            var expected = 2;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponStrength = 4
+            };
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 2
+            };
+
+            var actual = CombatMath.GetSuccessThresholdOfWound(attacker, defender);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]
