@@ -1,5 +1,4 @@
-﻿using MathNet.Numerics.Distributions;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using WarhammerCombatMathLibrary;
 using WarhammerCombatMathLibrary.Data;
 
@@ -16,7 +15,7 @@ namespace UnitTests
         /// <summary>
         /// Attack profile for Kharn the Betrayer
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_KHARN_THE_BETRAYER = new() 
+        public static readonly AttackerDTO ATTACKER_KHARN_THE_BETRAYER = new()
         {
             NumberOfModels = 1,
             WeaponAttacks = 8,
@@ -29,10 +28,10 @@ namespace UnitTests
         /// <summary>
         /// Attack profile for a 10 man squad of Space Marine Intercessors, all equipped with Bolt Rifles
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD = new() 
+        public static readonly AttackerDTO ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD = new()
         {
             NumberOfModels = 10,
-            WeaponAttacks = 4,
+            WeaponAttacks = 2,
             WeaponSkill = 3,
             WeaponStrength = 4,
             WeaponArmorPierce = 1,
@@ -40,13 +39,13 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Attack profile for a five man squad of Space Marine Terminators, all equipped with Power Fists
+        /// Attack profile for a five man squad of Space Marine Terminators, all equipped with Chain Fists
         /// </summary>
         public static readonly AttackerDTO ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD = new()
         {
             NumberOfModels = 5,
             WeaponAttacks = 3,
-            WeaponSkill = 3,
+            WeaponSkill = 4,
             WeaponStrength = 8,
             WeaponArmorPierce = 2,
             WeaponDamage = 2
@@ -55,7 +54,7 @@ namespace UnitTests
         /// <summary>
         /// Defense profile for a 10 man squad of Space Marine Intercessors
         /// </summary>
-        public static readonly DefenderDTO DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD = new() 
+        public static readonly DefenderDTO DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD = new()
         {
             NumberOfModels = 10,
             Toughness = 4,
@@ -68,7 +67,7 @@ namespace UnitTests
         /// <summary>
         /// Defense profile for a 5 man squad of Space Marine Terminators
         /// </summary>
-        public static readonly DefenderDTO DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD = new() 
+        public static readonly DefenderDTO DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD = new()
         {
             NumberOfModels = 5,
             Toughness = 5,
@@ -231,7 +230,7 @@ namespace UnitTests
         [TestMethod]
         public void GetTotalNumberOfAttacks_TestParams2()
         {
-            var expected = 40;
+            var expected = 20;
             var actual = CombatMath.GetTotalNumberOfAttacks(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
@@ -288,44 +287,36 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHit_WeaponSKill2()
+        public void GetProbabilityOfHit_TestParams1()
         {
-            var attacker = new AttackerDTO()
-            {
-                WeaponSkill = 2
-            };
+            var expected = 0.8333;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(ATTACKER_KHARN_THE_BETRAYER), 4);
 
-            Console.WriteLine($"TEST - Attacker: {attacker}");
-
-            Assert.AreEqual(0.83, Math.Round(CombatMath.GetProbabilityOfHit(attacker)), 2);
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHit_WeaponSKill3()
+        public void GetProbabilityOfHit_TestParams2()
         {
-            var attacker = new AttackerDTO()
-            {
-                WeaponSkill = 3
-            };
+            var expected = 0.6667;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
-            Assert.AreEqual(0.67, Math.Round(CombatMath.GetProbabilityOfHit(attacker)), 2);
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHit_WeaponSKill5()
+        public void GetProbabilityOfHit_TestParams3()
         {
-            var attacker = new AttackerDTO()
-            {
-                WeaponSkill = 5
-            };
+            var expected = 0.5;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
 
-            Assert.AreEqual(0.33, Math.Round(CombatMath.GetProbabilityOfHit(attacker)), 2);
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -343,14 +334,10 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanHits_TestParams1()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 1,
-                WeaponSkill = 4
-            };
+            var expected = 6.6667;
+            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_KHARN_THE_BETRAYER), 4);
 
-            Assert.AreEqual(0.5, CombatMath.GetMeanHits(attacker));
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -359,14 +346,10 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanHits_TestParams2()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 10,
-                WeaponAttacks = 10,
-                WeaponSkill = 4
-            };
+            var expected = 13.3333;
+            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
-            Assert.AreEqual(50, CombatMath.GetMeanHits(attacker));
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -375,14 +358,10 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanHits_TestParams3()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 10,
-                WeaponAttacks = 4,
-                WeaponSkill = 3
-            };
+            var expected = 7.5;
+            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
 
-            Assert.AreEqual(26.67, Math.Round(CombatMath.GetMeanHits(attacker), 2));
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -400,14 +379,10 @@ namespace UnitTests
         [TestMethod]
         public void GetExpectedHits_TestParams1()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 1,
-                WeaponSkill = 4
-            };
+            var expected = 6;
+            var actual = CombatMath.GetExpectedHits(ATTACKER_KHARN_THE_BETRAYER);
 
-            Assert.AreEqual(0, CombatMath.GetExpectedHits(attacker));
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -416,14 +391,10 @@ namespace UnitTests
         [TestMethod]
         public void GetExpectedHits_TestParams2()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 10,
-                WeaponAttacks = 10,
-                WeaponSkill = 4
-            };
+            var expected = 13;
+            var actual = CombatMath.GetExpectedHits(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
-            Assert.AreEqual(50, CombatMath.GetExpectedHits(attacker));
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -432,14 +403,10 @@ namespace UnitTests
         [TestMethod]
         public void GetExpectedHits_TestParams3()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 10,
-                WeaponAttacks = 4,
-                WeaponSkill = 3
-            };
+            var expected = 7;
+            var actual = CombatMath.GetExpectedHits(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD);
 
-            Assert.AreEqual(26, CombatMath.GetExpectedHits(attacker));
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -457,14 +424,10 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationHits_TestParams1()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 1,
-                WeaponSkill = 4
-            };
+            var expected = 1.0541;
+            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_KHARN_THE_BETRAYER), 4);
 
-            Assert.AreEqual(0.5, CombatMath.GetStandardDeviationHits(attacker));
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -473,14 +436,10 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationHits_TestParams2()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 10,
-                WeaponAttacks = 10,
-                WeaponSkill = 4
-            };
+            var expected = 2.1082;
+            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
-            Assert.AreEqual(5, CombatMath.GetStandardDeviationHits(attacker));
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -489,14 +448,10 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationHits_TestParams3()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 10,
-                WeaponAttacks = 4,
-                WeaponSkill = 3
-            };
+            var expected = 1.9365;
+            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
 
-            Assert.AreEqual(2.98, Math.Round(CombatMath.GetStandardDeviationHits(attacker), 2));
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -531,20 +486,20 @@ namespace UnitTests
         [TestMethod]
         public void GetBinomialDistributionHits_TestParams1()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 1,
-                WeaponSkill = 4
-            };
-
             var expected = new List<BinomialOutcome>
             {
-                new(0, 0.5),
-                new(1, 0.5)
+                new(0, 0),
+                new(1, 0),
+                new(2, 0.0004),
+                new(3, 0.0042),
+                new(4, 0.0260),
+                new(5, 0.1042),
+                new(6, 0.2605),
+                new(7, 0.3721),
+                new(8, 0.2326)
             };
 
-            var actual = CombatMath.GetBinomialDistributionHits(attacker);
+            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_KHARN_THE_BETRAYER);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -569,22 +524,32 @@ namespace UnitTests
         [TestMethod]
         public void GetBinomialDistributionHits_TestParams2()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 3,
-                WeaponSkill = 4
-            };
-
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.125),
-                new(1, 0.375),
-                new(2, 0.375),
-                new(3, 0.125)
+                new(0, 0),
+                new(1, 0),
+                new(2, 0),
+                new(3, 0),
+                new(4, 0),
+                new(5, 0.0001),
+                new(6, 0.0007),
+                new(7, 0.0028),
+                new(8, 0.0092),
+                new(9, 0.0247),
+                new(10, 0.0543),
+                new(11, 0.0987),
+                new(12, 0.148),
+                new(13, 0.1821),
+                new(14, 0.1821),
+                new(15, 0.1457),
+                new(16, 0.0911),
+                new(17, 0.0429),
+                new(18, 0.0143),
+                new(19, 0.003),
+                new(20, 0.0003)
             };
 
-            var actual = CombatMath.GetBinomialDistributionHits(attacker);
+            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -609,23 +574,27 @@ namespace UnitTests
         [TestMethod]
         public void GetBinomialDistributionHits_TestParams3()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 2,
-                WeaponAttacks = 2,
-                WeaponSkill = 4
-            };
-
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0625),
-                new(1, 0.25),
-                new(2, 0.375),
-                new(3, 0.25),
-                new(4, 0.0625)
+                new(0, 0),
+                new(1, 0.0005),
+                new(2, 0.0032),
+                new(3, 0.0139),
+                new(4, 0.0417),
+                new(5, 0.0916),
+                new(6, 0.1527),
+                new(7, 0.1964),
+                new(8, 0.1964),
+                new(9, 0.1527),
+                new(10, 0.0916),
+                new(11, 0.0417),
+                new(12, 0.0139),
+                new(13, 0.0032),
+                new(14, 0.0005),
+                new(15, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionHits(attacker);
+            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -793,7 +762,7 @@ namespace UnitTests
         /// Tests the case where the attacker is null.
         /// </summary>
         [TestMethod]
-        public void GetSuccessThresholdOfWound_AttackerIsNull() 
+        public void GetSuccessThresholdOfWound_AttackerIsNull()
         {
             var expected = 7;
 
@@ -811,7 +780,7 @@ namespace UnitTests
         /// Tests the case where the defender is null.
         /// </summary>
         [TestMethod]
-        public void GetSuccessThresholdOfWound_DefenderIsNull() 
+        public void GetSuccessThresholdOfWound_DefenderIsNull()
         {
             var expected = 7;
 
@@ -829,7 +798,7 @@ namespace UnitTests
         /// Tests the case with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetSuccessThresholdOfWound_TestParams1() 
+        public void GetSuccessThresholdOfWound_TestParams1()
         {
             var expected = 4;
 
@@ -852,7 +821,7 @@ namespace UnitTests
         /// Tests the case with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetSuccessThresholdOfWound_TestParams2() 
+        public void GetSuccessThresholdOfWound_TestParams2()
         {
             var expected = 5;
 
@@ -875,7 +844,7 @@ namespace UnitTests
         /// Tests the case with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetSuccessThresholdOfWound_TestParams3() 
+        public void GetSuccessThresholdOfWound_TestParams3()
         {
             var expected = 2;
 
@@ -1031,22 +1000,8 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanWounds_TestParams1()
         {
-            var expected = 5.5556;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 8,
-                WeaponSkill = 2,
-                WeaponStrength = 8
-            };
-
-            var defender = new DefenderDTO()
-            {
-                Toughness = 4
-            };
-
-            var actual = CombatMath.GetMeanWounds(attacker, defender);
+            var expected = 4.4444;
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1057,22 +1012,8 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanWounds_TestParams2()
         {
-            var expected = 13.3333;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 10,
-                WeaponAttacks = 4,
-                WeaponSkill = 3,
-                WeaponStrength = 4
-            };
-
-            var defender = new DefenderDTO() 
-            {
-                Toughness = 4
-            };
-
-            var actual = Math.Round(CombatMath.GetMeanWounds(attacker, defender));
+            var expected = 6.6667;
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1083,21 +1024,8 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanWounds_TestParams3()
         {
-            var expected = 13.3333;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 10,
-                WeaponAttacks = 4,
-                WeaponSkill = 3
-            };
-
-            var defender = new DefenderDTO()
-            {
-                Toughness = 4
-            };
-
-            var actual = Math.Round(CombatMath.GetMeanWounds(attacker, defender));
+            var expected = 4.4444;
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }

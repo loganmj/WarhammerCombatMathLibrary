@@ -180,7 +180,7 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static int GetSuccessThresholdOfWound(AttackerDTO? attacker, DefenderDTO? defender)
         {
-            if (attacker == null) 
+            if (attacker == null)
             {
                 Debug.WriteLine($"GetSuccessThresholdOfWound() | Attacker is null. Returning 7+ ...");
                 return 7;
