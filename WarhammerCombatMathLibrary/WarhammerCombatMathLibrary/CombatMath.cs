@@ -163,18 +163,15 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A Binomial object for the hit roll.</returns>
         public static Binomial GetHitsBinomial(AttackerDTO? attacker) 
         {
+            if (attacker == null) 
+            {
+                Debug.WriteLine($"GetHitsBinomial() | Attacker is null. Returning binomial for n=0, p=0 ...");
+                return new Binomial(0, 0);
+            }
+
             var numberOfTrials = GetTotalNumberOfAttacks(attacker);
             var probability = GetProbabilityOfHit(attacker);
             return new Binomial(probability, numberOfTrials);
-        }
-
-        /// <summary>
-        /// Returns the upper cumulative distribution P(X≥k) of the attacker's hit roll.
-        /// </summary>
-        /// <returns></returns>
-        public static List<BinomialOutcome> GetUpperCumulativeDistributionOfHits(AttackerDTO attacker)
-        {
-            return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
         }
 
         /// <summary>
@@ -182,11 +179,24 @@ namespace WarhammerCombatMathLibrary
         /// That is, the cumulative probability of all probabilities P(X≥k) in the distribution.
         /// </summary>
         /// <param name="binomial">The distribution to of probabilities.</param>
-        /// <param name="k">The minimum number of successes.</param>
+        /// <param name="successes">The minimum number of successes.</param>
         /// <returns></returns>
-        public static double GetSurvivorProbability(Binomial binomial, int k)
+        public static double GetSurvivorProbability(Binomial? binomial, int successes)
         {
-            return 1 - binomial.CumulativeDistribution(k - 1);
+            // Validate inputs
+            if (binomial == null) 
+            {
+                Debug.WriteLine($"GetSurvivorProbability() | Binomial is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (successes < 0) 
+            {
+                Debug.WriteLine($"GetSurvivorProbability() | Successes is less than 0. Returning 0 ...");
+                return 0;
+            }
+
+            return 1 - binomial.CumulativeDistribution(successes - 1);
         }
 
         /// <summary>
