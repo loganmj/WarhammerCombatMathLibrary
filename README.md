@@ -1,9 +1,38 @@
-# Warhammer 40k Combat Library
-This project combines statistics mathematics with the 10th Edition rules for Warhammer 40k to provide the ability to calculate the probability of the outcome of combat at each step of the combat process.
+# WarhammerCombatMathLibrary
 
-# Arbitrarily Large Numbers
-Factorials are able to become very large very quickly. Therefore, as of version 3.1.0, the BigInteger type is used to perform calculations when factorials are involved.
-It is not recommended to use versions before 3.1.0, as they will either throw errors or produce incorrect results for calculations with trials above 12.
+## Overview
+WarhammerCombatMathLibrary is a set of library files designed to assist with calculating combat math for Warhammer 40k. This library aims to provide tools and functions to streamline and enhance the accuracy of combat calculations in the game.
 
-# Math Document
-Please see the Math.md file in the Docs folder of the repository for an in-depth explanation of how the calculations are done.
+## Features
+- Combat Calculations: Functions to calculate various combat scenarios and outcomes.
+- Probability Analysis: Tools to analyze the probability of different combat results.
+- Customizable Parameters: Easily adjust parameters to fit different units and scenarios.
+- Efficient Algorithms: Optimized for performance to handle complex calculations quickly.
+
+## Installation
+
+### GitHub
+To use the WarhammerCombatMathLibrary, clone the repository and include the library files in your project:
+
+`git clone https://github.com/loganmj/WarhammerCombatMathLibrary.git`
+
+### NuGet
+The library is also published as a NuGet package. You can install it using the NuGet Package Manager in Visual Studio or via the command line:
+
+`dotnet add package WarhammerCombatMathLibrary`
+
+For more details, visit the NuGet package page.
+
+Contributing
+We welcome contributions to enhance the library. To contribute:
+
+Fork the repository.
+Create a new branch (git checkout -b feature-branch).
+Make your changes and commit them (git commit -m 'Add new feature').
+Push to the branch (git push origin feature-branch).
+Create a pull request.
+License
+This project is licensed under the GPL-3.0 License. See the LICENSE file for details.
+
+Contact
+For any questions or feedback, please open an issue on the repository or contact the maintainer.
