@@ -330,7 +330,7 @@ namespace WarhammerCombatMathLibrary
             if (attacker == null)
             {
                 Debug.WriteLine($"GetBinomialDistributionWounds() | Attacker is null. Returning empty list ...");
-                return [];
+                return new List<BinomialOutcome>();
             }
 
             if (defender == null)
