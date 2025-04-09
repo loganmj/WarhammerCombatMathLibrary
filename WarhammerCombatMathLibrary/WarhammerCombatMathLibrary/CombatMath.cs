@@ -186,13 +186,13 @@ namespace WarhammerCombatMathLibrary
             // Validate inputs
             if (binomial == null) 
             {
-                Debug.WriteLine($"GetHitsBinomial() | Binomial is null. Returning 0 ...");
+                Debug.WriteLine($"GetSurvivorProbability() | Binomial is null. Returning 0 ...");
                 return 0;
             }
 
             if (successes < 0) 
             {
-                Debug.WriteLine($"GetHitsBinomial() | Successes is less than 0. Returning 0 ...");
+                Debug.WriteLine($"GetSurvivorProbability() | Successes is less than 0. Returning 0 ...");
                 return 0;
             }
 
