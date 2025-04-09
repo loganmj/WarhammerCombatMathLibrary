@@ -426,80 +426,6 @@ namespace UnitTests
         /// Tests the case where the attacker parameter is null.
         /// </summary>
         [TestMethod]
-        public void GetHitsBinomial_AttackerIsNull()
-        {
-            var expected = new Binomial(0,0);
-            var actual = CombatMath.GetHitsBinomial(null);
-
-            Assert.AreEqual(expected.Mean, actual.Mean);
-            Assert.AreEqual(expected.Variance, actual.Variance);
-            Assert.AreEqual(expected.Entropy, actual.Entropy);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetHitsBinomial_TestParams1()
-        {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 1,
-                WeaponSkill = 4
-            };
-
-            var expected = new Binomial(0.5, 1);
-            var actual = CombatMath.GetHitsBinomial(attacker);
-            Assert.AreEqual(expected.Mean, actual.Mean);
-            Assert.AreEqual(expected.Variance, actual.Variance);
-            Assert.AreEqual(expected.Entropy, actual.Entropy);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetHitsBinomial_TestParams2()
-        {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 3,
-                WeaponSkill = 4
-            };
-
-            var expected = new Binomial(0.5, 3);
-            var actual = CombatMath.GetHitsBinomial(attacker);
-            Assert.AreEqual(expected.Mean, actual.Mean);
-            Assert.AreEqual(expected.Variance, actual.Variance);
-            Assert.AreEqual(expected.Entropy, actual.Entropy);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetHitsBinomial_TestParams3()
-        {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 2,
-                WeaponAttacks = 2,
-                WeaponSkill = 4
-            };
-
-            var expected = new Binomial(0.5, 4);
-            var actual = CombatMath.GetHitsBinomial(attacker);
-            Assert.AreEqual(expected.Mean, actual.Mean);
-            Assert.AreEqual(expected.Variance, actual.Variance);
-            Assert.AreEqual(expected.Entropy, actual.Entropy);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker parameter is null.
-        /// </summary>
-        [TestMethod]
         public void GetBinomialDistributionOfHits_AttackerIsNull()
         {
             var expected = new List<BinomialOutcome>();
@@ -540,7 +466,7 @@ namespace UnitTests
                 new(0, 0.5),
                 new(1, 0.5)
             };
-            
+
             var actual = CombatMath.GetBinomialDistributionOfHits(attacker);
 
             // Print expected
@@ -639,78 +565,6 @@ namespace UnitTests
             }
 
             CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorProbability_BinomialIsNull()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetSurvivorProbability(null, 1);
-
-            Assert.AreEqual(expected, Math.Round(actual, 4));
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorProbability_SuccessesLessThan0()
-        {
-            var expected = 0;
-
-            var binomial = new Binomial(0.5, 2);
-            var successes = -1;
-            var actual = CombatMath.GetSurvivorProbability(binomial, successes);
-
-            Assert.AreEqual(expected, Math.Round(actual, 4));
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorProbability_TestParams1() 
-        {
-            var expected = 0.75;
-
-            var binomial = new Binomial(0.5, 2);
-            var successes = 1;
-            var actual = CombatMath.GetSurvivorProbability(binomial, successes);
-
-            Assert.AreEqual(expected, Math.Round(actual, 4));
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorProbability_TestParams2() 
-        {
-            var expected = 0.5;
-
-            var binomial = new Binomial(0.5, 5);
-            var successes = 3;
-            var actual = CombatMath.GetSurvivorProbability(binomial, successes);
-
-            Assert.AreEqual(expected, Math.Round(actual, 4));
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorProbability_TestParams3() 
-        {
-            var expected = 0.0002;
-
-            var binomial = new Binomial(0.16, 10);
-            var successes = 7;
-            var actual = CombatMath.GetSurvivorProbability(binomial, successes);
-
-            Assert.AreEqual(expected, Math.Round(actual, 4));
         }
 
         /// <summary>

@@ -1,6 +1,4 @@
-﻿using MathNet.Numerics;
-using MathNet.Numerics.Distributions;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using WarhammerCombatMathLibrary.Data;
 
 namespace WarhammerCombatMathLibrary
@@ -157,63 +155,19 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Gets a binomial distribution of successful hit rolls.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns>A Binomial object for the hit roll.</returns>
-        public static Binomial GetHitsBinomial(AttackerDTO? attacker) 
-        {
-            if (attacker == null) 
-            {
-                Debug.WriteLine($"GetHitsBinomial() | Attacker is null. Returning binomial for n=0, p=0 ...");
-                return new Binomial(0, 0);
-            }
-
-            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
-            var probability = GetProbabilityOfHit(attacker);
-            return new Binomial(probability, numberOfTrials);
-        }
-
-        /// <summary>
-        /// Gets the survivor function probability for the specified number of successes k.
-        /// That is, the cumulative probability of all probabilities P(X≥k) in the distribution.
-        /// </summary>
-        /// <param name="binomial">The distribution to of probabilities.</param>
-        /// <param name="successes">The minimum number of successes.</param>
-        /// <returns></returns>
-        public static double GetSurvivorProbability(Binomial? binomial, int successes)
-        {
-            // Validate inputs
-            if (binomial == null) 
-            {
-                Debug.WriteLine($"GetSurvivorProbability() | Binomial is null. Returning 0 ...");
-                return 0;
-            }
-
-            if (successes < 0) 
-            {
-                Debug.WriteLine($"GetSurvivorProbability() | Successes is less than 0. Returning 0 ...");
-                return 0;
-            }
-
-            return 1 - binomial.CumulativeDistribution(successes - 1);
-        }
-
-        /// <summary>
         /// Gets a distribution of all discrete survivor function values for a successful hit roll.
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static List<BinomialOutcome> GetHitsSurvivorDistribution(AttackerDTO? attacker) 
+        public static List<BinomialOutcome> GetHitsSurvivorDistribution(AttackerDTO? attacker)
         {
             var numberOfTrials = GetTotalNumberOfAttacks(attacker);
             var probability = GetProbabilityOfHit(attacker);
-            var hitBinomial = new Binomial(probability, numberOfTrials);
             var survivorDistribution = new List<BinomialOutcome>();
 
             for (int trial = 0; trial <= numberOfTrials; trial++)
             {
-                survivorDistribution.Add(new BinomialOutcome(trial, GetSurvivorProbability(hitBinomial, trial)));
+                survivorDistribution.Add(new BinomialOutcome(trial, Statistics.SurvivorFunction(numberOfTrials, trial, probability)));
             }
 
             return survivorDistribution;
