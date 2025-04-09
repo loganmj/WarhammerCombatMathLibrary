@@ -426,10 +426,10 @@ namespace UnitTests
         /// Tests the case where the attacker parameter is null.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionOfHits_AttackerIsNull()
+        public void GetBinomialDistributionHits_AttackerIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetBinomialDistributionOfHits(null);
+            var actual = CombatMath.GetBinomialDistributionHits(null);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -452,7 +452,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionOfHits_TestParams1()
+        public void GetBinomialDistributionHits_TestParams1()
         {
             var attacker = new AttackerDTO()
             {
@@ -467,7 +467,7 @@ namespace UnitTests
                 new(1, 0.5)
             };
 
-            var actual = CombatMath.GetBinomialDistributionOfHits(attacker);
+            var actual = CombatMath.GetBinomialDistributionHits(attacker);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -490,7 +490,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionOfHits_TestParams2()
+        public void GetBinomialDistributionHits_TestParams2()
         {
             var attacker = new AttackerDTO()
             {
@@ -507,7 +507,7 @@ namespace UnitTests
                 new(3, 0.125)
             };
 
-            var actual = CombatMath.GetBinomialDistributionOfHits(attacker);
+            var actual = CombatMath.GetBinomialDistributionHits(attacker);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -530,7 +530,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionOfHits_TestParams3()
+        public void GetBinomialDistributionHits_TestParams3()
         {
             var attacker = new AttackerDTO()
             {
@@ -548,7 +548,7 @@ namespace UnitTests
                 new(4, 0.0625)
             };
 
-            var actual = CombatMath.GetBinomialDistributionOfHits(attacker);
+            var actual = CombatMath.GetBinomialDistributionHits(attacker);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -565,6 +565,356 @@ namespace UnitTests
             }
 
             CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionHits_AttackerIsNull()
+        {
+            var expected = new List<BinomialOutcome>();
+            var actual = CombatMath.GetSurvivorDistributionHits(null);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionHits_TestParams1()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponAttacks = 1,
+                WeaponSkill = 4
+            };
+
+            var expected = new List<BinomialOutcome>
+            {
+                new(0, 1),
+                new(1, 0.5)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionHits(attacker);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionHits_TestParams2()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponAttacks = 3,
+                WeaponSkill = 4
+            };
+
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.875),
+                new(2, 0.5),
+                new(3, 0.125)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionHits(attacker);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionHits_TestParams3()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 2,
+                WeaponAttacks = 2,
+                WeaponSkill = 4
+            };
+
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.9375),
+                new(2, 0.6875),
+                new(3, 0.3125),
+                new(4, 0.0625)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionHits(attacker);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker is null.
+        /// </summary>
+        [TestMethod]
+        public void GetSuccessThresholdOfWound_AttackerIsNull() 
+        {
+            var expected = 7;
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = CombatMath.GetSuccessThresholdOfWound(null, defender);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender is null.
+        /// </summary>
+        [TestMethod]
+        public void GetSuccessThresholdOfWound_DefenderIsNull() 
+        {
+            var expected = 7;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponStrength = 4
+            };
+
+            var actual = CombatMath.GetSuccessThresholdOfWound(attacker, null);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSuccessThresholdOfWound_TestParams1() 
+        {
+            var expected = 4;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponStrength = 4
+            };
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = CombatMath.GetSuccessThresholdOfWound(attacker, defender);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSuccessThresholdOfWound_TestParams2() 
+        {
+            var expected = 5;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponStrength = 4
+            };
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 5
+            };
+
+            var actual = CombatMath.GetSuccessThresholdOfWound(attacker, defender);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSuccessThresholdOfWound_TestParams3() 
+        {
+            var expected = 2;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponStrength = 4
+            };
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 2
+            };
+
+            var actual = CombatMath.GetSuccessThresholdOfWound(attacker, defender);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker is null.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfWound_AttackerIsNull()
+        {
+            var expected = 0;
+
+            var defender = new DefenderDTO();
+            var actual = CombatMath.GetProbabilityOfWound(null, defender);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender is null.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfWound_DefenderIsNull()
+        {
+            var expected = 0;
+
+            var attacker = new AttackerDTO();
+            var actual = CombatMath.GetProbabilityOfWound(attacker, null);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has a negative number of models.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfWound_TestParams1()
+        {
+            var expected = 0.25;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 4,
+                WeaponStrength = 4
+            };
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = CombatMath.GetProbabilityOfWound(attacker, defender);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfWound_TestParams2()
+        {
+            var expected = 0.3333;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 4
+            };
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfWound_TestParams3()
+        {
+            var expected = 0.5556;
+
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 2,
+                WeaponStrength = 5
+            };
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>

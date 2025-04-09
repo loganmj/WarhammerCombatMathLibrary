@@ -141,7 +141,7 @@ namespace WarhammerCombatMathLibrary
         /// Returns a binomial distribution of attack roll results based on the process data.
         /// </summary>
         /// <returns>A BinomialDistribution object containing the hit success data.</returns>
-        public static List<BinomialOutcome> GetBinomialDistributionOfHits(AttackerDTO? attacker)
+        public static List<BinomialOutcome> GetBinomialDistributionHits(AttackerDTO? attacker)
         {
             if (attacker == null)
             {
@@ -159,18 +159,17 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static List<BinomialOutcome> GetHitsSurvivorDistribution(AttackerDTO? attacker)
+        public static List<BinomialOutcome> GetSurvivorDistributionHits(AttackerDTO? attacker)
         {
-            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
-            var probability = GetProbabilityOfHit(attacker);
-            var survivorDistribution = new List<BinomialOutcome>();
-
-            for (int trial = 0; trial <= numberOfTrials; trial++)
+            if (attacker == null)
             {
-                survivorDistribution.Add(new BinomialOutcome(trial, Statistics.SurvivorFunction(numberOfTrials, trial, probability)));
+                Debug.WriteLine($"GetSurvivorDistributionHits() | Attacker is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
             }
 
-            return survivorDistribution;
+            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var probability = GetProbabilityOfHit(attacker);
+            return Statistics.SurvivorDistribution(numberOfTrials, probability);
         }
 
         /// <summary>
@@ -179,8 +178,20 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static int GetSuccessThresholdOfWound(AttackerDTO attacker, DefenderDTO defender)
+        public static int GetSuccessThresholdOfWound(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null) 
+            {
+                Debug.WriteLine($"GetSuccessThresholdOfWound() | Attacker is null. Returning 7+ ...");
+                return 7;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetSuccessThresholdOfWound() | Defender is null. Returning 7+ ...");
+                return 7;
+            }
+
             var strength = attacker.WeaponStrength;
             var toughness = defender.Toughness;
 
@@ -221,8 +232,20 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetProbabilityOfWound(AttackerDTO attacker, DefenderDTO defender)
+        public static double GetProbabilityOfWound(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetProbabilityOfWound() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetProbabilityOfWound() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
             var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker, defender);
             var numberOfSuccessfulResults = GetNumberOfSuccessfulResults(woundSuccessThreshold);
             return GetProbabilityOfHit(attacker) * Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
