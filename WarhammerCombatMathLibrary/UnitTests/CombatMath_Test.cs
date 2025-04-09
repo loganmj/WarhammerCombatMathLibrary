@@ -1588,7 +1588,7 @@ namespace UnitTests
         public void GetMeanFailedSaves_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetProbabilityFailedSave(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetMeanFailedSaves(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
 
@@ -1598,8 +1598,152 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanFailedSaves_NullDefender()
         {
-            var attacker = new AttackerDTO();
-            Assert.AreEqual(0, CombatMath.GetMeanFailedSaves(attacker, null));
+            var expected = 0;
+            var actual = CombatMath.GetMeanFailedSaves(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanFailedSaves_TestParams1()
+        {
+            var expected = 2.963;
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanFailedSaves_TestParams2()
+        {
+            var expected = 3.3333;
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanFailedSaves_TestParams3()
+        {
+            var expected = 1.4815;
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedFailedSaves_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetExpectedFailedSaves(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedFailedSaves_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedFailedSaves_TestParams1()
+        {
+            var expected = 2;
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedFailedSaves_TestParams2()
+        {
+            var expected = 3;
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedFailedSaves_TestParams3()
+        {
+            var expected = 1;
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationFailedSaves_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetStandardDeviationFailedSaves(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationFailedSaves_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetStandardDeviationFailedSaves(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationFailedSaves_TestParams1()
+        {
+            var expected = 1.3659;
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationFailedSaves_TestParams2()
+        {
+            var expected = 1.6667;
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationFailedSaves_TestParams3()
+        {
+            var expected = 1.1712;
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
         }
     }
 
