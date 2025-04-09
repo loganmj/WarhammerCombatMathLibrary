@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using MathNet.Numerics.Distributions;
+using System.Diagnostics;
 using System.Numerics;
 using WarhammerCombatMathLibrary.Data;
 
@@ -136,7 +137,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            if (numberOfSuccesses > numberOfTrials) 
+            if (numberOfSuccesses > numberOfTrials)
             {
                 Debug.WriteLine($"ProbabilityMassFunction() | Number of successes is greater than number of trials. Returning 0 ...");
                 return 0;
@@ -201,7 +202,7 @@ namespace WarhammerCombatMathLibrary
                 // All probabilities should be 0, except the probability of all successes should be 1.
                 var adjustedDistribution = new List<BinomialOutcome>();
 
-                for (int k = 0; k <= numberOfTrials-1; k++)
+                for (int k = 0; k <= numberOfTrials - 1; k++)
                 {
                     adjustedDistribution.Add(new BinomialOutcome(k, 0));
                 }
@@ -224,7 +225,7 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Calculates the lower cumulative probability of trial data.
-        /// Lower cumulative probability is the probability of achieving a result less than or equal to X successes such that P(X ≤ k).
+        /// Lower cumulative probability is the probability of achieving a result less than or equal to X successes such that P(X≤k).
         /// </summary>
         /// <param name="numberOfTrials"></param>
         /// <param name="numberOfSuccesses"></param>
@@ -239,7 +240,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            if (numberOfSuccesses < 0) 
+            if (numberOfSuccesses < 0)
             {
                 Debug.WriteLine($"LowerCumulativeProbability() | Number of successes is less than 0. Returning 0 ...");
                 return 0;
@@ -262,7 +263,7 @@ namespace WarhammerCombatMathLibrary
             // Therefore, the sum of all values up to the max number of successes is 0.
             if (probability >= 1)
             {
-                if (numberOfSuccesses == numberOfTrials) 
+                if (numberOfSuccesses == numberOfTrials)
                 {
                     Debug.WriteLine($"LowerCumulativeProbability() | Probability is greater than or equal to 1, and the number of successes equals the number of trials. Returning 1 ...");
                     return 1;
@@ -283,7 +284,7 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Calculates the lower cumulative distribution of trial data.
+        /// Calculates the lower cumulative distribution of trial data P(X≤k).
         /// </summary>
         /// <param name="numberOfTrials"></param>
         /// <param name="probability"></param>
@@ -345,7 +346,7 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Calculates the upper cumulative probability of trial data.
-        /// Upper cumulative probability is the probability of achieving greater than X successes such that P(X > k).
+        /// Upper cumulative probability is the probability of achieving greater than X successes such that P(X>k).
         /// </summary>
         /// <param name="numberOfTrials"></param>
         /// <param name="numberOfSuccesses"></param>
@@ -451,7 +452,7 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Calculates the lower cumulative distribution of trial data.
+        /// Calculates the upper cumulative distribution of trial data P(X>k).
         /// </summary>
         /// <param name="numberOfTrials"></param>
         /// <param name="probability"></param>
@@ -503,6 +504,101 @@ namespace WarhammerCombatMathLibrary
             for (int k = 0; k <= numberOfTrials; k++)
             {
                 distribution.Add(new BinomialOutcome { Successes = k, Probability = UpperCumulativeProbability(numberOfTrials, k, probability) });
+            }
+
+            return distribution;
+        }
+
+        /// <summary>
+        /// Gets the survivor function probability for the specified number of successes k.
+        /// That is, the cumulative probability of all probabilities P(X≥k) in the distribution.
+        /// </summary>
+        /// <param name="numberOfTrials">The total number of trials.</param>
+        /// <param name="successes">The minimum number of successes.</param>
+        /// <param name="probability">The probability of success in a single trial.</param>
+        /// <returns></returns>
+        public static double SurvivorFunction(int numberOfTrials, int successes, double probability)
+        {
+            // Validate inputs
+            if (numberOfTrials < 0)
+            {
+                Debug.WriteLine($"GetSurvivorProbability() | Binomial is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (successes < 0)
+            {
+                Debug.WriteLine($"GetSurvivorProbability() | Successes is less than 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (probability < 0)
+            {
+                return 0;
+            }
+
+            if (probability >= 1)
+            {
+                return 1;
+            }
+
+            var binomial = new Binomial(probability, numberOfTrials);
+            return 1 - binomial.CumulativeDistribution(successes - 1);
+        }
+
+        /// <summary>
+        /// Gets the distribution of survivor function outcomes P(X≥k).
+        /// </summary>
+        /// <param name="numberOfTrials"></param>
+        /// <param name="probability"></param>
+        /// <returns></returns>
+        public static List<BinomialOutcome> SurvivorDistribution(int numberOfTrials, double probability)
+        {
+            // Validate parameters
+            if (numberOfTrials < 1)
+            {
+                Debug.WriteLine($"SurvivorDistribution() | Number of trials is less than 1.");
+                return [new(0, 1)];
+            }
+
+            if (probability <= 0)
+            {
+                Debug.WriteLine($"SurvivorDistribution() | Probability is less than or equal to 0.");
+
+                // The probability of getting greater than 0 is 0%
+                var adjustedDistribution = new List<BinomialOutcome>();
+
+                for (int k = 0; k <= numberOfTrials; k++)
+                {
+                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
+                }
+
+                return adjustedDistribution;
+            }
+
+            if (probability >= 1)
+            {
+                Debug.WriteLine($"SurvivorDistribution() | Probability is greater than or equal to 1.");
+
+                // All probabilities should be 0, except the probability of all successes should be 1.
+                // So the upper cumulative distribution should all be ones, except for the last value because you can't get higher than the last value.
+                var adjustedDistribution = new List<BinomialOutcome>();
+
+                for (int k = 0; k <= numberOfTrials - 1; k++)
+                {
+                    adjustedDistribution.Add(new BinomialOutcome(k, 1));
+                }
+
+                adjustedDistribution.Add(new BinomialOutcome(numberOfTrials, 0));
+
+                return adjustedDistribution;
+            }
+
+            var distribution = new List<BinomialOutcome>();
+
+            for (int k = 0; k <= numberOfTrials; k++)
+            {
+                distribution.Add(new BinomialOutcome { Successes = k, Probability = SurvivorFunction(numberOfTrials, k, probability) });
             }
 
             return distribution;

@@ -285,7 +285,7 @@ namespace UnitTests
         /// Tests the case where the number of successes is greater than the number of trials.
         /// </summary>
         [TestMethod]
-        public void ProbabilityMassFunction_NumberOfSuccessesGreaterThanNumberOfTrials() 
+        public void ProbabilityMassFunction_NumberOfSuccessesGreaterThanNumberOfTrials()
         {
             Assert.AreEqual(0, Statistics.ProbabilityMassFunction(1, 2, 0.5));
         }
@@ -367,7 +367,7 @@ namespace UnitTests
         [TestMethod]
         public void BinomialDistribution_ProbabilityLessThanOrEqualTo0()
         {
-            var expected = new List<BinomialOutcome>() 
+            var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
                 new(1,0),
@@ -399,12 +399,12 @@ namespace UnitTests
         [TestMethod]
         public void BinomialDistribution_ProbabilityGreaterThanOrEqualTo1()
         {
-            var expected = new List<BinomialOutcome>() 
+            var expected = new List<BinomialOutcome>()
             {
                 new(0, 0),
                 new(1, 0),
                 new(2, 0),
-                new(3, 1) 
+                new(3, 1)
             };
 
             var actual = Statistics.BinomialDistribution(3, 1);
@@ -434,10 +434,10 @@ namespace UnitTests
         {
             var numberOfTrials = 1;
             var probability = 0.5;
-            var expected = new List<BinomialOutcome>() 
+            var expected = new List<BinomialOutcome>()
             {
                 new(0, 0.5),
-                new(1, 0.5) 
+                new(1, 0.5)
             };
 
             var actual = Statistics.BinomialDistribution(numberOfTrials, probability);
@@ -467,9 +467,9 @@ namespace UnitTests
         {
             var numberOfTrials = 1;
             var probability = 0.1;
-            var expected = new List<BinomialOutcome>() 
-            { 
-                new(0, 0.9), 
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 0.9),
                 new(1, 0.1)
             };
 
@@ -530,7 +530,7 @@ namespace UnitTests
         /// Tests the case where the number of trials is less than 1.
         /// </summary>
         [TestMethod]
-        public void LowerCumulativeProbability_NumberOfTrialsLessThan1() 
+        public void LowerCumulativeProbability_NumberOfTrialsLessThan1()
         {
             Assert.AreEqual(0, Statistics.LowerCumulativeProbability(0, 1, 0.5));
         }
@@ -539,7 +539,7 @@ namespace UnitTests
         /// Tests the case where the number of successes is less than 0.
         /// </summary>
         [TestMethod]
-        public void LowerCumulativeProbability_NumberOfSuccessesLessThan0() 
+        public void LowerCumulativeProbability_NumberOfSuccessesLessThan0()
         {
             Assert.AreEqual(0, Statistics.LowerCumulativeProbability(1, -1, 0.5));
         }
@@ -557,7 +557,7 @@ namespace UnitTests
         /// Tests the case where the probability is less than or equal to 0.
         /// </summary>
         [TestMethod]
-        public void LowerCumulativeProbability_ProbabilityLessThanOrEqualTo0() 
+        public void LowerCumulativeProbability_ProbabilityLessThanOrEqualTo0()
         {
             Assert.AreEqual(0, Statistics.LowerCumulativeProbability(1, 1, -1));
         }
@@ -566,7 +566,7 @@ namespace UnitTests
         /// Tests the case where probability is greater than or equal to 1, and the number of successes is less than the number of trials.
         /// </summary>
         [TestMethod]
-        public void LowerCumulativeProbability_ProbabilityGreaterThanOrEqualTo1_SuccessesLessThanTrials() 
+        public void LowerCumulativeProbability_ProbabilityGreaterThanOrEqualTo1_SuccessesLessThanTrials()
         {
             Assert.AreEqual(0, Statistics.LowerCumulativeProbability(2, 1, 1));
         }
@@ -905,22 +905,21 @@ namespace UnitTests
             CollectionAssert.AreEqual(expected, actual);
         }
 
-        /*
-
         /// <summary>
         /// Tests the case where the probability argument is negative.
         /// </summary>
         [TestMethod]
-        public void LowerCumulativeDistribution_ProbabilityLessThanOrEqualTo0()
+        public void UpperCumulativeDistribution_ProbabilityLessThanOrEqualTo0()
         {
-            var expected = new List<BinomialData>()
+            var expected = new List<BinomialOutcome>()
             {
-                new(0, 1),
-                new(1,1),
-                new(2,1),
-                new(3,1)
+                new(0, 0),
+                new(1, 0),
+                new(2, 0),
+                new(3, 0)
             };
-            var actual = Statistics.LowerCumulativeDistribution(3, -1);
+
+            var actual = Statistics.UpperCumulativeDistribution(3, -1);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -943,17 +942,17 @@ namespace UnitTests
         /// Tests the case where the probability argument is greater than 1.
         /// </summary>
         [TestMethod]
-        public void LowerCumulativeDistribution_ProbabilityGreaterThanOrEqualTo1()
+        public void UpperCumulativeDistribution_ProbabilityGreaterThanOrEqualTo1()
         {
-            var expected = new List<BinomialData>()
+            var expected = new List<BinomialOutcome>()
             {
-                new(0, 0),
-                new(1, 0),
-                new(2, 0),
-                new(3, 1)
+                new(0, 1),
+                new(1, 1),
+                new(2, 1),
+                new(3, 0)
             };
 
-            var actual = Statistics.LowerCumulativeDistribution(3, 1);
+            var actual = Statistics.UpperCumulativeDistribution(3, 1);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -976,17 +975,17 @@ namespace UnitTests
         /// Tests the probability mass function with given inputs.
         /// </summary>
         [TestMethod]
-        public void LowerCumulativeDistribution_TestParams1()
+        public void UpperCumulativeDistribution_TestParams1()
         {
-            var numberOfTrials = 1;
-            var probability = 0.5;
-            var expected = new List<BinomialData>()
+            var expected = new List<BinomialOutcome>()
             {
                 new(0, 0.5),
-                new(1, 1)
+                new(1, 0)
             };
 
-            var actual = Statistics.LowerCumulativeDistribution(numberOfTrials, probability);
+            var numberOfTrials = 1;
+            var probability = 0.5;
+            var actual = Statistics.UpperCumulativeDistribution(numberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1009,17 +1008,17 @@ namespace UnitTests
         /// Tests the probability mass function with given inputs.
         /// </summary>
         [TestMethod]
-        public void LowerCumulativeDistribution_TestParams2()
+        public void UpperCumulativeDistribution_TestParams2()
         {
-            var numberOfTrials = 1;
-            var probability = 0.1;
-            var expected = new List<BinomialData>()
+            var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.9),
-                new(1, 1.0)
+                new(0, 0.1000),
+                new(1, 0)
             };
 
-            var actual = Statistics.LowerCumulativeDistribution(numberOfTrials, probability);
+            var numberOfTrials = 1;
+            var probability = 0.1;
+            var actual = Statistics.UpperCumulativeDistribution(numberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1042,18 +1041,18 @@ namespace UnitTests
         /// Tests the probability mass function with given large inputs.
         /// </summary>
         [TestMethod]
-        public void LowerCumulativeDistribution_TestParams3()
+        public void UpperCumulativeDistribution_TestParams3()
         {
-            var numberOfTrials = 2;
-            var probability = 0.5;
-            var expected = new List<BinomialData>()
+            var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.25),
-                new(1, 0.75),
-                new(2, 1.0)
+                new(0, 0.75),
+                new(1, 0.25),
+                new(2, 0)
             };
 
-            var actual = Statistics.LowerCumulativeDistribution(numberOfTrials, probability);
+            var numberOfTrials = 2;
+            var probability = 0.5;
+            var actual = Statistics.UpperCumulativeDistribution(numberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1072,6 +1071,116 @@ namespace UnitTests
             CollectionAssert.AreEqual(expected, actual);
         }
 
-        */
+        /// <summary>
+        /// Tests the case where number of trials is less than 0.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorFunction_NumberOfTrialsLessThan0()
+        {
+            var expected = 0;
+
+            var numberOfTrials = -1;
+            var successes = 1;
+            var probability = 0.5;
+            var actual = Statistics.SurvivorFunction(numberOfTrials, successes, probability);
+
+            Assert.AreEqual(expected, Math.Round(actual, 4));
+        }
+
+        /// <summary>
+        /// Tests the case where the number of successes is less than 0.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorFunction_SuccessesLessThan0()
+        {
+            var expected = 0;
+
+            var numberOfTrials = 1;
+            var successes = -1;
+            var probability = 0.5;
+            var actual = Statistics.SurvivorFunction(numberOfTrials, successes, probability);
+
+            Assert.AreEqual(expected, Math.Round(actual, 4));
+        }
+
+        /// <summary>
+        /// Tests the case where the probability is less than 0.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorFunction_ProbabilityLessThan0()
+        {
+            var expected = 0;
+
+            var numberOfTrials = 1;
+            var successes = 1;
+            var probability = 0;
+            var actual = Statistics.SurvivorFunction(numberOfTrials, successes, probability);
+
+            Assert.AreEqual(expected, Math.Round(actual, 4));
+        }
+
+        /// <summary>
+        /// Tests the case where the probability is greater than 1.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorFunction_ProbabilityGreaterThan1()
+        {
+            var expected = 1;
+
+            var numberOfTrials = 1;
+            var successes = 1;
+            var probability = 1.5;
+            var actual = Statistics.SurvivorFunction(numberOfTrials, successes, probability);
+
+            Assert.AreEqual(expected, Math.Round(actual, 4));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorFunction_TestParams1()
+        {
+            var expected = 0.75;
+
+            var numberOfTrials = 2;
+            var successes = 1;
+            var probability = 0.5;
+            var actual = Statistics.SurvivorFunction(numberOfTrials, successes, probability);
+
+            Assert.AreEqual(expected, Math.Round(actual, 4));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorFunction_TestParams2()
+        {
+            var expected = 0.5;
+
+            var numberOfTrials = 5;
+            var successes = 3;
+            var probability = 0.5;
+            var actual = Statistics.SurvivorFunction(numberOfTrials, successes, probability);
+
+            Assert.AreEqual(expected, Math.Round(actual, 4));
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorFunction_TestParams3()
+        {
+            var expected = 0.0002;
+
+            var numberOfTrials = 10;
+            var successes = 7;
+            var probability = 0.16;
+            var actual = Statistics.SurvivorFunction(numberOfTrials, successes, probability);
+
+            Assert.AreEqual(expected, Math.Round(actual, 4));
+        }
     }
 }

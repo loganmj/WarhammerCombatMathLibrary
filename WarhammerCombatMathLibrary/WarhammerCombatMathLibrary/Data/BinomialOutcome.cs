@@ -56,7 +56,7 @@
         {
             if (obj is BinomialOutcome other)
             {
-                return Successes == other.Successes && Probability == other.Probability;
+                return Successes == other.Successes && Math.Round(Probability, 4) == Math.Round(other.Probability, 4);
             }
 
             return false;
