@@ -645,20 +645,20 @@ namespace UnitTests
         [TestMethod]
         public void GetSurvivorDistributionHits_TestParams1()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 1,
-                WeaponSkill = 4
-            };
-
             var expected = new List<BinomialOutcome>
             {
                 new(0, 1),
-                new(1, 0.5)
+                new(1, 1),
+                new(2, 1),
+                new(3, 0.9996),
+                new(4, 0.9954),
+                new(5, 0.9693),
+                new(6, 0.8652),
+                new(7, 0.6047),
+                new(8, 0.2326)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(attacker);
+            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_KHARN_THE_BETRAYER);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -683,22 +683,32 @@ namespace UnitTests
         [TestMethod]
         public void GetSurvivorDistributionHits_TestParams2()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 3,
-                WeaponSkill = 4
-            };
-
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.875),
-                new(2, 0.5),
-                new(3, 0.125)
+                new(1, 1),
+                new(2, 1),
+                new(3, 1),
+                new(4, 1),
+                new(5, 1),
+                new(6, 0.9998),
+                new(7, 0.9991),
+                new(8, 0.9963),
+                new(9, 0.9870),
+                new(10, 0.9624),
+                new(11, 0.9081),
+                new(12, 0.8095),
+                new(13, 0.6615),
+                new(14, 0.4793),
+                new(15, 0.2972),
+                new(16, 0.1515),
+                new(17, 0.0604),
+                new(18, 0.0176),
+                new(19, 0.0033),
+                new(20, 0.0003)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(attacker);
+            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -723,23 +733,27 @@ namespace UnitTests
         [TestMethod]
         public void GetSurvivorDistributionHits_TestParams3()
         {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 2,
-                WeaponAttacks = 2,
-                WeaponSkill = 4
-            };
-
-            var expected = new List<BinomialOutcome>()
+            var expected = new List<BinomialOutcome>
             {
                 new(0, 1),
-                new(1, 0.9375),
-                new(2, 0.6875),
-                new(3, 0.3125),
-                new(4, 0.0625)
+                new(1, 1),
+                new(2, 0.9995),
+                new(3, 0.9963),
+                new(4, 0.9824),
+                new(5, 0.9408),
+                new(6, 0.8491),
+                new(7, 0.6964),
+                new(8, 0.5),
+                new(9, 0.3036),
+                new(10, 0.1509),
+                new(11, 0.0592),
+                new(12, 0.0176),
+                new(13, 0.0037),
+                new(14, 0.0005),
+                new(15, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(attacker);
+            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
