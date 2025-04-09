@@ -232,7 +232,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetProbabilityOfWound(AttackerDTO? attacker, DefenderDTO? defender)
+        public static double GetProbabilityWound(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -271,7 +271,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
+            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityWound(attacker, defender));
         }
 
         /// <summary>
@@ -316,7 +316,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfWound(attacker, defender));
+            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityWound(attacker, defender));
         }
 
         /// <summary>
@@ -340,7 +340,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             var numberOfTrials = GetTotalNumberOfAttacks(attacker);
-            var probability = GetProbabilityOfWound(attacker, defender);
+            var probability = GetProbabilityWound(attacker, defender);
             return Statistics.BinomialDistribution(numberOfTrials, probability);
         }
 
@@ -364,7 +364,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             var numberOfTrials = GetTotalNumberOfAttacks(attacker);
-            var probability = GetProbabilityOfWound(attacker, defender);
+            var probability = GetProbabilityWound(attacker, defender);
             return Statistics.SurvivorDistribution(numberOfTrials, probability);
         }
 
@@ -399,7 +399,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetProbabilityOfFailedSave(AttackerDTO? attacker, DefenderDTO? defender)
+        public static double GetProbabilityFailedSave(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -416,7 +416,7 @@ namespace WarhammerCombatMathLibrary
             var adjustedArmorSave = GetAdjustedArmorSave(attacker, defender);
             var numberOfSuccessfulResults = GetNumberOfSuccessfulResults(adjustedArmorSave);
             var probabilityOfSuccessfulSave = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
-            return GetProbabilityOfWound(attacker, defender) * (1 - probabilityOfSuccessfulSave);
+            return GetProbabilityWound(attacker, defender) * (1 - probabilityOfSuccessfulSave);
         }
 
         /// <summary>
@@ -427,7 +427,7 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static List<BinomialOutcome> GetBinomialDistributionOfFailSaves(AttackerDTO attacker, DefenderDTO defender)
         {
-            return Statistics.BinomialDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
+            return Statistics.BinomialDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
         }
 
         /// <summary>
@@ -450,7 +450,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
+            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
         }
 
         /// <summary>
@@ -471,7 +471,7 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double GetStandardDeviationFailedSaves(AttackerDTO attacker, DefenderDTO defender)
         {
-            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
+            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
         }
 
         /// <summary>
@@ -495,7 +495,7 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static List<BinomialOutcome> GetUpperCumulativeDistributionOfFailedSaves(AttackerDTO attacker, DefenderDTO defender)
         {
-            return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityOfFailedSave(attacker, defender));
+            return Statistics.UpperCumulativeDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
         }
 
         /// <summary>
