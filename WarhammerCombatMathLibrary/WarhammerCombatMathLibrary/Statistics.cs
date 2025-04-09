@@ -568,7 +568,11 @@ namespace WarhammerCombatMathLibrary
                 // The probability of getting greater than 0 is 0%
                 var adjustedDistribution = new List<BinomialOutcome>();
 
-                for (int k = 0; k <= numberOfTrials; k++)
+                // If including k=0, the probability should be 1.
+                adjustedDistribution.Add(new BinomialOutcome(0, 1));
+
+                // Probabilities for all other values of k should be 0.
+                for (int k = 1; k <= numberOfTrials; k++)
                 {
                     adjustedDistribution.Add(new BinomialOutcome(k, 0));
                 }
@@ -581,15 +585,13 @@ namespace WarhammerCombatMathLibrary
                 Debug.WriteLine($"SurvivorDistribution() | Probability is greater than or equal to 1.");
 
                 // All probabilities should be 0, except the probability of all successes should be 1.
-                // So the upper cumulative distribution should all be ones, except for the last value because you can't get higher than the last value.
+                // So the upper cumulative distribution should all be ones.
                 var adjustedDistribution = new List<BinomialOutcome>();
 
-                for (int k = 0; k <= numberOfTrials - 1; k++)
+                for (int k = 0; k <= numberOfTrials; k++)
                 {
                     adjustedDistribution.Add(new BinomialOutcome(k, 1));
                 }
-
-                adjustedDistribution.Add(new BinomialOutcome(numberOfTrials, 0));
 
                 return adjustedDistribution;
             }

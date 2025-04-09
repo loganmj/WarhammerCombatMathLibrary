@@ -1182,5 +1182,197 @@ namespace UnitTests
 
             Assert.AreEqual(expected, Math.Round(actual, 4));
         }
+
+        /// <summary>
+        /// Tests the case where the numberOfTrials argument is out of range.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorDistribution_NumberOfTrialsLessThan1()
+        {
+            var expected = new List<BinomialOutcome>() { new(0, 1) };
+            var actual = Statistics.SurvivorDistribution(0, 0.5);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the probability argument is negative.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorDistribution_ProbabilityLessThanOrEqualTo0()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0),
+                new(2, 0),
+                new(3, 0)
+            };
+
+            var actual = Statistics.SurvivorDistribution(3, -1);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the probability argument is greater than 1.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorDistribution_ProbabilityGreaterThanOrEqualTo1()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 1),
+                new(2, 1),
+                new(3, 1)
+            };
+
+            var actual = Statistics.SurvivorDistribution(3, 1);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given inputs.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorDistribution_TestParams1()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.5)
+            };
+
+            var numberOfTrials = 1;
+            var probability = 0.5;
+            var actual = Statistics.SurvivorDistribution(numberOfTrials, probability);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given inputs.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorDistribution_TestParams2()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.1)
+            };
+
+            var numberOfTrials = 1;
+            var probability = 0.1;
+            var actual = Statistics.SurvivorDistribution(numberOfTrials, probability);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the probability mass function with given large inputs.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorDistribution_TestParams3()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1.0),
+                new(1, 0.75),
+                new(2, 0.25)
+            };
+
+            var numberOfTrials = 2;
+            var probability = 0.5;
+            var actual = Statistics.SurvivorDistribution(numberOfTrials, probability);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
     }
 }
