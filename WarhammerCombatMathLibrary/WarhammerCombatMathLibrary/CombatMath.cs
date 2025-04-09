@@ -164,7 +164,7 @@ namespace WarhammerCombatMathLibrary
             if (attacker == null)
             {
                 Debug.WriteLine($"GetSurvivorDistributionHits() | Attacker is null. Returning empty list ...");
-                return [];
+                return new List<BinomialOutcome>();
             }
 
             var numberOfTrials = GetTotalNumberOfAttacks(attacker);
