@@ -630,17 +630,6 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Calculates the mode value of a probability distribution.
-        /// </summary>
-        /// <param name="numberOfTrials"></param>
-        /// <param name="probability"></param>
-        /// <returns></returns>
-        public static int GetMode(int numberOfTrials, double probability)
-        {
-            return (int)Math.Round((numberOfTrials + 1) * probability);
-        }
-
-        /// <summary>
         /// Calculates the standard deviation of a probability distribution.
         /// </summary>
         /// <param name="numberOfTrials"></param>
