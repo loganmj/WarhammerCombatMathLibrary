@@ -163,6 +163,11 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A Binomial object for the hit roll.</returns>
         public static Binomial GetHitsBinomial(AttackerDTO? attacker) 
         {
+            if (attacker == null) 
+            {
+                return new Binomial(0, 0);
+            }
+
             var numberOfTrials = GetTotalNumberOfAttacks(attacker);
             var probability = GetProbabilityOfHit(attacker);
             return new Binomial(probability, numberOfTrials);

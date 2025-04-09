@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using MathNet.Numerics.Distributions;
+using System.Diagnostics;
 using WarhammerCombatMathLibrary;
 using WarhammerCombatMathLibrary.Data;
 
@@ -419,6 +420,80 @@ namespace UnitTests
             };
 
             Assert.AreEqual(2.98, Math.Round(CombatMath.GetStandardDeviationHits(attacker), 2));
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetHitsBinomial_AttackerIsNull()
+        {
+            var expected = new Binomial(0,0);
+            var actual = CombatMath.GetHitsBinomial(null);
+
+            Assert.AreEqual(expected.Mean, actual.Mean);
+            Assert.AreEqual(expected.Variance, actual.Variance);
+            Assert.AreEqual(expected.Entropy, actual.Entropy);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetHitsBinomial_TestParams1()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponAttacks = 1,
+                WeaponSkill = 4
+            };
+
+            var expected = new Binomial(0.5, 1);
+            var actual = CombatMath.GetHitsBinomial(attacker);
+            Assert.AreEqual(expected.Mean, actual.Mean);
+            Assert.AreEqual(expected.Variance, actual.Variance);
+            Assert.AreEqual(expected.Entropy, actual.Entropy);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetHitsBinomial_TestParams2()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponAttacks = 3,
+                WeaponSkill = 4
+            };
+
+            var expected = new Binomial(0.5, 3);
+            var actual = CombatMath.GetHitsBinomial(attacker);
+            Assert.AreEqual(expected.Mean, actual.Mean);
+            Assert.AreEqual(expected.Variance, actual.Variance);
+            Assert.AreEqual(expected.Entropy, actual.Entropy);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetHitsBinomial_TestParams3()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 2,
+                WeaponAttacks = 2,
+                WeaponSkill = 4
+            };
+
+            var expected = new Binomial(0.5, 4);
+            var actual = CombatMath.GetHitsBinomial(attacker);
+            Assert.AreEqual(expected.Mean, actual.Mean);
+            Assert.AreEqual(expected.Variance, actual.Variance);
+            Assert.AreEqual(expected.Entropy, actual.Entropy);
         }
 
         /// <summary>
