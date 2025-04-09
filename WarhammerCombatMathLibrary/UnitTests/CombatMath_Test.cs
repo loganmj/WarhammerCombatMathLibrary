@@ -814,19 +814,8 @@ namespace UnitTests
         [TestMethod]
         public void GetSuccessThresholdOfWound_TestParams1()
         {
-            var expected = 4;
-
-            var attacker = new AttackerDTO()
-            {
-                WeaponStrength = 4
-            };
-
-            var defender = new DefenderDTO()
-            {
-                Toughness = 4
-            };
-
-            var actual = CombatMath.GetSuccessThresholdOfWound(attacker, defender);
+            var expected = 3;
+            var actual = CombatMath.GetSuccessThresholdOfWound(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             Assert.AreEqual(expected, actual);
         }
@@ -837,19 +826,8 @@ namespace UnitTests
         [TestMethod]
         public void GetSuccessThresholdOfWound_TestParams2()
         {
-            var expected = 5;
-
-            var attacker = new AttackerDTO()
-            {
-                WeaponStrength = 4
-            };
-
-            var defender = new DefenderDTO()
-            {
-                Toughness = 5
-            };
-
-            var actual = CombatMath.GetSuccessThresholdOfWound(attacker, defender);
+            var expected = 4;
+            var actual = CombatMath.GetSuccessThresholdOfWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             Assert.AreEqual(expected, actual);
         }
@@ -860,19 +838,8 @@ namespace UnitTests
         [TestMethod]
         public void GetSuccessThresholdOfWound_TestParams3()
         {
-            var expected = 2;
-
-            var attacker = new AttackerDTO()
-            {
-                WeaponStrength = 4
-            };
-
-            var defender = new DefenderDTO()
-            {
-                Toughness = 2
-            };
-
-            var actual = CombatMath.GetSuccessThresholdOfWound(attacker, defender);
+            var expected = 5;
+            var actual = CombatMath.GetSuccessThresholdOfWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
 
             Assert.AreEqual(expected, actual);
         }
@@ -911,21 +878,8 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfWound_TestParams1()
         {
-            var expected = 0.25;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponSkill = 4,
-                WeaponStrength = 4
-            };
-
-            var defender = new DefenderDTO()
-            {
-                Toughness = 4
-            };
-
-            var actual = CombatMath.GetProbabilityOfWound(attacker, defender);
+            var expected = 0.5556;
+            var actual = Math.Round(CombatMath.GetProbabilityOfWound(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -937,20 +891,7 @@ namespace UnitTests
         public void GetProbabilityOfWound_TestParams2()
         {
             var expected = 0.3333;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponSkill = 3,
-                WeaponStrength = 4
-            };
-
-            var defender = new DefenderDTO()
-            {
-                Toughness = 4
-            };
-
-            var actual = Math.Round(CombatMath.GetProbabilityOfWound(attacker, defender), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -961,21 +902,8 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfWound_TestParams3()
         {
-            var expected = 0.5556;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponSkill = 2,
-                WeaponStrength = 5
-            };
-
-            var defender = new DefenderDTO()
-            {
-                Toughness = 4
-            };
-
-            var actual = Math.Round(CombatMath.GetProbabilityOfWound(attacker, defender), 4);
+            var expected = 0.2222;
+            var actual = Math.Round(CombatMath.GetProbabilityOfWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
