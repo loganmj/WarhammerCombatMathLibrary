@@ -141,7 +141,7 @@ namespace WarhammerCombatMathLibrary
         /// Returns a binomial distribution of attack roll results based on the process data.
         /// </summary>
         /// <returns>A BinomialDistribution object containing the hit success data.</returns>
-        public static List<BinomialOutcome> GetBinomialDistributionOfHits(AttackerDTO? attacker)
+        public static List<BinomialOutcome> GetBinomialDistributionHits(AttackerDTO? attacker)
         {
             if (attacker == null)
             {
@@ -161,6 +161,12 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static List<BinomialOutcome> GetSurvivorDistributionHits(AttackerDTO? attacker)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetSurvivorDistributionHits() | Attacker is null. Returning empty list ...");
+                return [];
+            }
+
             var numberOfTrials = GetTotalNumberOfAttacks(attacker);
             var probability = GetProbabilityOfHit(attacker);
             var survivorDistribution = new List<BinomialOutcome>();
