@@ -169,14 +169,7 @@ namespace WarhammerCombatMathLibrary
 
             var numberOfTrials = GetTotalNumberOfAttacks(attacker);
             var probability = GetProbabilityOfHit(attacker);
-            var survivorDistribution = new List<BinomialOutcome>();
-
-            for (int trial = 0; trial <= numberOfTrials; trial++)
-            {
-                survivorDistribution.Add(new BinomialOutcome(trial, Statistics.SurvivorFunction(numberOfTrials, trial, probability)));
-            }
-
-            return survivorDistribution;
+            return Statistics.SurvivorDistribution(numberOfTrials, probability);
         }
 
         /// <summary>
