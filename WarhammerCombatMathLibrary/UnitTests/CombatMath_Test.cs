@@ -972,121 +972,126 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Tests the case where the attacker parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedWounds_AttackerIsNull()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetExpectedWounds(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedWounds_DefenderIsNull()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_KHARN_THE_BETRAYER, null);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedWounds_TestParams1()
+        {
+            var expected = 4;
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedWounds_TestParams2()
+        {
+            var expected = 6;
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedWounds_TestParams3()
+        {
+            var expected = 4;
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationWounds_AttackerIsNull()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetStandardDeviationWounds(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationWounds_DefenderIsNull()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetStandardDeviationWounds(ATTACKER_KHARN_THE_BETRAYER, null);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationWounds_TestParams1()
+        {
+            var expected = 1.4055;
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationWounds_TestParams2()
+        {
+            var expected = 2.1082;
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationWounds_TestParams3()
+        {
+            var expected = 1.8592;
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
         /*
-
-        /// <summary>
-        /// Tests the case where the attacker parameter is null.
-        /// </summary>
-        [TestMethod]
-        public void GetExpectedHits_AttackerIsNull()
-        {
-            Assert.AreEqual(0, CombatMath.GetExpectedHits(null));
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetExpectedHits_TestParams1()
-        {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 1,
-                WeaponSkill = 4
-            };
-
-            Assert.AreEqual(0, CombatMath.GetExpectedHits(attacker));
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetExpectedHits_TestParams2()
-        {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 10,
-                WeaponAttacks = 10,
-                WeaponSkill = 4
-            };
-
-            Assert.AreEqual(50, CombatMath.GetExpectedHits(attacker));
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetExpectedHits_TestParams3()
-        {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 10,
-                WeaponAttacks = 4,
-                WeaponSkill = 3
-            };
-
-            Assert.AreEqual(26, CombatMath.GetExpectedHits(attacker));
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker parameter is null.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationHits_AttackerIsNull()
-        {
-            Assert.AreEqual(0, CombatMath.GetStandardDeviationHits(null));
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationHits_TestParams1()
-        {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponAttacks = 1,
-                WeaponSkill = 4
-            };
-
-            Assert.AreEqual(0.5, CombatMath.GetStandardDeviationHits(attacker));
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationHits_TestParams2()
-        {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 10,
-                WeaponAttacks = 10,
-                WeaponSkill = 4
-            };
-
-            Assert.AreEqual(5, CombatMath.GetStandardDeviationHits(attacker));
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationHits_TestParams3()
-        {
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 10,
-                WeaponAttacks = 4,
-                WeaponSkill = 3
-            };
-
-            Assert.AreEqual(2.98, Math.Round(CombatMath.GetStandardDeviationHits(attacker), 2));
-        }
 
 
         /// <summary>
