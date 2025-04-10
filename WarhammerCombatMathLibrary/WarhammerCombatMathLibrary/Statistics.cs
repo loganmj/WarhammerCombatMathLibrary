@@ -346,7 +346,7 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Calculates the upper cumulative probability of trial data.
-        /// Upper cumulative probability is the probability of achieving greater than X successes such that P(X>k).
+        /// Upper cumulative probability is the probability of achieving greater than X successes such that P(X>k) or 1-P(X≤k).
         /// </summary>
         /// <param name="numberOfTrials"></param>
         /// <param name="numberOfSuccesses"></param>
@@ -452,7 +452,7 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Calculates the upper cumulative distribution of trial data P(X>k).
+        /// Calculates the upper cumulative distribution of trial data P(X>k) or 1-P(X≤k).
         /// </summary>
         /// <param name="numberOfTrials"></param>
         /// <param name="probability"></param>
@@ -612,7 +612,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="numberOfTrials"></param>
         /// <param name="probability"></param>
         /// <returns></returns>
-        public static double GetMean(int numberOfTrials, double probability)
+        public static double Mean(int numberOfTrials, double probability)
         {
             if (numberOfTrials < 1)
             {
@@ -635,7 +635,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="numberOfTrials"></param>
         /// <param name="probability"></param>
         /// <returns></returns>
-        public static double GetStandardDeviation(int numberOfTrials, double probability)
+        public static double StandardDeviation(int numberOfTrials, double probability)
         {
             if (numberOfTrials < 0)
             {
