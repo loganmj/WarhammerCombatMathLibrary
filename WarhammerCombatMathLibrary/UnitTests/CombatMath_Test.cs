@@ -2290,6 +2290,61 @@ namespace UnitTests
             var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDestroyedModels_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetExpectedDestroyedModels(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDestroyedModels_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDestroyedModels_TestParams1()
+        {
+            var expected = 2;
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDestroyedModels_TestParams2()
+        {
+            var expected = 1;
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDestroyedModels_TestParams3()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
     }
 
     #endregion
