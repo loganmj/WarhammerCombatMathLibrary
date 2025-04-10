@@ -542,8 +542,20 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetMeanDamage(AttackerDTO attacker, DefenderDTO defender)
+        public static double GetMeanDamage(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetMeanDamage() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetMeanDamage() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
             return GetMeanFailedSaves(attacker, defender) * attacker.WeaponDamage;
         }
 
@@ -554,7 +566,19 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static int GetExpectedDamage(AttackerDTO attacker, DefenderDTO defender)
         {
-            return (int)Math.Floor(GetMeanDamage(attacker, defender));
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetExpectedDamage() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetExpectedDamage() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            return (int)Math.Floor(GetMeanFailedSaves(attacker, defender)) * attacker.WeaponDamage;
         }
 
         /// <summary>
@@ -565,6 +589,18 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double GetStandardDeviationDamage(AttackerDTO attacker, DefenderDTO defender)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetStandardDeviationDamage() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetStandardDeviationDamage() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
             return GetStandardDeviationFailedSaves(attacker, defender) * attacker.WeaponDamage;
         }
 
