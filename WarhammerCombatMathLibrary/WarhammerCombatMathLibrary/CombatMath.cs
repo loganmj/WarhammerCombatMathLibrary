@@ -102,7 +102,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
+            return Statistics.Mean(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
+            return Statistics.StandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityWound(attacker, defender));
+            return Statistics.Mean(GetTotalNumberOfAttacks(attacker), GetProbabilityWound(attacker, defender));
         }
 
         /// <summary>
@@ -316,7 +316,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityWound(attacker, defender));
+            return Statistics.StandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityWound(attacker, defender));
         }
 
         /// <summary>
@@ -439,7 +439,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetMean(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
+            return Statistics.Mean(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
         }
 
         /// <summary>
@@ -484,7 +484,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.GetStandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
+            return Statistics.StandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
         }
 
         /// <summary>

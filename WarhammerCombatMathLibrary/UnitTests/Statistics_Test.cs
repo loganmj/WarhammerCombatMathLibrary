@@ -71,7 +71,7 @@ namespace UnitTests
         [TestMethod]
         public void GetMean_NumberOfTrialsLessThan1()
         {
-            Assert.AreEqual(0, Statistics.GetMean(0, 1));
+            Assert.AreEqual(0, Statistics.Mean(0, 1));
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace UnitTests
         [TestMethod]
         public void GetMean_ProbabilityLessThan0()
         {
-            Assert.AreEqual(0, Statistics.GetMean(1, -1));
+            Assert.AreEqual(0, Statistics.Mean(1, -1));
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace UnitTests
         [TestMethod]
         public void GetMean_TestParams1()
         {
-            Assert.AreEqual(0.5, Statistics.GetMean(1, 0.5));
+            Assert.AreEqual(0.5, Statistics.Mean(1, 0.5));
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace UnitTests
         [TestMethod]
         public void GetMean_TestParams2()
         {
-            Assert.AreEqual(5, Statistics.GetMean(10, 0.5));
+            Assert.AreEqual(5, Statistics.Mean(10, 0.5));
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace UnitTests
         [TestMethod]
         public void GetMean_TestParams3()
         {
-            Assert.AreEqual(25, Statistics.GetMean(100, 0.25));
+            Assert.AreEqual(25, Statistics.Mean(100, 0.25));
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviation_NumberOfTrialsLessThan1()
         {
-            Assert.AreEqual(0, Statistics.GetStandardDeviation(0, 1));
+            Assert.AreEqual(0, Statistics.StandardDeviation(0, 1));
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviation_ProbabilityLessThan0()
         {
-            Assert.AreEqual(0, Statistics.GetStandardDeviation(1, -1));
+            Assert.AreEqual(0, Statistics.StandardDeviation(1, -1));
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviation_TestParams1()
         {
-            Assert.AreEqual(0.5, Statistics.GetMean(1, 0.5));
+            Assert.AreEqual(0.5, Statistics.Mean(1, 0.5));
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviation_TestParams2()
         {
-            Assert.AreEqual(1.58, Math.Round(Statistics.GetStandardDeviation(10, 0.5), 2));
+            Assert.AreEqual(1.58, Math.Round(Statistics.StandardDeviation(10, 0.5), 2));
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviation_TestParams3()
         {
-            Assert.AreEqual(4.33, Math.Round(Statistics.GetStandardDeviation(100, 0.25), 2));
+            Assert.AreEqual(4.33, Math.Round(Statistics.StandardDeviation(100, 0.25), 2));
         }
 
         /// <summary>
