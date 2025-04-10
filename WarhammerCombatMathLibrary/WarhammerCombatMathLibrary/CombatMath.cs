@@ -604,6 +604,34 @@ namespace WarhammerCombatMathLibrary
             return GetStandardDeviationFailedSaves(attacker, defender) * attacker.WeaponDamage;
         }
 
+        /// <summary>
+        /// Get the expected number of defending models that will be destroyed by the attack.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        public static int GetExpectedDestroyedModels(AttackerDTO? attacker, DefenderDTO? defender) 
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetExpectedDestroyedModels() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetExpectedDestroyedModels() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            var expectedDamage = GetExpectedDamage(attacker, defender);
+
+            // Determine the divisor based on which value is larger: the defender's wounds per model, or the attacker's weapon damage.
+            var divisor = Math.Max(defender.Wounds, attacker.WeaponDamage);
+
+            return (int)Math.Floor((double)expectedDamage / divisor);
+        }
+
         #endregion
     }
 }
