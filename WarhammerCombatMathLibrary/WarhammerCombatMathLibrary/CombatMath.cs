@@ -493,9 +493,47 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static List<BinomialOutcome> GetBinomialDistributionFailSaves(AttackerDTO attacker, DefenderDTO defender)
+        public static List<BinomialOutcome> GetBinomialDistributionFailedSaves(AttackerDTO? attacker, DefenderDTO? defender)
         {
-            return Statistics.BinomialDistribution(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetBinomialDistributionFailedSaves() | Attacker is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetBinomialDistributionFailedSaves() | Defender is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var probability = GetProbabilityFailedSave(attacker, defender);
+            return Statistics.BinomialDistribution(numberOfTrials, probability);
+        }
+
+        /// <summary>
+        /// Gets a distribution of all discrete survivor function values for a successful hit and wound, and a failed save roll.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static List<BinomialOutcome> GetSurvivorDistributionFailedSaves(AttackerDTO? attacker, DefenderDTO? defender) 
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetSurvivorDistributionFailedSaves() | Attacker is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetSurvivorDistributionFailedSaves() | Defender is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var probability = GetProbabilityFailedSave(attacker, defender);
+            return Statistics.SurvivorDistribution(numberOfTrials, probability);
         }
 
         /// <summary>
@@ -504,8 +542,20 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetMeanDamage(AttackerDTO attacker, DefenderDTO defender)
+        public static double GetMeanDamage(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetMeanDamage() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetMeanDamage() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
             return GetMeanFailedSaves(attacker, defender) * attacker.WeaponDamage;
         }
 
@@ -514,9 +564,21 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static int GetExpectedDamage(AttackerDTO attacker, DefenderDTO defender)
+        public static int GetExpectedDamage(AttackerDTO? attacker, DefenderDTO? defender)
         {
-            return (int)Math.Floor(GetMeanDamage(attacker, defender));
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetExpectedDamage() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetExpectedDamage() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            return (int)Math.Floor(GetMeanFailedSaves(attacker, defender) * attacker.WeaponDamage);
         }
 
         /// <summary>
@@ -525,8 +587,20 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetStandardDeviationDamage(AttackerDTO attacker, DefenderDTO defender)
+        public static double GetStandardDeviationDamage(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetStandardDeviationDamage() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetStandardDeviationDamage() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
             return GetStandardDeviationFailedSaves(attacker, defender) * attacker.WeaponDamage;
         }
 

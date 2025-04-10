@@ -1745,6 +1745,551 @@ namespace UnitTests
             var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
+
+        /// <summary>
+        /// Tests the case where the attacker parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionFailedSaves_AttackerIsNull()
+        {
+            var expected = new List<BinomialOutcome>();
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionFailedSaves_DefenderIsNull()
+        {
+            var expected = new List<BinomialOutcome>();
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_KHARN_THE_BETRAYER, null);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionFailedSaves_TestParams1()
+        {
+            var expected = new List<BinomialOutcome>
+            {
+                new(0, 0.0247),
+                new(1, 0.1162),
+                new(2, 0.2393),
+                new(3, 0.2815),
+                new(4, 0.2070),
+                new(5, 0.0974),
+                new(6, 0.0287),
+                new(7, 0.0048),
+                new(8, 0.0004)
+            };
+
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionFailedSaves_TestParams2()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 0.0261),
+                new(1, 0.1043),
+                new(2, 0.1982),
+                new(3, 0.2379),
+                new(4, 0.2022),
+                new(5, 0.1294),
+                new(6, 0.0647),
+                new(7, 0.0259),
+                new(8, 0.0084),
+                new(9, 0.0022),
+                new(10, 0.0005),
+                new(11, 0.0001),
+                new(12, 0),
+                new(13, 0),
+                new(14, 0),
+                new(15, 0),
+                new(16, 0),
+                new(17, 0),
+                new(18, 0),
+                new(19, 0),
+                new(20, 0)
+            };
+
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionFailedSaves_TestParams3()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 0.2145),
+                new(1, 0.3433),
+                new(2, 0.2609),
+                new(3, 0.1252),
+                new(4, 0.0426),
+                new(5, 0.0109),
+                new(6, 0.0022),
+                new(7, 0.0003),
+                new(8, 0),
+                new(9, 0),
+                new(10, 0),
+                new(11, 0),
+                new(12, 0),
+                new(13, 0),
+                new(14, 0),
+                new(15, 0),
+                new(16, 0),
+                new(17, 0),
+                new(18, 0),
+                new(19, 0),
+                new(20, 0)
+            };
+
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionFailedSaves_AttackerIsNull()
+        {
+            var expected = new List<BinomialOutcome>();
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender parameter is null.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionFailedSaves_DefenderIsNull()
+        {
+            var expected = new List<BinomialOutcome>();
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_KHARN_THE_BETRAYER, null);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionFailedSaves_TestParams1()
+        {
+            var expected = new List<BinomialOutcome>
+            {
+                new(0, 1),
+                new(1, 0.9753),
+                new(2, 0.8591),
+                new(3, 0.6198),
+                new(4, 0.3382),
+                new(5, 0.1312),
+                new(6, 0.0338),
+                new(7, 0.0052),
+                new(8, 0.0004)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionFailedSaves_TestParams2()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.9739),
+                new(2, 0.8696),
+                new(3, 0.6713),
+                new(4, 0.4335),
+                new(5, 0.2313),
+                new(6, 0.1018),
+                new(7, 0.0371),
+                new(8, 0.0113),
+                new(9, 0.0028),
+                new(10, 0.0006),
+                new(11, 0.0001),
+                new(12, 0),
+                new(13, 0),
+                new(14, 0),
+                new(15, 0),
+                new(16, 0),
+                new(17, 0),
+                new(18, 0),
+                new(19, 0),
+                new(20, 0)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionFailedSaves_TestParams3()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.7855),
+                new(2, 0.4422),
+                new(3, 0.1813),
+                new(4, 0.0561),
+                new(5, 0.0135),
+                new(6, 0.0026),
+                new(7, 0.0004),
+                new(8, 0.0001),
+                new(9, 0),
+                new(10, 0),
+                new(11, 0),
+                new(12, 0),
+                new(13, 0),
+                new(14, 0),
+                new(15, 0),
+                new(16, 0),
+                new(17, 0),
+                new(18, 0),
+                new(19, 0),
+                new(20, 0)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamage_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetMeanDamage(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamage_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetMeanDamage(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamage_TestParams1()
+        {
+            var expected = 8.8889;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamage_TestParams2()
+        {
+            var expected = 3.3333;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamage_TestParams3()
+        {
+            var expected = 1.4815;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamage_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetExpectedDamage(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamage_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamage_TestParams1()
+        {
+            var expected = 8;
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamage_TestParams2()
+        {
+            var expected = 3;
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamage_TestParams3()
+        {
+            var expected = 1;
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamage_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetStandardDeviationDamage(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamage_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetStandardDeviationDamage(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamage_TestParams1()
+        {
+            var expected = 4.0976;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamage_TestParams2()
+        {
+            var expected = 1.6667;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamage_TestParams3()
+        {
+            var expected = 1.1712;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
     }
 
     #endregion
