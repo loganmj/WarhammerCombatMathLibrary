@@ -627,9 +627,9 @@ namespace WarhammerCombatMathLibrary
             var expectedDamage = GetExpectedDamage(attacker, defender);
 
             // Determine the divisor based on which value is larger: the defender's wounds per model, or the attacker's weapon damage.
-            var divisor = Math.Max(defender.Wounds, attacker.WeaponDamage);
+            var damageThreshold = Math.Max(defender.Wounds, attacker.WeaponDamage);
 
-            return (int)Math.Floor((double)expectedDamage / divisor);
+            return (int)Math.Floor((double)expectedDamage / damageThreshold);
         }
 
         #endregion
