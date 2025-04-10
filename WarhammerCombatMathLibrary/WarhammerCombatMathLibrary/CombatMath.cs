@@ -564,7 +564,7 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static int GetExpectedDamage(AttackerDTO attacker, DefenderDTO defender)
+        public static int GetExpectedDamage(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -578,7 +578,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return (int)Math.Floor(GetMeanFailedSaves(attacker, defender)) * attacker.WeaponDamage;
+            return (int)Math.Floor(GetMeanFailedSaves(attacker, defender) * attacker.WeaponDamage);
         }
 
         /// <summary>
@@ -587,7 +587,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetStandardDeviationDamage(AttackerDTO attacker, DefenderDTO defender)
+        public static double GetStandardDeviationDamage(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
