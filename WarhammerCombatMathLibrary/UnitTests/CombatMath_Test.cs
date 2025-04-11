@@ -2285,6 +2285,64 @@ namespace UnitTests
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]
+        public void GetModelsDestroyed_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetModelsDestroyed(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD, 1);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetModelsDestroyed_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetModelsDestroyed(ATTACKER_KHARN_THE_BETRAYER, null, 1);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetModelsDestroyed_TestParams1()
+        {
+            var expected = 3;
+            var totalDamage = 9;
+            var actual = CombatMath.GetModelsDestroyed(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD, totalDamage);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetModelsDestroyed_TestParams2()
+        {
+            var expected = 2;
+            var totalDamage = 4;
+            var actual = CombatMath.GetModelsDestroyed(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD, totalDamage);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetModelsDestroyed_TestParams3()
+        {
+            var expected = 0;
+            var totalDamage = 2;
+            var actual = CombatMath.GetModelsDestroyed(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD, totalDamage);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
         public void GetExpectedDestroyedModels_NullAttacker()
         {
             var expected = 0;
@@ -2333,6 +2391,116 @@ namespace UnitTests
         {
             var expected = 0;
             var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDestroyedModels_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDestroyedModels_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDestroyedModels_TestParams1()
+        {
+            var expected = 1;
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDestroyedModels_TestParams2()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDestroyedModels_TestParams3()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetAttacksRequiredToDestroyOneModel_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetAttacksRequiredToDestroyOneModel(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetAttacksRequiredToDestroyOneModel_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetAttacksRequiredToDestroyOneModel(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetAttacksRequiredToDestroyOneModel_TestParams1()
+        {
+            var expected = 1;
+            var actual = CombatMath.GetAttacksRequiredToDestroyOneModel(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetAttacksRequiredToDestroyOneModel_TestParams2()
+        {
+            var expected = 2;
+            var actual = CombatMath.GetAttacksRequiredToDestroyOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetAttacksRequiredToDestroyOneModel_TestParams3()
+        {
+            var expected = 3;
+            var actual = CombatMath.GetAttacksRequiredToDestroyOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
     }

@@ -665,7 +665,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static int GetStandardDeviationDestroyedModels(AttackerDTO attacker, DefenderDTO? defender)
+        public static int GetStandardDeviationDestroyedModels(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
