@@ -2532,7 +2532,7 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfDestroyingOneModel_TestParams1()
         {
-            var expected = 0.3704;
+            var expected = 0.1162;
             var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingOneModel(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
@@ -2543,7 +2543,7 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfDestroyingOneModel_TestParams2()
         {
-            var expected = 0.0278;
+            var expected = 0.1982;
             var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
@@ -2554,7 +2554,7 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfDestroyingOneModel_TestParams3()
         {
-            var expected = 0.0004;
+            var expected = 0.1252;
             var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
@@ -2619,17 +2619,15 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>
                 {
-                    new(0, 0.0098),
-                    new(1, 0.0576),
-                    new(2, 0.1525),
-                    new(3, 0.2392),
-                    new(4, 0.2462),
-                    new(5, 0.1738),
-                    new(6, 0.0852),
-                    new(7, 0.0286),
-                    new(8, 0.0063),
-                    new(9, 0.0008),
-                    new(10, 0)
+                    new(0, 0.0247),
+                    new(1, 0.1162),
+                    new(2, 0.2393),
+                    new(3, 0.2815),
+                    new(4, 0.2070),
+                    new(5, 0.0974),
+                    new(6, 0.0287),
+                    new(7, 0.0048),
+                    new(8, 0.0004)
                 };
 
             var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
@@ -2659,12 +2657,12 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
                 {
-                    new(0, 0.7545),
-                    new(1, 0.2156),
-                    new(2, 0.0277),
-                    new(3, 0.0021),
-                    new(4, 0.0001),
-                    new(5, 0),
+                    new(0, 0.0261),
+                    new(1, 0.1982),
+                    new(2, 0.2022),
+                    new(3, 0.0647),
+                    new(4, 0.0084),
+                    new(5, 0.0005),
                     new(6, 0),
                     new(7, 0),
                     new(8, 0),
@@ -2699,12 +2697,13 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
                 {
-                    new(0, 0.9980),
-                    new(1, 0.0020),
-                    new(2, 0),
+                    new(0, 0.2145),
+                    new(1, 0.1252),
+                    new(2, 0.0022),
                     new(3, 0),
                     new(4, 0),
-                    new(5, 0)
+                    new(5, 0),
+                    new(6, 0)
                 };
 
             var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
@@ -2787,16 +2786,14 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>
                 {
                     new(0, 1),
-                    new(1, 0.9902),
-                    new(2, 0.9326),
-                    new(3, 0.7801),
-                    new(4, 0.5410),
-                    new(5, 0.2948),
-                    new(6, 0.1210),
-                    new(7, 0.0358),
-                    new(8, 0.0072),
-                    new(9, 0.0009),
-                    new(10, 0)
+                    new(1, 0.9753),
+                    new(2, 0.8591),
+                    new(3, 0.6198),
+                    new(4, 0.3382),
+                    new(5, 0.1312),
+                    new(6, 0.0338),
+                    new(7, 0.0052),
+                    new(8, 0.0004)
                 };
 
             var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
@@ -2827,11 +2824,11 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
                 {
                     new(0, 1),
-                    new(1, 0.2455),
-                    new(2, 0.0299),
-                    new(3, 0.0022),
-                    new(4, 0.0001),
-                    new(5, 0),
+                    new(1, 0.8696),
+                    new(2, 0.4335),
+                    new(3, 0.1018),
+                    new(4, 0.0113),
+                    new(5, 0.0006),
                     new(6, 0),
                     new(7, 0),
                     new(8, 0),
@@ -2867,11 +2864,12 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
                 {
                     new(0, 1),
-                    new(1, 0.0020),
-                    new(2, 0),
+                    new(1, 0.1813),
+                    new(2, 0.0026),
                     new(3, 0),
                     new(4, 0),
-                    new(5, 0)
+                    new(5, 0),
+                    new(6, 0)
                 };
 
             var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);

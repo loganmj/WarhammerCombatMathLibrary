@@ -164,11 +164,16 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Calculates the binomial distribution of trial data.
+        /// Optionally calculates the binomial distribution of trial data, assuming that a group of a given number of trial successes is considered a single success
+        /// in the context of the distribution.
+        /// Example: If 'groupSuccessCount' = 2, then the total number of trials is divided by 2, and any combination of 2 successful trials is considered a single success
+        /// in the context of the distribution.
         /// </summary>
         /// <param name="numberOfTrials">The number of trials in the process.</param>
         /// <param name="probability">The probability of success for a single trial.</param>
+        /// <param name="groupSuccessCount">The number of grouped trial successes that count as a success. Default is 1 (one trial success equals one binomial success)</param>
         /// <returns>A binomial distribution of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> BinomialDistribution(int numberOfTrials, double probability)
+        public static List<BinomialOutcome> BinomialDistribution(int numberOfTrials, double probability, int groupSuccessCount = 1)
         {
             // Validate parameters
             if (numberOfTrials < 1)
@@ -212,12 +217,28 @@ namespace WarhammerCombatMathLibrary
                 return adjustedDistribution;
             }
 
+            if (groupSuccessCount < 1)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Group success count is less than 1.");
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            }
+
+            if (groupSuccessCount > numberOfTrials)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Group success count is greater than the total number of trials.");
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            }
+
             // Create distribution
             var distribution = new List<BinomialOutcome>();
 
-            for (int k = 0; k <= numberOfTrials; k++)
+            for (int k = 0; k <= Math.Floor((double)numberOfTrials / groupSuccessCount); k++)
             {
-                distribution.Add(new BinomialOutcome(k, ProbabilityMassFunction(numberOfTrials, k, probability)));
+                distribution.Add(new BinomialOutcome
+                {
+                    Successes = k,
+                    Probability = ProbabilityMassFunction(numberOfTrials, k * groupSuccessCount, probability)
+                });
             }
 
             return distribution;
@@ -284,12 +305,17 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Calculates the lower cumulative distribution of trial data P(X≤k).
+        /// Calculates the lower cumulative distribution P(X≤k) of trial data.
+        /// Optionally calculates the lower cumulative distribution P(X≤k) of trial data, assuming that a group of a given number of trial successes is considered a single success
+        /// in the context of the distribution.
+        /// Example: If 'groupSuccessCount' = 2, then the total number of trials is divided by 2, and any combination of 2 successful trials is considered a single success
+        /// in the context of the distribution.
         /// </summary>
         /// <param name="numberOfTrials"></param>
         /// <param name="probability"></param>
-        /// <returns>A cumulative distribution of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> LowerCumulativeDistribution(int numberOfTrials, double probability)
+        /// <param name="groupSuccessCount">The number of grouped trial successes that count as a success. Default is 1 (one trial success equals one binomial success)</param>
+        /// <returns>A cumulative distribution P(X≤k) of trial results and their respective probabilities.</returns>
+        public static List<BinomialOutcome> LowerCumulativeDistribution(int numberOfTrials, double probability, int groupSuccessCount = 1)
         {
             // Validate parameters
             if (numberOfTrials < 1)
@@ -334,11 +360,27 @@ namespace WarhammerCombatMathLibrary
                 return adjustedDistribution;
             }
 
+            if (groupSuccessCount < 1)
+            {
+                Debug.WriteLine($"LowerCumulativeDistribution() | Group success count is less than 1.");
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            }
+
+            if (groupSuccessCount > numberOfTrials)
+            {
+                Debug.WriteLine($"LowerCumulativeDistribution() | Group success count is greater than the total number of trials.");
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            }
+
             var distribution = new List<BinomialOutcome>();
 
-            for (int k = 0; k <= numberOfTrials; k++)
+            for (int k = 0; k <= Math.Floor((double)numberOfTrials / groupSuccessCount); k++)
             {
-                distribution.Add(new BinomialOutcome { Successes = k, Probability = LowerCumulativeProbability(numberOfTrials, k, probability) });
+                distribution.Add(new BinomialOutcome
+                {
+                    Successes = k,
+                    Probability = LowerCumulativeProbability(numberOfTrials, k * groupSuccessCount, probability)
+                });
             }
 
             return distribution;
@@ -396,68 +438,20 @@ namespace WarhammerCombatMathLibrary
             }
 
             return 1 - LowerCumulativeProbability(numberOfTrials, numberOfSuccesses, probability);
-
-            /*
-
-            // Validate parameters
-            if (numberOfTrials < 1)
-            {
-                Debug.WriteLine($"UpperCumulativeProbability() | Number of trials is less than 1. Returning 0 ...");
-                return 0;
-            }
-
-            // The sum of all values P(k) for k >= 0 is 1, so any value of k < 0 should also result in 1, if one must define a value.
-            if (numberOfSuccesses < 0)
-            {
-                Debug.WriteLine($"UpperCumulativeProbability() | Number of successes is less than 0. Returning 0 ...");
-                return 1;
-            }
-
-            if (numberOfSuccesses > numberOfTrials)
-            {
-                Debug.WriteLine($"UpperCumulativeProbability() | Number of successes is greater than number of trials. Returning 0 ...");
-                return 0;
-            }
-
-            // In the case where probability is less than or equal to 0, the probability of 0 successes is 1, and all discrete probabilities past that are equal to 0.
-            // Therefore, the cumulative value is always 0, unless it contains the P(0) value, in which case it is 1.
-            if (probability <= 0)
-            {
-                if (numberOfSuccesses == 0)
-                {
-                    Debug.WriteLine($"UpperCumulativeProbability() | Probability is less than or equal to 0, and the number of successes equals 0. Returning 1 ...");
-                    return 1;
-                }
-
-                Debug.WriteLine($"UpperCumulativeProbability() | Probability is less than or equal to 0, and the number of successes does not equal 0. Returning 0 ...");
-                return 0;
-            }
-
-            if (probability >= 1)
-            {
-                Debug.WriteLine($"UpperCumulativeProbability() | Probability is greater than or equal to 1. Returning 1 ...");
-                return 1;
-            }
-
-            double cumulativeProbability = 0;
-
-            for (int i = numberOfSuccesses; i <= numberOfTrials; i++)
-            {
-                cumulativeProbability += ProbabilityMassFunction(numberOfTrials, i, probability);
-            }
-
-            return cumulativeProbability;
-
-            */
         }
 
         /// <summary>
-        /// Calculates the upper cumulative distribution of trial data P(X>k) or 1-P(X≤k).
+        /// Calculates the upper cumulative distribution P(X>k) or 1-P(X≤k) of trial data.
+        /// Optionally calculates the upper cumulative distribution P(X>k) or 1-P(X≤k) of trial data, assuming that a group of a given number of trial successes is considered a single 
+        /// success in the context of the distribution.
+        /// Example: If 'groupSuccessCount' = 2, then the total number of trials is divided by 2, and any combination of 2 successful trials is considered a single success
+        /// in the context of the distribution.
         /// </summary>
         /// <param name="numberOfTrials"></param>
         /// <param name="probability"></param>
-        /// <returns>A cumulative distribution of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> UpperCumulativeDistribution(int numberOfTrials, double probability)
+        /// <param name="groupSuccessCount">The number of grouped trial successes that count as a success. Default is 1 (one trial success equals one binomial success)</param>
+        /// <returns>A cumulative distribution P(X>k) or 1-P(X≤k) of trial results and their respective probabilities.</returns>
+        public static List<BinomialOutcome> UpperCumulativeDistribution(int numberOfTrials, double probability, int groupSuccessCount = 1)
         {
             // Validate parameters
             if (numberOfTrials < 1)
@@ -499,11 +493,27 @@ namespace WarhammerCombatMathLibrary
                 return adjustedDistribution;
             }
 
+            if (groupSuccessCount < 1)
+            {
+                Debug.WriteLine($"UpperCumulativeDistribution() | Group success count is less than 1.");
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            }
+
+            if (groupSuccessCount > numberOfTrials)
+            {
+                Debug.WriteLine($"UpperCumulativeDistribution() | Group success count is greater than the total number of trials.");
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            }
+
             var distribution = new List<BinomialOutcome>();
 
-            for (int k = 0; k <= numberOfTrials; k++)
+            for (int k = 0; k <= Math.Floor((double)numberOfTrials / groupSuccessCount); k++)
             {
-                distribution.Add(new BinomialOutcome { Successes = k, Probability = UpperCumulativeProbability(numberOfTrials, k, probability) });
+                distribution.Add(new BinomialOutcome
+                {
+                    Successes = k,
+                    Probability = UpperCumulativeProbability(numberOfTrials, k * groupSuccessCount, probability)
+                });
             }
 
             return distribution;
@@ -547,12 +557,17 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Gets the distribution of survivor function outcomes P(X≥k).
+        /// Gets the survivor function distribution P(X≥k) of trial data.
+        /// Optionally calculates the upper cumulative distribution P(X≥k) of trial data, assuming that a group of a given number of trial successes is considered a single 
+        /// success in the context of the distribution.
+        /// Example: If 'groupSuccessCount' = 2, then the total number of trials is divided by 2, and any combination of 2 successful trials is considered a single success
+        /// in the context of the distribution.
         /// </summary>
         /// <param name="numberOfTrials"></param>
         /// <param name="probability"></param>
-        /// <returns></returns>
-        public static List<BinomialOutcome> SurvivorDistribution(int numberOfTrials, double probability)
+        /// <param name="groupSuccessCount">The number of grouped trial successes that count as a success. Default is 1 (one trial success equals one binomial success)</param>
+        /// <returns>A survivor function distribution P(X≥k) of trial results and their respective probabilities.</returns>
+        public static List<BinomialOutcome> SurvivorDistribution(int numberOfTrials, double probability, int groupSuccessCount = 1)
         {
             // Validate parameters
             if (numberOfTrials < 1)
@@ -596,11 +611,27 @@ namespace WarhammerCombatMathLibrary
                 return adjustedDistribution;
             }
 
+            if (groupSuccessCount < 1)
+            {
+                Debug.WriteLine($"SurvivorDistribution() | Group success count is less than 1.");
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            }
+
+            if (groupSuccessCount > numberOfTrials)
+            {
+                Debug.WriteLine($"SurvivorDistribution() | Group success count is greater than the total number of trials.");
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            }
+
             var distribution = new List<BinomialOutcome>();
 
-            for (int k = 0; k <= numberOfTrials; k++)
+            for (int k = 0; k <= Math.Floor((double)numberOfTrials / groupSuccessCount); k++)
             {
-                distribution.Add(new BinomialOutcome { Successes = k, Probability = SurvivorFunction(numberOfTrials, k, probability) });
+                distribution.Add(new BinomialOutcome
+                {
+                    Successes = k,
+                    Probability = SurvivorFunction(numberOfTrials, k * groupSuccessCount, probability)
+                });
             }
 
             return distribution;
