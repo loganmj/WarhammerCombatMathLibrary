@@ -611,7 +611,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="defender">The defending unit data.</param>
         /// <param name="totalDamage">The total amount of damage done to the unit.</param>
         /// <returns></returns>
-        public static int GetModelsDestroyed(AttackerDTO? attacker, DefenderDTO? defender, int totalDamage) 
+        public static int GetModelsDestroyed(AttackerDTO? attacker, DefenderDTO? defender, int totalDamage)
         {
             if (attacker == null)
             {
@@ -714,7 +714,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetProbabilityOfDestroyingOneModel(AttackerDTO? attacker, DefenderDTO? defender) 
+        public static double GetProbabilityOfDestroyingOneModel(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -728,14 +728,17 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
+            // Get the total number of attacks
+            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+
             // The number of successful, unblocked attacks required to destroy a single model
-            var attacksRequiredToKillOneModel = GetAttacksRequiredToDestroyOneModel(attacker, defender);
+            var numberOfSuccesses = GetAttacksRequiredToDestroyOneModel(attacker, defender);
 
             // The probability of getting a single successful attack
-            var probabilityOfSingleSuccessfulAttack = GetProbabilityFailedSave(attacker, defender);
+            var probability = GetProbabilityFailedSave(attacker, defender);
 
             // The probability of getting the number of successful attacks required to destroy a single model
-            return Statistics.ProbabilityOfMultipleSuccesses(probabilityOfSingleSuccessfulAttack, attacksRequiredToKillOneModel);
+            return Statistics.ProbabilityMassFunction(numberOfTrials, numberOfSuccesses, probability);
         }
 
         /// <summary>
@@ -759,9 +762,10 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Base the distribution off of the max number of defending models and the probability of successfully destroying a single model
-            var numberOfTrials = defender.NumberOfModels;
-            var probabilityOfDestroyingOneModel = GetProbabilityOfDestroyingOneModel(attacker, defender);
-            return Statistics.BinomialDistribution(numberOfTrials, probabilityOfDestroyingOneModel);
+            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var probability = GetProbabilityFailedSave(attacker, defender);
+            var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(attacker, defender);
+            return Statistics.BinomialDistribution(numberOfTrials, probability, groupSuccessCount);
         }
 
         /// <summary>

@@ -224,6 +224,71 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Calculates the binomial distribution of trial data, assuming that a group of a given number of trial successes is considered a single success
+        /// in the context of the distribution.
+        /// Example: If 'groupSuccessCount' = 2, then the total number of trials is divided by 2, and any combination of 2 successful trials is considered a single success
+        /// in the context of the distribution.
+        /// </summary>
+        /// <param name="numberOfTrials"></param>
+        /// <param name="probability"></param>
+        /// <param name="groupSuccessCount"></param>
+        /// <returns></returns>
+        public static List<BinomialOutcome> BinomialDistribution(int numberOfTrials, double probability, int groupSuccessCount)
+        {
+            // Validate parameters
+            if (numberOfTrials < 1)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Number of trials is less than 1.");
+                return [new(0, 1)];
+            }
+
+            if (probability <= 0)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Probability is less than or equal to 0.");
+
+                // The probability of 0 successes should be 1, all other probabilities should be 0.
+                var adjustedDistribution = new List<BinomialOutcome>
+                {
+                    new(0, 1)
+                };
+
+                for (int k = 1; k <= numberOfTrials; k++)
+                {
+                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
+                }
+
+                return adjustedDistribution;
+            }
+
+            if (probability >= 1)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Probability is greater than or equal to 1.");
+
+                // All probabilities should be 0, except the probability of all successes should be 1.
+                var adjustedDistribution = new List<BinomialOutcome>();
+
+                for (int k = 0; k <= numberOfTrials - 1; k++)
+                {
+                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
+                }
+
+                adjustedDistribution.Add(new BinomialOutcome(numberOfTrials, 1));
+
+                return adjustedDistribution;
+            }
+
+            // Create distribution
+            var distribution = new List<BinomialOutcome>();
+
+            for (int k = 0; k <= Math.Floor((double)numberOfTrials / groupSuccessCount); k++)
+            {
+                distribution.Add(new BinomialOutcome(k, ProbabilityMassFunction(numberOfTrials, k * groupSuccessCount, probability)));
+            }
+
+            return distribution;
+        }
+
+        /// <summary>
         /// Calculates the lower cumulative probability of trial data.
         /// Lower cumulative probability is the probability of achieving a result less than or equal to X successes such that P(X≤k).
         /// </summary>
