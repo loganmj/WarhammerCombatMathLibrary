@@ -2503,6 +2503,61 @@ namespace UnitTests
             var actual = CombatMath.GetAttacksRequiredToDestroyOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfDestroyingOneModel_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetProbabilityOfDestroyingOneModel(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfDestroyingOneModel_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetProbabilityOfDestroyingOneModel(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfDestroyingOneModel_TestParams1()
+        {
+            var expected = 0.3704; // 0.3704
+            var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingOneModel(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfDestroyingOneModel_TestParams2()
+        {
+            var expected = 0.0278; // p=0.1667, a=2
+            var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfDestroyingOneModel_TestParams3()
+        {
+            var expected = 0.0004;
+            var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
     }
 
     #endregion
