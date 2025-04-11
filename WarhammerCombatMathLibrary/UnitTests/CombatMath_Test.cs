@@ -780,12 +780,7 @@ namespace UnitTests
         {
             var expected = 7;
 
-            var defender = new DefenderDTO()
-            {
-                Toughness = 4
-            };
-
-            var actual = CombatMath.GetSuccessThresholdOfWound(null, defender);
+            var actual = CombatMath.GetSuccessThresholdOfWound(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             Assert.AreEqual(expected, actual);
         }
@@ -798,12 +793,7 @@ namespace UnitTests
         {
             var expected = 7;
 
-            var attacker = new AttackerDTO()
-            {
-                WeaponStrength = 4
-            };
-
-            var actual = CombatMath.GetSuccessThresholdOfWound(attacker, null);
+            var actual = CombatMath.GetSuccessThresholdOfWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, null);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1497,7 +1487,7 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetAdjustedArmorSave_TestParams1() 
+        public void GetAdjustedArmorSave_TestParams1()
         {
             var expected = 5;
             var actual = CombatMath.GetAdjustedArmorSave(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
@@ -1508,7 +1498,7 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetAdjustedArmorSave_TestParams2() 
+        public void GetAdjustedArmorSave_TestParams2()
         {
             var expected = 4;
             var actual = CombatMath.GetAdjustedArmorSave(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
@@ -1519,7 +1509,7 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetAdjustedArmorSave_TestParams3() 
+        public void GetAdjustedArmorSave_TestParams3()
         {
             var expected = 3;
             var actual = CombatMath.GetAdjustedArmorSave(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);

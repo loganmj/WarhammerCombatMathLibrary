@@ -517,7 +517,7 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static List<BinomialOutcome> GetSurvivorDistributionFailedSaves(AttackerDTO? attacker, DefenderDTO? defender) 
+        public static List<BinomialOutcome> GetSurvivorDistributionFailedSaves(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -605,12 +605,43 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Determines the maximum possible number of models destroyed given a specified amount of applied damage.
+        /// </summary>
+        /// <param name="attacker">The attacking unit data.</param>
+        /// <param name="defender">The defending unit data.</param>
+        /// <param name="totalDamage">The total amount of damage done to the unit.</param>
+        /// <returns></returns>
+        public static int GetModelsDestroyed(AttackerDTO? attacker, DefenderDTO? defender, int totalDamage) 
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetModelsDestroyed() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetModelsDestroyed() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            // Determine the divisor based on which value is larger: the defender's wounds per model, or the attacker's weapon damage.
+            var damageThreshold = Math.Max(defender.Wounds, attacker.WeaponDamage);
+
+            // Calculate the maximum possobile number of models destroyed
+            var modelsDestroyed = (int)Math.Floor((double)totalDamage / damageThreshold);
+
+            // Return either the max possible models destroyed, or the total number of defending models, whichever comes first
+            return Math.Min(modelsDestroyed, defender.NumberOfModels);
+        }
+
+        /// <summary>
         /// Get the expected number of defending models that will be destroyed by the attack.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static int GetExpectedDestroyedModels(AttackerDTO? attacker, DefenderDTO? defender) 
+        public static int GetExpectedDestroyedModels(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -625,11 +656,138 @@ namespace WarhammerCombatMathLibrary
             }
 
             var expectedDamage = GetExpectedDamage(attacker, defender);
+            return GetModelsDestroyed(attacker, defender, expectedDamage);
+        }
 
-            // Determine the divisor based on which value is larger: the defender's wounds per model, or the attacker's weapon damage.
-            var damageThreshold = Math.Max(defender.Wounds, attacker.WeaponDamage);
+        /// <summary>
+        /// Gets the standard deviation of destroyed models.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        public static int GetStandardDeviationDestroyedModels(AttackerDTO attacker, DefenderDTO? defender)
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetStandardDeviationDestroyedModels() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
 
-            return (int)Math.Floor((double)expectedDamage / damageThreshold);
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetStandardDeviationDestroyedModels() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            var standardDeviationDamage = (int)Math.Floor(GetStandardDeviationDamage(attacker, defender));
+            return GetModelsDestroyed(attacker, defender, standardDeviationDamage);
+        }
+
+        /// <summary>
+        /// Determines the number of successful, unblocked attacks required to destroy a single model from the defending unit.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        public static int GetAttacksRequiredToDestroyOneModel(AttackerDTO? attacker, DefenderDTO? defender)
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetAttacksRequiredToDestroyOneModel() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetAttacksRequiredToDestroyOneModel() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            // If the result is a decimal, round up to the next highest int value.
+            // Can't have a partial attack.
+            return (int)Math.Ceiling((double)defender.Wounds / attacker.WeaponDamage);
+        }
+
+        /// <summary>
+        /// The probability of getting a number of successful, unblocked attacks required to destroy a single model from the defending unit.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        public static double GetProbabilityOfDestroyingOneModel(AttackerDTO? attacker, DefenderDTO? defender) 
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetProbabilityOfDestroyingOneModel() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetProbabilityOfDestroyingOneModel() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            // The number of successful, unblocked attacks required to destroy a single model
+            var attacksRequiredToKillOneModel = GetAttacksRequiredToDestroyOneModel(attacker, defender);
+
+            // The probability of getting a single successful attack
+            var probabilityOfSingleSuccessfulAttack = GetProbabilityFailedSave(attacker, defender);
+
+            // The probability of getting the number of successful attacks required to destroy a single model
+            return Statistics.ProbabilityOfMultipleSuccesses(probabilityOfSingleSuccessfulAttack, attacksRequiredToKillOneModel);
+        }
+
+        /// <summary>
+        /// Gets the binomial distribution of destroyed models.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        public static List<BinomialOutcome> GetBinomialDistributionDestroyedModels(AttackerDTO? attacker, DefenderDTO? defender)
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetBinomialDistributionDestroyedModels() | Attacker is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetBinomialDistributionDestroyedModels() | Defender is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            // Base the distribution off of the max number of defending models and the probability of successfully destroying a single model
+            var numberOfTrials = defender.NumberOfModels;
+            var probabilityOfDestroyingOneModel = GetProbabilityOfDestroyingOneModel(attacker, defender);
+            return Statistics.BinomialDistribution(numberOfTrials, probabilityOfDestroyingOneModel);
+        }
+
+        /// <summary>
+        /// Gets the survivor distribution of destroyed models.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        public static List<BinomialOutcome> GetSurvivorDistributionDestroyedModels(AttackerDTO? attacker, DefenderDTO defender)
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetSurvivorDistributionDestroyedModels() | Attacker is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetSurvivorDistributionDestroyedModels() | Defender is null. Returning empty list ...");
+                return new List<BinomialOutcome>();
+            }
+
+            // Base the distribution off of the max number of defending models and the probability of successfully destroying a single model
+            var numberOfTrials = defender.NumberOfModels;
+            var probabilityOfDestroyingOneModel = GetProbabilityOfDestroyingOneModel(attacker, defender);
+            return Statistics.SurvivorDistribution(numberOfTrials, probabilityOfDestroyingOneModel);
         }
 
         #endregion
