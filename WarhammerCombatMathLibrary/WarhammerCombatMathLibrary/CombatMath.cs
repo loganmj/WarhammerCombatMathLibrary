@@ -628,7 +628,7 @@ namespace WarhammerCombatMathLibrary
             // Determine the divisor based on which value is larger: the defender's wounds per model, or the attacker's weapon damage.
             var damageThreshold = Math.Max(defender.Wounds, attacker.WeaponDamage);
 
-            // Calculate the maximum possobile number of models destroyed
+            // Calculate the maximum possible number of models destroyed
             var modelsDestroyed = (int)Math.Floor((double)totalDamage / damageThreshold);
 
             // Return either the max possible models destroyed, or the total number of defending models, whichever comes first
