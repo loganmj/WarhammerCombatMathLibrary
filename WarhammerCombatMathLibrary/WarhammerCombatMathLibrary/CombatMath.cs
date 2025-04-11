@@ -761,7 +761,7 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome>();
             }
 
-            // Base the distribution off of the max number of defending models and the probability of successfully destroying a single model
+            // Use the alternate binomial calculation that takes into account requiring groups of successful die rolls to destroy a single model
             var numberOfTrials = GetTotalNumberOfAttacks(attacker);
             var probability = GetProbabilityFailedSave(attacker, defender);
             var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(attacker, defender);
@@ -788,10 +788,11 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome>();
             }
 
-            // Base the distribution off of the max number of defending models and the probability of successfully destroying a single model
-            var numberOfTrials = defender.NumberOfModels;
-            var probabilityOfDestroyingOneModel = GetProbabilityOfDestroyingOneModel(attacker, defender);
-            return Statistics.SurvivorDistribution(numberOfTrials, probabilityOfDestroyingOneModel);
+            // Use the alternate binomial calculation that takes into account requiring groups of successful die rolls to destroy a single model
+            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var probability = GetProbabilityFailedSave(attacker, defender);
+            var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(attacker, defender);
+            return Statistics.SurvivorDistribution(numberOfTrials, probability, groupSuccessCount);
         }
 
         #endregion
