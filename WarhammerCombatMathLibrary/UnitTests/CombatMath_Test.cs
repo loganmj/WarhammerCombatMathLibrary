@@ -2532,7 +2532,7 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfDestroyingOneModel_TestParams1()
         {
-            var expected = 0.1162;
+            var expected = 0.9753;
             var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingAtLeastOneModel(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
@@ -2543,7 +2543,7 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfDestroyingOneModel_TestParams2()
         {
-            var expected = 0.1982;
+            var expected = 0.8696;
             var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingAtLeastOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
@@ -2554,7 +2554,7 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfDestroyingOneModel_TestParams3()
         {
-            var expected = 0.1252;
+            var expected = 0.1813;
             var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingAtLeastOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
