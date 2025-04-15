@@ -709,12 +709,12 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// The probability of getting a number of successful, unblocked attacks required to destroy a single model from the defending unit.
+        /// The probability of getting a number of successful, unblocked attacks required to destroy at least a single model from the defending unit.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetProbabilityOfDestroyingOneModel(AttackerDTO? attacker, DefenderDTO? defender)
+        public static double GetProbabilityOfDestroyingAtLeastOneModel(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -738,7 +738,7 @@ namespace WarhammerCombatMathLibrary
             var probability = GetProbabilityFailedSave(attacker, defender);
 
             // The probability of getting the number of successful attacks required to destroy a single model
-            return Statistics.ProbabilityMassFunction(numberOfTrials, numberOfSuccesses, probability);
+            return Statistics.SurvivorFunction(numberOfTrials, numberOfSuccesses, probability);
         }
 
         /// <summary>
