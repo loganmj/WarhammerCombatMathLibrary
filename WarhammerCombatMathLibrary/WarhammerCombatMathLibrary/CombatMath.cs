@@ -709,7 +709,7 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// The probability of getting a number of successful, unblocked attacks required to destroy at least a single model from the defending unit.
+        /// The probability of getting a number of successful, unblocked attacks required to destroy at least one model from the defending unit.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
