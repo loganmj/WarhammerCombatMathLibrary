@@ -540,11 +540,12 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Gets the average amount of damage done after all rolls have been completed.
+        /// This is the average amount of gross damage, before any modifers or feel no pains have been accounted for.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetMeanDamage(AttackerDTO? attacker, DefenderDTO? defender)
+        public static double GetMeanDamageGross(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -563,10 +564,11 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Gets the discrete expected total amount of damage, based on the average probability and the amount of damage per attack.
+        /// This is the expected amount of gross damage, before any modifers or feel no pains have been accounted for.
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static int GetExpectedDamage(AttackerDTO? attacker, DefenderDTO? defender)
+        public static int GetExpectedDamageGross(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -585,11 +587,12 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Gets the standard deviation of damage done after all rolls have been completed.
+        /// This is the standard deviation of gross damage, before any modifers or feel no pains have been accounted for.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetStandardDeviationDamage(AttackerDTO? attacker, DefenderDTO? defender)
+        public static double GetStandardDeviationDamageGross(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -603,7 +606,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var adjustedDamage = GetExpectedDamageAdjustedForFeelNoPains(defender, attacker.WeaponDamage);
+            var adjustedDamage = GetAdjustedDamage(defender, attacker.WeaponDamage);
             return GetStandardDeviationFailedSaves(attacker, defender) * adjustedDamage;
         }
 
@@ -611,10 +614,79 @@ namespace WarhammerCombatMathLibrary
         /// Adjusts the given amount of damage based on the expected defender feel no pain rolls.
         /// </summary>
         /// <returns></returns>
-        public static double GetExpectedDamageAdjustedForFeelNoPains(DefenderDTO defender, int damage)
+        public static double GetAdjustedDamage(DefenderDTO defender, int damage)
         {
             var feelNoPainSuccessProbability = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(defender.FeelNoPain));
             return damage * (1 - feelNoPainSuccessProbability);
+        }
+
+        /// <summary>
+        /// Gets the average amount of damage done after all rolls have been completed and after all modifers and feel no pains have been accounted for.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        public static double GetMeanDamageNet(AttackerDTO? attacker, DefenderDTO? defender)
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetMeanDamage() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetMeanDamage() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            return GetMeanFailedSaves(attacker, defender) * attacker.WeaponDamage;
+        }
+
+        /// <summary>
+        /// Gets the discrete expected total amount of damage, after all modifers and feel no pains have been accounted for.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static int GetExpectedDamageNet(AttackerDTO? attacker, DefenderDTO? defender)
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetExpectedDamage() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetExpectedDamage() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            return (int)Math.Floor(GetMeanFailedSaves(attacker, defender) * attacker.WeaponDamage);
+        }
+
+        /// <summary>
+        /// Gets the standard deviation of damage done after all rolls have been completed and after all modifers and feel no pains have been accounted for.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        public static double GetStandardDeviationDamageNet(AttackerDTO? attacker, DefenderDTO? defender)
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetStandardDeviationDamage() | Attacker is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetStandardDeviationDamage() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            var adjustedDamage = GetAdjustedDamage(defender, attacker.WeaponDamage);
+            return GetStandardDeviationFailedSaves(attacker, defender) * adjustedDamage;
         }
 
         /// <summary>
@@ -648,7 +720,7 @@ namespace WarhammerCombatMathLibrary
             var damageThreshold = Math.Max(defender.Wounds, attacker.WeaponDamage);
 
             // Adjust the total damage based on the defender Feel No Pain probability
-            var adjustedTotalDamage = GetExpectedDamageAdjustedForFeelNoPains(defender, totalDamage);
+            var adjustedTotalDamage = GetAdjustedDamage(defender, totalDamage);
 
             // Calculate the maximum possible number of models destroyed
             var modelsDestroyed = (int)Math.Floor(adjustedTotalDamage / damageThreshold);
@@ -677,7 +749,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return GetModelsDestroyed(attacker, defender, GetExpectedDamage(attacker, defender));
+            return GetModelsDestroyed(attacker, defender, GetExpectedDamageGross(attacker, defender));
         }
 
         /// <summary>
@@ -700,7 +772,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var standardDeviationDamage = (int)Math.Floor(GetStandardDeviationDamage(attacker, defender));
+            var standardDeviationDamage = (int)Math.Floor(GetStandardDeviationDamageNet(attacker, defender));
             return GetModelsDestroyed(attacker, defender, standardDeviationDamage);
         }
 
@@ -726,7 +798,7 @@ namespace WarhammerCombatMathLibrary
 
             // Factor in feel no pains by calculating the feel no pain probability,
             // and using that to determine average weapon damage.
-            var adjustedWeaponDamage = GetExpectedDamageAdjustedForFeelNoPains(defender, attacker.WeaponDamage);
+            var adjustedWeaponDamage = GetAdjustedDamage(defender, attacker.WeaponDamage);
 
             // If the result is a decimal, round up to the next highest int value (as it will require another full attack to destroy the model).
             return (int)Math.Ceiling(defender.Wounds / adjustedWeaponDamage);
