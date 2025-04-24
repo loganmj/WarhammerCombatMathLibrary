@@ -20,27 +20,29 @@ namespace WarhammerCombatMathLibrary
         #region Public Methods
 
         /// <summary>
-        /// Returns the success threshold for succeeding a hit roll.
+        /// Returns the success threshold for succeeding on a given die roll, with a given success threshold.
+        /// Note that in Warhammer 40k, a roll of 1 always fails, and a roll of 6 always succeeds.
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
         public static int GetNumberOfSuccessfulResults(int successThreshold)
         {
-            // If the success threshold is greater than 6, there are no successful results
+            // If the success threshold is greater than the number of possible results, then there are no successful results
             if (successThreshold > POSSIBLE_RESULTS_SIX_SIDED_DIE)
             {
                 Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is greater than {POSSIBLE_RESULTS_SIX_SIDED_DIE}, returning 0 ...");
                 return 0;
             }
 
-            // If the success threshold is less than 2, there are no fail results
-            if (successThreshold < 2)
+            // If the success threshold is less than or equal to 0, then there are no successful results
+            if (successThreshold <= 0) 
             {
-                Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is less than two, returning {POSSIBLE_RESULTS_SIX_SIDED_DIE} ...");
-                return POSSIBLE_RESULTS_SIX_SIDED_DIE;
+                Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is less than or equal to 0, returning 0 ...");
+                return 0;
             }
 
-            return POSSIBLE_RESULTS_SIX_SIDED_DIE - (successThreshold - 1);
+            // Calculate the number of possible successful results, capping out at the number of possible results minus one (to account for the guaranteed fail result)
+            return Math.Min(POSSIBLE_RESULTS_SIX_SIDED_DIE - (successThreshold - 1), POSSIBLE_RESULTS_SIX_SIDED_DIE - 1);
         }
 
         /// <summary>
@@ -703,9 +705,14 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
+            // Factor in feel no pains by calculating the feel no pain probability,
+            // and using that to determine average weapon damage.
+            var feelNoPainProbability = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(defender.FeelNoPain));
+            var averageWeaponDamage = attacker.WeaponDamage * (1 - feelNoPainProbability);
+
             // If the result is a decimal, round up to the next highest int value.
             // Can't have a partial attack.
-            return (int)Math.Ceiling((double)defender.Wounds / attacker.WeaponDamage);
+            return (int)Math.Ceiling((double)defender.Wounds / averageWeaponDamage);
         }
 
         /// <summary>
