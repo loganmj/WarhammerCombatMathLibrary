@@ -2317,6 +2317,61 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the case where the defender is null
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedDamage_NullDefender() 
+        {
+            var expected = 0;
+            var actual = CombatMath.GetAdjustedDamage(null, 5);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the input damage is less than or equal to 0.
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedDamage_DamageIsLessThanOrEqualTo0() 
+        {
+            var expected = 0;
+            var actual = CombatMath.GetAdjustedDamage(DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD, 0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedDamage_TestParams1()
+        {
+            var expected = 20;
+            var actual = CombatMath.GetAdjustedDamage(DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD, 20);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedDamage_TestParams2() 
+        {
+            var expected = 13.6667;
+            var actual = Math.Round(CombatMath.GetAdjustedDamage(DEFENDER_VOTANN_CTHONIAN_BESERKS, 20), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedDamage_TestParams3() 
+        {
+            var expected = 6.6667;
+            var actual = Math.Round(CombatMath.GetAdjustedDamage(DEFENDER_DEATH_GUARD_MORTARION, 10), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]

@@ -611,11 +611,27 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Adjusts the given amount of damage based on the expected defender feel no pain rolls.
+        /// Adjusts the given amount of damage based on any defensive modifiers.
         /// </summary>
         /// <returns></returns>
-        public static double GetAdjustedDamage(DefenderDTO defender, int damage)
+        public static double GetAdjustedDamage(DefenderDTO? defender, int damage)
         {
+            // Validate inputs
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetAdjustedDamage() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (damage <= 0)
+            {
+                Debug.WriteLine($"GetAdjustedDamage() | Input damage is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
+
+            // Account for feel no pains
+            // NOTE: Using the average probability for feel no pains is not a perfect way of handling this,
+            // but it is SIGNIFICANTLY less resource intensive than performing calculations for every single feel no pain roll.
             var feelNoPainSuccessProbability = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(defender.FeelNoPain));
             return damage * (1 - feelNoPainSuccessProbability);
         }
