@@ -219,13 +219,13 @@ namespace WarhammerCombatMathLibrary
             if (groupSuccessCount < 1)
             {
                 Debug.WriteLine($"BinomialDistribution() | Group success count is less than 1.");
-                return [new(0, 1)];
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
             }
 
             if (groupSuccessCount > numberOfTrials)
             {
                 Debug.WriteLine($"BinomialDistribution() | Group success count is greater than the total number of trials.");
-                return [new(0, 1)];
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
             }
 
             // Create distribution
@@ -362,13 +362,13 @@ namespace WarhammerCombatMathLibrary
             if (groupSuccessCount < 1)
             {
                 Debug.WriteLine($"LowerCumulativeDistribution() | Group success count is less than 1.");
-                return [new(0, 1)];
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
             }
 
             if (groupSuccessCount > numberOfTrials)
             {
                 Debug.WriteLine($"LowerCumulativeDistribution() | Group success count is greater than the total number of trials.");
-                return [new(0, 1)];
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
             }
 
             var distribution = new List<BinomialOutcome>();
@@ -495,13 +495,13 @@ namespace WarhammerCombatMathLibrary
             if (groupSuccessCount < 1)
             {
                 Debug.WriteLine($"UpperCumulativeDistribution() | Group success count is less than 1.");
-                return [new(0, 1)];
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
             }
 
             if (groupSuccessCount > numberOfTrials)
             {
                 Debug.WriteLine($"UpperCumulativeDistribution() | Group success count is greater than the total number of trials.");
-                return [new(0, 1)];
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
             }
 
             var distribution = new List<BinomialOutcome>();
@@ -613,13 +613,13 @@ namespace WarhammerCombatMathLibrary
             if (groupSuccessCount < 1)
             {
                 Debug.WriteLine($"SurvivorDistribution() | Group success count is less than 1.");
-                return [new(0, 1)];
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
             }
 
             if (groupSuccessCount > numberOfTrials)
             {
                 Debug.WriteLine($"SurvivorDistribution() | Group success count is greater than the total number of trials.");
-                return [new(0, 1)];
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
             }
 
             var distribution = new List<BinomialOutcome>();
