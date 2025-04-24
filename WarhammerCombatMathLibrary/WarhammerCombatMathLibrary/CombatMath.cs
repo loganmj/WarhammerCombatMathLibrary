@@ -710,8 +710,7 @@ namespace WarhammerCombatMathLibrary
             var feelNoPainProbability = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(defender.FeelNoPain));
             var averageWeaponDamage = attacker.WeaponDamage * (1 - feelNoPainProbability);
 
-            // If the result is a decimal, round up to the next highest int value.
-            // Can't have a partial attack.
+            // If the result is a decimal, round up to the next highest int value (as it will require another full attack to destroy the model).
             return (int)Math.Ceiling((double)defender.Wounds / averageWeaponDamage);
         }
 

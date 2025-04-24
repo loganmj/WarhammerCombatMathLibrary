@@ -551,7 +551,8 @@ namespace WarhammerCombatMathLibrary
                 return 1;
             }
 
-            // Perform calculation
+            // Perform calculation by taking 1 minus the lower cumulative probability.
+            // NOTE: Make sure to calculate lower cumulative probability at k-1, since the survivor function must include P(k).
             return 1 - LowerCumulativeProbability(numberOfTrials, successes - 1, probability);
         }
 
