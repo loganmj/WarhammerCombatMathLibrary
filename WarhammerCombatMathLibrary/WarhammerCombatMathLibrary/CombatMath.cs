@@ -549,13 +549,13 @@ namespace WarhammerCombatMathLibrary
         {
             if (attacker == null)
             {
-                Debug.WriteLine($"GetMeanDamage() | Attacker is null. Returning 0 ...");
+                Debug.WriteLine($"GetMeanDamageGross() | Attacker is null. Returning 0 ...");
                 return 0;
             }
 
             if (defender == null)
             {
-                Debug.WriteLine($"GetMeanDamage() | Defender is null. Returning 0 ...");
+                Debug.WriteLine($"GetMeanDamageGross() | Defender is null. Returning 0 ...");
                 return 0;
             }
 
@@ -572,13 +572,13 @@ namespace WarhammerCombatMathLibrary
         {
             if (attacker == null)
             {
-                Debug.WriteLine($"GetExpectedDamage() | Attacker is null. Returning 0 ...");
+                Debug.WriteLine($"GetExpectedDamageGross() | Attacker is null. Returning 0 ...");
                 return 0;
             }
 
             if (defender == null)
             {
-                Debug.WriteLine($"GetExpectedDamage() | Defender is null. Returning 0 ...");
+                Debug.WriteLine($"GetExpectedDamageGross() | Defender is null. Returning 0 ...");
                 return 0;
             }
 
@@ -596,13 +596,13 @@ namespace WarhammerCombatMathLibrary
         {
             if (attacker == null)
             {
-                Debug.WriteLine($"GetStandardDeviationDamage() | Attacker is null. Returning 0 ...");
+                Debug.WriteLine($"GetStandardDeviationDamageGross() | Attacker is null. Returning 0 ...");
                 return 0;
             }
 
             if (defender == null)
             {
-                Debug.WriteLine($"GetStandardDeviationDamage() | Defender is null. Returning 0 ...");
+                Debug.WriteLine($"GetStandardDeviationDamageGross() | Defender is null. Returning 0 ...");
                 return 0;
             }
 
@@ -646,13 +646,13 @@ namespace WarhammerCombatMathLibrary
         {
             if (attacker == null)
             {
-                Debug.WriteLine($"GetMeanDamage() | Attacker is null. Returning 0 ...");
+                Debug.WriteLine($"GetMeanDamageNet() | Attacker is null. Returning 0 ...");
                 return 0;
             }
 
             if (defender == null)
             {
-                Debug.WriteLine($"GetMeanDamage() | Defender is null. Returning 0 ...");
+                Debug.WriteLine($"GetMeanDamageNet() | Defender is null. Returning 0 ...");
                 return 0;
             }
 
@@ -668,13 +668,13 @@ namespace WarhammerCombatMathLibrary
         {
             if (attacker == null)
             {
-                Debug.WriteLine($"GetExpectedDamage() | Attacker is null. Returning 0 ...");
+                Debug.WriteLine($"GetExpectedDamageNet() | Attacker is null. Returning 0 ...");
                 return 0;
             }
 
             if (defender == null)
             {
-                Debug.WriteLine($"GetExpectedDamage() | Defender is null. Returning 0 ...");
+                Debug.WriteLine($"GetExpectedDamageNet() | Defender is null. Returning 0 ...");
                 return 0;
             }
 
@@ -691,13 +691,13 @@ namespace WarhammerCombatMathLibrary
         {
             if (attacker == null)
             {
-                Debug.WriteLine($"GetStandardDeviationDamage() | Attacker is null. Returning 0 ...");
+                Debug.WriteLine($"GetStandardDeviationDamageNet() | Attacker is null. Returning 0 ...");
                 return 0;
             }
 
             if (defender == null)
             {
-                Debug.WriteLine($"GetStandardDeviationDamage() | Defender is null. Returning 0 ...");
+                Debug.WriteLine($"GetStandardDeviationDamageNet() | Defender is null. Returning 0 ...");
                 return 0;
             }
 
