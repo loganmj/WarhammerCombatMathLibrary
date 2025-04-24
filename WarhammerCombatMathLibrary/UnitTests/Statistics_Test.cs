@@ -1113,7 +1113,7 @@ namespace UnitTests
 
             var numberOfTrials = 1;
             var successes = 1;
-            var probability = 0;
+            var probability = -1;
             var actual = Statistics.SurvivorFunction(numberOfTrials, successes, probability);
 
             Assert.AreEqual(expected, Math.Round(actual, 4));

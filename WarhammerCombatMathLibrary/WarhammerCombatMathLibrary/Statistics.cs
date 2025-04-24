@@ -1,5 +1,4 @@
-﻿using MathNet.Numerics.Distributions;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Numerics;
 using WarhammerCombatMathLibrary.Data;
 
@@ -552,8 +551,9 @@ namespace WarhammerCombatMathLibrary
                 return 1;
             }
 
-            var binomial = new Binomial(probability, numberOfTrials);
-            return 1 - binomial.CumulativeDistribution(successes - 1);
+            // Perform calculation by taking 1 minus the lower cumulative probability.
+            // NOTE: Make sure to calculate lower cumulative probability at k-1, since the survivor function must include P(k).
+            return 1 - LowerCumulativeProbability(numberOfTrials, successes - 1, probability);
         }
 
         /// <summary>
