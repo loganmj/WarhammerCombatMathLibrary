@@ -94,7 +94,7 @@ namespace UnitTests
         /// Tests the case where the provided success threshold is lower than 2.
         /// </summary>
         [TestMethod]
-        public void GetNumberOfSuccessfulResults_SuccessThresholdLessThan2()
+        public void GetNumberOfSuccessfulResults_SuccessThresholdLessThan0()
         {
             Assert.AreEqual(0, CombatMath.GetNumberOfSuccessfulResults(-1));
         }
@@ -103,7 +103,7 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetNumberOfSuccessfulResults_SuccessThreshold4()
+        public void GetNumberOfSuccessfulResults_TestParams1()
         {
             Assert.AreEqual(3, CombatMath.GetNumberOfSuccessfulResults(4));
         }
@@ -112,18 +112,18 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetNumberOfSuccessfulResults_SuccessThreshold2()
+        public void GetNumberOfSuccessfulResults_TestParams2()
         {
-            Assert.AreEqual(5, CombatMath.GetNumberOfSuccessfulResults(2));
+            Assert.AreEqual(2, CombatMath.GetNumberOfSuccessfulResults(5));
         }
 
         /// <summary>
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetNumberOfSuccessfulResults_SuccessThreshold5()
+        public void GetNumberOfSuccessfulResults_TestParams3()
         {
-            Assert.AreEqual(2, CombatMath.GetNumberOfSuccessfulResults(5));
+            Assert.AreEqual(5, CombatMath.GetNumberOfSuccessfulResults(1));
         }
 
         /// <summary>
