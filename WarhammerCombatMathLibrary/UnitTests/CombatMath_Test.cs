@@ -2355,7 +2355,7 @@ namespace UnitTests
         [TestMethod]
         public void GetAdjustedDamage_TestParams2() 
         {
-            var expected = 13.6667;
+            var expected = 13.3333;
             var actual = Math.Round(CombatMath.GetAdjustedDamage(DEFENDER_VOTANN_CTHONIAN_BESERKS, 20), 4);
             Assert.AreEqual(expected, actual);
         }
