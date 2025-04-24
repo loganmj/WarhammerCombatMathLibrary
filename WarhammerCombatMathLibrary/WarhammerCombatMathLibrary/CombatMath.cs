@@ -603,7 +603,18 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return GetStandardDeviationFailedSaves(attacker, defender) * attacker.WeaponDamage;
+            var adjustedDamage = GetExpectedDamageAdjustedForFeelNoPains(defender, attacker.WeaponDamage);
+            return GetStandardDeviationFailedSaves(attacker, defender) * adjustedDamage;
+        }
+
+        /// <summary>
+        /// Adjusts the given amount of damage based on the expected defender feel no pain rolls.
+        /// </summary>
+        /// <returns></returns>
+        public static double GetExpectedDamageAdjustedForFeelNoPains(DefenderDTO defender, int damage)
+        {
+            var feelNoPainSuccessProbability = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(defender.FeelNoPain));
+            return damage * (1 - feelNoPainSuccessProbability);
         }
 
         /// <summary>
@@ -627,11 +638,20 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
+            if (totalDamage <= 0) 
+            {
+                Debug.WriteLine($"GetModelsDestroyed() | Total damage is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
+
             // Determine the divisor based on which value is larger: the defender's wounds per model, or the attacker's weapon damage.
             var damageThreshold = Math.Max(defender.Wounds, attacker.WeaponDamage);
 
+            // Adjust the total damage based on the defender Feel No Pain probability
+            var adjustedTotalDamage = GetExpectedDamageAdjustedForFeelNoPains(defender, totalDamage);
+
             // Calculate the maximum possible number of models destroyed
-            var modelsDestroyed = (int)Math.Floor((double)totalDamage / damageThreshold);
+            var modelsDestroyed = (int)Math.Floor(adjustedTotalDamage / damageThreshold);
 
             // Return either the max possible models destroyed, or the total number of defending models, whichever comes first
             return Math.Min(modelsDestroyed, defender.NumberOfModels);
@@ -657,8 +677,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var expectedDamage = GetExpectedDamage(attacker, defender);
-            return GetModelsDestroyed(attacker, defender, expectedDamage);
+            return GetModelsDestroyed(attacker, defender, GetExpectedDamage(attacker, defender));
         }
 
         /// <summary>
@@ -707,44 +726,10 @@ namespace WarhammerCombatMathLibrary
 
             // Factor in feel no pains by calculating the feel no pain probability,
             // and using that to determine average weapon damage.
-            var feelNoPainProbability = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(defender.FeelNoPain));
-            var averageWeaponDamage = attacker.WeaponDamage * (1 - feelNoPainProbability);
+            var adjustedWeaponDamage = GetExpectedDamageAdjustedForFeelNoPains(defender, attacker.WeaponDamage);
 
             // If the result is a decimal, round up to the next highest int value (as it will require another full attack to destroy the model).
-            return (int)Math.Ceiling((double)defender.Wounds / averageWeaponDamage);
-        }
-
-        /// <summary>
-        /// The probability of getting a number of successful, unblocked attacks required to destroy at least one model from the defending unit.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static double GetProbabilityOfDestroyingAtLeastOneModel(AttackerDTO? attacker, DefenderDTO? defender)
-        {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetProbabilityOfDestroyingOneModel() | Attacker is null. Returning 0 ...");
-                return 0;
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetProbabilityOfDestroyingOneModel() | Defender is null. Returning 0 ...");
-                return 0;
-            }
-
-            // Get the total number of attacks
-            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
-
-            // The number of successful, unblocked attacks required to destroy a single model
-            var numberOfSuccesses = GetAttacksRequiredToDestroyOneModel(attacker, defender);
-
-            // The probability of getting a single successful attack
-            var probability = GetProbabilityFailedSave(attacker, defender);
-
-            // The probability of getting the number of successful attacks required to destroy a single model
-            return Statistics.SurvivorFunction(numberOfTrials, numberOfSuccesses, probability);
+            return (int)Math.Ceiling(defender.Wounds / adjustedWeaponDamage);
         }
 
         /// <summary>

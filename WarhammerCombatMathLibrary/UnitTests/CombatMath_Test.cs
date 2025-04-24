@@ -77,6 +77,19 @@ namespace UnitTests
             Wounds = 3
         };
 
+        /// <summary>
+        /// Defense profile for a 5 man squad of Leagues of Votann Cthonian Beserks
+        /// </summary>
+        public static readonly DefenderDTO DEFENDER_VOTANN_CTHONIAN_BESERKS = new()
+        {
+            NumberOfModels = 5,
+            Toughness = 5,
+            ArmorSave = 6,
+            InvulnerableSave = 7,
+            FeelNoPain = 5,
+            Wounds = 2
+        };
+
         #endregion
 
         #region Unit Tests 
