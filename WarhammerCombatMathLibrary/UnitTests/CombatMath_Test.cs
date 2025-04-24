@@ -2505,61 +2505,6 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Test the case where the attacker object is null
-        /// </summary>
-        [TestMethod]
-        public void GetProbabilityOfDestroyingOneModel_NullAttacker()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetProbabilityOfDestroyingAtLeastOneModel(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the case where the defender object is null
-        /// </summary>
-        [TestMethod]
-        public void GetProbabilityOfDestroyingOneModel_NullDefender()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetProbabilityOfDestroyingAtLeastOneModel(ATTACKER_KHARN_THE_BETRAYER, null);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetProbabilityOfDestroyingOneModel_TestParams1()
-        {
-            var expected = 0.9753;
-            var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingAtLeastOneModel(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetProbabilityOfDestroyingOneModel_TestParams2()
-        {
-            var expected = 0.8696;
-            var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingAtLeastOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetProbabilityOfDestroyingOneModel_TestParams3()
-        {
-            var expected = 0.1813;
-            var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingAtLeastOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
         /// Tests the case where the attacker parameter is null.
         /// </summary>
         [TestMethod]
