@@ -266,7 +266,7 @@ namespace UnitTests
                 WeaponSkill = 0
             };
 
-            Assert.AreEqual(1, CombatMath.GetProbabilityOfHit(attacker));
+            Assert.AreEqual(0, CombatMath.GetProbabilityOfHit(attacker));
         }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace UnitTests
                 WeaponSkill = -1
             };
 
-            Assert.AreEqual(1, CombatMath.GetProbabilityOfHit(attacker));
+            Assert.AreEqual(0, CombatMath.GetProbabilityOfHit(attacker));
         }
 
         /// <summary>
