@@ -54,13 +54,14 @@
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"Attacker:\n"
-                   + $"NumberOfModels: {NumberOfModels}\n"
-                   + $"WeaponAttacks: {WeaponFlatAttacks}\n"
-                   + $"WeaponSkill: {WeaponSkill}+\n"
-                   + $"WeaponStrength: {WeaponStrength}\n"
-                   + $"WeaponArmorPierce: -{WeaponArmorPierce}\n"
-                   + $"WeaponDamage: {WeaponDamage}";
+            return $"Attacker: [NumberOfModels: {NumberOfModels}, "
+                   + $"WeaponVariableAttacks: {WeaponVariableAttacks}, "
+                   + $"WeaponVariableAttacksType: {WeaponVariableAttackType}, "
+                   + $"WeaponFlatAttacks: {WeaponFlatAttacks},"
+                   + $"WeaponSkill: {WeaponSkill},"
+                   + $"WeaponStrength: {WeaponStrength},"
+                   + $"WeaponArmorPierce: -{WeaponArmorPierce},"
+                   + $"WeaponDamage: {WeaponDamage}]";
         }
 
         #endregion

@@ -5,7 +5,14 @@
     /// </summary>
     public enum DiceType
     {
-        D3,
-        D6
+        /// <summary>
+        /// Represents a 3 sided dice
+        /// </summary>
+        D3 = 3,
+
+        /// <summary>
+        /// Represents a six sided dice
+        /// </summary>
+        D6 = 6
     }
 }

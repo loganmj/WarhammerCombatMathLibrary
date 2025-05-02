@@ -168,7 +168,7 @@ namespace UnitTests
         public void GetTotalNumberOfAttacks_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetTotalNumberOfAttacks(null);
+            var actual = CombatMath.GetTotalNumberOfFlatAttacks(null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -186,7 +186,7 @@ namespace UnitTests
                 WeaponFlatAttacks = 1
             };
 
-            var actual = CombatMath.GetTotalNumberOfAttacks(attacker);
+            var actual = CombatMath.GetTotalNumberOfFlatAttacks(attacker);
 
             Assert.AreEqual(expected, actual);
         }
@@ -205,7 +205,7 @@ namespace UnitTests
                 WeaponFlatAttacks = 1
             };
 
-            var actual = CombatMath.GetTotalNumberOfAttacks(attacker);
+            var actual = CombatMath.GetTotalNumberOfFlatAttacks(attacker);
 
             Assert.AreEqual(expected, actual);
         }
@@ -224,7 +224,7 @@ namespace UnitTests
                 WeaponFlatAttacks = 0
             };
 
-            var actual = CombatMath.GetTotalNumberOfAttacks(attacker);
+            var actual = CombatMath.GetTotalNumberOfFlatAttacks(attacker);
 
             Assert.AreEqual(expected, actual);
         }
@@ -243,7 +243,7 @@ namespace UnitTests
                 WeaponFlatAttacks = -1
             };
 
-            var actual = CombatMath.GetTotalNumberOfAttacks(attacker);
+            var actual = CombatMath.GetTotalNumberOfFlatAttacks(attacker);
 
             Assert.AreEqual(expected, actual);
         }
@@ -255,7 +255,7 @@ namespace UnitTests
         public void GetTotalNumberOfAttacks_TestParams1()
         {
             var expected = 8;
-            var actual = CombatMath.GetTotalNumberOfAttacks(ATTACKER_KHARN_THE_BETRAYER);
+            var actual = CombatMath.GetTotalNumberOfFlatAttacks(ATTACKER_KHARN_THE_BETRAYER);
             Assert.AreEqual(expected, actual);
         }
 
@@ -266,7 +266,7 @@ namespace UnitTests
         public void GetTotalNumberOfAttacks_TestParams2()
         {
             var expected = 20;
-            var actual = CombatMath.GetTotalNumberOfAttacks(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetTotalNumberOfFlatAttacks(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
 
@@ -277,7 +277,7 @@ namespace UnitTests
         public void GetTotalNumberOfAttacks_TestParams3()
         {
             var expected = 15;
-            var actual = CombatMath.GetTotalNumberOfAttacks(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetTotalNumberOfFlatAttacks(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2320,7 +2320,7 @@ namespace UnitTests
         /// Tests the case where the defender is null
         /// </summary>
         [TestMethod]
-        public void GetAdjustedDamage_NullDefender() 
+        public void GetAdjustedDamage_NullDefender()
         {
             var expected = 0;
             var actual = CombatMath.GetAdjustedDamage(null, 5);
@@ -2331,7 +2331,7 @@ namespace UnitTests
         /// Tests the case where the input damage is less than or equal to 0.
         /// </summary>
         [TestMethod]
-        public void GetAdjustedDamage_DamageIsLessThanOrEqualTo0() 
+        public void GetAdjustedDamage_DamageIsLessThanOrEqualTo0()
         {
             var expected = 0;
             var actual = CombatMath.GetAdjustedDamage(DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD, 0);
@@ -2353,7 +2353,7 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetAdjustedDamage_TestParams2() 
+        public void GetAdjustedDamage_TestParams2()
         {
             var expected = 13.3333;
             var actual = Math.Round(CombatMath.GetAdjustedDamage(DEFENDER_VOTANN_CTHONIAN_BESERKS, 20), 4);
@@ -2364,7 +2364,7 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetAdjustedDamage_TestParams3() 
+        public void GetAdjustedDamage_TestParams3()
         {
             var expected = 6.6667;
             var actual = Math.Round(CombatMath.GetAdjustedDamage(DEFENDER_DEATH_GUARD_MORTARION, 10), 4);

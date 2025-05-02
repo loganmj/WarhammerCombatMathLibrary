@@ -35,7 +35,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // If the success threshold is less than or equal to 0, then there are no successful results
-            if (successThreshold <= 0) 
+            if (successThreshold <= 0)
             {
                 Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is less than or equal to 0, returning 0 ...");
                 return 0;
@@ -46,29 +46,59 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns the total number of attack rolls the attacker is making.
+        /// Returns the total number of variable attack rolls the attacker is making.
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static int GetTotalNumberOfAttacks(AttackerDTO? attacker)
+        public static int GetTotalNumberOfVariableAttacks(AttackerDTO? attacker)
+        {
+            // Validate inputs
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetTotalNumberOfVariableAttacks() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
+            if (attacker.NumberOfModels < 1)
+            {
+                Debug.WriteLine($"GetTotalNumberOfVariableAttacks() | Number of models is less than 1, returning 0 ...");
+                return 0;
+            }
+
+            if (attacker.WeaponVariableAttacks < 1)
+            {
+                Debug.WriteLine($"GetTotalNumberOfVariableAttacks() | Weapon Variable Attacks is less than 1, returning 0 ...");
+                return 0;
+            }
+
+            // Perform calculation
+            return attacker.NumberOfModels * attacker.WeaponFlatAttacks;
+        }
+
+        /// <summary>
+        /// Returns the total number of flat attack rolls the attacker is making.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static int GetTotalNumberOfFlatAttacks(AttackerDTO? attacker)
         {
             // If attacker parameter is null, return 0
             if (attacker == null)
             {
-                Debug.WriteLine($"GetTotalNumberOfAttacks() | Attacker is null, returning 0 ...");
+                Debug.WriteLine($"GetTotalNumberOfFlatAttacks() | Attacker is null, returning 0 ...");
                 return 0;
             }
 
             // If either the number of models or the weapon attacks is less than 1, return 0.
             if (attacker.NumberOfModels < 1)
             {
-                Debug.WriteLine($"GetTotalNumberOfAttacks() | Number of models is less than 1, returning 0 ...");
+                Debug.WriteLine($"GetTotalNumberOfFlatAttacks() | Number of models is less than 1, returning 0 ...");
                 return 0;
             }
 
             if (attacker.WeaponFlatAttacks < 1)
             {
-                Debug.WriteLine($"GetTotalNumberOfAttacks() | Weapon Attacks is less than 1, returning 0 ...");
+                Debug.WriteLine($"GetTotalNumberOfFlatAttacks() | Weapon Flat Attacks is less than 1, returning 0 ...");
                 return 0;
             }
 
@@ -104,7 +134,10 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.Mean(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
+            var averageVariableAttacks = Statistics.Mean((int)attacker.WeaponVariableAttackType, GetProbabilityOfHit(attacker)) * GetTotalNumberOfVariableAttacks(attacker);
+            var averageFlatAttacks = Statistics.Mean(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityOfHit(attacker));
+
+            return averageVariableAttacks + averageFlatAttacks;
         }
 
         /// <summary>
@@ -136,7 +169,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.StandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityOfHit(attacker));
+            return Statistics.StandardDeviation(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityOfHit(attacker));
         }
 
         /// <summary>
@@ -151,7 +184,7 @@ namespace WarhammerCombatMathLibrary
                 return [];
             }
 
-            var totalAttacks = GetTotalNumberOfAttacks(attacker);
+            var totalAttacks = GetTotalNumberOfFlatAttacks(attacker);
             var probabilityOfHit = GetProbabilityOfHit(attacker);
             return Statistics.BinomialDistribution(totalAttacks, probabilityOfHit);
         }
@@ -169,7 +202,7 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome>();
             }
 
-            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var numberOfTrials = GetTotalNumberOfFlatAttacks(attacker);
             var probability = GetProbabilityOfHit(attacker);
             return Statistics.SurvivorDistribution(numberOfTrials, probability);
         }
@@ -273,7 +306,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.Mean(GetTotalNumberOfAttacks(attacker), GetProbabilityWound(attacker, defender));
+            return Statistics.Mean(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityWound(attacker, defender));
         }
 
         /// <summary>
@@ -318,7 +351,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.StandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityWound(attacker, defender));
+            return Statistics.StandardDeviation(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityWound(attacker, defender));
         }
 
         /// <summary>
@@ -341,7 +374,7 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome>();
             }
 
-            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var numberOfTrials = GetTotalNumberOfFlatAttacks(attacker);
             var probability = GetProbabilityWound(attacker, defender);
             return Statistics.BinomialDistribution(numberOfTrials, probability);
         }
@@ -365,7 +398,7 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome>();
             }
 
-            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var numberOfTrials = GetTotalNumberOfFlatAttacks(attacker);
             var probability = GetProbabilityWound(attacker, defender);
             return Statistics.SurvivorDistribution(numberOfTrials, probability);
         }
@@ -441,7 +474,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.Mean(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
+            return Statistics.Mean(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
         }
 
         /// <summary>
@@ -486,7 +519,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.StandardDeviation(GetTotalNumberOfAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
+            return Statistics.StandardDeviation(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
         }
 
         /// <summary>
@@ -509,7 +542,7 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome>();
             }
 
-            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var numberOfTrials = GetTotalNumberOfFlatAttacks(attacker);
             var probability = GetProbabilityFailedSave(attacker, defender);
             return Statistics.BinomialDistribution(numberOfTrials, probability);
         }
@@ -533,7 +566,7 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome>();
             }
 
-            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var numberOfTrials = GetTotalNumberOfFlatAttacks(attacker);
             var probability = GetProbabilityFailedSave(attacker, defender);
             return Statistics.SurvivorDistribution(numberOfTrials, probability);
         }
@@ -728,7 +761,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            if (totalDamage <= 0) 
+            if (totalDamage <= 0)
             {
                 Debug.WriteLine($"GetModelsDestroyed() | Total damage is less than or equal to 0. Returning 0 ...");
                 return 0;
@@ -843,7 +876,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Use the alternate binomial calculation that takes into account requiring groups of successful die rolls to destroy a single model
-            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var numberOfTrials = GetTotalNumberOfFlatAttacks(attacker);
             var probability = GetProbabilityFailedSave(attacker, defender);
             var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(attacker, defender);
             return Statistics.BinomialDistribution(numberOfTrials, probability, groupSuccessCount);
@@ -870,7 +903,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Use the alternate binomial calculation that takes into account requiring groups of successful die rolls to destroy a single model
-            var numberOfTrials = GetTotalNumberOfAttacks(attacker);
+            var numberOfTrials = GetTotalNumberOfFlatAttacks(attacker);
             var probability = GetProbabilityFailedSave(attacker, defender);
             var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(attacker, defender);
             return Statistics.SurvivorDistribution(numberOfTrials, probability, groupSuccessCount);
