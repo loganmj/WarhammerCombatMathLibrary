@@ -52,6 +52,36 @@ namespace UnitTests
         };
 
         /// <summary>
+        /// Attack profile for a World Eaters Forgefiend.
+        /// </summary>
+        public static readonly AttackerDTO ATTACKER_WORLD_EATERS_FORGEFIEND = new()
+        {
+            NumberOfModels = 1,
+            WeaponScalarOfVariableAttacks = 3,
+            WeaponVariableAttackType = DiceType.D3,
+            WeaponFlatAttacks = 0,
+            WeaponSkill = 3,
+            WeaponStrength = 10,
+            WeaponArmorPierce = 3,
+            WeaponDamage = 3
+        };
+
+        /// <summary>
+        /// Attack profile for a unit of World Eaters Chaos Spawn.
+        /// </summary>
+        public static readonly AttackerDTO ATTACKER_WORLD_EATERS_CHAOS_SPAWN = new()
+        {
+            NumberOfModels = 2,
+            WeaponScalarOfVariableAttacks = 1,
+            WeaponVariableAttackType = DiceType.D6,
+            WeaponFlatAttacks = 2,
+            WeaponSkill = 4,
+            WeaponStrength = 6,
+            WeaponArmorPierce = 1,
+            WeaponDamage = 2
+        };
+
+        /// <summary>
         /// Defense profile for a 10 man squad of Space Marine Intercessors
         /// </summary>
         public static readonly DefenderDTO DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD = new()
@@ -78,16 +108,16 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Defense profile for a 5 man squad of Leagues of Votann Cthonian Beserks
+        /// Defense profile for a unit of World Eaters Chaos Spawn
         /// </summary>
-        public static readonly DefenderDTO DEFENDER_VOTANN_CTHONIAN_BESERKS = new()
+        public static readonly DefenderDTO DEFENDER_WORLD_EATERS_CHAOS_SPAWN = new()
         {
-            NumberOfModels = 5,
+            NumberOfModels = 2,
             Toughness = 5,
-            ArmorSave = 6,
+            ArmorSave = 4,
             InvulnerableSave = 7,
             FeelNoPain = 5,
-            Wounds = 2
+            Wounds = 4
         };
 
         /// <summary>
@@ -113,7 +143,9 @@ namespace UnitTests
         [TestMethod]
         public void GetNumberOfSuccessfulResults_SuccessThresholdGreaterThan6()
         {
-            Assert.AreEqual(0, CombatMath.GetNumberOfSuccessfulResults(7));
+            var expected = 0;
+            var actual = CombatMath.GetNumberOfSuccessfulResults(7);
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -165,7 +197,127 @@ namespace UnitTests
         /// Tests the case where the attacker has 0 models.
         /// </summary>
         [TestMethod]
-        public void GetTotalNumberOfAttacks_NullAttacker()
+        public void GetScalarValueOfVariableAttacks_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetScalarValueOfVariableAttacks(null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has 0 models.
+        /// </summary>
+        [TestMethod]
+        public void GetScalarValueOfVariableAttacks_ZeroModels()
+        {
+            var expected = 0;
+
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 0,
+                WeaponFlatAttacks = 1
+            };
+
+            var actual = CombatMath.GetScalarValueOfVariableAttacks(attacker);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has a negative number of models.
+        /// </summary>
+        [TestMethod]
+        public void GetScalarValueOfVariableAttacks_NegativeNumberOfModels()
+        {
+            var expected = 0;
+
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = -1,
+                WeaponFlatAttacks = 1
+            };
+
+            var actual = CombatMath.GetScalarValueOfVariableAttacks(attacker);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has 0 weapon attacks.
+        /// </summary>
+        [TestMethod]
+        public void GetScalarValueOfVariableAttacks_ZeroWeaponAttacks()
+        {
+            var expected = 0;
+
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponScalarOfVariableAttacks = 0
+            };
+
+            var actual = CombatMath.GetScalarValueOfVariableAttacks(attacker);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has a negative number of weapon attacks.
+        /// </summary>
+        [TestMethod]
+        public void GetScalarValueOfVariableAttacks_NegativeWeaponAttacks()
+        {
+            var expected = 0;
+
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = -1
+            };
+
+            var actual = CombatMath.GetScalarValueOfVariableAttacks(attacker);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetScalarValueOfVariableAttacks_TestParams1()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetScalarValueOfVariableAttacks(ATTACKER_KHARN_THE_BETRAYER);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetScalarValueOfVariableAttacks_TestParams2()
+        {
+            var expected = 2;
+            var actual = CombatMath.GetScalarValueOfVariableAttacks(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetScalarValueOfVariableAttacks_TestParams3()
+        {
+            var expected = 3;
+            var actual = CombatMath.GetScalarValueOfVariableAttacks(ATTACKER_WORLD_EATERS_FORGEFIEND);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has 0 models.
+        /// </summary>
+        [TestMethod]
+        public void GetTotalNumberOfFlatAttacks_NullAttacker()
         {
             var expected = 0;
             var actual = CombatMath.GetTotalNumberOfFlatAttacks(null);
@@ -176,7 +328,7 @@ namespace UnitTests
         /// Tests the case where the attacker has 0 models.
         /// </summary>
         [TestMethod]
-        public void GetTotalNumberOfAttacks_ZeroModels()
+        public void GetTotalNumberOfFlatAttacks_ZeroModels()
         {
             var expected = 0;
 
@@ -195,7 +347,7 @@ namespace UnitTests
         /// Tests the case where the attacker has a negative number of models.
         /// </summary>
         [TestMethod]
-        public void GetTotalNumberOfAttacks_NegativeNumberOfModels()
+        public void GetTotalNumberOfFlatAttacks_NegativeNumberOfModels()
         {
             var expected = 0;
 
@@ -214,7 +366,7 @@ namespace UnitTests
         /// Tests the case where the attacker has 0 weapon attacks.
         /// </summary>
         [TestMethod]
-        public void GetTotalNumberOfAttacks_ZeroWeaponAttacks()
+        public void GetTotalNumberOfFlatAttacks_ZeroWeaponAttacks()
         {
             var expected = 0;
 
@@ -233,7 +385,7 @@ namespace UnitTests
         /// Tests the case where the attacker has a negative number of weapon attacks.
         /// </summary>
         [TestMethod]
-        public void GetTotalNumberOfAttacks_NegativeWeaponAttacks()
+        public void GetTotalNumberOfFlatAttacks_NegativeWeaponAttacks()
         {
             var expected = 0;
 
@@ -252,7 +404,7 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetTotalNumberOfAttacks_TestParams1()
+        public void GetTotalNumberOfFlatAttacks_TestParams1()
         {
             var expected = 8;
             var actual = CombatMath.GetTotalNumberOfFlatAttacks(ATTACKER_KHARN_THE_BETRAYER);
@@ -263,7 +415,7 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetTotalNumberOfAttacks_TestParams2()
+        public void GetTotalNumberOfFlatAttacks_TestParams2()
         {
             var expected = 20;
             var actual = CombatMath.GetTotalNumberOfFlatAttacks(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
@@ -274,7 +426,7 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetTotalNumberOfAttacks_TestParams3()
+        public void GetTotalNumberOfFlatAttacks_TestParams3()
         {
             var expected = 15;
             var actual = CombatMath.GetTotalNumberOfFlatAttacks(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD);
@@ -2356,7 +2508,7 @@ namespace UnitTests
         public void GetAdjustedDamage_TestParams2()
         {
             var expected = 13.3333;
-            var actual = Math.Round(CombatMath.GetAdjustedDamage(DEFENDER_VOTANN_CTHONIAN_BESERKS, 20), 4);
+            var actual = Math.Round(CombatMath.GetAdjustedDamage(DEFENDER_WORLD_EATERS_CHAOS_SPAWN, 20), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2410,8 +2562,8 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanDamageNet_TestParams2()
         {
-            var expected = 4.4444;
-            var actual = Math.Round(CombatMath.GetMeanDamageNet(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_VOTANN_CTHONIAN_BESERKS), 4);
+            var expected = 2.963;
+            var actual = Math.Round(CombatMath.GetMeanDamageNet(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2465,8 +2617,8 @@ namespace UnitTests
         [TestMethod]
         public void GetExpectedDamageNet_TestParams2()
         {
-            var expected = 4;
-            var actual = CombatMath.GetExpectedDamageNet(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_VOTANN_CTHONIAN_BESERKS);
+            var expected = 2;
+            var actual = CombatMath.GetExpectedDamageNet(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2520,8 +2672,8 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationDamageNet_TestParams2()
         {
-            var expected = 1.2395;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamageNet(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_VOTANN_CTHONIAN_BESERKS), 4);
+            var expected = 1.0591;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamageNet(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN), 4);
             Assert.AreEqual(expected, actual);
         }
 

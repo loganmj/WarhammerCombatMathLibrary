@@ -13,9 +13,9 @@
         public int NumberOfModels { get; set; }
 
         /// <summary>
-        /// The number of variable die roll attacks that the attacker gets.
+        /// The scalar number of variable attacks that the attacker gets.
         /// </summary>
-        public int WeaponVariableAttacks { get; set; }
+        public int WeaponScalarOfVariableAttacks { get; set; }
 
         /// <summary>
         /// The dice type used to determine the variable number of attacks.
@@ -55,7 +55,7 @@
         public override string ToString()
         {
             return $"Attacker: [NumberOfModels: {NumberOfModels}, "
-                   + $"WeaponVariableAttacks: {WeaponVariableAttacks}, "
+                   + $"WeaponVariableAttacks: {WeaponScalarOfVariableAttacks}, "
                    + $"WeaponVariableAttacksType: {WeaponVariableAttackType}, "
                    + $"WeaponFlatAttacks: {WeaponFlatAttacks},"
                    + $"WeaponSkill: {WeaponSkill},"

@@ -46,11 +46,11 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns the total number of variable attack rolls the attacker is making.
+        /// Returns the scalar value of variable attack rolls the attacker is making.
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static int GetTotalNumberOfVariableAttacks(AttackerDTO? attacker)
+        public static int GetScalarValueOfVariableAttacks(AttackerDTO? attacker)
         {
             // Validate inputs
             if (attacker == null)
@@ -65,14 +65,14 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            if (attacker.WeaponVariableAttacks < 1)
+            if (attacker.WeaponScalarOfVariableAttacks < 1)
             {
                 Debug.WriteLine($"GetTotalNumberOfVariableAttacks() | Weapon Variable Attacks is less than 1, returning 0 ...");
                 return 0;
             }
 
             // Perform calculation
-            return attacker.NumberOfModels * attacker.WeaponFlatAttacks;
+            return attacker.NumberOfModels * attacker.WeaponScalarOfVariableAttacks;
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageVariableAttacks = Statistics.Mean((int)attacker.WeaponVariableAttackType, GetProbabilityOfHit(attacker)) * GetTotalNumberOfVariableAttacks(attacker);
+            var averageVariableAttacks = Statistics.Mean((int)attacker.WeaponVariableAttackType, GetProbabilityOfHit(attacker)) * GetScalarValueOfVariableAttacks(attacker);
             var averageFlatAttacks = Statistics.Mean(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityOfHit(attacker));
 
             return averageVariableAttacks + averageFlatAttacks;
