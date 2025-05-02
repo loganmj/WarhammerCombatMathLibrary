@@ -43,6 +43,33 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Calculates the average result from the number of possible results.
+        /// </summary>
+        /// <param name="numberOfPossibleResults"></param>
+        /// <returns></returns>
+        public static int AverageResult(int numberOfPossibleResults)
+        {
+            // Validate inputs
+            if (numberOfPossibleResults <= 0)
+            {
+                return 0;
+            }
+
+            // Use formula for adding natural numbers from 1 to n
+            var sum = (double)(numberOfPossibleResults * (numberOfPossibleResults + 1)) / 2;
+            var average = (int)Math.Round(((double)sum / numberOfPossibleResults));
+
+            // Debug
+            Debug.WriteLine($"Calculating average of {numberOfPossibleResults} results ...");
+            Debug.WriteLine($"Sum of Results: {sum}");
+            Debug.WriteLine($"Average of Results: Sum/Total = {sum} / {numberOfPossibleResults} = {average}");
+
+            // Calcualte average
+            return average;
+
+        }
+
+        /// <summary>
         /// Calculates the binomial coefficient, determining the number of combinations of k elements
         /// in a population of n, independent of order.
         /// </summary>

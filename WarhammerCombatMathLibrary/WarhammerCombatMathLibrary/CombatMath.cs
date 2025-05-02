@@ -134,10 +134,17 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageVariableAttacks = Statistics.Mean((int)attacker.WeaponVariableAttackType, GetProbabilityOfHit(attacker)) * GetScalarValueOfVariableAttacks(attacker);
-            var averageFlatAttacks = Statistics.Mean(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityOfHit(attacker));
+            var averageNumberOfVariableAttacks = Statistics.AverageResult((int)attacker.WeaponVariableAttackType) * GetScalarValueOfVariableAttacks(attacker);
+            var averageHitsWithVariableAttacks = Statistics.Mean(averageNumberOfVariableAttacks, GetProbabilityOfHit(attacker));
+            var averageHitsWithFlatAttacks = Statistics.Mean(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityOfHit(attacker));
 
-            return averageVariableAttacks + averageFlatAttacks;
+            // DEBUG
+            Debug.WriteLine($"Average Number of Variable Attacks: {averageNumberOfVariableAttacks}");
+            Debug.WriteLine($"Average Hits with Variable Attacks: {averageHitsWithVariableAttacks}");
+            Debug.WriteLine($"Average Hits with Flat Attacks: {averageHitsWithFlatAttacks}");
+            Debug.WriteLine($"Mean Hits: {averageHitsWithVariableAttacks + averageHitsWithFlatAttacks}");
+
+            return averageHitsWithVariableAttacks + averageHitsWithFlatAttacks;
         }
 
         /// <summary>

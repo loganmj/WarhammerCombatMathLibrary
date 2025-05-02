@@ -545,8 +545,20 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanHits_TestParams3()
         {
-            var expected = 7.5;
-            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var expected = 4;
+            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_WORLD_EATERS_FORGEFIEND), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanHits_TestParams4()
+        {
+            var expected = 6;
+            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN), 4);
 
             Assert.AreEqual(expected, actual);
         }
