@@ -606,7 +606,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
+            // Adjust the damage to account for defensive modifiers (e.g., feel no pain)
             var adjustedDamage = GetAdjustedDamage(defender, attacker.WeaponDamage);
+
             return GetStandardDeviationFailedSaves(attacker, defender) * adjustedDamage;
         }
 
