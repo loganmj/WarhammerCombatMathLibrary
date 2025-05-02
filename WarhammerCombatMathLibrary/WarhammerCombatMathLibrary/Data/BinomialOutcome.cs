@@ -19,6 +19,30 @@
 
         #endregion
 
+        #region Constructors
+
+        /// <summary>
+        /// Parameterless constructor. Sets properties to default values.
+        /// </summary>
+        public BinomialOutcome()
+        {
+            Successes = 0;
+            Probability = 0;
+        }
+
+        /// <summary>
+        /// Constructs binomial data with given property values.
+        /// </summary>
+        /// <param name="successes"></param>
+        /// <param name="probability"></param>
+        public BinomialOutcome(int successes, double probability)
+        {
+            Successes = successes;
+            Probability = probability;
+        }
+
+        #endregion
+
         #region Public Methods
 
         /// <inheritdoc/>
