@@ -77,6 +77,32 @@ namespace UnitTests
             Wounds = 3
         };
 
+        /// <summary>
+        /// Defense profile for a 5 man squad of Leagues of Votann Cthonian Beserks
+        /// </summary>
+        public static readonly DefenderDTO DEFENDER_VOTANN_CTHONIAN_BESERKS = new()
+        {
+            NumberOfModels = 5,
+            Toughness = 5,
+            ArmorSave = 6,
+            InvulnerableSave = 7,
+            FeelNoPain = 5,
+            Wounds = 2
+        };
+
+        /// <summary>
+        /// Defense profile for Mortarian, primarch of the Death Guard
+        /// </summary>
+        public static readonly DefenderDTO DEFENDER_DEATH_GUARD_MORTARION = new()
+        {
+            NumberOfModels = 1,
+            Toughness = 12,
+            ArmorSave = 2,
+            InvulnerableSave = 4,
+            FeelNoPain = 5,
+            Wounds = 16
+        };
+
         #endregion
 
         #region Unit Tests 
@@ -91,10 +117,19 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the case where the provided success threshold is 0.
+        /// </summary>
+        [TestMethod]
+        public void GetNumberOfSuccessfulResults_SuccessThreshold0()
+        {
+            Assert.AreEqual(0, CombatMath.GetNumberOfSuccessfulResults(0));
+        }
+
+        /// <summary>
         /// Tests the case where the provided success threshold is lower than 2.
         /// </summary>
         [TestMethod]
-        public void GetNumberOfSuccessfulResults_SuccessThresholdLessThan2()
+        public void GetNumberOfSuccessfulResults_SuccessThresholdLessThan0()
         {
             Assert.AreEqual(0, CombatMath.GetNumberOfSuccessfulResults(-1));
         }
@@ -103,7 +138,7 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetNumberOfSuccessfulResults_SuccessThreshold4()
+        public void GetNumberOfSuccessfulResults_TestParams1()
         {
             Assert.AreEqual(3, CombatMath.GetNumberOfSuccessfulResults(4));
         }
@@ -112,18 +147,18 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetNumberOfSuccessfulResults_SuccessThreshold2()
+        public void GetNumberOfSuccessfulResults_TestParams2()
         {
-            Assert.AreEqual(5, CombatMath.GetNumberOfSuccessfulResults(2));
+            Assert.AreEqual(2, CombatMath.GetNumberOfSuccessfulResults(5));
         }
 
         /// <summary>
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetNumberOfSuccessfulResults_SuccessThreshold5()
+        public void GetNumberOfSuccessfulResults_TestParams3()
         {
-            Assert.AreEqual(2, CombatMath.GetNumberOfSuccessfulResults(5));
+            Assert.AreEqual(5, CombatMath.GetNumberOfSuccessfulResults(1));
         }
 
         /// <summary>
@@ -2120,10 +2155,10 @@ namespace UnitTests
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]
-        public void GetMeanDamage_NullAttacker()
+        public void GetMeanDamageGross_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetMeanDamage(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetMeanDamageGross(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2131,10 +2166,10 @@ namespace UnitTests
         /// Test the case where the defender object is null
         /// </summary>
         [TestMethod]
-        public void GetMeanDamage_NullDefender()
+        public void GetMeanDamageGross_NullDefender()
         {
             var expected = 0;
-            var actual = CombatMath.GetMeanDamage(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetMeanDamageGross(ATTACKER_KHARN_THE_BETRAYER, null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2142,10 +2177,10 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetMeanDamage_TestParams1()
+        public void GetMeanDamageGross_TestParams1()
         {
             var expected = 8.8889;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDamageGross(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2153,10 +2188,10 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetMeanDamage_TestParams2()
+        public void GetMeanDamageGross_TestParams2()
         {
             var expected = 3.3333;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDamageGross(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2164,10 +2199,10 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetMeanDamage_TestParams3()
+        public void GetMeanDamageGross_TestParams3()
         {
             var expected = 1.4815;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDamageGross(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2175,10 +2210,10 @@ namespace UnitTests
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]
-        public void GetExpectedDamage_NullAttacker()
+        public void GetExpectedDamageGross_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetExpectedDamage(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDamageGross(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2186,10 +2221,10 @@ namespace UnitTests
         /// Test the case where the defender object is null
         /// </summary>
         [TestMethod]
-        public void GetExpectedDamage_NullDefender()
+        public void GetExpectedDamageGross_NullDefender()
         {
             var expected = 0;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetExpectedDamageGross(ATTACKER_KHARN_THE_BETRAYER, null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2197,10 +2232,10 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetExpectedDamage_TestParams1()
+        public void GetExpectedDamageGross_TestParams1()
         {
             var expected = 8;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDamageGross(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2208,10 +2243,10 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetExpectedDamage_TestParams2()
+        public void GetExpectedDamageGross_TestParams2()
         {
             var expected = 3;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDamageGross(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2219,10 +2254,10 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetExpectedDamage_TestParams3()
+        public void GetExpectedDamageGross_TestParams3()
         {
             var expected = 1;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetExpectedDamageGross(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2230,10 +2265,10 @@ namespace UnitTests
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationDamage_NullAttacker()
+        public void GetStandardDeviationDamageGross_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDamage(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDamageGross(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2241,10 +2276,10 @@ namespace UnitTests
         /// Test the case where the defender object is null
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationDamage_NullDefender()
+        public void GetStandardDeviationDamageGross_NullDefender()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDamage(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetStandardDeviationDamageGross(ATTACKER_KHARN_THE_BETRAYER, null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2252,10 +2287,10 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationDamage_TestParams1()
+        public void GetStandardDeviationDamageGross_TestParams1()
         {
             var expected = 4.0976;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamageGross(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2263,10 +2298,10 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationDamage_TestParams2()
+        public void GetStandardDeviationDamageGross_TestParams2()
         {
             var expected = 1.6667;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamageGross(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2274,10 +2309,230 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationDamage_TestParams3()
+        public void GetStandardDeviationDamageGross_TestParams3()
         {
             var expected = 1.1712;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamageGross(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender is null
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedDamage_NullDefender() 
+        {
+            var expected = 0;
+            var actual = CombatMath.GetAdjustedDamage(null, 5);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the input damage is less than or equal to 0.
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedDamage_DamageIsLessThanOrEqualTo0() 
+        {
+            var expected = 0;
+            var actual = CombatMath.GetAdjustedDamage(DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD, 0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedDamage_TestParams1()
+        {
+            var expected = 20;
+            var actual = CombatMath.GetAdjustedDamage(DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD, 20);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedDamage_TestParams2() 
+        {
+            var expected = 13.3333;
+            var actual = Math.Round(CombatMath.GetAdjustedDamage(DEFENDER_VOTANN_CTHONIAN_BESERKS, 20), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetAdjustedDamage_TestParams3() 
+        {
+            var expected = 6.6667;
+            var actual = Math.Round(CombatMath.GetAdjustedDamage(DEFENDER_DEATH_GUARD_MORTARION, 10), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamageNet_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetMeanDamageNet(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamageNet_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetMeanDamageNet(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamageNet_TestParams1()
+        {
+            var expected = 8.8889;
+            var actual = Math.Round(CombatMath.GetMeanDamageNet(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamageNet_TestParams2()
+        {
+            var expected = 4.4444;
+            var actual = Math.Round(CombatMath.GetMeanDamageNet(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_VOTANN_CTHONIAN_BESERKS), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamageNet_TestParams3()
+        {
+            var expected = 1.6667;
+            var actual = Math.Round(CombatMath.GetMeanDamageNet(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_DEATH_GUARD_MORTARION), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamageNet_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetExpectedDamageNet(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamageNet_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetExpectedDamageNet(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamageNet_TestParams1()
+        {
+            var expected = 8;
+            var actual = CombatMath.GetExpectedDamageNet(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamageNet_TestParams2()
+        {
+            var expected = 4;
+            var actual = CombatMath.GetExpectedDamageNet(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_VOTANN_CTHONIAN_BESERKS);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamageNet_TestParams3()
+        {
+            var expected = 1;
+            var actual = CombatMath.GetExpectedDamageNet(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_DEATH_GUARD_MORTARION);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamageNet_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetStandardDeviationDamageNet(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamageNet_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetStandardDeviationDamageNet(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamageNet_TestParams1()
+        {
+            var expected = 4.0976;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamageNet(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamageNet_TestParams2()
+        {
+            var expected = 1.2395;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamageNet(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_VOTANN_CTHONIAN_BESERKS), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamageNet_TestParams3()
+        {
+            var expected = 1.438;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamageNet(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_DEATH_GUARD_MORTARION), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2501,61 +2756,6 @@ namespace UnitTests
         {
             var expected = 3;
             var actual = CombatMath.GetAttacksRequiredToDestroyOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the case where the attacker object is null
-        /// </summary>
-        [TestMethod]
-        public void GetProbabilityOfDestroyingOneModel_NullAttacker()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetProbabilityOfDestroyingAtLeastOneModel(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the case where the defender object is null
-        /// </summary>
-        [TestMethod]
-        public void GetProbabilityOfDestroyingOneModel_NullDefender()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetProbabilityOfDestroyingAtLeastOneModel(ATTACKER_KHARN_THE_BETRAYER, null);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetProbabilityOfDestroyingOneModel_TestParams1()
-        {
-            var expected = 0.9753;
-            var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingAtLeastOneModel(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetProbabilityOfDestroyingOneModel_TestParams2()
-        {
-            var expected = 0.8696;
-            var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingAtLeastOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetProbabilityOfDestroyingOneModel_TestParams3()
-        {
-            var expected = 0.1813;
-            var actual = Math.Round(CombatMath.GetProbabilityOfDestroyingAtLeastOneModel(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
 
