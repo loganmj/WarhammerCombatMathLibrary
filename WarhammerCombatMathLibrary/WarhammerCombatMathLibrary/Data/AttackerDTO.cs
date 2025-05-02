@@ -13,9 +13,19 @@
         public int NumberOfModels { get; set; }
 
         /// <summary>
-        /// The number of attacks the attacker is making.
+        /// The number of variable die roll attacks that the attacker gets.
         /// </summary>
-        public int WeaponAttacks { get; set; }
+        public int WeaponVariableAttacks { get; set; }
+
+        /// <summary>
+        /// The dice type used to determine the variable number of attacks.
+        /// </summary>
+        public DiceType WeaponVariableAttackType { get; set; }
+
+        /// <summary>
+        /// The number of flat attacks the attacker gets.
+        /// </summary>
+        public int WeaponFlatAttacks { get; set; }
 
         /// <summary>
         /// The ballistic/weapon skill threshold value of the attacker.
@@ -46,7 +56,7 @@
         {
             return $"Attacker:\n"
                    + $"NumberOfModels: {NumberOfModels}\n"
-                   + $"WeaponAttacks: {WeaponAttacks}\n"
+                   + $"WeaponAttacks: {WeaponFlatAttacks}\n"
                    + $"WeaponSkill: {WeaponSkill}+\n"
                    + $"WeaponStrength: {WeaponStrength}\n"
                    + $"WeaponArmorPierce: -{WeaponArmorPierce}\n"

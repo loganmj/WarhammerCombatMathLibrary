@@ -66,14 +66,14 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            if (attacker.WeaponAttacks < 1)
+            if (attacker.WeaponFlatAttacks < 1)
             {
                 Debug.WriteLine($"GetTotalNumberOfAttacks() | Weapon Attacks is less than 1, returning 0 ...");
                 return 0;
             }
 
             // Perform calculation
-            return attacker.NumberOfModels * attacker.WeaponAttacks;
+            return attacker.NumberOfModels * attacker.WeaponFlatAttacks;
         }
 
         /// <summary>

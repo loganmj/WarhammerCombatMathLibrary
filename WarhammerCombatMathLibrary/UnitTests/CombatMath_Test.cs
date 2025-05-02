@@ -18,7 +18,7 @@ namespace UnitTests
         public static readonly AttackerDTO ATTACKER_KHARN_THE_BETRAYER = new()
         {
             NumberOfModels = 1,
-            WeaponAttacks = 8,
+            WeaponFlatAttacks = 8,
             WeaponSkill = 2,
             WeaponStrength = 6,
             WeaponArmorPierce = 2,
@@ -31,7 +31,7 @@ namespace UnitTests
         public static readonly AttackerDTO ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD = new()
         {
             NumberOfModels = 10,
-            WeaponAttacks = 2,
+            WeaponFlatAttacks = 2,
             WeaponSkill = 3,
             WeaponStrength = 4,
             WeaponArmorPierce = 1,
@@ -44,7 +44,7 @@ namespace UnitTests
         public static readonly AttackerDTO ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD = new()
         {
             NumberOfModels = 5,
-            WeaponAttacks = 3,
+            WeaponFlatAttacks = 3,
             WeaponSkill = 4,
             WeaponStrength = 8,
             WeaponArmorPierce = 2,
@@ -183,7 +183,7 @@ namespace UnitTests
             var attacker = new AttackerDTO()
             {
                 NumberOfModels = 0,
-                WeaponAttacks = 1
+                WeaponFlatAttacks = 1
             };
 
             var actual = CombatMath.GetTotalNumberOfAttacks(attacker);
@@ -202,7 +202,7 @@ namespace UnitTests
             var attacker = new AttackerDTO()
             {
                 NumberOfModels = -1,
-                WeaponAttacks = 1
+                WeaponFlatAttacks = 1
             };
 
             var actual = CombatMath.GetTotalNumberOfAttacks(attacker);
@@ -221,7 +221,7 @@ namespace UnitTests
             var attacker = new AttackerDTO()
             {
                 NumberOfModels = 1,
-                WeaponAttacks = 0
+                WeaponFlatAttacks = 0
             };
 
             var actual = CombatMath.GetTotalNumberOfAttacks(attacker);
@@ -240,7 +240,7 @@ namespace UnitTests
             var attacker = new AttackerDTO()
             {
                 NumberOfModels = 1,
-                WeaponAttacks = -1
+                WeaponFlatAttacks = -1
             };
 
             var actual = CombatMath.GetTotalNumberOfAttacks(attacker);
