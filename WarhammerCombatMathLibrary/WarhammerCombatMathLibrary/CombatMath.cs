@@ -107,6 +107,40 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Returns the total number of attack rolls the attacking unit is making.
+        /// Uses the average value of any variable attacks, to get a simple result.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns></returns>
+        public static int GetTotalAttacks(AttackerDTO? attacker)
+        {
+            // If attacker parameter is null, return 0
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetTotalAttacks() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
+            // If either the number of models or the weapon attacks is less than 1, return 0.
+            if (attacker.NumberOfModels < 1)
+            {
+                Debug.WriteLine($"GetTotalAttacks() | Number of models is less than 1, returning 0 ...");
+                return 0;
+            }
+
+            // If both the variable salar and the flat value of attacks are less than or equal to 0, then there are no attacks.
+            if (attacker.WeaponScalarOfVariableAttacks <= 0 && attacker.WeaponFlatAttacks <= 0)
+            {
+                Debug.WriteLine($"GetTotalAttacks() | Attacker has no attacks value, returning 0 ...");
+                return 0;
+            }
+
+            var averageVariableAttacks = Statistics.AverageResult((int)attacker.WeaponVariableAttackType) * attacker.WeaponScalarOfVariableAttacks;
+            var combinedAttacks = averageVariableAttacks + attacker.WeaponFlatAttacks;
+            return combinedAttacks * attacker.NumberOfModels;
+        }
+
+        /// <summary>
         /// Returns the probability of succeeding a roll with a single dice, given the desired success threshold.
         /// </summary>
         /// <returns>A double value containing the probability of success for a single trial.</returns>
@@ -137,12 +171,6 @@ namespace WarhammerCombatMathLibrary
             var averageNumberOfVariableAttacks = Statistics.AverageResult((int)attacker.WeaponVariableAttackType) * GetScalarValueOfVariableAttacks(attacker);
             var averageHitsWithVariableAttacks = Statistics.Mean(averageNumberOfVariableAttacks, GetProbabilityOfHit(attacker));
             var averageHitsWithFlatAttacks = Statistics.Mean(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityOfHit(attacker));
-
-            // DEBUG
-            Debug.WriteLine($"Average Number of Variable Attacks: {averageNumberOfVariableAttacks}");
-            Debug.WriteLine($"Average Hits with Variable Attacks: {averageHitsWithVariableAttacks}");
-            Debug.WriteLine($"Average Hits with Flat Attacks: {averageHitsWithFlatAttacks}");
-            Debug.WriteLine($"Mean Hits: {averageHitsWithVariableAttacks + averageHitsWithFlatAttacks}");
 
             return averageHitsWithVariableAttacks + averageHitsWithFlatAttacks;
         }
@@ -176,7 +204,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.StandardDeviation(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityOfHit(attacker));
+            return Statistics.StandardDeviation(GetTotalAttacks(attacker), GetProbabilityOfHit(attacker));
         }
 
         /// <summary>

@@ -659,8 +659,20 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationHits_TestParams3()
         {
-            var expected = 1.9365;
-            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var expected = 1.1547;
+            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_WORLD_EATERS_FORGEFIEND), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationHits_TestParams4()
+        {
+            var expected = 1.7321;
+            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN), 4);
 
             Assert.AreEqual(expected, actual);
         }

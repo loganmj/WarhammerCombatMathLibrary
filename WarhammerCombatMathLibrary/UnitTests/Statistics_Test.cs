@@ -84,7 +84,7 @@ namespace UnitTests
         {
             var expected = 2;
             var numberOfResults = 3;
-            var actual = Statistics.AverageResult(3);
+            var actual = Statistics.AverageResult(numberOfResults);
             Assert.AreEqual(expected, actual);
         }
 
