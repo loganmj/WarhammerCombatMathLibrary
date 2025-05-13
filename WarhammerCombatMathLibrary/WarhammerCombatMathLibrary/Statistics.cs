@@ -46,7 +46,7 @@ namespace WarhammerCombatMathLibrary
         /// Calculates the average result from the number of possible results.
         /// </summary>
         /// <param name="numberOfPossibleResults"></param>
-        /// <returns></returns>
+        /// <returns>An integer value containing the average possible result.</returns>
         public static int AverageResult(int numberOfPossibleResults)
         {
             // Validate inputs

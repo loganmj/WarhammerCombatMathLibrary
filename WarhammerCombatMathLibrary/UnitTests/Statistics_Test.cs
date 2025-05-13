@@ -66,6 +66,53 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the AverageResult() method when the input parameter is less than or equal to 0.
+        /// </summary>
+        [TestMethod]
+        public void AverageResult_PossibleResultsLessThanOrEqualTo0()
+        {
+            var expected = 0;
+            var actual = Statistics.AverageResult(0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the AverageResult() method with given params.
+        /// </summary>
+        [TestMethod]
+        public void AverageResult_TestParams1()
+        {
+            var expected = 2;
+            var numberOfResults = 3;
+            var actual = Statistics.AverageResult(3);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the AverageResult() method with given params.
+        /// </summary>
+        [TestMethod]
+        public void AverageResult_TestParams2()
+        {
+            var expected = 4;
+            var numberOfResults = 6;
+            var actual = Statistics.AverageResult(numberOfResults);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the AverageResult() method with given params.
+        /// </summary>
+        [TestMethod]
+        public void AverageResult_TestParams3()
+        {
+            var expected = 6;
+            var numberOfResults = 10;
+            var actual = Statistics.AverageResult(numberOfResults);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
         /// Tests the case where the number of trials is less than 1.
         /// </summary>
         [TestMethod]
