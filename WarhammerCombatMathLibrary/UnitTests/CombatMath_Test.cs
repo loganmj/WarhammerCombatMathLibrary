@@ -602,8 +602,20 @@ namespace UnitTests
         [TestMethod]
         public void GetExpectedHits_TestParams3()
         {
-            var expected = 7;
-            var actual = CombatMath.GetExpectedHits(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var expected = 4;
+            var actual = CombatMath.GetExpectedHits(ATTACKER_WORLD_EATERS_FORGEFIEND);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedHits_TestParams4()
+        {
+            var expected = 6;
+            var actual = CombatMath.GetExpectedHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
 
             Assert.AreEqual(expected, actual);
         }
