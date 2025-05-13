@@ -437,6 +437,179 @@ namespace UnitTests
         /// Tests the case where the attacker has 0 models.
         /// </summary>
         [TestMethod]
+        public void GetTotalAttacks_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetTotalAttacks(null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has 0 models.
+        /// </summary>
+        [TestMethod]
+        public void GetTotalAttacks_ZeroModels()
+        {
+            var expected = 0;
+
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 0,
+                WeaponFlatAttacks = 1
+            };
+
+            var actual = CombatMath.GetTotalAttacks(attacker);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has a negative number of models.
+        /// </summary>
+        [TestMethod]
+        public void GetTotalAttacks_NegativeNumberOfModels()
+        {
+            var expected = 0;
+
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = -1,
+                WeaponFlatAttacks = 1
+            };
+
+            var actual = CombatMath.GetTotalAttacks(attacker);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has 0 weapon attacks.
+        /// </summary>
+        [TestMethod]
+        public void GetTotalAttacks_ZeroWeaponAttacks()
+        {
+            var expected = 0;
+
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponScalarOfVariableAttacks = 0,
+                WeaponFlatAttacks = 0
+            };
+
+            var actual = CombatMath.GetTotalAttacks(attacker);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has 0 scalar weapon attacks, but at least one flat attack.
+        /// </summary>
+        [TestMethod]
+        public void GetTotalAttacks_ZeroScalar()
+        {
+            var expected = 1;
+
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponScalarOfVariableAttacks = 0,
+                WeaponFlatAttacks = 1
+            };
+
+            var actual = CombatMath.GetTotalAttacks(attacker);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has 0 flat weapon attacks, but at least one scalar attack.
+        /// </summary>
+        [TestMethod]
+        public void GetTotalAttacks_ZeroFlat()
+        {
+            var expected = 4;
+
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponScalarOfVariableAttacks = 1,
+                WeaponVariableAttackType = DiceType.D6,
+                WeaponFlatAttacks = 0
+            };
+
+            var actual = CombatMath.GetTotalAttacks(attacker);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has a negative number of weapon attacks.
+        /// </summary>
+        [TestMethod]
+        public void GetTotalAttacks_NegativeWeaponAttacks()
+        {
+            var expected = 0;
+
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = -1
+            };
+
+            var actual = CombatMath.GetTotalAttacks(attacker);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetTotalAttacks_TestParams1()
+        {
+            var expected = 8;
+            var actual = CombatMath.GetTotalAttacks(ATTACKER_KHARN_THE_BETRAYER);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetTotalAttacks_TestParams2()
+        {
+            var expected = 20;
+            var actual = CombatMath.GetTotalAttacks(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetTotalAttacks_TestParams3()
+        {
+            var expected = 6;
+            var actual = CombatMath.GetTotalAttacks(ATTACKER_WORLD_EATERS_FORGEFIEND);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetTotalAttacks_TestParams4()
+        {
+            var expected = 12;
+            var actual = CombatMath.GetTotalAttacks(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has 0 models.
+        /// </summary>
+        [TestMethod]
         public void GetProbabilityOfHit_NullAttacker()
         {
             Assert.AreEqual(0, CombatMath.GetProbabilityOfHit(null));
