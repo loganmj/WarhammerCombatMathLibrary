@@ -107,12 +107,13 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns the total number of attack rolls the attacking unit is making.
-        /// Uses the average value of any variable attacks, to get a simple result.
+        /// Returns the average number of attack rolls the attacking unit is making.
+        /// This includes the average of any variable attacks added to the flat number of attacks.
+        /// This also takes into account the number of models in the attacking unit.
         /// </summary>
         /// <param name="attacker"></param>
-        /// <returns></returns>
-        public static int GetTotalAttacks(AttackerDTO? attacker)
+        /// <returns>An integer value containing the average number of attacks made by the attacking unit.</returns>
+        public static int GetAverageAttacks(AttackerDTO? attacker)
         {
             // If attacker parameter is null, return 0
             if (attacker == null)
@@ -135,9 +136,79 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageVariableAttacks = Statistics.AverageResult((int)attacker.WeaponVariableAttackType) * attacker.WeaponScalarOfVariableAttacks;
+            var averageVariableAttacks = attacker.WeaponScalarOfVariableAttacks * Statistics.AverageResult((int)attacker.WeaponVariableAttackType);
             var combinedAttacks = averageVariableAttacks + attacker.WeaponFlatAttacks;
             return combinedAttacks * attacker.NumberOfModels;
+        }
+
+        /// <summary>
+        /// Gets the minimum number of attacks made by the attacking unit.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns>An integer value containing the minimum number attacks made by the attacking unit.</returns>
+        public static int GetMinimumAttacks(AttackerDTO? attacker)
+        {
+            // If attacker parameter is null, return 0
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetMinimumAttacks() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
+            // If either the number of models or the weapon attacks is less than 1, return 0.
+            if (attacker.NumberOfModels < 1)
+            {
+                Debug.WriteLine($"GetMinimumAttacks() | Number of models is less than 1, returning 0 ...");
+                return 0;
+            }
+
+            // If both the variable salar and the flat value of attacks are less than or equal to 0, then there are no attacks.
+            if (attacker.WeaponScalarOfVariableAttacks <= 0 && attacker.WeaponFlatAttacks <= 0)
+            {
+                Debug.WriteLine($"GetMinimumAttacks() | Attacker has no attacks value, returning 0 ...");
+                return 0;
+            }
+
+            var minimumVariableAttacks = attacker.WeaponScalarOfVariableAttacks * 1;
+            var flatAttacks = attacker.WeaponFlatAttacks;
+            var numberOfModels = attacker.NumberOfModels;
+
+            return (minimumVariableAttacks + flatAttacks) * numberOfModels;
+        }
+
+        /// <summary>
+        /// Gets the maximum number of attacks made by the attacking unit.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <returns>An integer value containing the maximum number attacks made by the attacking unit.</returns>
+        public static int GetMaximumAttacks(AttackerDTO? attacker)
+        {
+            // If attacker parameter is null, return 0
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetMaximumAttacks() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
+            // If either the number of models or the weapon attacks is less than 1, return 0.
+            if (attacker.NumberOfModels < 1)
+            {
+                Debug.WriteLine($"GetMaximumAttacks() | Number of models is less than 1, returning 0 ...");
+                return 0;
+            }
+
+            // If both the variable salar and the flat value of attacks are less than or equal to 0, then there are no attacks.
+            if (attacker.WeaponScalarOfVariableAttacks <= 0 && attacker.WeaponFlatAttacks <= 0)
+            {
+                Debug.WriteLine($"GetMaximumAttacks() | Attacker has no attacks value, returning 0 ...");
+                return 0;
+            }
+
+            var maximumVariableAttacks = attacker.WeaponScalarOfVariableAttacks * (int)attacker.WeaponVariableAttackType;
+            var flatAttacks = attacker.WeaponFlatAttacks;
+            var numberOfModels = attacker.NumberOfModels;
+
+            return (maximumVariableAttacks + flatAttacks) * numberOfModels;
         }
 
         /// <summary>
@@ -204,7 +275,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.StandardDeviation(GetTotalAttacks(attacker), GetProbabilityOfHit(attacker));
+            return Statistics.StandardDeviation(GetAverageAttacks(attacker), GetProbabilityOfHit(attacker));
         }
 
         /// <summary>
@@ -219,9 +290,10 @@ namespace WarhammerCombatMathLibrary
                 return [];
             }
 
-            var totalAttacks = GetTotalNumberOfFlatAttacks(attacker);
+            var minimumAttacks = GetMinimumAttacks(attacker);
+            var maximumAttacks = GetMaximumAttacks(attacker);
             var probabilityOfHit = GetProbabilityOfHit(attacker);
-            return Statistics.BinomialDistribution(totalAttacks, probabilityOfHit);
+            return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probabilityOfHit);
         }
 
         /// <summary>

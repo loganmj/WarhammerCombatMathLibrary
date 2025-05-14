@@ -271,6 +271,120 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Calculates the combined binomial distribution of trial data using a variable number of trials.
+        /// Optionally calculates the binomial distribution of trial data, assuming that a group of a given number of trial successes is considered a single success
+        /// in the context of the distribution.
+        /// Example: If 'groupSuccessCount' = 2, then the total number of trials is divided by 2, and any combination of 2 successful trials is considered a single success
+        /// in the context of the distribution.
+        /// </summary>
+        /// <param name="minNumberOfTrials">The minimum nunmber of trials in the process.</param>
+        /// <param name="maxNumberOfTrials">The maximum number of trials in the process.</param>
+        /// <param name="probability">The probability of success for a single trial.</param>
+        /// <param name="groupSuccessCount">The number of grouped trial successes that count as a success. Default is 1 (one trial success equals one binomial success)</param>
+        /// <returns>A binomial distribution of trial results and their respective probabilities.</returns>
+        public static List<BinomialOutcome> BinomialDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int groupSuccessCount = 1)
+        {
+            // Validate parameters
+            if (minNumberOfTrials < 0)
+            {
+                // The minimum number of trials must always be at least 0.
+                minNumberOfTrials = 0;
+            }
+
+            if (maxNumberOfTrials < 1)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Max number of trials is less than 1.");
+                return [new(0, 1)];
+            }
+
+            if (minNumberOfTrials == maxNumberOfTrials)
+            {
+                // If there isn't actually any variation in the number of trials, use the simpler method.
+                return BinomialDistribution(maxNumberOfTrials, probability);
+            }
+
+            if (probability <= 0)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Probability is less than or equal to 0.");
+
+                // The probability of 0 successes should be 1, all other probabilities should be 0.
+                var adjustedDistribution = new List<BinomialOutcome>
+                {
+                    new(0, 1)
+                };
+
+                for (int k = 1; k <= maxNumberOfTrials; k++)
+                {
+                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
+                }
+
+                return adjustedDistribution;
+            }
+
+            if (probability >= 1)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Probability is greater than or equal to 1.");
+
+                // All probabilities should be 0, except the probability of all successes should be 1.
+                var adjustedDistribution = new List<BinomialOutcome>();
+
+                for (int k = 0; k <= maxNumberOfTrials - 1; k++)
+                {
+                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
+                }
+
+                adjustedDistribution.Add(new BinomialOutcome(maxNumberOfTrials, 1));
+
+                return adjustedDistribution;
+            }
+
+            if (groupSuccessCount < 1)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Group success count is less than 1.");
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            }
+
+            if (groupSuccessCount > maxNumberOfTrials)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Group success count is greater than the total number of trials.");
+                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            }
+
+            // Create distribution
+            var distribution = new List<BinomialOutcome>();
+
+            // Calculate the binomial results for each success value k, and average the results for each value of n
+            for (int k = 0; k <= Math.Floor((double)maxNumberOfTrials / groupSuccessCount); k++)
+            {
+                double combinedProbability = 0;
+                var startingValue = Math.Max(minNumberOfTrials, k);
+
+                for (int n = startingValue; n <= maxNumberOfTrials; n++)
+                {
+                    var massFunctionResult = ProbabilityMassFunction(n, k * groupSuccessCount, probability);
+                    combinedProbability += massFunctionResult;
+
+                    Debug.WriteLine($"Probability Mass Function for n={n}, k={k}, p={probability}: {massFunctionResult}, cumulative mass = {combinedProbability}");
+                }
+
+                // Average all the probabilities for that value of n
+                var numerator = combinedProbability;
+                var denominator = (maxNumberOfTrials - (startingValue - 1));
+                combinedProbability = (double)numerator / denominator;
+                Debug.WriteLine($"Average probability for k={k}: {numerator} / {denominator} = {combinedProbability}");
+
+                // Add the result to the distribution
+                distribution.Add(new BinomialOutcome
+                {
+                    Successes = k,
+                    Probability = combinedProbability
+                });
+            }
+
+            return distribution;
+        }
+
+        /// <summary>
         /// Calculates the lower cumulative probability of trial data.
         /// Lower cumulative probability is the probability of achieving a result less than or equal to X successes such that P(X≤k).
         /// </summary>

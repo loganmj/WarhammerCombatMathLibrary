@@ -437,10 +437,10 @@ namespace UnitTests
         /// Tests the case where the attacker has 0 models.
         /// </summary>
         [TestMethod]
-        public void GetTotalAttacks_NullAttacker()
+        public void GetAverageAttacks_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetTotalAttacks(null);
+            var actual = CombatMath.GetAverageAttacks(null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -448,7 +448,7 @@ namespace UnitTests
         /// Tests the case where the attacker has 0 models.
         /// </summary>
         [TestMethod]
-        public void GetTotalAttacks_ZeroModels()
+        public void GetAverageAttacks_ZeroModels()
         {
             var expected = 0;
 
@@ -458,7 +458,7 @@ namespace UnitTests
                 WeaponFlatAttacks = 1
             };
 
-            var actual = CombatMath.GetTotalAttacks(attacker);
+            var actual = CombatMath.GetAverageAttacks(attacker);
 
             Assert.AreEqual(expected, actual);
         }
@@ -467,7 +467,7 @@ namespace UnitTests
         /// Tests the case where the attacker has a negative number of models.
         /// </summary>
         [TestMethod]
-        public void GetTotalAttacks_NegativeNumberOfModels()
+        public void GetAverageAttacks_NegativeNumberOfModels()
         {
             var expected = 0;
 
@@ -477,7 +477,7 @@ namespace UnitTests
                 WeaponFlatAttacks = 1
             };
 
-            var actual = CombatMath.GetTotalAttacks(attacker);
+            var actual = CombatMath.GetAverageAttacks(attacker);
 
             Assert.AreEqual(expected, actual);
         }
@@ -486,7 +486,7 @@ namespace UnitTests
         /// Tests the case where the attacker has 0 weapon attacks.
         /// </summary>
         [TestMethod]
-        public void GetTotalAttacks_ZeroWeaponAttacks()
+        public void GetAverageAttacks_ZeroWeaponAttacks()
         {
             var expected = 0;
 
@@ -497,7 +497,7 @@ namespace UnitTests
                 WeaponFlatAttacks = 0
             };
 
-            var actual = CombatMath.GetTotalAttacks(attacker);
+            var actual = CombatMath.GetAverageAttacks(attacker);
 
             Assert.AreEqual(expected, actual);
         }
@@ -506,7 +506,7 @@ namespace UnitTests
         /// Tests the case where the attacker has 0 scalar weapon attacks, but at least one flat attack.
         /// </summary>
         [TestMethod]
-        public void GetTotalAttacks_ZeroScalar()
+        public void GetAverageAttacks_ZeroScalar()
         {
             var expected = 1;
 
@@ -517,7 +517,7 @@ namespace UnitTests
                 WeaponFlatAttacks = 1
             };
 
-            var actual = CombatMath.GetTotalAttacks(attacker);
+            var actual = CombatMath.GetAverageAttacks(attacker);
 
             Assert.AreEqual(expected, actual);
         }
@@ -526,7 +526,7 @@ namespace UnitTests
         /// Tests the case where the attacker has 0 flat weapon attacks, but at least one scalar attack.
         /// </summary>
         [TestMethod]
-        public void GetTotalAttacks_ZeroFlat()
+        public void GetAverageAttacks_ZeroFlat()
         {
             var expected = 4;
 
@@ -538,7 +538,7 @@ namespace UnitTests
                 WeaponFlatAttacks = 0
             };
 
-            var actual = CombatMath.GetTotalAttacks(attacker);
+            var actual = CombatMath.GetAverageAttacks(attacker);
 
             Assert.AreEqual(expected, actual);
         }
@@ -547,7 +547,7 @@ namespace UnitTests
         /// Tests the case where the attacker has a negative number of weapon attacks.
         /// </summary>
         [TestMethod]
-        public void GetTotalAttacks_NegativeWeaponAttacks()
+        public void GetAverageAttacks_NegativeWeaponAttacks()
         {
             var expected = 0;
 
@@ -557,7 +557,7 @@ namespace UnitTests
                 WeaponFlatAttacks = -1
             };
 
-            var actual = CombatMath.GetTotalAttacks(attacker);
+            var actual = CombatMath.GetAverageAttacks(attacker);
 
             Assert.AreEqual(expected, actual);
         }
@@ -566,10 +566,10 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetTotalAttacks_TestParams1()
+        public void GetAverageAttacks_TestParams1()
         {
             var expected = 8;
-            var actual = CombatMath.GetTotalAttacks(ATTACKER_KHARN_THE_BETRAYER);
+            var actual = CombatMath.GetAverageAttacks(ATTACKER_KHARN_THE_BETRAYER);
             Assert.AreEqual(expected, actual);
         }
 
@@ -577,10 +577,10 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetTotalAttacks_TestParams2()
+        public void GetAverageAttacks_TestParams2()
         {
             var expected = 20;
-            var actual = CombatMath.GetTotalAttacks(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetAverageAttacks(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
 
@@ -588,10 +588,10 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetTotalAttacks_TestParams3()
+        public void GetAverageAttacks_TestParams3()
         {
             var expected = 6;
-            var actual = CombatMath.GetTotalAttacks(ATTACKER_WORLD_EATERS_FORGEFIEND);
+            var actual = CombatMath.GetAverageAttacks(ATTACKER_WORLD_EATERS_FORGEFIEND);
             Assert.AreEqual(expected, actual);
         }
 
@@ -599,10 +599,10 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetTotalAttacks_TestParams4()
+        public void GetAverageAttacks_TestParams4()
         {
             var expected = 12;
-            var actual = CombatMath.GetTotalAttacks(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetAverageAttacks(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
             Assert.AreEqual(expected, actual);
         }
 
@@ -972,25 +972,65 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0),
-                new(1, 0.0005),
-                new(2, 0.0032),
-                new(3, 0.0139),
-                new(4, 0.0417),
-                new(5, 0.0916),
-                new(6, 0.1527),
-                new(7, 0.1964),
-                new(8, 0.1964),
-                new(9, 0.1527),
-                new(10, 0.0916),
-                new(11, 0.0417),
-                new(12, 0.0139),
-                new(13, 0.0032),
-                new(14, 0.0005),
-                new(15, 0)
+                new(0, 0.0079),
+                new(1, 0.0555),
+                new(2, 0.1501),
+                new(3, 0.2101),
+                new(4, 0.2309),
+                new(5, 0.2361),
+                new(6, 0.2097),
+                new(7, 0.1496),
+                new(8, 0.0780),
+                new(9, 0.0260)
             };
 
-            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_WORLD_EATERS_FORGEFIEND);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionHits_TestParams4()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 0.0028),
+                new(1, 0.0199),
+                new(2, 0.0623),
+                new(3, 0.1182),
+                new(4, 0.1575),
+                new(5, 0.1659),
+                new(6, 0.1516),
+                new(7, 0.1371),
+                new(8, 0.1111),
+                new(9, 0.0786),
+                new(10, 0.0475),
+                new(11, 0.0239),
+                new(12, 0.0098),
+                new(13, 0.0032),
+                new(14, 0.0008),
+                new(15, 0.0001),
+                new(16, 0)
+            };
+
+            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
