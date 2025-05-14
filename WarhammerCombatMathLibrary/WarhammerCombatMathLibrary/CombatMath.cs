@@ -486,9 +486,10 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome>();
             }
 
-            var numberOfTrials = GetTotalNumberOfFlatAttacks(attacker);
+            var minimumAttacks = GetMinimumAttacks(attacker);
+            var maximumAttacks = GetMaximumAttacks(attacker);
             var probability = GetProbabilityWound(attacker, defender);
-            return Statistics.BinomialDistribution(numberOfTrials, probability);
+            return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability);
         }
 
         /// <summary>
