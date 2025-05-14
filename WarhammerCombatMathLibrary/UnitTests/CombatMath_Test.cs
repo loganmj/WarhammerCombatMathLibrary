@@ -1921,8 +1921,20 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationWounds_TestParams3()
         {
-            var expected = 1.8592;
-            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var expected = 1.2172;
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationWounds_TestParams4()
+        {
+            var expected = 1.633;
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
