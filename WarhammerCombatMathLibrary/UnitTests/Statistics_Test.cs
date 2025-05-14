@@ -1479,40 +1479,6 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the probability mass function with given large inputs.
-        /// </summary>
-        [TestMethod]
-        public void UpperCumulativeDistribution_TestParams3()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.75),
-                new(1, 0.25),
-                new(2, 0)
-            };
-
-            var numberOfTrials = 2;
-            var probability = 0.5;
-            var actual = Statistics.UpperCumulativeDistribution(numberOfTrials, probability);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
         /// Tests the method with given large inputs.
         /// </summary>
         [TestMethod]
@@ -1726,6 +1692,58 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the case for the variable trials override where the minNumberOfTrials argument is out of range.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorDistribution_VariableTrials_MinNumberOfTrialsLessThan1()
+        {
+            var expected = new List<BinomialOutcome>() { new(0, 1) };
+            var actual = Statistics.SurvivorDistribution(0, 1, 0.5);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case for the variable trials override where the maxNumberOfTrials argument is out of range.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorDistribution_VariableTrials_MaxNumberOfTrialsLessThan1()
+        {
+            var expected = new List<BinomialOutcome>() { new(0, 1) };
+            var actual = Statistics.SurvivorDistribution(1, 0, 0.5);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
         /// Tests the case where the probability argument is negative.
         /// </summary>
         [TestMethod]
@@ -1773,6 +1791,58 @@ namespace UnitTests
             };
 
             var actual = Statistics.SurvivorDistribution(3, 1);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the probability argument is greater than 1.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorDistribution_GroupSuccessCountLessThan1()
+        {
+            var expected = new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            var actual = Statistics.SurvivorDistribution(3, 0.5, 0);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the probability argument is greater than 1.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorDistribution_GroupSuccessCountGreaterThanNumberOfTrials()
+        {
+            var expected = new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            var actual = Statistics.SurvivorDistribution(3, 0.5, 5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1873,6 +1943,81 @@ namespace UnitTests
             var numberOfTrials = 2;
             var probability = 0.5;
             var actual = Statistics.SurvivorDistribution(numberOfTrials, probability);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given large inputs.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorDistribution_VariableTrials_TestParams1()
+        {
+            var minNumberOfTrials = 1;
+            var maxNumberOfTrials = 3;
+            var probability = 0.5;
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.7083),
+                new(2, 0.3750),
+                new(3, 0.1250)
+            };
+
+            var actual = Statistics.SurvivorDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given large inputs.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorDistribution_VariableTrials_TestParams2()
+        {
+            var minNumberOfTrials = 1;
+            var maxNumberOfTrials = 6;
+            var probability = 0.5;
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.8359),
+                new(2, 0.6281),
+                new(3, 0.3984),
+                new(4, 0.1979),
+                new(5, 0.0703),
+                new(6, 0.0156)
+            };
+
+            var actual = Statistics.SurvivorDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
