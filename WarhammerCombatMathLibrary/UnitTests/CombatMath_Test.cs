@@ -1778,8 +1778,20 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanWounds_TestParams3()
         {
-            var expected = 4.4444;
-            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var expected = 3.3333;
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanWounds_TestParams4()
+        {
+            var expected = 4;
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
