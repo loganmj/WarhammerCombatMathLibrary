@@ -1849,8 +1849,20 @@ namespace UnitTests
         [TestMethod]
         public void GetExpectedWounds_TestParams3()
         {
+            var expected = 3;
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedWounds_TestParams4()
+        {
             var expected = 4;
-            var actual = CombatMath.GetExpectedWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             Assert.AreEqual(expected, actual);
         }
