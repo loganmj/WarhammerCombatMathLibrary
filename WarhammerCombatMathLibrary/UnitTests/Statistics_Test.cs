@@ -578,7 +578,7 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the probability mass function with given inputs.
+        /// Tests the method with given inputs.
         /// </summary>
         [TestMethod]
         public void BinomialDistribution_TestParams1()
@@ -611,7 +611,7 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the probability mass function with given inputs.
+        /// Tests the method with given inputs.
         /// </summary>
         [TestMethod]
         public void BinomialDistribution_TestParams2()
@@ -644,7 +644,7 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the probability mass function with given large inputs.
+        /// Tests the method with given large inputs.
         /// </summary>
         [TestMethod]
         public void BinomialDistribution_VariableTrials_TestParams1()
@@ -680,7 +680,7 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the probability mass function with given large inputs.
+        /// Tests the method with given large inputs.
         /// </summary>
         [TestMethod]
         public void BinomialDistribution_VariableTrials_TestParams2()
@@ -826,6 +826,58 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the case for the variable trials override where the minNumberOfTrials argument is out of range.
+        /// </summary>
+        [TestMethod]
+        public void LowerCumulativeDistribution_VariableTrials_MinNumberOfTrialsLessThan1()
+        {
+            var expected = new List<BinomialOutcome>() { new(0, 1) };
+            var actual = Statistics.LowerCumulativeDistribution(0, 1, 0.5);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case for the variable trials override where the maxNumberOfTrials argument is out of range.
+        /// </summary>
+        [TestMethod]
+        public void LowerCumulativeDistribution_VariableTrials_MaxNumberOfTrialsLessThan1()
+        {
+            var expected = new List<BinomialOutcome>() { new(0, 1) };
+            var actual = Statistics.LowerCumulativeDistribution(1, 0, 0.5);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
         /// Tests the case where the probability argument is negative.
         /// </summary>
         [TestMethod]
@@ -872,6 +924,58 @@ namespace UnitTests
             };
 
             var actual = Statistics.LowerCumulativeDistribution(3, 1);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the probability argument is greater than 1.
+        /// </summary>
+        [TestMethod]
+        public void LowerCumulativeDistribution_GroupSuccessCountLessThan1()
+        {
+            var expected = new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            var actual = Statistics.LowerCumulativeDistribution(3, 0.5, 0);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the probability argument is greater than 1.
+        /// </summary>
+        [TestMethod]
+        public void LowerCumulativeDistribution_GroupSuccessCountGreaterThanNumberOfTrials()
+        {
+            var expected = new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+            var actual = Statistics.LowerCumulativeDistribution(3, 0.5, 5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -957,21 +1061,62 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the probability mass function with given large inputs.
+        /// Tests the method with given large inputs.
         /// </summary>
         [TestMethod]
-        public void LowerCumulativeDistribution_TestParams3()
+        public void LowerCumulativeDistribution_VariableTrials_TestParams1()
         {
-            var numberOfTrials = 2;
+            var minNumberOfTrials = 1;
+            var maxNumberOfTrials = 3;
             var probability = 0.5;
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.25),
-                new(1, 0.75),
-                new(2, 1.0)
+                new(0, 0.2917),
+                new(1, 0.7500),
+                new(2, 0.9375),
+                new(3, 1.0000)
             };
 
-            var actual = Statistics.LowerCumulativeDistribution(numberOfTrials, probability);
+            var actual = Statistics.LowerCumulativeDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given large inputs.
+        /// </summary>
+        [TestMethod]
+        public void LowerCumulativeDistribution_VariableTrials_TestParams2()
+        {
+            var minNumberOfTrials = 1;
+            var maxNumberOfTrials = 6;
+            var probability = 0.5;
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 0.1641),
+                new(1, 0.4766),
+                new(2, 0.68125),
+                new(3, 0.8516),
+                new(4, 0.9531),
+                new(5, 0.9922),
+                new(6, 1.0000)
+            };
+
+            var actual = Statistics.LowerCumulativeDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
