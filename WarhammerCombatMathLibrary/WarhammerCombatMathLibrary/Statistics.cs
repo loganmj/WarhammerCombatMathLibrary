@@ -287,8 +287,8 @@ namespace WarhammerCombatMathLibrary
             // Validate parameters
             if (minNumberOfTrials < 1)
             {
-                // The minimum number of trials must always be at least 1.
-                minNumberOfTrials = 1;
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Min number of trials is less than 1.");
+                return [new(0, 1)];
             }
 
             if (maxNumberOfTrials < 1)
