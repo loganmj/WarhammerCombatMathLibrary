@@ -2313,29 +2313,64 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9934),
-                new(2, 0.9559),
-                new(3, 0.8541),
-                new(4, 0.6796),
-                new(5, 0.4677),
-                new(6, 0.2740),
-                new(7, 0.1356),
-                new(8, 0.0565),
-                new(9, 0.0198),
-                new(10, 0.0058),
-                new(11, 0.0014),
-                new(12, 0.0003),
+                new(1, 0.9775),
+                new(2, 0.8713),
+                new(3, 0.6647),
+                new(4, 0.5042),
+                new(5, 0.3350),
+                new(6, 0.1853),
+                new(7, 0.0803),
+                new(8, 0.0252),
+                new(9, 0.0050)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionWounds_TestParams4()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.9763),
+                new(2, 0.8832),
+                new(3, 0.7097),
+                new(4, 0.4998),
+                new(5, 0.3087),
+                new(6, 0.1666),
+                new(7, 0.0855),
+                new(8, 0.0377),
+                new(9, 0.0141),
+                new(10, 0.0044),
+                new(11, 0.0011),
+                new(12, 0.0002),
                 new(13, 0),
                 new(14, 0),
                 new(15, 0),
-                new(16, 0),
-                new(17, 0),
-                new(18, 0),
-                new(19, 0),
-                new(20, 0)
+                new(16, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
