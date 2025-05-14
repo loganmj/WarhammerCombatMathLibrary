@@ -1515,27 +1515,67 @@ namespace UnitTests
         [TestMethod]
         public void GetSurvivorDistributionHits_TestParams3()
         {
-            var expected = new List<BinomialOutcome>
+            var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 1),
-                new(2, 0.9995),
-                new(3, 0.9963),
-                new(4, 0.9824),
-                new(5, 0.9408),
-                new(6, 0.8491),
-                new(7, 0.6964),
-                new(8, 0.5),
-                new(9, 0.3036),
-                new(10, 0.1509),
-                new(11, 0.0592),
-                new(12, 0.0176),
-                new(13, 0.0037),
-                new(14, 0.0005),
-                new(15, 0)
+                new(1, 0.9921),
+                new(2, 0.9366),
+                new(3, 0.7865),
+                new(4, 0.6725),
+                new(5, 0.5300),
+                new(6, 0.3674),
+                new(7, 0.2103),
+                new(8, 0.0910),
+                new(9, 0.0260)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_WORLD_EATERS_FORGEFIEND);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionHits_TestParams4()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.9972),
+                new(2, 0.9773),
+                new(3, 0.9150),
+                new(4, 0.7969),
+                new(5, 0.6394),
+                new(6, 0.4734),
+                new(7, 0.3540),
+                new(8, 0.2410),
+                new(9, 0.1462),
+                new(10, 0.0772),
+                new(11, 0.0346),
+                new(12, 0.0129),
+                new(13, 0.0038),
+                new(14, 0.0009),
+                new(15, 0.0001),
+                new(16, 0)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
 
             // Print expected
             Debug.WriteLine($"Expected: ");

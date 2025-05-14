@@ -273,7 +273,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.StandardDeviation(GetAverageAttacks(attacker), GetProbabilityOfHit(attacker));
+            var averageAttacks = GetAverageAttacks(attacker);
+            var probabilityOfHit = GetProbabilityOfHit(attacker);
+            return Statistics.StandardDeviation(averageAttacks, probabilityOfHit);
         }
 
         /// <summary>
@@ -459,7 +461,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.StandardDeviation(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityWound(attacker, defender));
+            var averageAttacks = GetAverageAttacks(attacker);
+            var probabilityOfWound = GetProbabilityWound(attacker, defender);
+            return Statistics.StandardDeviation(averageAttacks, probabilityOfWound);
         }
 
         /// <summary>
