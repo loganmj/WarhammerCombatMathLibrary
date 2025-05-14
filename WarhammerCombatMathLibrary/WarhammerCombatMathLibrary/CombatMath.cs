@@ -412,7 +412,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.Mean(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityWound(attacker, defender));
+            var averageAttacks = GetAverageAttacks(attacker);
+            var probabilityOfWound = GetProbabilityWound(attacker, defender);
+            return Statistics.Mean(averageAttacks, probabilityOfWound);
         }
 
         /// <summary>
