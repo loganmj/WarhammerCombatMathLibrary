@@ -313,6 +313,8 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
+        /* Working on removing the GetTotalNumberOfFlatAttacks() method
+
         /// <summary>
         /// Tests the case where the attacker has 0 models.
         /// </summary>
@@ -432,6 +434,8 @@ namespace UnitTests
             var actual = CombatMath.GetTotalNumberOfFlatAttacks(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
+
+        */
 
         /// <summary>
         /// Tests the case where the attacker has 0 models.
