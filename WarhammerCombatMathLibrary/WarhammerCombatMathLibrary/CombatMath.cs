@@ -995,11 +995,11 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome>();
             }
 
-            // Use the alternate binomial calculation that takes into account requiring groups of successful die rolls to destroy a single model
-            var numberOfTrials = GetTotalNumberOfFlatAttacks(attacker);
+            var minimumAttacks = GetMinimumAttacks(attacker);
+            var maximumAttacks = GetMaximumAttacks(attacker);
             var probability = GetProbabilityFailedSave(attacker, defender);
             var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(attacker, defender);
-            return Statistics.BinomialDistribution(numberOfTrials, probability, groupSuccessCount);
+            return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability, groupSuccessCount);
         }
 
         /// <summary>
@@ -1022,11 +1022,11 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome>();
             }
 
-            // Use the alternate binomial calculation that takes into account requiring groups of successful die rolls to destroy a single model
-            var numberOfTrials = GetTotalNumberOfFlatAttacks(attacker);
+            var minimumAttacks = GetMinimumAttacks(attacker);
+            var maximumAttacks = GetMaximumAttacks(attacker);
             var probability = GetProbabilityFailedSave(attacker, defender);
             var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(attacker, defender);
-            return Statistics.SurvivorDistribution(numberOfTrials, probability, groupSuccessCount);
+            return Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probability, groupSuccessCount);
         }
 
         #endregion

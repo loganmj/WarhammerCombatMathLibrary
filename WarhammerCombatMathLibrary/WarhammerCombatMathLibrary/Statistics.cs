@@ -9,6 +9,114 @@ namespace WarhammerCombatMathLibrary
     /// </summary>
     public static class Statistics
     {
+        #region Private Methods
+
+        /// <summary>
+        /// Creates a distribution based on the given probability function.
+        /// </summary>
+        /// <param name="distributionType">The type of distribution to create.</param>
+        /// <param name="numberOfTrials">The number of trials n</param>
+        /// <param name="probability">The probability of success p</param>
+        /// <param name="groupSuccessCount">Value used to define the number of combined success that consitute a "single" trial success.</param>
+        /// <returns>A List<BinomialOutcome> containing the distribution of result objects.</returns>
+        private static List<BinomialOutcome> CreateDistribution(DistributionTypes distributionType, int numberOfTrials, double probability, int groupSuccessCount = 1)
+        {
+            var distribution = new List<BinomialOutcome>();
+
+            for (int k = 0; k <= Math.Floor((double)numberOfTrials / groupSuccessCount); k++)
+            {
+                double discreteProbability = 0;
+
+                switch (distributionType)
+                {
+                    case (DistributionTypes.Binomial):
+                        discreteProbability = ProbabilityMassFunction(numberOfTrials, k * groupSuccessCount, probability);
+                        break;
+                    case (DistributionTypes.LowerCumulative):
+                        discreteProbability = LowerCumulativeProbability(numberOfTrials, k * groupSuccessCount, probability);
+                        break;
+                    case (DistributionTypes.UpperCumulative):
+                        discreteProbability = UpperCumulativeProbability(numberOfTrials, k * groupSuccessCount, probability);
+                        break;
+                    case (DistributionTypes.Suvivor):
+                        discreteProbability = SurvivorFunction(numberOfTrials, k * groupSuccessCount, probability);
+                        break;
+                }
+
+                distribution.Add(new BinomialOutcome
+                {
+                    Successes = k,
+                    Probability = discreteProbability
+                });
+            }
+
+            return distribution;
+        }
+
+        /// <summary>
+        /// Creates a distribution based on the given probability function.
+        /// Allows for factoring in a variable number of trials.
+        /// </summary>
+        /// <param name="distributionType">The type of distribution to create.</param>
+        /// <param name="minNumberOfTrials">The minimum number of trials</param>
+        /// <param name="maxNumberOfTrials">The maximum number of trials</param>
+        /// <param name="probability">The probability of success p</param>
+        /// <param name="groupSuccessCount">Value used to define the number of combined success that consitute a "single" trial success.</param>
+        /// <returns>A List<BinomialOutcome> containing the distribution of result objects.</returns>
+        private static List<BinomialOutcome> CreateDistribution(DistributionTypes distributionType, int minNumberOfTrials, int maxNumberOfTrials, double probability, int groupSuccessCount = 1)
+        {
+            var distribution = new List<BinomialOutcome>();
+
+            // Calculate the binomial results for each success value k, and average the results for each value of n
+            for (int k = 0; k <= Math.Floor((double)maxNumberOfTrials / groupSuccessCount); k++)
+            {
+                double combinedProbability = 0;
+                var startingValue = Math.Max(minNumberOfTrials, k);
+
+                for (int n = startingValue; n <= maxNumberOfTrials; n++)
+                {
+                    double massFunctionResult = 0;
+
+                    switch (distributionType)
+                    {
+                        case (DistributionTypes.Binomial):
+                            massFunctionResult = ProbabilityMassFunction(n, k * groupSuccessCount, probability);
+                            break;
+                        case (DistributionTypes.LowerCumulative):
+                            massFunctionResult = LowerCumulativeProbability(n, k * groupSuccessCount, probability);
+                            break;
+                        case (DistributionTypes.UpperCumulative):
+                            massFunctionResult = UpperCumulativeProbability(n, k * groupSuccessCount, probability);
+                            break;
+                        case (DistributionTypes.Suvivor):
+                            massFunctionResult = SurvivorFunction(n, k * groupSuccessCount, probability);
+                            break;
+                    }
+
+                    combinedProbability += massFunctionResult;
+
+                    Debug.WriteLine($"Probability Mass Function for n={n}, k={k}, p={probability}: {massFunctionResult}, combined mass = {combinedProbability}");
+                }
+
+                // Average all the probabilities for that value of n
+                var numerator = combinedProbability;
+                var denominator = (maxNumberOfTrials - (startingValue - 1));
+                combinedProbability = (double)numerator / denominator;
+                Debug.WriteLine($"Average probability for k={k}: {numerator} / {denominator} = {combinedProbability}");
+
+                // Add the result to the distribution
+                distribution.Add(new BinomialOutcome
+                {
+                    Successes = k,
+                    Probability = combinedProbability
+                });
+            }
+
+            return distribution;
+        }
+
+        #endregion
+
         #region Public Methods
 
         /// <summary>
@@ -255,19 +363,8 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
             }
 
-            // Create distribution
-            var distribution = new List<BinomialOutcome>();
-
-            for (int k = 0; k <= Math.Floor((double)numberOfTrials / groupSuccessCount); k++)
-            {
-                distribution.Add(new BinomialOutcome
-                {
-                    Successes = k,
-                    Probability = ProbabilityMassFunction(numberOfTrials, k * groupSuccessCount, probability)
-                });
-            }
-
-            return distribution;
+            // Calculate distribution
+            return CreateDistribution(DistributionTypes.Binomial, numberOfTrials, probability, groupSuccessCount);
         }
 
         /// <summary>
@@ -295,12 +392,6 @@ namespace WarhammerCombatMathLibrary
             {
                 Debug.WriteLine($"BinomialDistributionVariableTrials() | Max number of trials is less than 1.");
                 return [new(0, 1)];
-            }
-
-            if (minNumberOfTrials == maxNumberOfTrials)
-            {
-                // If there isn't actually any variation in the number of trials, use the simpler method.
-                return BinomialDistribution(maxNumberOfTrials, probability);
             }
 
             if (probability <= 0)
@@ -351,37 +442,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Create distribution
-            var distribution = new List<BinomialOutcome>();
-
-            // Calculate the binomial results for each success value k, and average the results for each value of n
-            for (int k = 0; k <= Math.Floor((double)maxNumberOfTrials / groupSuccessCount); k++)
-            {
-                double combinedProbability = 0;
-                var startingValue = Math.Max(minNumberOfTrials, k);
-
-                for (int n = startingValue; n <= maxNumberOfTrials; n++)
-                {
-                    var massFunctionResult = ProbabilityMassFunction(n, k * groupSuccessCount, probability);
-                    combinedProbability += massFunctionResult;
-
-                    Debug.WriteLine($"Probability Mass Function for n={n}, k={k}, p={probability}: {massFunctionResult}, combined mass = {combinedProbability}");
-                }
-
-                // Average all the probabilities for that value of n
-                var numerator = combinedProbability;
-                var denominator = (maxNumberOfTrials - (startingValue - 1));
-                combinedProbability = (double)numerator / denominator;
-                Debug.WriteLine($"Average probability for k={k}: {numerator} / {denominator} = {combinedProbability}");
-
-                // Add the result to the distribution
-                distribution.Add(new BinomialOutcome
-                {
-                    Successes = k,
-                    Probability = combinedProbability
-                });
-            }
-
-            return distribution;
+            return CreateDistribution(DistributionTypes.Binomial, minNumberOfTrials, maxNumberOfTrials, probability, groupSuccessCount);
         }
 
         /// <summary>
@@ -512,18 +573,8 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
             }
 
-            var distribution = new List<BinomialOutcome>();
-
-            for (int k = 0; k <= Math.Floor((double)numberOfTrials / groupSuccessCount); k++)
-            {
-                distribution.Add(new BinomialOutcome
-                {
-                    Successes = k,
-                    Probability = LowerCumulativeProbability(numberOfTrials, k * groupSuccessCount, probability)
-                });
-            }
-
-            return distribution;
+            // Create distribution
+            return CreateDistribution(DistributionTypes.LowerCumulative, numberOfTrials, probability, groupSuccessCount);
         }
 
         /// <summary>
@@ -551,12 +602,6 @@ namespace WarhammerCombatMathLibrary
             {
                 Debug.WriteLine($"LowerCumulativeDistribution() | Maximum number of trials is less than 1.");
                 return [new(0, 1)];
-            }
-
-            if (minNumberOfTrials == maxNumberOfTrials)
-            {
-                // If there isn't actually any variation in the number of trials, use the simpler method.
-                return LowerCumulativeDistribution(maxNumberOfTrials, probability);
             }
 
             if (probability <= 0)
@@ -608,37 +653,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Create distribution
-            var distribution = new List<BinomialOutcome>();
-
-            // Calculate the binomial results for each success value k, and average the results for each value of n
-            for (int k = 0; k <= Math.Floor((double)maxNumberOfTrials / groupSuccessCount); k++)
-            {
-                double combinedProbability = 0;
-                var startingValue = Math.Max(minNumberOfTrials, k);
-
-                for (int n = startingValue; n <= maxNumberOfTrials; n++)
-                {
-                    var massFunctionResult = LowerCumulativeProbability(n, k * groupSuccessCount, probability);
-                    combinedProbability += massFunctionResult;
-
-                    Debug.WriteLine($"Lower Cumulative Mass Function for n={n}, k={k}, p={probability}: {massFunctionResult}, combined mass = {combinedProbability}");
-                }
-
-                // Average all the probabilities for that value of n
-                var numerator = combinedProbability;
-                var denominator = (maxNumberOfTrials - (startingValue - 1));
-                combinedProbability = (double)numerator / denominator;
-                Debug.WriteLine($"Average probability for k={k}: {numerator} / {denominator} = {combinedProbability}");
-
-                // Add the result to the distribution
-                distribution.Add(new BinomialOutcome
-                {
-                    Successes = k,
-                    Probability = combinedProbability
-                });
-            }
-
-            return distribution;
+            return CreateDistribution(DistributionTypes.LowerCumulative, minNumberOfTrials, maxNumberOfTrials, probability, groupSuccessCount);
         }
 
         /// <summary>
@@ -760,18 +775,8 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
             }
 
-            var distribution = new List<BinomialOutcome>();
-
-            for (int k = 0; k <= Math.Floor((double)numberOfTrials / groupSuccessCount); k++)
-            {
-                distribution.Add(new BinomialOutcome
-                {
-                    Successes = k,
-                    Probability = UpperCumulativeProbability(numberOfTrials, k * groupSuccessCount, probability)
-                });
-            }
-
-            return distribution;
+            // Create distribution
+            return CreateDistribution(DistributionTypes.UpperCumulative, numberOfTrials, probability, groupSuccessCount);
         }
 
         /// <summary>
@@ -799,12 +804,6 @@ namespace WarhammerCombatMathLibrary
             {
                 Debug.WriteLine($"UpperCumulativeDistribution() | Maximum number of trials is less than 1.");
                 return [new(0, 1)];
-            }
-
-            if (minNumberOfTrials == maxNumberOfTrials)
-            {
-                // If there isn't actually any variation in the number of trials, use the simpler method.
-                return UpperCumulativeDistribution(maxNumberOfTrials, probability);
             }
 
             if (probability <= 0)
@@ -853,37 +852,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Create distribution
-            var distribution = new List<BinomialOutcome>();
-
-            // Calculate the binomial results for each success value k, and average the results for each value of n
-            for (int k = 0; k <= Math.Floor((double)maxNumberOfTrials / groupSuccessCount); k++)
-            {
-                double combinedProbability = 0;
-                var startingValue = Math.Max(minNumberOfTrials, k);
-
-                for (int n = startingValue; n <= maxNumberOfTrials; n++)
-                {
-                    var massFunctionResult = UpperCumulativeProbability(n, k * groupSuccessCount, probability);
-                    combinedProbability += massFunctionResult;
-
-                    Debug.WriteLine($"Upper Cumulative Mass Function for n={n}, k={k}, p={probability}: {massFunctionResult}, combined mass = {combinedProbability}");
-                }
-
-                // Average all the probabilities for that value of n
-                var numerator = combinedProbability;
-                var denominator = (maxNumberOfTrials - (startingValue - 1));
-                combinedProbability = (double)numerator / denominator;
-                Debug.WriteLine($"Average probability for k={k}: {numerator} / {denominator} = {combinedProbability}");
-
-                // Add the result to the distribution
-                distribution.Add(new BinomialOutcome
-                {
-                    Successes = k,
-                    Probability = combinedProbability
-                });
-            }
-
-            return distribution;
+            return CreateDistribution(DistributionTypes.UpperCumulative, minNumberOfTrials, maxNumberOfTrials, probability, groupSuccessCount);
         }
 
         /// <summary>
@@ -991,18 +960,8 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
             }
 
-            var distribution = new List<BinomialOutcome>();
-
-            for (int k = 0; k <= Math.Floor((double)numberOfTrials / groupSuccessCount); k++)
-            {
-                distribution.Add(new BinomialOutcome
-                {
-                    Successes = k,
-                    Probability = SurvivorFunction(numberOfTrials, k * groupSuccessCount, probability)
-                });
-            }
-
-            return distribution;
+            // Create distribution
+            return CreateDistribution(DistributionTypes.Suvivor, numberOfTrials, probability, groupSuccessCount);
         }
 
         /// <summary>
@@ -1030,12 +989,6 @@ namespace WarhammerCombatMathLibrary
             {
                 Debug.WriteLine($"SurvivorDistribution() | Maximum number of trials is less than 1.");
                 return [new(0, 1)];
-            }
-
-            if (minNumberOfTrials == maxNumberOfTrials)
-            {
-                // If there isn't actually any variation in the number of trials, use the simpler method.
-                return SurvivorDistribution(maxNumberOfTrials, probability);
             }
 
             if (probability <= 0)
@@ -1086,37 +1039,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Create distribution
-            var distribution = new List<BinomialOutcome>();
-
-            // Calculate the binomial results for each success value k, and average the results for each value of n
-            for (int k = 0; k <= Math.Floor((double)maxNumberOfTrials / groupSuccessCount); k++)
-            {
-                double combinedProbability = 0;
-                var startingValue = Math.Max(minNumberOfTrials, k);
-
-                for (int n = startingValue; n <= maxNumberOfTrials; n++)
-                {
-                    var massFunctionResult = SurvivorFunction(n, k * groupSuccessCount, probability);
-                    combinedProbability += massFunctionResult;
-
-                    Debug.WriteLine($"Survivor Mass Function for n={n}, k={k}, p={probability}: {massFunctionResult}, combined mass = {combinedProbability}");
-                }
-
-                // Average all the probabilities for that value of n
-                var numerator = combinedProbability;
-                var denominator = (maxNumberOfTrials - (startingValue - 1));
-                combinedProbability = (double)numerator / denominator;
-                Debug.WriteLine($"Average probability for k={k}: {numerator} / {denominator} = {combinedProbability}");
-
-                // Add the result to the distribution
-                distribution.Add(new BinomialOutcome
-                {
-                    Successes = k,
-                    Probability = combinedProbability
-                });
-            }
-
-            return distribution;
+            return CreateDistribution(DistributionTypes.Suvivor, minNumberOfTrials, maxNumberOfTrials, probability, groupSuccessCount);
         }
 
         /// <summary>
