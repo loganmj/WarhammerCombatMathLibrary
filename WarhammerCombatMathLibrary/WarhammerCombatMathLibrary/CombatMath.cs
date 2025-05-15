@@ -17,6 +17,79 @@ namespace WarhammerCombatMathLibrary
 
         #endregion
 
+        #region Private Methods
+
+        /// <summary>
+        /// Determines the maximum possible number of models destroyed given a specified amount of applied damage.
+        /// </summary>
+        /// <param name="attackerWeaponDamage">The damage per attack from the attacker's weapon.</param>
+        /// <param name="totalDamage">The total amount of damage done to the defending unit.</param>
+        /// <param name="defender">The defending unit data.</param>
+        /// <returns></returns>
+        private static int GetModelsDestroyed(int attackerWeaponDamage, int totalDamage, DefenderDTO? defender)
+        {
+            // Validate inputs
+            if (attackerWeaponDamage <= 0)
+            {
+                Debug.WriteLine($"GetModelsDestroyed() | Attacker's weapon damage is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (totalDamage <= 0)
+            {
+                Debug.WriteLine($"GetModelsDestroyed() | Total damage is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetModelsDestroyed() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            // Determine the divisor based on which value is larger: the defender's wounds per model, or the attacker's weapon damage.
+            var damageThreshold = Math.Max(defender.Wounds, attackerWeaponDamage);
+
+            // Adjust the total damage based on the defender Feel No Pain probability
+            var adjustedTotalDamage = GetAdjustedDamage(defender, totalDamage);
+
+            // Calculate the maximum possible number of models destroyed
+            var modelsDestroyed = (int)Math.Floor(adjustedTotalDamage / damageThreshold);
+
+            // Return either the max possible models destroyed, or the total number of defending models, whichever comes first
+            return Math.Min(modelsDestroyed, defender.NumberOfModels);
+        }
+
+        /// <summary>
+        /// Determines the number of successful, unblocked attacks required to destroy a single model from the defending unit.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        private static int GetAttacksRequiredToDestroyOneModel(int attackerWeaponDamage, DefenderDTO? defender)
+        {
+            if (attackerWeaponDamage <= 0)
+            {
+                Debug.WriteLine($"GetAttacksRequiredToDestroyOneModel() | Attacker weapon damage is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetAttacksRequiredToDestroyOneModel() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            // Factor in feel no pains by calculating the feel no pain probability,
+            // and using that to determine average weapon damage.
+            var adjustedWeaponDamage = GetAdjustedDamage(defender, attackerWeaponDamage);
+
+            // If the result is a decimal, round up to the next highest int value (as it will require another full attack to destroy the model).
+            return (int)Math.Ceiling(defender.Wounds / adjustedWeaponDamage);
+        }
+
+        #endregion
+
         #region Public Methods
 
         /// <summary>
@@ -43,67 +116,6 @@ namespace WarhammerCombatMathLibrary
 
             // Calculate the number of possible successful results, capping out at the number of possible results minus one (to account for the guaranteed fail result)
             return Math.Min(POSSIBLE_RESULTS_SIX_SIDED_DIE - (successThreshold - 1), POSSIBLE_RESULTS_SIX_SIDED_DIE - 1);
-        }
-
-        /// <summary>
-        /// Returns the scalar value of variable attack rolls the attacker is making.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns></returns>
-        public static int GetScalarValueOfVariableAttacks(AttackerDTO? attacker)
-        {
-            // Validate inputs
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetTotalNumberOfVariableAttacks() | Attacker is null, returning 0 ...");
-                return 0;
-            }
-
-            if (attacker.NumberOfModels < 1)
-            {
-                Debug.WriteLine($"GetTotalNumberOfVariableAttacks() | Number of models is less than 1, returning 0 ...");
-                return 0;
-            }
-
-            if (attacker.WeaponScalarOfVariableAttacks < 1)
-            {
-                Debug.WriteLine($"GetTotalNumberOfVariableAttacks() | Weapon Variable Attacks is less than 1, returning 0 ...");
-                return 0;
-            }
-
-            // Perform calculation
-            return attacker.NumberOfModels * attacker.WeaponScalarOfVariableAttacks;
-        }
-
-        /// <summary>
-        /// Returns the total number of flat attack rolls the attacker is making.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns></returns>
-        public static int GetTotalNumberOfFlatAttacks(AttackerDTO? attacker)
-        {
-            // If attacker parameter is null, return 0
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetTotalNumberOfFlatAttacks() | Attacker is null, returning 0 ...");
-                return 0;
-            }
-
-            // If either the number of models or the weapon attacks is less than 1, return 0.
-            if (attacker.NumberOfModels < 1)
-            {
-                Debug.WriteLine($"GetTotalNumberOfFlatAttacks() | Number of models is less than 1, returning 0 ...");
-                return 0;
-            }
-
-            if (attacker.WeaponFlatAttacks < 1)
-            {
-                Debug.WriteLine($"GetTotalNumberOfFlatAttacks() | Weapon Flat Attacks is less than 1, returning 0 ...");
-                return 0;
-            }
-
-            // Perform calculation
-            return attacker.NumberOfModels * attacker.WeaponFlatAttacks;
         }
 
         /// <summary>
@@ -692,80 +704,6 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Gets the average amount of damage done after all rolls have been completed.
-        /// This is the average amount of gross damage, before any modifers or feel no pains have been accounted for.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static double GetMeanDamageGross(AttackerDTO? attacker, DefenderDTO? defender)
-        {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetMeanDamageGross() | Attacker is null. Returning 0 ...");
-                return 0;
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetMeanDamageGross() | Defender is null. Returning 0 ...");
-                return 0;
-            }
-
-            return GetMeanFailedSaves(attacker, defender) * attacker.WeaponDamage;
-        }
-
-        /// <summary>
-        /// Gets the discrete expected total amount of damage, based on the average probability and the amount of damage per attack.
-        /// This is the expected amount of gross damage, before any modifers or feel no pains have been accounted for.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns></returns>
-        public static int GetExpectedDamageGross(AttackerDTO? attacker, DefenderDTO? defender)
-        {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetExpectedDamageGross() | Attacker is null. Returning 0 ...");
-                return 0;
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetExpectedDamageGross() | Defender is null. Returning 0 ...");
-                return 0;
-            }
-
-            return (int)Math.Floor(GetMeanFailedSaves(attacker, defender) * attacker.WeaponDamage);
-        }
-
-        /// <summary>
-        /// Gets the standard deviation of damage done after all rolls have been completed.
-        /// This is the standard deviation of gross damage, before any modifers or feel no pains have been accounted for.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static double GetStandardDeviationDamageGross(AttackerDTO? attacker, DefenderDTO? defender)
-        {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetStandardDeviationDamageGross() | Attacker is null. Returning 0 ...");
-                return 0;
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetStandardDeviationDamageGross() | Defender is null. Returning 0 ...");
-                return 0;
-            }
-
-            // Adjust the damage to account for defensive modifiers (e.g., feel no pain)
-            var adjustedDamage = GetAdjustedDamage(defender, attacker.WeaponDamage);
-
-            return GetStandardDeviationFailedSaves(attacker, defender) * adjustedDamage;
-        }
-
-        /// <summary>
         /// Adjusts the given amount of damage based on any defensive modifiers.
         /// </summary>
         /// <returns></returns>
@@ -797,7 +735,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetMeanDamageNet(AttackerDTO? attacker, DefenderDTO? defender)
+        public static double GetMeanDamage(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -819,7 +757,7 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
-        public static int GetExpectedDamageNet(AttackerDTO? attacker, DefenderDTO? defender)
+        public static int GetExpectedDamage(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -842,7 +780,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetStandardDeviationDamageNet(AttackerDTO? attacker, DefenderDTO? defender)
+        public static double GetStandardDeviationDamage(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -858,46 +796,6 @@ namespace WarhammerCombatMathLibrary
 
             var adjustedDamage = GetAdjustedDamage(defender, attacker.WeaponDamage);
             return GetStandardDeviationFailedSaves(attacker, defender) * adjustedDamage;
-        }
-
-        /// <summary>
-        /// Determines the maximum possible number of models destroyed given a specified amount of applied damage.
-        /// </summary>
-        /// <param name="attacker">The attacking unit data.</param>
-        /// <param name="defender">The defending unit data.</param>
-        /// <param name="totalDamage">The total amount of damage done to the unit.</param>
-        /// <returns></returns>
-        public static int GetModelsDestroyed(AttackerDTO? attacker, DefenderDTO? defender, int totalDamage)
-        {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetModelsDestroyed() | Attacker is null. Returning 0 ...");
-                return 0;
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetModelsDestroyed() | Defender is null. Returning 0 ...");
-                return 0;
-            }
-
-            if (totalDamage <= 0)
-            {
-                Debug.WriteLine($"GetModelsDestroyed() | Total damage is less than or equal to 0. Returning 0 ...");
-                return 0;
-            }
-
-            // Determine the divisor based on which value is larger: the defender's wounds per model, or the attacker's weapon damage.
-            var damageThreshold = Math.Max(defender.Wounds, attacker.WeaponDamage);
-
-            // Adjust the total damage based on the defender Feel No Pain probability
-            var adjustedTotalDamage = GetAdjustedDamage(defender, totalDamage);
-
-            // Calculate the maximum possible number of models destroyed
-            var modelsDestroyed = (int)Math.Floor(adjustedTotalDamage / damageThreshold);
-
-            // Return either the max possible models destroyed, or the total number of defending models, whichever comes first
-            return Math.Min(modelsDestroyed, defender.NumberOfModels);
         }
 
         /// <summary>
@@ -920,7 +818,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return GetModelsDestroyed(attacker, defender, GetExpectedDamageGross(attacker, defender));
+            var attackerWeaponDamage = attacker.WeaponDamage;
+            var totalDamage = GetExpectedDamage(attacker, defender);
+            return GetModelsDestroyed(attackerWeaponDamage, totalDamage, defender);
         }
 
         /// <summary>
@@ -943,36 +843,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var standardDeviationDamage = (int)Math.Floor(GetStandardDeviationDamageNet(attacker, defender));
-            return GetModelsDestroyed(attacker, defender, standardDeviationDamage);
-        }
-
-        /// <summary>
-        /// Determines the number of successful, unblocked attacks required to destroy a single model from the defending unit.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static int GetAttacksRequiredToDestroyOneModel(AttackerDTO? attacker, DefenderDTO? defender)
-        {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetAttacksRequiredToDestroyOneModel() | Attacker is null. Returning 0 ...");
-                return 0;
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetAttacksRequiredToDestroyOneModel() | Defender is null. Returning 0 ...");
-                return 0;
-            }
-
-            // Factor in feel no pains by calculating the feel no pain probability,
-            // and using that to determine average weapon damage.
-            var adjustedWeaponDamage = GetAdjustedDamage(defender, attacker.WeaponDamage);
-
-            // If the result is a decimal, round up to the next highest int value (as it will require another full attack to destroy the model).
-            return (int)Math.Ceiling(defender.Wounds / adjustedWeaponDamage);
+            var attackerWeaponDamage = attacker.WeaponDamage;
+            var standardDeviationDamage = (int)Math.Floor(GetStandardDeviationDamage(attacker, defender));
+            return GetModelsDestroyed(attackerWeaponDamage, standardDeviationDamage, defender);
         }
 
         /// <summary>
@@ -998,7 +871,7 @@ namespace WarhammerCombatMathLibrary
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
             var probability = GetProbabilityFailedSave(attacker, defender);
-            var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(attacker, defender);
+            var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(attacker.WeaponDamage, defender);
             return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability, groupSuccessCount);
         }
 
@@ -1025,7 +898,7 @@ namespace WarhammerCombatMathLibrary
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
             var probability = GetProbabilityFailedSave(attacker, defender);
-            var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(attacker, defender);
+            var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(attacker.WeaponDamage, defender);
             return Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probability, groupSuccessCount);
         }
 

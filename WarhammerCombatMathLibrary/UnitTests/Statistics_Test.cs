@@ -11,6 +11,8 @@ namespace UnitTests
     [TestClass]
     public sealed class Statistics_Test
     {
+        #region Unit Tests - ProbabilityOfSuccess()
+
         /// <summary>
         /// Tests the case where the numberOfPossibleResults argument is out of range.
         /// </summary>
@@ -65,6 +67,10 @@ namespace UnitTests
             Assert.AreEqual(0.7, Statistics.ProbabilityOfSuccess(10, 7));
         }
 
+        #endregion
+
+        #region Unit Tests - AverageResult()
+
         /// <summary>
         /// Tests the AverageResult() method when the input parameter is less than or equal to 0.
         /// </summary>
@@ -112,11 +118,15 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
+        #endregion
+
+        #region Unit Tests - Mean()
+
         /// <summary>
         /// Tests the case where the number of trials is less than 1.
         /// </summary>
         [TestMethod]
-        public void GetMean_NumberOfTrialsLessThan1()
+        public void Mean_NumberOfTrialsLessThan1()
         {
             Assert.AreEqual(0, Statistics.Mean(0, 1));
         }
@@ -125,7 +135,7 @@ namespace UnitTests
         /// Tests the case where the probability is less than 0.
         /// </summary>
         [TestMethod]
-        public void GetMean_ProbabilityLessThan0()
+        public void Mean_ProbabilityLessThan0()
         {
             Assert.AreEqual(0, Statistics.Mean(1, -1));
         }
@@ -134,7 +144,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetMean_TestParams1()
+        public void Mean_TestParams1()
         {
             Assert.AreEqual(0.5, Statistics.Mean(1, 0.5));
         }
@@ -143,7 +153,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetMean_TestParams2()
+        public void Mean_TestParams2()
         {
             Assert.AreEqual(5, Statistics.Mean(10, 0.5));
         }
@@ -152,16 +162,20 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetMean_TestParams3()
+        public void Mean_TestParams3()
         {
             Assert.AreEqual(25, Statistics.Mean(100, 0.25));
         }
+
+        #endregion
+
+        #region Unit Tests - StandardDeviation()
 
         /// <summary>
         /// Tests the case where the number of trials is less than 1.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviation_NumberOfTrialsLessThan1()
+        public void StandardDeviation_NumberOfTrialsLessThan1()
         {
             Assert.AreEqual(0, Statistics.StandardDeviation(0, 1));
         }
@@ -170,7 +184,7 @@ namespace UnitTests
         /// Tests the case where the probability is less than 0.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviation_ProbabilityLessThan0()
+        public void StandardDeviation_ProbabilityLessThan0()
         {
             Assert.AreEqual(0, Statistics.StandardDeviation(1, -1));
         }
@@ -179,7 +193,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviation_TestParams1()
+        public void StandardDeviation_TestParams1()
         {
             Assert.AreEqual(0.5, Statistics.Mean(1, 0.5));
         }
@@ -188,7 +202,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviation_TestParams2()
+        public void StandardDeviation_TestParams2()
         {
             Assert.AreEqual(1.58, Math.Round(Statistics.StandardDeviation(10, 0.5), 2));
         }
@@ -197,10 +211,14 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviation_TestParams3()
+        public void StandardDeviation_TestParams3()
         {
             Assert.AreEqual(4.33, Math.Round(Statistics.StandardDeviation(100, 0.25), 2));
         }
+
+        #endregion
+
+        #region Unit Tests - BinomialCoefficient()
 
         /// <summary>
         /// Tests the case where the totalPopulation argument is out of range.
@@ -256,6 +274,10 @@ namespace UnitTests
             Assert.AreEqual(BigInteger.Parse("18053528883775"), Statistics.BinomialCoefficient(50, 32));
         }
 
+        #endregion
+
+        #region Unit Tests - ProbabilityOfMultipleSuccesses()
+
         /// <summary>
         /// Tests the case where the probability argument is negative.
         /// </summary>
@@ -309,6 +331,10 @@ namespace UnitTests
         {
             Assert.AreEqual(0.59, Math.Round(Statistics.ProbabilityOfMultipleSuccesses(0.9, 5), 2));
         }
+
+        #endregion
+
+        #region Unit Tests - ProbabilityMassFunction()
 
         /// <summary>
         /// Tests the case where the numberOfTrials argument is out of range.
@@ -381,6 +407,10 @@ namespace UnitTests
         {
             Assert.AreEqual(0.0160, Math.Round(Statistics.ProbabilityMassFunction(50, 32, 0.5), 4));
         }
+
+        #endregion
+
+        #region Unit Tests - BinomialDistribution()
 
         /// <summary>
         /// Tests the case where the numberOfTrials argument is out of range.
@@ -718,6 +748,10 @@ namespace UnitTests
             CollectionAssert.AreEqual(expected, actual);
         }
 
+        #endregion
+
+        #region Unit Tests - LowerCumulativeProbability
+
         /// <summary>
         /// Tests the case where the number of trials is less than 1.
         /// </summary>
@@ -798,6 +832,10 @@ namespace UnitTests
         {
             Assert.AreEqual(0.9836, Math.Round(Statistics.LowerCumulativeProbability(50, 32, 0.5), 4));
         }
+
+        #endregion
+
+        #region Unit Tests - LowerCumulativeDistribution
 
         /// <summary>
         /// Tests the case where the numberOfTrials argument is out of range.
@@ -1135,6 +1173,10 @@ namespace UnitTests
             CollectionAssert.AreEqual(expected, actual);
         }
 
+        #endregion
+
+        #region Unit Tests - UpperCumulativeProbability
+
         /// <summary>
         /// Tests the case where the number of trials is less than 1.
         /// </summary>
@@ -1215,6 +1257,10 @@ namespace UnitTests
         {
             Assert.AreEqual(0.0164, Math.Round(Statistics.UpperCumulativeProbability(50, 32, 0.5), 4));
         }
+
+        #endregion
+
+        #region Unit Tests - UpperCumulativeDistribution
 
         /// <summary>
         /// Tests the case where the numberOfTrials argument is out of range.
@@ -1553,6 +1599,10 @@ namespace UnitTests
             CollectionAssert.AreEqual(expected, actual);
         }
 
+        #endregion
+
+        #region Unit Tests - SurvivorFunction
+
         /// <summary>
         /// Tests the case where number of trials is less than 0.
         /// </summary>
@@ -1664,6 +1714,10 @@ namespace UnitTests
 
             Assert.AreEqual(expected, Math.Round(actual, 4));
         }
+
+        #endregion
+
+        #region Unit Tests - SurvivorDistribution
 
         /// <summary>
         /// Tests the case where the numberOfTrials argument is out of range.
@@ -1928,40 +1982,6 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the probability mass function with given large inputs.
-        /// </summary>
-        [TestMethod]
-        public void SurvivorDistribution_TestParams3()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1.0),
-                new(1, 0.75),
-                new(2, 0.25)
-            };
-
-            var numberOfTrials = 2;
-            var probability = 0.5;
-            var actual = Statistics.SurvivorDistribution(numberOfTrials, probability);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
         /// Tests the method with given large inputs.
         /// </summary>
         [TestMethod]
@@ -2035,5 +2055,7 @@ namespace UnitTests
 
             CollectionAssert.AreEqual(expected, actual);
         }
+
+        #endregion
     }
 }
