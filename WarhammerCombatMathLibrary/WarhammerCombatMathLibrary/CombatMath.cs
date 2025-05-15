@@ -635,7 +635,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Statistics.StandardDeviation(GetTotalNumberOfFlatAttacks(attacker), GetProbabilityFailedSave(attacker, defender));
+            var averageAttacks = GetAverageAttacks(attacker);
+            var probabilityOfFailedSave = GetProbabilityFailedSave(attacker, defender);
+            return Statistics.StandardDeviation(averageAttacks, probabilityOfFailedSave);
         }
 
         /// <summary>
