@@ -11,7 +11,7 @@
         Binomial,
 
         /// <summary>
-        /// A lower cumulative distribution gives a probabiilty value P(X <= k) for each value of k.
+        /// A lower cumulative distribution gives a probability value P(X <= k) for each value of k.
         /// </summary>
         LowerCumulative,
 
