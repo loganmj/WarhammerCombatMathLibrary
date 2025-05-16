@@ -24,6 +24,6 @@
         /// A survivor distribution gives a probability value P(X >= k) for each value of k, essentially calculating the probability of 
         /// getting at least k successes for each value of k.
         /// </summary>
-        Suvivor
+        Survivor
     }
 }
