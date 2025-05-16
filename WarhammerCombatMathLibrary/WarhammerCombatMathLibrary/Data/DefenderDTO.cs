@@ -44,13 +44,12 @@
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"Defender:\n"
-                   + $"NumberOfModels: {NumberOfModels}\n"
-                   + $"Toughness: {Toughness}\n"
-                   + $"ArmorSave: {ArmorSave}+\n"
-                   + $"InvulnerableSave: {InvulnerableSave}+\n"
-                   + $"FeelNoPain: {FeelNoPain}+\n"
-                   + $"Wounds: {Wounds}";
+            return $"Defender: [NumberOfModels: {NumberOfModels},"
+                   + $"Toughness: {Toughness},"
+                   + $"ArmorSave: {ArmorSave},"
+                   + $"InvulnerableSave: {InvulnerableSave},"
+                   + $"FeelNoPain: {FeelNoPain},"
+                   + $"Wounds: {Wounds}]";
         }
 
         #endregion

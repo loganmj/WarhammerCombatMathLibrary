@@ -13,9 +13,19 @@
         public int NumberOfModels { get; set; }
 
         /// <summary>
-        /// The number of attacks the attacker is making.
+        /// The scalar number of variable attacks that the attacker gets.
         /// </summary>
-        public int WeaponAttacks { get; set; }
+        public int WeaponScalarOfVariableAttacks { get; set; }
+
+        /// <summary>
+        /// The dice type used to determine the variable number of attacks.
+        /// </summary>
+        public DiceType WeaponVariableAttackType { get; set; }
+
+        /// <summary>
+        /// The number of flat attacks the attacker gets.
+        /// </summary>
+        public int WeaponFlatAttacks { get; set; }
 
         /// <summary>
         /// The ballistic/weapon skill threshold value of the attacker.
@@ -44,13 +54,14 @@
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"Attacker:\n"
-                   + $"NumberOfModels: {NumberOfModels}\n"
-                   + $"WeaponAttacks: {WeaponAttacks}\n"
-                   + $"WeaponSkill: {WeaponSkill}+\n"
-                   + $"WeaponStrength: {WeaponStrength}\n"
-                   + $"WeaponArmorPierce: -{WeaponArmorPierce}\n"
-                   + $"WeaponDamage: {WeaponDamage}";
+            return $"Attacker: [NumberOfModels: {NumberOfModels}, "
+                   + $"WeaponVariableAttacks: {WeaponScalarOfVariableAttacks}, "
+                   + $"WeaponVariableAttacksType: {WeaponVariableAttackType}, "
+                   + $"WeaponFlatAttacks: {WeaponFlatAttacks},"
+                   + $"WeaponSkill: {WeaponSkill},"
+                   + $"WeaponStrength: {WeaponStrength},"
+                   + $"WeaponArmorPierce: -{WeaponArmorPierce},"
+                   + $"WeaponDamage: {WeaponDamage}]";
         }
 
         #endregion
