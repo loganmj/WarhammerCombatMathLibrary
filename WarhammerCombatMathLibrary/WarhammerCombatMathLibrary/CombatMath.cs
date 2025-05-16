@@ -141,7 +141,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            // If both the variable salar and the flat value of attacks are less than or equal to 0, then there are no attacks.
+            // If both the variable scalar and the flat value of attacks are less than or equal to 0, then there are no attacks.
             if (attacker.WeaponScalarOfVariableAttacks <= 0 && attacker.WeaponFlatAttacks <= 0)
             {
                 Debug.WriteLine($"GetTotalAttacks() | Attacker has no attacks value, returning 0 ...");
