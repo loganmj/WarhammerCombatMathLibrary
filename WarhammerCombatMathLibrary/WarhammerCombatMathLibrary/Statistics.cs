@@ -38,7 +38,7 @@ namespace WarhammerCombatMathLibrary
                     case (DistributionTypes.UpperCumulative):
                         discreteProbability = UpperCumulativeProbability(numberOfTrials, k * groupSuccessCount, probability);
                         break;
-                    case (DistributionTypes.Suvivor):
+                    case (DistributionTypes.Survivor):
                         discreteProbability = SurvivorFunction(numberOfTrials, k * groupSuccessCount, probability);
                         break;
                 }
@@ -89,7 +89,7 @@ namespace WarhammerCombatMathLibrary
                         case (DistributionTypes.UpperCumulative):
                             massFunctionResult = UpperCumulativeProbability(n, k * groupSuccessCount, probability);
                             break;
-                        case (DistributionTypes.Suvivor):
+                        case (DistributionTypes.Survivor):
                             massFunctionResult = SurvivorFunction(n, k * groupSuccessCount, probability);
                             break;
                     }
@@ -963,7 +963,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Create distribution
-            return CreateDistribution(DistributionTypes.Suvivor, numberOfTrials, probability, groupSuccessCount);
+            return CreateDistribution(DistributionTypes.Survivor, numberOfTrials, probability, groupSuccessCount);
         }
 
         /// <summary>
@@ -1041,7 +1041,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Create distribution
-            return CreateDistribution(DistributionTypes.Suvivor, minNumberOfTrials, maxNumberOfTrials, probability, groupSuccessCount);
+            return CreateDistribution(DistributionTypes.Survivor, minNumberOfTrials, maxNumberOfTrials, probability, groupSuccessCount);
         }
 
         /// <summary>
