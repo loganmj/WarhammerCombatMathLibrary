@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>WarhammerCombatMathLibrary</PackageId>
-    <Version>6.0.0</Version>
+    <Version>6.1.0</Version>
     <Authors>Michael Logan</Authors>
     <Description>A set of library files used for calculating combat math for Warhammer 40k.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>

@@ -13,6 +13,11 @@
         public int NumberOfModels { get; set; }
 
         /// <summary>
+        /// Does the attacker's weapon have a variable number of attacks
+        /// </summary>
+        public bool WeaponHasVariableAttacks { get; set; }
+
+        /// <summary>
         /// The scalar number of variable attacks that the attacker gets.
         /// </summary>
         public int WeaponScalarOfVariableAttacks { get; set; }
@@ -55,9 +60,7 @@
         public override string ToString()
         {
             return $"Attacker: [NumberOfModels: {NumberOfModels}, "
-                   + $"WeaponVariableAttacks: {WeaponScalarOfVariableAttacks}, "
-                   + $"WeaponVariableAttacksType: {WeaponVariableAttackType}, "
-                   + $"WeaponFlatAttacks: {WeaponFlatAttacks},"
+                   + $"Weapon Attacks: {(WeaponHasVariableAttacks ? $"{WeaponScalarOfVariableAttacks} {WeaponVariableAttackType} + {WeaponFlatAttacks}" : WeaponFlatAttacks)}, "
                    + $"WeaponSkill: {WeaponSkill},"
                    + $"WeaponStrength: {WeaponStrength},"
                    + $"WeaponArmorPierce: -{WeaponArmorPierce},"
