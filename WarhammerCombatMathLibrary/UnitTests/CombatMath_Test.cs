@@ -22,7 +22,7 @@ namespace UnitTests
             WeaponSkill = 2,
             WeaponStrength = 6,
             WeaponArmorPierce = 2,
-            WeaponDamage = 3
+            WeaponFlatDamage = 3
         };
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace UnitTests
             WeaponSkill = 3,
             WeaponStrength = 4,
             WeaponArmorPierce = 1,
-            WeaponDamage = 1
+            WeaponFlatDamage = 1
         };
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace UnitTests
             WeaponSkill = 4,
             WeaponStrength = 8,
             WeaponArmorPierce = 2,
-            WeaponDamage = 2
+            WeaponFlatDamage = 2
         };
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace UnitTests
             WeaponSkill = 3,
             WeaponStrength = 10,
             WeaponArmorPierce = 3,
-            WeaponDamage = 3
+            WeaponFlatDamage = 3
         };
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace UnitTests
             WeaponSkill = 4,
             WeaponStrength = 6,
             WeaponArmorPierce = 1,
-            WeaponDamage = 2
+            WeaponFlatDamage = 2
         };
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace UnitTests
             WeaponSkill = 0,
             WeaponStrength = 5,
             WeaponArmorPierce = 1,
-            WeaponDamage = 1,
+            WeaponFlatDamage = 1,
             WeaponHasTorrent = true
         };
 
@@ -109,7 +109,7 @@ namespace UnitTests
             WeaponSkill = 4,
             WeaponStrength = 3,
             WeaponArmorPierce = 0,
-            WeaponDamage = 1
+            WeaponFlatDamage = 1
         };
 
         /// <summary>
@@ -163,537 +163,6 @@ namespace UnitTests
             FeelNoPain = 5,
             Wounds = 16
         };
-
-        #endregion
-
-        #region Unit Tests - GetAverageAttacks()
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 models.
-        /// </summary>
-        [TestMethod]
-        public void GetAverageAttacks_NullAttacker()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetAverageAttacks(null);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 models.
-        /// </summary>
-        [TestMethod]
-        public void GetAverageAttacks_ZeroModels()
-        {
-            var expected = 0;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 0,
-                WeaponFlatAttacks = 1
-            };
-
-            var actual = CombatMath.GetAverageAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has a negative number of models.
-        /// </summary>
-        [TestMethod]
-        public void GetAverageAttacks_NegativeNumberOfModels()
-        {
-            var expected = 0;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = -1,
-                WeaponFlatAttacks = 1
-            };
-
-            var actual = CombatMath.GetAverageAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 weapon attacks.
-        /// </summary>
-        [TestMethod]
-        public void GetAverageAttacks_ZeroWeaponAttacks()
-        {
-            var expected = 0;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponScalarOfVariableAttacks = 0,
-                WeaponFlatAttacks = 0
-            };
-
-            var actual = CombatMath.GetAverageAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 scalar weapon attacks, but at least one flat attack.
-        /// </summary>
-        [TestMethod]
-        public void GetAverageAttacks_ZeroScalar()
-        {
-            var expected = 1;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponScalarOfVariableAttacks = 0,
-                WeaponFlatAttacks = 1
-            };
-
-            var actual = CombatMath.GetAverageAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 flat weapon attacks, but at least one scalar attack.
-        /// </summary>
-        [TestMethod]
-        public void GetAverageAttacks_ZeroFlat()
-        {
-            var expected = 4;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponScalarOfVariableAttacks = 1,
-                WeaponVariableAttackType = DiceType.D6,
-                WeaponFlatAttacks = 0
-            };
-
-            var actual = CombatMath.GetAverageAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has a negative number of weapon attacks.
-        /// </summary>
-        [TestMethod]
-        public void GetAverageAttacks_NegativeWeaponAttacks()
-        {
-            var expected = 0;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponFlatAttacks = -1
-            };
-
-            var actual = CombatMath.GetAverageAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetAverageAttacks_TestParams1()
-        {
-            var expected = 8;
-            var actual = CombatMath.GetAverageAttacks(ATTACKER_KHARN_THE_BETRAYER);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetAverageAttacks_TestParams2()
-        {
-            var expected = 20;
-            var actual = CombatMath.GetAverageAttacks(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetAverageAttacks_TestParams3()
-        {
-            var expected = 6;
-            var actual = CombatMath.GetAverageAttacks(ATTACKER_WORLD_EATERS_FORGEFIEND);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetAverageAttacks_TestParams4()
-        {
-            var expected = 12;
-            var actual = CombatMath.GetAverageAttacks(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
-            Assert.AreEqual(expected, actual);
-        }
-
-        #endregion
-
-        #region Unit Tests - GetMinimumAttacks()
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 models.
-        /// </summary>
-        [TestMethod]
-        public void GetMinimumAttacks_NullAttacker()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetMinimumAttacks(null);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 models.
-        /// </summary>
-        [TestMethod]
-        public void GetMinimumAttacks_ZeroModels()
-        {
-            var expected = 0;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 0,
-                WeaponFlatAttacks = 1
-            };
-
-            var actual = CombatMath.GetMinimumAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has a negative number of models.
-        /// </summary>
-        [TestMethod]
-        public void GetMinimumAttacks_NegativeNumberOfModels()
-        {
-            var expected = 0;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = -1,
-                WeaponFlatAttacks = 1
-            };
-
-            var actual = CombatMath.GetMinimumAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 weapon attacks.
-        /// </summary>
-        [TestMethod]
-        public void GetMinimumAttacks_ZeroWeaponAttacks()
-        {
-            var expected = 0;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponScalarOfVariableAttacks = 0,
-                WeaponFlatAttacks = 0
-            };
-
-            var actual = CombatMath.GetMinimumAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 scalar weapon attacks, but at least one flat attack.
-        /// </summary>
-        [TestMethod]
-        public void GetMinimumAttacks_ZeroScalar()
-        {
-            var expected = 1;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponScalarOfVariableAttacks = 0,
-                WeaponFlatAttacks = 1
-            };
-
-            var actual = CombatMath.GetMinimumAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 flat weapon attacks, but at least one scalar attack.
-        /// </summary>
-        [TestMethod]
-        public void GetMinimumAttacks_ZeroFlat()
-        {
-            var expected = 1;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponScalarOfVariableAttacks = 1,
-                WeaponVariableAttackType = DiceType.D6,
-                WeaponFlatAttacks = 0
-            };
-
-            var actual = CombatMath.GetMinimumAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has a negative number of weapon attacks.
-        /// </summary>
-        [TestMethod]
-        public void GetMinimumAttacks_NegativeWeaponAttacks()
-        {
-            var expected = 0;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponFlatAttacks = -1
-            };
-
-            var actual = CombatMath.GetMinimumAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetMinimumAttacks_TestParams1()
-        {
-            var expected = 8;
-            var actual = CombatMath.GetMinimumAttacks(ATTACKER_KHARN_THE_BETRAYER);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetMinimumAttacks_TestParams2()
-        {
-            var expected = 20;
-            var actual = CombatMath.GetMinimumAttacks(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetMinimumAttacks_TestParams3()
-        {
-            var expected = 3;
-            var actual = CombatMath.GetMinimumAttacks(ATTACKER_WORLD_EATERS_FORGEFIEND);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetMinimumAttacks_TestParams4()
-        {
-            var expected = 6;
-            var actual = CombatMath.GetMinimumAttacks(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
-            Assert.AreEqual(expected, actual);
-        }
-
-        #endregion
-
-        #region Unit Tests - GetMaximumAttacks()
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 models.
-        /// </summary>
-        [TestMethod]
-        public void GetMaximumAttacks_NullAttacker()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetMaximumAttacks(null);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 models.
-        /// </summary>
-        [TestMethod]
-        public void GetMaximumAttacks_ZeroModels()
-        {
-            var expected = 0;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 0,
-                WeaponFlatAttacks = 1
-            };
-
-            var actual = CombatMath.GetMaximumAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has a negative number of models.
-        /// </summary>
-        [TestMethod]
-        public void GetMaximumAttacks_NegativeNumberOfModels()
-        {
-            var expected = 0;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = -1,
-                WeaponFlatAttacks = 1
-            };
-
-            var actual = CombatMath.GetMaximumAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 weapon attacks.
-        /// </summary>
-        [TestMethod]
-        public void GetMaximumAttacks_ZeroWeaponAttacks()
-        {
-            var expected = 0;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponScalarOfVariableAttacks = 0,
-                WeaponFlatAttacks = 0
-            };
-
-            var actual = CombatMath.GetMaximumAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 scalar weapon attacks, but at least one flat attack.
-        /// </summary>
-        [TestMethod]
-        public void GetMaximumAttacks_ZeroScalar()
-        {
-            var expected = 1;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponScalarOfVariableAttacks = 0,
-                WeaponFlatAttacks = 1
-            };
-
-            var actual = CombatMath.GetMaximumAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has 0 flat weapon attacks, but at least one scalar attack.
-        /// </summary>
-        [TestMethod]
-        public void GetMaximumAttacks_ZeroFlat()
-        {
-            var expected = 6;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponScalarOfVariableAttacks = 1,
-                WeaponVariableAttackType = DiceType.D6,
-                WeaponFlatAttacks = 0
-            };
-
-            var actual = CombatMath.GetMaximumAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker has a negative number of weapon attacks.
-        /// </summary>
-        [TestMethod]
-        public void GetMaximumAttacks_NegativeWeaponAttacks()
-        {
-            var expected = 0;
-
-            var attacker = new AttackerDTO()
-            {
-                NumberOfModels = 1,
-                WeaponFlatAttacks = -1
-            };
-
-            var actual = CombatMath.GetMaximumAttacks(attacker);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetMaximumAttacks_TestParams1()
-        {
-            var expected = 8;
-            var actual = CombatMath.GetMaximumAttacks(ATTACKER_KHARN_THE_BETRAYER);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetMaximumAttacks_TestParams2()
-        {
-            var expected = 20;
-            var actual = CombatMath.GetMaximumAttacks(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetMaximumAttacks_TestParams3()
-        {
-            var expected = 9;
-            var actual = CombatMath.GetMaximumAttacks(ATTACKER_WORLD_EATERS_FORGEFIEND);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetMaximumAttacks_TestParams4()
-        {
-            var expected = 16;
-            var actual = CombatMath.GetMaximumAttacks(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
-            Assert.AreEqual(expected, actual);
-        }
 
         #endregion
 
