@@ -72,7 +72,6 @@ namespace WarhammerCombatMathLibrary
             {
                 double combinedProbability = 0;
                 var startingValue = Math.Max(minNumberOfTrials, k * groupSuccessCount);
-                Debug.WriteLine($"Determining starting value | minNumberOfTrials = {minNumberOfTrials}, k = {k * groupSuccessCount}, max = {startingValue}");
 
                 for (int n = startingValue; n <= maxNumberOfTrials; n++)
                 {
@@ -95,16 +94,12 @@ namespace WarhammerCombatMathLibrary
                     }
 
                     combinedProbability += massFunctionResult;
-
-                    Debug.WriteLine($"{distributionType} Mass Function for n={n}, k={k}, p={probability}: {massFunctionResult}, combined mass = {combinedProbability}");
                 }
 
                 // Average all the probabilities for that value of n
                 var numerator = combinedProbability;
                 var denominator = (maxNumberOfTrials - (startingValue - 1));
-                Debug.WriteLine($"Determining denominator | maxNumberOfTrials={maxNumberOfTrials}, startingValue={startingValue} | maxNumberOfTrials - (startingValue - 1) = {denominator}");
                 combinedProbability = (double)numerator / denominator;
-                Debug.WriteLine($"Average probability for k={k}: {numerator} / {denominator} = {combinedProbability}");
 
                 // Add the result to the distribution
                 distribution.Add(new BinomialOutcome
@@ -1079,6 +1074,12 @@ namespace WarhammerCombatMathLibrary
             if (probability < 0)
             {
                 Debug.WriteLine($"GetStandardDeviation() | Probability is less than 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (probability == 1)
+            {
+                Debug.WriteLine($"GetStandardDeviation() | Probability is 1. Returning 0 ...");
                 return 0;
             }
 

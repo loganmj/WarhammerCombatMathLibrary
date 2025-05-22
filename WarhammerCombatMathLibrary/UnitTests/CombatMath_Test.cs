@@ -886,7 +886,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetExpectedHits_TestParams1()
+        public void GetExpectedHits_SingleModelAttacker()
         {
             var expected = 6;
             var actual = CombatMath.GetExpectedHits(ATTACKER_KHARN_THE_BETRAYER);
@@ -898,7 +898,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetExpectedHits_TestParams2()
+        public void GetExpectedHits_MultiModelAttacker()
         {
             var expected = 13;
             var actual = CombatMath.GetExpectedHits(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
@@ -910,7 +910,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetExpectedHits_TestParams3()
+        public void GetExpectedHits_VariableAttacks_SingleModelAttacker()
         {
             var expected = 4;
             var actual = CombatMath.GetExpectedHits(ATTACKER_WORLD_EATERS_FORGEFIEND);
@@ -922,10 +922,22 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetExpectedHits_TestParams4()
+        public void GetExpectedHits_VariableAttacks_MultiModelAttacker()
         {
             var expected = 6;
             var actual = CombatMath.GetExpectedHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedHits_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = 20;
+            var actual = CombatMath.GetExpectedHits(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD);
 
             Assert.AreEqual(expected, actual);
         }
@@ -947,7 +959,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationHits_TestParams1()
+        public void GetStandardDeviationHits_SingleModelAttacker()
         {
             var expected = 1.0541;
             var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_KHARN_THE_BETRAYER), 4);
@@ -959,7 +971,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationHits_TestParams2()
+        public void GetStandardDeviationHits_MultiModelAttacker()
         {
             var expected = 2.1082;
             var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
@@ -971,7 +983,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationHits_TestParams3()
+        public void GetStandardDeviationHits_VariableAttacks_SingleModelAttacker()
         {
             var expected = 1.1547;
             var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_WORLD_EATERS_FORGEFIEND), 4);
@@ -983,10 +995,22 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationHits_TestParams4()
+        public void GetStandardDeviationHits_VariableAttacks_MultiModelAttacker()
         {
             var expected = 1.7321;
             var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the weapon has torrent.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationHits_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = 0;
+            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1194,6 +1218,66 @@ namespace UnitTests
             CollectionAssert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionHits_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 0),
+                new(1, 0),
+                new(2, 0),
+                new(3, 0),
+                new(4, 0),
+                new(5, 0),
+                new(6, 0),
+                new(7, 0),
+                new(8, 0),
+                new(9, 0),
+                new(10, 0),
+                new(11, 0),
+                new(12, 0),
+                new(13, 0),
+                new(14, 0),
+                new(15, 0),
+                new(16, 0),
+                new(17, 0),
+                new(18, 0),
+                new(19, 0),
+                new(20, 0),
+                new(21, 0),
+                new(22, 0),
+                new(23, 0),
+                new(24, 0),
+                new(25, 0),
+                new(26, 0),
+                new(27, 0),
+                new(28, 0),
+                new(29, 0),
+                new(30, 1)
+            };
+
+            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetSurvivorDistributionHits()
@@ -1379,6 +1463,66 @@ namespace UnitTests
             };
 
             var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the weapon has torrent.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionHits_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 1),
+                new(2, 1),
+                new(3, 1),
+                new(4, 1),
+                new(5, 1),
+                new(6, 1),
+                new(7, 1),
+                new(8, 1),
+                new(9, 1),
+                new(10, 1),
+                new(11, 1),
+                new(12, 1),
+                new(13, 1),
+                new(14, 1),
+                new(15, 1),
+                new(16, 1),
+                new(17, 1),
+                new(18, 1),
+                new(19, 1),
+                new(20, 1),
+                new(21, 1),
+                new(22, 1),
+                new(23, 1),
+                new(24, 1),
+                new(25, 1),
+                new(26, 1),
+                new(27, 1),
+                new(28, 1),
+                new(29, 1),
+                new(30, 1)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
