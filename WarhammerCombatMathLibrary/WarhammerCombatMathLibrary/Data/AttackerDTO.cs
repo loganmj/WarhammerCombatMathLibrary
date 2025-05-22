@@ -13,11 +13,6 @@
         public int NumberOfModels { get; set; }
 
         /// <summary>
-        /// Does the attacker's weapon have a variable number of attacks
-        /// </summary>
-        public bool WeaponHasVariableAttacks { get; set; }
-
-        /// <summary>
         /// The scalar number of variable attacks that the attacker gets.
         /// </summary>
         public int WeaponScalarOfVariableAttacks { get; set; }
@@ -31,6 +26,11 @@
         /// The number of flat attacks the attacker gets.
         /// </summary>
         public int WeaponFlatAttacks { get; set; }
+
+        /// <summary>
+        /// Denotes whether the weapon has the Torrent keyword.
+        /// </summary>
+        public bool WeaponHasTorrent { get; set; }
 
         /// <summary>
         /// The ballistic/weapon skill threshold value of the attacker.
@@ -60,7 +60,7 @@
         public override string ToString()
         {
             return $"Attacker: [NumberOfModels: {NumberOfModels}, "
-                   + $"Weapon Attacks: {(WeaponHasVariableAttacks ? $"{WeaponScalarOfVariableAttacks} {WeaponVariableAttackType} + {WeaponFlatAttacks}" : WeaponFlatAttacks)}, "
+                   + $"Weapon Attacks: {(WeaponScalarOfVariableAttacks > 0 ? $"{WeaponScalarOfVariableAttacks} {WeaponVariableAttackType} + {WeaponFlatAttacks}" : WeaponFlatAttacks)}, "
                    + $"WeaponSkill: {WeaponSkill},"
                    + $"WeaponStrength: {WeaponStrength},"
                    + $"WeaponArmorPierce: -{WeaponArmorPierce},"

@@ -20,6 +20,51 @@ namespace WarhammerCombatMathLibrary
         #region Private Methods
 
         /// <summary>
+        /// Returns the success threshold for succeeding on a given die roll, with a given success threshold.
+        /// Note that in Warhammer 40k, a roll of 1 always fails, and a roll of 6 always succeeds.
+        /// </summary>
+        /// <param name="successThreshold"></param>
+        /// <returns>An integer value containing the number of possible successful results.</returns>
+        private static int GetNumberOfSuccessfulResults(int successThreshold)
+        {
+            // If the success threshold is greater than the number of possible results, then there are no successful results
+            if (successThreshold > POSSIBLE_RESULTS_SIX_SIDED_DIE)
+            {
+                Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is greater than {POSSIBLE_RESULTS_SIX_SIDED_DIE}, returning 0 ...");
+                return 0;
+            }
+
+            // If the success threshold is less than or equal to 0, then there are no successful results
+            if (successThreshold <= 0)
+            {
+                Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is less than or equal to 0, returning 0 ...");
+                return 0;
+            }
+
+            // Calculate the number of possible successful results, capping out at the number of possible results minus one (to account for the guaranteed fail result)
+            return Math.Min(POSSIBLE_RESULTS_SIX_SIDED_DIE - (successThreshold - 1), POSSIBLE_RESULTS_SIX_SIDED_DIE - 1);
+        }
+
+        /// <summary>
+        /// Returns the probability of succeeding a roll with a single dice, given the desired success threshold.
+        /// </summary>
+        /// <param name="weaponSkill">The weapon skill success threshold.</param>
+        /// <returns>A double value containing the probability of success for a single trial.</returns>
+        private static double GetProbabilityOfHit(int weaponSkill)
+        {
+            // Validate parameters
+            if (weaponSkill <= 0)
+            {
+                Debug.WriteLine($"GetProbabilityOfHit() | Weapon skill is less than or equal to 0, returning 0 ...");
+                return 0;
+            }
+
+            // A roll of 1 is always a fail, so treat an input of 1+ as an input of 2+
+            var successThreshold = weaponSkill == 1 ? 2 : weaponSkill;
+            return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(successThreshold));
+        }
+
+        /// <summary>
         /// Determines the maximum possible number of models destroyed given a specified amount of applied damage.
         /// </summary>
         /// <param name="attackerWeaponDamage">The damage per attack from the attacker's weapon.</param>
@@ -93,32 +138,6 @@ namespace WarhammerCombatMathLibrary
         #region Public Methods
 
         /// <summary>
-        /// Returns the success threshold for succeeding on a given die roll, with a given success threshold.
-        /// Note that in Warhammer 40k, a roll of 1 always fails, and a roll of 6 always succeeds.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns></returns>
-        public static int GetNumberOfSuccessfulResults(int successThreshold)
-        {
-            // If the success threshold is greater than the number of possible results, then there are no successful results
-            if (successThreshold > POSSIBLE_RESULTS_SIX_SIDED_DIE)
-            {
-                Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is greater than {POSSIBLE_RESULTS_SIX_SIDED_DIE}, returning 0 ...");
-                return 0;
-            }
-
-            // If the success threshold is less than or equal to 0, then there are no successful results
-            if (successThreshold <= 0)
-            {
-                Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is less than or equal to 0, returning 0 ...");
-                return 0;
-            }
-
-            // Calculate the number of possible successful results, capping out at the number of possible results minus one (to account for the guaranteed fail result)
-            return Math.Min(POSSIBLE_RESULTS_SIX_SIDED_DIE - (successThreshold - 1), POSSIBLE_RESULTS_SIX_SIDED_DIE - 1);
-        }
-
-        /// <summary>
         /// Returns the average number of attack rolls the attacking unit is making.
         /// This includes the average of any variable attacks added to the flat number of attacks.
         /// This also takes into account the number of models in the attacking unit.
@@ -181,7 +200,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var minimumVariableAttacks = attacker.WeaponScalarOfVariableAttacks * 1;
+            var minimumVariableAttacks = attacker.WeaponScalarOfVariableAttacks;
             var flatAttacks = attacker.WeaponFlatAttacks;
             var numberOfModels = attacker.NumberOfModels;
 
@@ -224,21 +243,6 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns the probability of succeeding a roll with a single dice, given the desired success threshold.
-        /// </summary>
-        /// <returns>A double value containing the probability of success for a single trial.</returns>
-        public static double GetProbabilityOfHit(AttackerDTO? attacker)
-        {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetProbabilityOfHit() | Attacker is null, returning 0 ...");
-                return 0;
-            }
-
-            return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(attacker.WeaponSkill));
-        }
-
-        /// <summary>
         /// Returns the mean of the attacker's hit roll distribution.
         /// </summary>
         /// <param name="attacker"></param>
@@ -252,7 +256,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             var averageNumberOfAttacks = GetAverageAttacks(attacker);
-            var probabilityOfHit = GetProbabilityOfHit(attacker);
+            var probabilityOfHit = GetProbabilityOfHit(attacker.WeaponSkill);
             return Statistics.Mean(averageNumberOfAttacks, probabilityOfHit);
         }
 
@@ -286,7 +290,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             var averageAttacks = GetAverageAttacks(attacker);
-            var probabilityOfHit = GetProbabilityOfHit(attacker);
+            var probabilityOfHit = GetProbabilityOfHit(attacker.WeaponSkill);
             return Statistics.StandardDeviation(averageAttacks, probabilityOfHit);
         }
 
@@ -304,7 +308,7 @@ namespace WarhammerCombatMathLibrary
 
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
-            var probabilityOfHit = GetProbabilityOfHit(attacker);
+            var probabilityOfHit = GetProbabilityOfHit(attacker.WeaponSkill);
             return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probabilityOfHit);
         }
 
@@ -323,7 +327,7 @@ namespace WarhammerCombatMathLibrary
 
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
-            var probabilityOfHit = GetProbabilityOfHit(attacker);
+            var probabilityOfHit = GetProbabilityOfHit(attacker.WeaponSkill);
             return Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probabilityOfHit);
         }
 
@@ -403,7 +407,7 @@ namespace WarhammerCombatMathLibrary
 
             var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker, defender);
             var numberOfSuccessfulResults = GetNumberOfSuccessfulResults(woundSuccessThreshold);
-            return GetProbabilityOfHit(attacker) * Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
+            return GetProbabilityOfHit(attacker.WeaponSkill) * Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
         }
 
         /// <summary>
