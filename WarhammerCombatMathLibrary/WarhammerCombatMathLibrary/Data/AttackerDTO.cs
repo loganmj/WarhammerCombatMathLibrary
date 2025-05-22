@@ -60,7 +60,7 @@
         public override string ToString()
         {
             return $"Attacker: [NumberOfModels: {NumberOfModels}, "
-                   + $"Weapon Attacks: {(WeaponScalarOfVariableAttacks > 0 ? $"{WeaponScalarOfVariableAttacks} {WeaponVariableAttackType} + {WeaponFlatAttacks}" : WeaponFlatAttacks)}, "
+                   + $"Weapon Attacks: {(WeaponScalarOfVariableAttacks > 0 ? $"{WeaponScalarOfVariableAttacks} {WeaponVariableAttackType} + {WeaponFlatAttacks}" : WeaponFlatAttacks.ToString())}, "
                    + $"WeaponSkill: {WeaponSkill},"
                    + $"WeaponStrength: {WeaponStrength},"
                    + $"WeaponArmorPierce: -{WeaponArmorPierce},"
