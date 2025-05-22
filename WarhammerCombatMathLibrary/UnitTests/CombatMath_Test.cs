@@ -4047,6 +4047,51 @@ namespace UnitTests
             CollectionAssert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionDestroyedModels_MultiModelAttacker_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = new List<BinomialOutcome>()
+                {
+                    new(0, 0.0152),
+                    new(1, 0.0911),
+                    new(2, 0.1138),
+                    new(3, 0.1119),
+                    new(4, 0.0983),
+                    new(5, 0.0666),
+                    new(6, 0.0320),
+                    new(7, 0.0104),
+                    new(8, 0.0022),
+                    new(9, 0.0003),
+                    new(10, 0),
+                    new(11, 0),
+                    new(12, 0),
+                    new(13, 0),
+                    new(14, 0),
+                    new(15, 0)
+                };
+
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetSurvivorDistributionDestroyedModels()
@@ -4270,6 +4315,51 @@ namespace UnitTests
                 };
 
             var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionDestroyedModels_MultiModelAttacker_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = new List<BinomialOutcome>()
+                {
+                    new(0, 1),
+                    new(1, 0.9316),
+                    new(2, 0.7306),
+                    new(3, 0.5248),
+                    new(4, 00.3365),
+                    new(5, 0.1728),
+                    new(6, 0.0664),
+                    new(7, 0.0182),
+                    new(8, 0.0034),
+                    new(9, 0.0004),
+                    new(10, 0),
+                    new(11, 0),
+                    new(12, 0),
+                    new(13, 0),
+                    new(14, 0),
+                    new(15, 0)
+                };
+
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
