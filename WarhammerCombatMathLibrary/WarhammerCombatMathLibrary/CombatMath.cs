@@ -124,7 +124,9 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// Adjusts the given amount of damage based on any defensive modifiers.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="defender">The defender object containing defensive attributes such as Feel No Pain.</param>
+        /// <param name="damage">The initial amount of damage to be adjusted.</param>
+        /// <returns>The adjusted damage value after applying defensive modifiers.</returns>
         private static double GetAdjustedDamage(DefenderDTO? defender, int damage)
         {
             // Validate inputs
