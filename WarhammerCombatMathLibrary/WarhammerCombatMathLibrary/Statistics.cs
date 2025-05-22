@@ -169,11 +169,6 @@ namespace WarhammerCombatMathLibrary
             var sum = (double)(numberOfPossibleResults * (numberOfPossibleResults + 1)) / 2;
             var average = (int)Math.Round(((double)sum / numberOfPossibleResults));
 
-            // Debug
-            Debug.WriteLine($"Calculating average of {numberOfPossibleResults} results ...");
-            Debug.WriteLine($"Sum of Results: {sum}");
-            Debug.WriteLine($"Average of Results: Sum/Total = {sum} / {numberOfPossibleResults} = {average}");
-
             // Calcualte average
             return average;
 

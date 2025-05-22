@@ -82,6 +82,22 @@ namespace UnitTests
         };
 
         /// <summary>
+        /// Attack profile for a Space Marine Infernus Squad.
+        /// </summary>
+        public static readonly AttackerDTO ATTACKER_SPACE_MARINE_INFERNUS_SQUAD = new()
+        {
+            NumberOfModels = 5,
+            WeaponScalarOfVariableAttacks = 1,
+            WeaponVariableAttackType = DiceType.D6,
+            WeaponFlatAttacks = 0,
+            WeaponSkill = 0,
+            WeaponStrength = 5,
+            WeaponArmorPierce = 1,
+            WeaponDamage = 1,
+            WeaponHasTorrent = true
+        };
+
+        /// <summary>
         /// Defense profile for a 10 man squad of Space Marine Intercessors
         /// </summary>
         public static readonly DefenderDTO DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD = new()
@@ -666,6 +682,122 @@ namespace UnitTests
 
         #endregion
 
+        #region Unit Tests - GetProbabilityOfHit()
+
+        /// <summary>
+        /// Tests the case where the attacker has 0 models.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_NullAttacker()
+        {
+            Assert.AreEqual(0, CombatMath.GetProbabilityOfHit(null));
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has 0 models.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_ZeroWeaponSkill()
+        {
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 0
+            };
+
+            Assert.AreEqual(0, CombatMath.GetProbabilityOfHit(attacker));
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has a negative number of models.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_NegativeWeaponSkill()
+        {
+            var expected = 0;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = -1
+            };
+
+            var actual = CombatMath.GetProbabilityOfHit(attacker);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker weapon skill is 1.
+        /// Rolls of 1 are always considered a fail, so a weapon skill of 1+ should be treated as a 2+ instead.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_WeaponSkillValueOf1()
+        {
+            var expected = 0.8333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker weapon has torrent.
+        /// Torrent weapons automatically hit their target.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_WeaponHasTorrent()
+        {
+            var expected = 1;
+            var attacker = new AttackerDTO()
+            {
+                WeaponHasTorrent = true
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_TestParams1()
+        {
+            var expected = 0.8333;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(ATTACKER_KHARN_THE_BETRAYER), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_TestParams2()
+        {
+            var expected = 0.6667;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_TestParams3()
+        {
+            var expected = 0.5;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
+
         #region Unit Tests - GetMeanHits()
 
         /// <summary>
@@ -721,6 +853,18 @@ namespace UnitTests
         {
             var expected = 6;
             var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker's weapon has torrent.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanHits_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = 20;
+            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
