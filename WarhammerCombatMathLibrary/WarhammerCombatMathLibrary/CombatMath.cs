@@ -20,12 +20,142 @@ namespace WarhammerCombatMathLibrary
         #region Private Methods
 
         /// <summary>
+        /// Returns the success threshold for succeeding on a given die roll, with a given success threshold.
+        /// Note that in Warhammer 40k, a roll of 1 always fails, and a roll of 6 always succeeds.
+        /// </summary>
+        /// <param name="successThreshold">The success threshold value.</param>
+        /// <returns>An integer value containing the number of possible successful results.</returns>
+        private static int GetNumberOfSuccessfulResults(int successThreshold)
+        {
+            // If the success threshold is greater than the number of possible results, then there are no successful results
+            if (successThreshold > POSSIBLE_RESULTS_SIX_SIDED_DIE)
+            {
+                Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is greater than {POSSIBLE_RESULTS_SIX_SIDED_DIE}, returning 0 ...");
+                return 0;
+            }
+
+            // If the success threshold is less than or equal to 0, then there are no successful results
+            if (successThreshold <= 0)
+            {
+                Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is less than or equal to 0, returning 0 ...");
+                return 0;
+            }
+
+            // Calculate the number of possible successful results, capping out at the number of possible results minus one (to account for the guaranteed fail result)
+            return Math.Min(POSSIBLE_RESULTS_SIX_SIDED_DIE - (successThreshold - 1), POSSIBLE_RESULTS_SIX_SIDED_DIE - 1);
+        }
+
+        /// <summary>
+        /// Returns the success threshold for wounding the defender.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        private static int GetSuccessThresholdOfWound(int attackerWeaponStrength, int defenderToughness)
+        {
+            if (attackerWeaponStrength <= 0)
+            {
+                Debug.WriteLine($"GetSuccessThresholdOfWound() | Attacker strength is less than or equal to 0. Returning 6+ ...");
+                return 6;
+            }
+
+            if (defenderToughness <= 0)
+            {
+                Debug.WriteLine($"GetSuccessThresholdOfWound() | Defender toughness is less than or equal to 0. Returning 6+ ...");
+                return 6;
+            }
+
+            // The attacker's weapon Strength is greater than or equal to double the defender's Toughness.
+            if (attackerWeaponStrength >= 2 * defenderToughness)
+            {
+                return 2;
+            }
+
+            // The attacker's weapon Strength is greater than, but less than double, the defender's Toughness.
+            else if (attackerWeaponStrength > defenderToughness)
+            {
+                return 3;
+            }
+
+            // The attacker's weapon Strength is equal to the defender's Toughness.
+            else if (attackerWeaponStrength == defenderToughness)
+            {
+                return 4;
+            }
+
+            // The attacker's weapon Strength is less than, but more than half, the defender's Toughness.
+            else if (attackerWeaponStrength > defenderToughness / 2)
+            {
+                return 5;
+            }
+
+            // The attacker's weapon Strength is less than or equal to half the defender's Toughness.
+            else
+            {
+                return 6;
+            }
+        }
+
+        /// <summary>
+        /// Returns the adjusted armor save of the defender after applying the attacker's armor pierce.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        private static int GetAdjustedArmorSave(AttackerDTO? attacker, DefenderDTO? defender)
+        {
+            if (attacker == null)
+            {
+                Debug.WriteLine($"GetAdjustedArmorSave() | Attacker is null, returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetAdjustedArmorSave() | Defender is null, returning 0 ...");
+                return 0;
+            }
+
+            // If the defender has an invulnerable save, and the invulnerable save is lower than the regular save after applying armor pierce,
+            // then use the invulnerable save.
+            return Math.Min(defender.ArmorSave + attacker.WeaponArmorPierce, defender.InvulnerableSave);
+        }
+
+        /// <summary>
+        /// Adjusts the given amount of damage based on any defensive modifiers.
+        /// </summary>
+        /// <param name="defender">The defender object containing defensive attributes such as Feel No Pain.</param>
+        /// <param name="damage">The initial amount of damage to be adjusted.</param>
+        /// <returns>The adjusted damage value after applying defensive modifiers.</returns>
+        private static double GetAdjustedDamage(DefenderDTO? defender, int damage)
+        {
+            // Validate inputs
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetAdjustedDamage() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (damage <= 0)
+            {
+                Debug.WriteLine($"GetAdjustedDamage() | Input damage is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
+
+            // Account for feel no pains
+            // NOTE: Using the average probability for feel no pains is not a perfect way of handling this,
+            // but it is SIGNIFICANTLY less resource intensive than performing calculations for every single feel no pain roll.
+            var feelNoPainSuccessProbability = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(defender.FeelNoPain));
+            return damage * (1 - feelNoPainSuccessProbability);
+        }
+
+        /// <summary>
         /// Determines the maximum possible number of models destroyed given a specified amount of applied damage.
         /// </summary>
         /// <param name="attackerWeaponDamage">The damage per attack from the attacker's weapon.</param>
         /// <param name="totalDamage">The total amount of damage done to the defending unit.</param>
         /// <param name="defender">The defending unit data.</param>
-        /// <returns></returns>
+        /// <returns>An integer value representing the number of defending models that will be destroyed by the attack.</returns>
         private static int GetModelsDestroyed(int attackerWeaponDamage, int totalDamage, DefenderDTO? defender)
         {
             // Validate inputs
@@ -63,9 +193,9 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// Determines the number of successful, unblocked attacks required to destroy a single model from the defending unit.
         /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
+        /// <param name="attackerWeaponDamage">The damage stat of the attacker's weapon.</param>
+        /// <param name="defender">The defender data object.</param>
+        /// <returns>An integer value representing the minimum number of successful attacks required to destroy a single model in the defending unit.</returns>
         private static int GetAttacksRequiredToDestroyOneModel(int attackerWeaponDamage, DefenderDTO? defender)
         {
             if (attackerWeaponDamage <= 0)
@@ -93,37 +223,11 @@ namespace WarhammerCombatMathLibrary
         #region Public Methods
 
         /// <summary>
-        /// Returns the success threshold for succeeding on a given die roll, with a given success threshold.
-        /// Note that in Warhammer 40k, a roll of 1 always fails, and a roll of 6 always succeeds.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns></returns>
-        public static int GetNumberOfSuccessfulResults(int successThreshold)
-        {
-            // If the success threshold is greater than the number of possible results, then there are no successful results
-            if (successThreshold > POSSIBLE_RESULTS_SIX_SIDED_DIE)
-            {
-                Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is greater than {POSSIBLE_RESULTS_SIX_SIDED_DIE}, returning 0 ...");
-                return 0;
-            }
-
-            // If the success threshold is less than or equal to 0, then there are no successful results
-            if (successThreshold <= 0)
-            {
-                Debug.WriteLine($"GetNumberOfSuccessfulResults() | Success threshold is less than or equal to 0, returning 0 ...");
-                return 0;
-            }
-
-            // Calculate the number of possible successful results, capping out at the number of possible results minus one (to account for the guaranteed fail result)
-            return Math.Min(POSSIBLE_RESULTS_SIX_SIDED_DIE - (successThreshold - 1), POSSIBLE_RESULTS_SIX_SIDED_DIE - 1);
-        }
-
-        /// <summary>
         /// Returns the average number of attack rolls the attacking unit is making.
         /// This includes the average of any variable attacks added to the flat number of attacks.
         /// This also takes into account the number of models in the attacking unit.
         /// </summary>
-        /// <param name="attacker"></param>
+        /// <param name="attacker">The attacker data object</param>
         /// <returns>An integer value containing the average number of attacks made by the attacking unit.</returns>
         public static int GetAverageAttacks(AttackerDTO? attacker)
         {
@@ -156,7 +260,7 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// Gets the minimum number of attacks made by the attacking unit.
         /// </summary>
-        /// <param name="attacker"></param>
+        /// <param name="attacker">The attacker data object</param>
         /// <returns>An integer value containing the minimum number attacks made by the attacking unit.</returns>
         public static int GetMinimumAttacks(AttackerDTO? attacker)
         {
@@ -181,7 +285,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var minimumVariableAttacks = attacker.WeaponScalarOfVariableAttacks * 1;
+            var minimumVariableAttacks = attacker.WeaponScalarOfVariableAttacks;
             var flatAttacks = attacker.WeaponFlatAttacks;
             var numberOfModels = attacker.NumberOfModels;
 
@@ -191,7 +295,7 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// Gets the maximum number of attacks made by the attacking unit.
         /// </summary>
-        /// <param name="attacker"></param>
+        /// <param name="attacker">The attacker data object</param>
         /// <returns>An integer value containing the maximum number attacks made by the attacking unit.</returns>
         public static int GetMaximumAttacks(AttackerDTO? attacker)
         {
@@ -226,16 +330,26 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// Returns the probability of succeeding a roll with a single dice, given the desired success threshold.
         /// </summary>
+        /// <param name="attacker">The attacker data object</param>
         /// <returns>A double value containing the probability of success for a single trial.</returns>
         public static double GetProbabilityOfHit(AttackerDTO? attacker)
         {
+            // Validate inputs
             if (attacker == null)
             {
                 Debug.WriteLine($"GetProbabilityOfHit() | Attacker is null, returning 0 ...");
                 return 0;
             }
 
-            return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(attacker.WeaponSkill));
+            // If the attacker's weapon has torrent, all attacks will automatically hit.
+            if (attacker.WeaponHasTorrent)
+            {
+                return 1;
+            }
+
+            // A roll of 1 always fails, so if the attacker data object has a weapon skill value of 1+, treat it as 2+
+            var successThreshold = attacker.WeaponSkill == 1 ? 2 : attacker.WeaponSkill;
+            return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(successThreshold));
         }
 
         /// <summary>
@@ -328,60 +442,6 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns the success threshold for wounding the defender.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static int GetSuccessThresholdOfWound(AttackerDTO? attacker, DefenderDTO? defender)
-        {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetSuccessThresholdOfWound() | Attacker is null. Returning 7+ ...");
-                return 7;
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetSuccessThresholdOfWound() | Defender is null. Returning 7+ ...");
-                return 7;
-            }
-
-            var strength = attacker.WeaponStrength;
-            var toughness = defender.Toughness;
-
-            // The attacker's weapon Strength is greater than or equal to double the defender's Toughness.
-            if (strength >= 2 * toughness)
-            {
-                return 2;
-            }
-
-            // The attacker's weapon Strength is greater than, but less than double, the defender's Toughness.
-            else if (strength > toughness)
-            {
-                return 3;
-            }
-
-            // The attacker's weapon Strength is equal to the defender's Toughness.
-            else if (strength == toughness)
-            {
-                return 4;
-            }
-
-            // The attacker's weapon Strength is less than, but more than half, the defender's Toughness.
-            else if (strength > toughness / 2)
-            {
-                return 5;
-            }
-
-            // The attacker's weapon Strength is less than or equal to half the defender's Toughness.
-            else
-            {
-                return 6;
-            }
-        }
-
-        /// <summary>
         /// Returns the probability of succeeding in both a hit and a wound roll for any one attack.
         /// </summary>
         /// <param name="attacker"></param>
@@ -401,7 +461,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker, defender);
+            var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
             var numberOfSuccessfulResults = GetNumberOfSuccessfulResults(woundSuccessThreshold);
             return GetProbabilityOfHit(attacker) * Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
         }
@@ -527,31 +587,6 @@ namespace WarhammerCombatMathLibrary
             var maximumAttacks = GetMaximumAttacks(attacker);
             var probability = GetProbabilityWound(attacker, defender);
             return Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probability);
-        }
-
-        /// <summary>
-        /// Returns the adjusted armor save of the defender after applying the attacker's armor pierce.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static int GetAdjustedArmorSave(AttackerDTO? attacker, DefenderDTO? defender)
-        {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetAdjustedArmorSave() | Attacker is null, returning 0 ...");
-                return 0;
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetAdjustedArmorSave() | Defender is null, returning 0 ...");
-                return 0;
-            }
-
-            // If the defender has an invulnerable save, and the invulnerable save is lower than the regular save after applying armor pierce,
-            // then use the invulnerable save.
-            return Math.Min(defender.ArmorSave + attacker.WeaponArmorPierce, defender.InvulnerableSave);
         }
 
         /// <summary>
@@ -701,32 +736,6 @@ namespace WarhammerCombatMathLibrary
             var maximumAttacks = GetMaximumAttacks(attacker);
             var probability = GetProbabilityFailedSave(attacker, defender);
             return Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probability);
-        }
-
-        /// <summary>
-        /// Adjusts the given amount of damage based on any defensive modifiers.
-        /// </summary>
-        /// <returns></returns>
-        public static double GetAdjustedDamage(DefenderDTO? defender, int damage)
-        {
-            // Validate inputs
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetAdjustedDamage() | Defender is null. Returning 0 ...");
-                return 0;
-            }
-
-            if (damage <= 0)
-            {
-                Debug.WriteLine($"GetAdjustedDamage() | Input damage is less than or equal to 0. Returning 0 ...");
-                return 0;
-            }
-
-            // Account for feel no pains
-            // NOTE: Using the average probability for feel no pains is not a perfect way of handling this,
-            // but it is SIGNIFICANTLY less resource intensive than performing calculations for every single feel no pain roll.
-            var feelNoPainSuccessProbability = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(defender.FeelNoPain));
-            return damage * (1 - feelNoPainSuccessProbability);
         }
 
         /// <summary>

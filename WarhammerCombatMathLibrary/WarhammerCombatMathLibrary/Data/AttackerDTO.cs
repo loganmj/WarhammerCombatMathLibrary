@@ -28,6 +28,11 @@
         public int WeaponFlatAttacks { get; set; }
 
         /// <summary>
+        /// Denotes whether the weapon has the Torrent keyword.
+        /// </summary>
+        public bool WeaponHasTorrent { get; set; }
+
+        /// <summary>
         /// The ballistic/weapon skill threshold value of the attacker.
         /// </summary>
         public int WeaponSkill { get; set; }
@@ -55,9 +60,7 @@
         public override string ToString()
         {
             return $"Attacker: [NumberOfModels: {NumberOfModels}, "
-                   + $"WeaponVariableAttacks: {WeaponScalarOfVariableAttacks}, "
-                   + $"WeaponVariableAttacksType: {WeaponVariableAttackType}, "
-                   + $"WeaponFlatAttacks: {WeaponFlatAttacks},"
+                   + $"Weapon Attacks: {(WeaponScalarOfVariableAttacks > 0 ? $"{WeaponScalarOfVariableAttacks} {WeaponVariableAttackType} + {WeaponFlatAttacks}" : WeaponFlatAttacks.ToString())}, "
                    + $"WeaponSkill: {WeaponSkill},"
                    + $"WeaponStrength: {WeaponStrength},"
                    + $"WeaponArmorPierce: -{WeaponArmorPierce},"
