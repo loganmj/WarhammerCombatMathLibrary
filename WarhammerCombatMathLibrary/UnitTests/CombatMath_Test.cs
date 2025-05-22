@@ -1558,72 +1558,6 @@ namespace UnitTests
 
         #endregion
 
-        #region Unit Tests - GetSuccessThresholdOfWound()
-
-        /// <summary>
-        /// Tests the case where the attacker is null.
-        /// </summary>
-        [TestMethod]
-        public void GetSuccessThresholdOfWound_AttackerIsNull()
-        {
-            var expected = 7;
-
-            var actual = CombatMath.GetSuccessThresholdOfWound(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the defender is null.
-        /// </summary>
-        [TestMethod]
-        public void GetSuccessThresholdOfWound_DefenderIsNull()
-        {
-            var expected = 7;
-
-            var actual = CombatMath.GetSuccessThresholdOfWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, null);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSuccessThresholdOfWound_HigherStrength()
-        {
-            var expected = 3;
-            var actual = CombatMath.GetSuccessThresholdOfWound(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSuccessThresholdOfWound_EqualStrengthAndToughness()
-        {
-            var expected = 4;
-            var actual = CombatMath.GetSuccessThresholdOfWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSuccessThresholdOfWound_HigherToughness()
-        {
-            var expected = 5;
-            var actual = CombatMath.GetSuccessThresholdOfWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        #endregion
-
         #region Unit Tests - GetProbabilityOfWound()
 
         /// <summary>
@@ -2537,65 +2471,6 @@ namespace UnitTests
 
         #endregion
 
-        #region Unit Tests - GetAdjustedArmorSave()
-
-        /// <summary>
-        /// Test the case where the attacker object is null
-        /// </summary>
-        [TestMethod]
-        public void GetAdjustedArmorSave_NullAttacker()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetAdjustedArmorSave(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the case where the defender object is null
-        /// </summary>
-        [TestMethod]
-        public void GetAdjustedArmorSave_NullDefender()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetAdjustedArmorSave(ATTACKER_KHARN_THE_BETRAYER, null);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetAdjustedArmorSave_NoArmorPierce_NoInvulnerableSave()
-        {
-            var expected = 3;
-            var actual = CombatMath.GetAdjustedArmorSave(ATTACKER_WORLD_EATERS_JAKHALS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetAdjustedArmorSave_HighArmorPierce_NoInvulnerableSave()
-        {
-            var expected = 5;
-            var actual = CombatMath.GetAdjustedArmorSave(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetAdjustedArmorSave_HighArmorPierce_InvulnerableSave4()
-        {
-            var expected = 4;
-            var actual = CombatMath.GetAdjustedArmorSave(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
-            Assert.AreEqual(expected, actual);
-        }
-
-        #endregion
-
         #region Unit Tests - GetProbabilityFailedSave()
 
         /// <summary>
@@ -2736,6 +2611,18 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanFailedSaves_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = 6.6667;
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetExpectedFailedSaves()
@@ -2819,6 +2706,18 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedFailedSaves_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = 6;
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            Assert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetStandardDeviationFailedSaves()
@@ -2898,6 +2797,18 @@ namespace UnitTests
         {
             var expected = 1.2910;
             var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationFailedSaves_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = 2.1082;
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3151,6 +3062,66 @@ namespace UnitTests
             };
 
             var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionFailedSaves_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 0.0152),
+                new(1, 0.0532),
+                new(2, 0.0911),
+                new(3, 0.1099),
+                new(4, 0.1138),
+                new(5, 0.1122),
+                new(6, 0.1119),
+                new(7, 0.1076),
+                new(8, 0.0983),
+                new(9, 0.0841),
+                new(10, 0.0666),
+                new(11, 0.0484),
+                new(12, 0.0320),
+                new(13, 0.0192),
+                new(14, 0.0104),
+                new(15, 0.0051),
+                new(16, 0.0022),
+                new(17, 0.0009),
+                new(18, 0.0003),
+                new(19, 0.0001),
+                new(20, 0),
+                new(21, 0),
+                new(22, 0),
+                new(23, 0),
+                new(24, 0),
+                new(25, 0),
+                new(26, 0),
+                new(27, 0),
+                new(28, 0),
+                new(29, 0),
+                new(30, 0)
+            };
+
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3436,63 +3407,64 @@ namespace UnitTests
             CollectionAssert.AreEqual(expected, actual);
         }
 
-        #endregion
-
-        #region Unit Tests - GetAdjustedDamage()
-
         /// <summary>
-        /// Tests the case where the defender is null
+        /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetAdjustedDamage_NullDefender()
+        public void GetSurvivorDistributionFailedSaves_VariableAttacks_WeaponHasTorrent()
         {
-            var expected = 0;
-            var actual = CombatMath.GetAdjustedDamage(null, 5);
-            Assert.AreEqual(expected, actual);
-        }
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.9848),
+                new(2, 0.9316),
+                new(3, 0.8405),
+                new(4, 0.7306),
+                new(5, 0.6168),
+                new(6, 0.5248),
+                new(7, 0.4301),
+                new(8, 0.3365),
+                new(9, 0.2490),
+                new(10, 0.1728),
+                new(11, 0.1115),
+                new(12, 0.0664),
+                new(13, 0.0363),
+                new(14, 0.0182),
+                new(15, 0.0082),
+                new(16, 0.0034),
+                new(17, 0.0013),
+                new(18, 0.0004),
+                new(19, 0.0001),
+                new(20, 0),
+                new(21, 0),
+                new(22, 0),
+                new(23, 0),
+                new(24, 0),
+                new(25, 0),
+                new(26, 0),
+                new(27, 0),
+                new(28, 0),
+                new(29, 0),
+                new(30, 0)
+            };
 
-        /// <summary>
-        /// Tests the case where the input damage is less than or equal to 0.
-        /// </summary>
-        [TestMethod]
-        public void GetAdjustedDamage_DamageIsLessThanOrEqualTo0()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetAdjustedDamage(DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD, 0);
-            Assert.AreEqual(expected, actual);
-        }
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetAdjustedDamage_NoDefensiveSpecialRules()
-        {
-            var expected = 20;
-            var actual = CombatMath.GetAdjustedDamage(DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD, 20);
-            Assert.AreEqual(expected, actual);
-        }
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
 
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetAdjustedDamage_SingleModel_DefenderHasFeelNoPains()
-        {
-            var expected = 6.6667;
-            var actual = Math.Round(CombatMath.GetAdjustedDamage(DEFENDER_DEATH_GUARD_MORTARION, 10), 4);
-            Assert.AreEqual(expected, actual);
-        }
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
 
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetAdjustedDamage_MultipleModels_DefenderHasFeelNoPains()
-        {
-            var expected = 13.3333;
-            var actual = Math.Round(CombatMath.GetAdjustedDamage(DEFENDER_WORLD_EATERS_CHAOS_SPAWN, 20), 4);
-            Assert.AreEqual(expected, actual);
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         #endregion
