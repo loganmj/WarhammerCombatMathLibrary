@@ -628,7 +628,7 @@ namespace WarhammerCombatMathLibrary
             if (attacker == null)
             {
                 Debug.WriteLine($"GetSurvivorDistributionHits() | Attacker is null. Returning empty list ...");
-                return new List<BinomialOutcome>();
+                return [];
             }
 
             var minimumAttacks = GetMinimumAttacks(attacker);
@@ -733,13 +733,13 @@ namespace WarhammerCombatMathLibrary
             if (attacker == null)
             {
                 Debug.WriteLine($"GetBinomialDistributionWounds() | Attacker is null. Returning empty list ...");
-                return new List<BinomialOutcome>();
+                return [];
             }
 
             if (defender == null)
             {
                 Debug.WriteLine($"GetBinomialDistributionWounds() | Defender is null. Returning empty list ...");
-                return new List<BinomialOutcome>();
+                return [];
             }
 
             var minimumAttacks = GetMinimumAttacks(attacker);
@@ -758,13 +758,13 @@ namespace WarhammerCombatMathLibrary
             if (attacker == null)
             {
                 Debug.WriteLine($"GetSurvivorDistributionWounds() | Attacker is null. Returning empty list ...");
-                return new List<BinomialOutcome>();
+                return [];
             }
 
             if (defender == null)
             {
                 Debug.WriteLine($"GetSurvivorDistributionWounds() | Defender is null. Returning empty list ...");
-                return new List<BinomialOutcome>();
+                return [];
             }
 
             var minimumAttacks = GetMinimumAttacks(attacker);
@@ -870,13 +870,13 @@ namespace WarhammerCombatMathLibrary
             if (attacker == null)
             {
                 Debug.WriteLine($"GetBinomialDistributionFailedSaves() | Attacker is null. Returning empty list ...");
-                return new List<BinomialOutcome>();
+                return [];
             }
 
             if (defender == null)
             {
                 Debug.WriteLine($"GetBinomialDistributionFailedSaves() | Defender is null. Returning empty list ...");
-                return new List<BinomialOutcome>();
+                return [];
             }
 
             var minimumAttacks = GetMinimumAttacks(attacker);
@@ -895,13 +895,13 @@ namespace WarhammerCombatMathLibrary
             if (attacker == null)
             {
                 Debug.WriteLine($"GetSurvivorDistributionFailedSaves() | Attacker is null. Returning empty list ...");
-                return new List<BinomialOutcome>();
+                return [];
             }
 
             if (defender == null)
             {
                 Debug.WriteLine($"GetSurvivorDistributionFailedSaves() | Defender is null. Returning empty list ...");
-                return new List<BinomialOutcome>();
+                return [];
             }
 
             var minimumAttacks = GetMinimumAttacks(attacker);
@@ -1068,13 +1068,13 @@ namespace WarhammerCombatMathLibrary
             if (attacker == null)
             {
                 Debug.WriteLine($"GetBinomialDistributionDestroyedModels() | Attacker is null. Returning empty list ...");
-                return new List<BinomialOutcome>();
+                return [];
             }
 
             if (defender == null)
             {
                 Debug.WriteLine($"GetBinomialDistributionDestroyedModels() | Defender is null. Returning empty list ...");
-                return new List<BinomialOutcome>();
+                return [];
             }
 
             // Get probability of a successful attack
@@ -1084,18 +1084,18 @@ namespace WarhammerCombatMathLibrary
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
 
-            // Get upper bound of group success count
-            var minimumDamagePerAttack = GetMinimumDamagePerAttack(attacker);
-            var minimumAdjustedDamagePerAttack = GetMinimumAdjustedDamagePerAttack(minimumDamagePerAttack, defender);
+            // Get lower bound of group success count
+            var minimumDamagePerAttack = GetMaximumDamagePerAttack(attacker);
+            var minimumAdjustedDamagePerAttack = GetMaximumAdjustedDamagePerAttack(minimumDamagePerAttack, defender);
             var minGroupSuccessCount = GetAttacksRequiredToDestroyOneModel(minimumAdjustedDamagePerAttack, defender);
 
-            // Get lower bound of group success count
-            var maximumDamagePerAttack = GetMaximumDamagePerAttack(attacker);
-            var maximumAdjustedDamagePerAttack = GetMaximumAdjustedDamagePerAttack(maximumDamagePerAttack, defender);
+            // Get upper bound of group success count
+            var maximumDamagePerAttack = GetMinimumDamagePerAttack(attacker);
+            var maximumAdjustedDamagePerAttack = GetMinimumAdjustedDamagePerAttack(maximumDamagePerAttack, defender);
             var maxGroupSuccessCount = GetAttacksRequiredToDestroyOneModel(maximumAdjustedDamagePerAttack, defender);
 
-            // TODO: Use version of the method that allows for variable group success count
-            return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability, 0);
+            return Statistics.BinomialDistribution(maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
+            // TODO: return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
         }
 
         /// <summary>
@@ -1109,13 +1109,13 @@ namespace WarhammerCombatMathLibrary
             if (attacker == null)
             {
                 Debug.WriteLine($"GetSurvivorDistributionDestroyedModels() | Attacker is null. Returning empty list ...");
-                return new List<BinomialOutcome>();
+                return [];
             }
 
             if (defender == null)
             {
                 Debug.WriteLine($"GetSurvivorDistributionDestroyedModels() | Defender is null. Returning empty list ...");
-                return new List<BinomialOutcome>();
+                return [];
             }
 
             var minimumAttacks = GetMinimumAttacks(attacker);

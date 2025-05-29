@@ -23,23 +23,27 @@ namespace WarhammerCombatMathLibrary
         {
             var distribution = new List<BinomialOutcome>();
 
-            for (int k = 0; k <= Math.Floor((double)numberOfTrials / groupSuccessCount); k++)
+            // Calculate the maximum number of grouped successes
+            var maxGroupSuccesses = Math.Floor((double)numberOfTrials / groupSuccessCount);
+
+            for (int k = 0; k <= maxGroupSuccesses; k++)
             {
+                var groupedSuccesses = k * groupSuccessCount;
                 double discreteProbability = 0;
 
                 switch (distributionType)
                 {
                     case (DistributionTypes.Binomial):
-                        discreteProbability = ProbabilityMassFunction(numberOfTrials, k * groupSuccessCount, probability);
+                        discreteProbability = ProbabilityMassFunction(numberOfTrials, groupedSuccesses, probability);
                         break;
                     case (DistributionTypes.LowerCumulative):
-                        discreteProbability = LowerCumulativeProbability(numberOfTrials, k * groupSuccessCount, probability);
+                        discreteProbability = LowerCumulativeProbability(numberOfTrials, groupedSuccesses, probability);
                         break;
                     case (DistributionTypes.UpperCumulative):
-                        discreteProbability = UpperCumulativeProbability(numberOfTrials, k * groupSuccessCount, probability);
+                        discreteProbability = UpperCumulativeProbability(numberOfTrials, groupedSuccesses, probability);
                         break;
                     case (DistributionTypes.Survivor):
-                        discreteProbability = SurvivorFunction(numberOfTrials, k * groupSuccessCount, probability);
+                        discreteProbability = SurvivorFunction(numberOfTrials, groupedSuccesses, probability);
                         break;
                 }
 
@@ -51,6 +55,81 @@ namespace WarhammerCombatMathLibrary
             }
 
             return distribution;
+        }
+
+        /// <summary>
+        /// Creates a distribution based on the given probability function.
+        /// Allows for variable group success count.
+        /// </summary>
+        /// <param name="distributionType">The type of distribution to create.</param>
+        /// <param name="numberOfTrials">The number of trials n</param>
+        /// <param name="probability">The probability of success p</param>
+        /// <param name="minGroupSuccessCount">Value used to define the minimum number of combined success that consitute a "single" trial success.</param>
+        /// <param name="maxGroupSuccessCount">Value used to define the maximum number of combined success that consitute a "single" trial success.</param>
+        /// <returns>A List<BinomialOutcome> containing the distribution of result objects.</returns>
+        private static List<BinomialOutcome> CreateDistribution(DistributionTypes distributionType, int numberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
+        {
+            // Keep track of successes for each group number using a map, for faster lookups
+            var probabilitySumsMap = new Dictionary<int, List<double>>();
+
+            // Create map of binomial data
+            var distributionMap = new Dictionary<int, double>();
+
+            for (int g = minGroupSuccessCount; g <= maxGroupSuccessCount; g++)
+            {
+                // Calculate the maximum number of grouped successes
+                var maxGroupSuccesses = Math.Floor((double)numberOfTrials / g);
+
+                for (int k = 0; k <= maxGroupSuccesses; k++)
+                {
+                    var groupedSuccesses = k * g;
+                    double discreteProbability = 0;
+
+                    switch (distributionType)
+                    {
+                        case (DistributionTypes.Binomial):
+                            discreteProbability = ProbabilityMassFunction(numberOfTrials, groupedSuccesses, probability);
+                            break;
+                        case (DistributionTypes.LowerCumulative):
+                            discreteProbability = LowerCumulativeProbability(numberOfTrials, groupedSuccesses, probability);
+                            break;
+                        case (DistributionTypes.UpperCumulative):
+                            discreteProbability = UpperCumulativeProbability(numberOfTrials, groupedSuccesses, probability);
+                            break;
+                        case (DistributionTypes.Survivor):
+                            discreteProbability = SurvivorFunction(numberOfTrials, groupedSuccesses, probability);
+                            break;
+                    }
+
+                    // Add the probability to the list for that value of k
+                    Debug.WriteLine($"Probability of {k} successes with group success count {g}: {discreteProbability}");
+
+                    if (!probabilitySumsMap.TryGetValue(k, out List<double>? value))
+                    {
+                        value = [];
+                        probabilitySumsMap[k] = value;
+                    }
+
+                    value.Add(discreteProbability);
+                }
+            }
+
+            // Create a distribution list using the average probabilities for each k
+            var finalDistribution = probabilitySumsMap
+                .Select(pair => new BinomialOutcome
+                {
+                    Successes = pair.Key,
+                    Probability = pair.Value.Average()
+                })
+                .OrderBy(outcome => outcome.Successes)
+                .ToList();
+
+            foreach (var outcome in finalDistribution)
+            {
+                Debug.WriteLine($"Averaged outcome: {outcome}");
+            }
+
+            return finalDistribution;
         }
 
         /// <summary>
@@ -360,6 +439,86 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Calculates the combined binomial distribution of trial data using a variable group success count.
+        /// </summary>
+        /// <param name="numberOfTrials">The number of trials in the process.</param>
+        /// <param name="probability">The probability of success for a single trial.</param>
+        /// <param name="minGroupSuccessCount">The minimum number of grouped trial successes that count as a success.</param>
+        /// <param name="maxGroupSuccessCount">The maximum number of grouped trial successes that count as a success.</param>
+        /// <returns>A binomial distribution of trial results and their respective probabilities.</returns>
+        public static List<BinomialOutcome> BinomialDistribution(int numberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
+        {
+            // Validate parameters
+            if (numberOfTrials < 1)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Number of trials is less than 1.");
+                return [new BinomialOutcome(0, 1)];
+            }
+
+            if (probability <= 0)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Probability is less than or equal to 0.");
+
+                // The probability of 0 successes should be 1, all other probabilities should be 0.
+                var adjustedDistribution = new List<BinomialOutcome>
+                {
+                    new(0, 1)
+                };
+
+                for (int k = 1; k <= numberOfTrials; k++)
+                {
+                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
+                }
+
+                return adjustedDistribution;
+            }
+
+            if (probability >= 1)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Probability is greater than or equal to 1.");
+
+                // All probabilities should be 0, except the probability of all successes should be 1.
+                var adjustedDistribution = new List<BinomialOutcome>();
+
+                for (int k = 0; k <= numberOfTrials - 1; k++)
+                {
+                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
+                }
+
+                adjustedDistribution.Add(new BinomialOutcome(numberOfTrials, 1));
+
+                return adjustedDistribution;
+            }
+
+            if (minGroupSuccessCount < 1)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Minimum group success count is less than 1.");
+                return [new BinomialOutcome(0, 1)];
+            }
+
+            if (maxGroupSuccessCount < 1)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Maximum group success count is less than 1.");
+                return [new BinomialOutcome(0, 1)];
+            }
+
+            if (minGroupSuccessCount > maxGroupSuccessCount)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Minimum group success count is greater than maximum group success count.");
+                return [new BinomialOutcome(0, 1)];
+            }
+
+            if (minGroupSuccessCount > numberOfTrials)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Minimum group success count is greater than the total number of trials.");
+                return [new BinomialOutcome(0, 1)];
+            }
+
+            // Create distribution
+            return CreateDistribution(DistributionTypes.Binomial, numberOfTrials, probability, minGroupSuccessCount, maxGroupSuccessCount);
+        }
+
+        /// <summary>
         /// Calculates the combined binomial distribution of trial data using a variable number of trials.
         /// Optionally calculates the binomial distribution of trial data, assuming that a group of a given number of trial successes is considered a single success
         /// in the context of the distribution.
@@ -376,19 +535,19 @@ namespace WarhammerCombatMathLibrary
             // Validate parameters
             if (minNumberOfTrials < 1)
             {
-                Debug.WriteLine($"BinomialDistributionVariableTrials() | Min number of trials is less than 1.");
+                Debug.WriteLine($"BinomialDistribution() | Min number of trials is less than 1.");
                 return [new(0, 1)];
             }
 
             if (maxNumberOfTrials < 1)
             {
-                Debug.WriteLine($"BinomialDistributionVariableTrials() | Max number of trials is less than 1.");
+                Debug.WriteLine($"BinomialDistribution() | Max number of trials is less than 1.");
                 return [new(0, 1)];
             }
 
             if (probability <= 0)
             {
-                Debug.WriteLine($"BinomialDistributionVariableTrials() | Probability is less than or equal to 0.");
+                Debug.WriteLine($"BinomialDistribution() | Probability is less than or equal to 0.");
 
                 // The probability of 0 successes should be 1, all other probabilities should be 0.
                 var adjustedDistribution = new List<BinomialOutcome>
@@ -406,7 +565,7 @@ namespace WarhammerCombatMathLibrary
 
             if (probability >= 1)
             {
-                Debug.WriteLine($"BinomialDistributionVariableTrials() | Probability is greater than or equal to 1.");
+                Debug.WriteLine($"BinomialDistribution() | Probability is greater than or equal to 1.");
 
                 // All probabilities should be 0, except the probability of all successes should be 1.
                 var adjustedDistribution = new List<BinomialOutcome>();
@@ -423,8 +582,8 @@ namespace WarhammerCombatMathLibrary
 
             if (groupSuccessCount < 1)
             {
-                Debug.WriteLine($"BinomialDistributionVariableTrials() | Group success count is less than 1.");
-                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+                Debug.WriteLine($"BinomialDistribution() | Group success count is less than 1.");
+                return [new BinomialOutcome(0, 1)];
             }
 
             if (groupSuccessCount > maxNumberOfTrials)

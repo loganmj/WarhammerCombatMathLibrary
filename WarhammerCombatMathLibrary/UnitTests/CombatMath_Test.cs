@@ -3808,6 +3808,66 @@ namespace UnitTests
             CollectionAssert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionDestroyedModels_SingleModelAttacker_VariableDamage()
+        {
+            var expected = new List<BinomialOutcome>()
+                {
+                    new(0, 0.0152),
+                    new(1, 0.0911),
+                    new(2, 0.1138),
+                    new(3, 0.1119),
+                    new(4, 0.0983),
+                    new(5, 0.0666),
+                    new(6, 0.0320),
+                    new(7, 0.0104),
+                    new(8, 0.0022),
+                    new(9, 0.0003),
+                    new(10, 0),
+                    new(11, 0),
+                    new(12, 0),
+                    new(13, 0),
+                    new(14, 0),
+                    new(15, 0)
+                };
+
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionDestroyedModels_MultiModelAttacker_VariableDamage()
+        {
+            var expected = new List<BinomialOutcome>()
+                {
+                    new(0, 0.0152),
+                    new(1, 0.0911),
+                    new(2, 0.1138),
+                    new(3, 0.1119),
+                    new(4, 0.0983),
+                    new(5, 0.0666),
+                    new(6, 0.0320),
+                    new(7, 0.0104),
+                    new(8, 0.0022),
+                    new(9, 0.0003),
+                    new(10, 0),
+                    new(11, 0),
+                    new(12, 0),
+                    new(13, 0),
+                    new(14, 0),
+                    new(15, 0)
+                };
+
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetSurvivorDistributionDestroyedModels()
