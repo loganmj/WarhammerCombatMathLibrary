@@ -342,18 +342,18 @@ namespace WarhammerCombatMathLibrary
         /// <param name="damagePerAttack">The amount of damage done per attack.</param>
         /// <param name="defender">The defender object containing defensive attributes such as Feel No Pain.</param>
         /// <returns>The adjusted damage value after applying defensive modifiers.</returns>
-        private static double GetMeanAdjustedDamagePerAttack(int damagePerAttack, DefenderDTO? defender)
+        private static double GetAverageAdjustedDamagePerAttack(int damagePerAttack, DefenderDTO? defender)
         {
             // Validate inputs
             if (damagePerAttack <= 0)
             {
-                Debug.WriteLine($"GetMeanAdjustedDamagePerAttack() | Input damage is less than or equal to 0. Returning 0 ...");
+                Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Input damage is less than or equal to 0. Returning 0 ...");
                 return 0;
             }
 
             if (defender == null)
             {
-                Debug.WriteLine($"GetMeanAdjustedDamagePerAttack() | Defender is null. Returning 0 ...");
+                Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Defender is null. Returning 0 ...");
                 return 0;
             }
 
@@ -492,12 +492,6 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static int GetExpectedHits(AttackerDTO? attacker)
         {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetExpectedHits() | Attacker is null, returning 0 ...");
-                return 0;
-            }
-
             return (int)Math.Floor(GetMeanHits(attacker));
         }
 
@@ -613,18 +607,6 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static int GetExpectedWounds(AttackerDTO? attacker, DefenderDTO? defender)
         {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetExpectedWounds() | Attacker is null. Returning 0 ...");
-                return 0;
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetExpectedWounds() | Defender is null. Returning 0 ...");
-                return 0;
-            }
-
             return (int)Math.Floor(GetMeanWounds(attacker, defender));
         }
 
@@ -762,18 +744,6 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static int GetExpectedFailedSaves(AttackerDTO? attacker, DefenderDTO? defender)
         {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetExpectedFailedSaves() | Attacker is null, returning 0 ...");
-                return 0;
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetExpectedFailedSaves() | Defender is null, returning 0 ...");
-                return 0;
-            }
-
             return (int)Math.Floor(GetMeanFailedSaves(attacker, defender));
         }
 
@@ -891,20 +861,7 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static int GetExpectedDamage(AttackerDTO? attacker, DefenderDTO? defender)
         {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetExpectedDamageNet() | Attacker is null. Returning 0 ...");
-                return 0;
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetExpectedDamageNet() | Defender is null. Returning 0 ...");
-                return 0;
-            }
-
-            var meanDamage = GetMeanDamage(attacker, defender);
-            return (int)Math.Floor(meanDamage);
+            return (int)Math.Floor(GetMeanDamage(attacker, defender));
         }
 
         /// <summary>
@@ -935,8 +892,7 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Get the mean number of defending models that will be destroyed by the attack.
-        /// This takes into account:
-        /// - Feel no pain rolls
+        /// This takes into account any feel no pain rolls and damage reduction abilities.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
@@ -957,7 +913,7 @@ namespace WarhammerCombatMathLibrary
 
             var averageSuccessfulAttacks = GetExpectedFailedSaves(attacker, defender);
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            var adjustedDamagePerAttack = (int)Math.Round(GetMeanAdjustedDamagePerAttack(averageDamagePerAttack, defender));
+            var adjustedDamagePerAttack = (int)Math.Round(GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender));
             var averageModelsDestroyed = GetModelsDestroyed(averageSuccessfulAttacks, adjustedDamagePerAttack, defender);
 
             Debug.WriteLine($"GetMeanDestroyedModels() | Average successful attacks: {averageSuccessfulAttacks}");
@@ -970,12 +926,11 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Get the expected number of defending models that will be destroyed by the attack.
-        /// This takes into account:
-        /// - Feel no pain rolls
+        /// This takes into account any feel no pain rolls and damage reduction abilities.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
-        /// <returns></returns>
+        /// <returns>An integer value containing the expected number of destroyed models</returns>
         public static int GetExpectedDestroyedModels(AttackerDTO? attacker, DefenderDTO? defender)
         {
             return (int)Math.Floor(GetMeanDestroyedModels(attacker, defender));
@@ -983,10 +938,11 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Gets the standard deviation of destroyed models.
+        /// This takes into account any feel no pain rolls and damage reduction abilities.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
-        /// <returns></returns>
+        /// <returns>An integer value containing the standard deviation of destroyed models.</returns>
         public static int GetStandardDeviationDestroyedModels(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
@@ -1001,9 +957,17 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
+            var standardDeviationSuccessfulAttacks = (int)Math.Floor(GetStandardDeviationFailedSaves(attacker, defender));
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            var standardDeviationDamage = (int)Math.Floor(GetStandardDeviationDamage(attacker, defender));
-            return GetModelsDestroyed(averageDamagePerAttack, standardDeviationDamage, defender);
+            var adjustedDamagePerAttack = (int)Math.Floor(GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender));
+            var standardDeviationDestroyedModels = GetModelsDestroyed(standardDeviationSuccessfulAttacks, adjustedDamagePerAttack, defender);
+
+            Debug.WriteLine($"GetStandardDeviationDestroyedModels() | Standard deviation successful attacks: {standardDeviationSuccessfulAttacks}");
+            Debug.WriteLine($"GetStandardDeviationDestroyedModels() | Average damage per attack: {averageDamagePerAttack}");
+            Debug.WriteLine($"GetStandardDeviationDestroyedModels() | Average adjusted damage per attack: {adjustedDamagePerAttack}");
+            Debug.WriteLine($"GetStandardDeviationDestroyedModels() | Standard deviation models destroyed: {standardDeviationDestroyedModels}");
+
+            return standardDeviationDestroyedModels;
         }
 
         /// <summary>
@@ -1030,7 +994,8 @@ namespace WarhammerCombatMathLibrary
             var maximumAttacks = GetMaximumAttacks(attacker);
             var probability = GetProbabilityFailedSave(attacker, defender);
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(averageDamagePerAttack, defender);
+            var adjustedDamagePerAttack = (int)Math.Floor(GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender));
+            var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(adjustedDamagePerAttack, defender);
             return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability, groupSuccessCount);
         }
 
