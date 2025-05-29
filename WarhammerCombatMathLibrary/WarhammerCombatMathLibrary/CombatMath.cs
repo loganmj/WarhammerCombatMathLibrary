@@ -230,8 +230,6 @@ namespace WarhammerCombatMathLibrary
         private static int GetAverageDamagePerAttack(AttackerDTO? attacker)
         {
             // Validate inputs
-            Debug.WriteLine($"GetAverageDamagePerAttack() | {attacker}");
-
             if (attacker == null)
             {
                 Debug.WriteLine($"GetAverageDamagePerAttack() | Attacker is null, returning 0 ...");
@@ -266,83 +264,94 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Gets the minimum amount of damage the attacking unit is able to do.
+        /// Gets the minimum amount of damage the attacking unit is able to do for each attack.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
-        /// <returns>An integer value containing the minimum amount of damage that the attacker is able to do.</returns>
-        private static int GetMinimumDamage(AttackerDTO? attacker)
+        /// <returns>An integer value containing the minimum amount of damage that the attacker is able to do for each attack.</returns>
+        private static int GetMinimumDamagePerAttack(AttackerDTO? attacker)
         {
-            // If attacker parameter is null, return 0
+            // Validate inputs
             if (attacker == null)
             {
-                Debug.WriteLine($"GetMinimumAttacks() | Attacker is null, returning 0 ...");
+                Debug.WriteLine($"GetMinimumDamagePerAttack() | Attacker is null, returning 0 ...");
                 return 0;
             }
 
-            // If either the number of models or the weapon attacks is less than 1, return 0.
-            if (attacker.NumberOfModels < 1)
-            {
-                Debug.WriteLine($"GetMinimumAttacks() | Number of models is less than 1, returning 0 ...");
-                return 0;
-            }
-
-            // If both the variable salar and the flat value of attacks are less than or equal to 0, then there are no attacks.
+            // If both the variable scalar and the flat number of attacks are less than or equal to 0, then there are no attacks.
             if (attacker.WeaponScalarOfVariableAttacks <= 0 && attacker.WeaponFlatAttacks <= 0)
             {
-                Debug.WriteLine($"GetMinimumAttacks() | Attacker has no attacks value, returning 0 ...");
+                Debug.WriteLine($"GetMinimumDamagePerAttack() | Attacker has no attacks value, returning 0 ...");
                 return 0;
             }
 
-            var minimumAttacks = GetMinimumAttacks(attacker);
-            var minimumDamagePerAttack = attacker.WeaponScalarOfVariableDamage + attacker.WeaponFlatDamage;
-            var minimumCombinedDamage = minimumAttacks * minimumDamagePerAttack;
-            return minimumCombinedDamage * attacker.NumberOfModels;
+            // If both the variable scalar and the flat value of damage are less than or equal to 0, then there is no damage.
+            if (attacker.WeaponScalarOfVariableDamage <= 0 && attacker.WeaponFlatDamage <= 0)
+            {
+                Debug.WriteLine($"GetMinimumDamagePerAttack() | Attacker has no damage value, returning 0 ...");
+                return 0;
+            }
+
+            var numberOfDamageDieRolls = attacker.WeaponScalarOfVariableDamage;
+            var minimumDamagePerDieRoll = 1;
+            var flatDamage = attacker.WeaponFlatDamage;
+            var minimumDamagePerAttack = (numberOfDamageDieRolls * minimumDamagePerDieRoll) + flatDamage;
+
+            Debug.WriteLine($"GetMinimumDamagePerAttack() | Number of damage die rolls: {numberOfDamageDieRolls}");
+            Debug.WriteLine($"GetMinimumDamagePerAttack() | Minimum damage per die roll: {minimumDamagePerDieRoll}");
+            Debug.WriteLine($"GetMinimumDamagePerAttack() | Flat damage: {flatDamage}");
+            Debug.WriteLine($"GetMinimumDamagePerAttack() | Minimum damage per attack: {minimumDamagePerAttack}");
+
+            return minimumDamagePerAttack;
         }
 
         /// <summary>
-        /// Gets the maximum amount of damage the attacking unit is able to do.
+        /// Gets the maximum amount of damage the attacking unit is able to do for each attack
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
-        /// <returns>An integer value containing the maximum amount of damage that the attacker is able to do.</returns>
-        private static int GetMaximumDamage(AttackerDTO? attacker)
+        /// <returns>An integer value containing the maximum amount of damage that the attacker is able to do for each attack</returns>
+        private static int GetMaximumDamagePerAttack(AttackerDTO? attacker)
         {
-            // If attacker parameter is null, return 0
+            // Validate inputs
             if (attacker == null)
             {
-                Debug.WriteLine($"GetMaximumAttacks() | Attacker is null, returning 0 ...");
+                Debug.WriteLine($"GetMaximumDamagePerAttack() | Attacker is null, returning 0 ...");
                 return 0;
             }
 
-            // If either the number of models or the weapon attacks is less than 1, return 0.
-            if (attacker.NumberOfModels < 1)
-            {
-                Debug.WriteLine($"GetMaximumAttacks() | Number of models is less than 1, returning 0 ...");
-                return 0;
-            }
-
-            // If both the variable salar and the flat value of attacks are less than or equal to 0, then there are no attacks.
+            // If both the variable scalar and the flat number of attacks are less than or equal to 0, then there are no attacks.
             if (attacker.WeaponScalarOfVariableAttacks <= 0 && attacker.WeaponFlatAttacks <= 0)
             {
-                Debug.WriteLine($"GetMaximumAttacks() | Attacker has no attacks value, returning 0 ...");
+                Debug.WriteLine($"GetMaximumDamagePerAttack() | Attacker has no attacks value, returning 0 ...");
                 return 0;
             }
 
-            var maximumAttacks = GetMaximumAttacks(attacker);
-            var maximumDamagePerAttack = (attacker.WeaponScalarOfVariableDamage * (int)attacker.WeaponVariableDamageType) + attacker.WeaponFlatDamage;
-            var maximumCombinedDamage = maximumAttacks * maximumDamagePerAttack;
-            return maximumCombinedDamage * attacker.NumberOfModels;
+            // If both the variable scalar and the flat value of damage are less than or equal to 0, then there is no damage.
+            if (attacker.WeaponScalarOfVariableDamage <= 0 && attacker.WeaponFlatDamage <= 0)
+            {
+                Debug.WriteLine($"GetMaximumDamagePerAttack() | Attacker has no damage value, returning 0 ...");
+                return 0;
+            }
+
+            var numberOfDamageDieRolls = attacker.WeaponScalarOfVariableDamage;
+            var maximumDamagePerDieRoll = (int)attacker.WeaponVariableDamageType;
+            var flatDamage = attacker.WeaponFlatDamage;
+            var maximumDamagePerAttack = (numberOfDamageDieRolls * maximumDamagePerDieRoll) + flatDamage;
+
+            Debug.WriteLine($"GetMaximumDamagePerAttack() | Number of damage die rolls: {numberOfDamageDieRolls}");
+            Debug.WriteLine($"GetMaximumDamagePerAttack() | Maximum damage per die roll: {maximumDamagePerDieRoll}");
+            Debug.WriteLine($"GetMaximumDamagePerAttack() | Flat damage: {flatDamage}");
+            Debug.WriteLine($"GetMaximumDamagePerAttack() | Maximum damage per attack: {maximumDamagePerAttack}");
+
+            return maximumDamagePerAttack;
         }
 
         /// <summary>
-        /// Adjusts the given amount of damage per attack based on any defensive modifiers.
-        /// Damage modification calculations must be done on a per-attack basis because it can affect how models are able to absorb excess damage.
-        /// This takes into account:
-        /// - Feel no pain probability
+        /// Determines the average amount of damage per attack that the attacker can do, after applying defensive modifiers
         /// </summary>
         /// <param name="damagePerAttack">The amount of damage done per attack.</param>
         /// <param name="defender">The defender object containing defensive attributes such as Feel No Pain.</param>
-        /// <returns>The adjusted damage value after applying defensive modifiers.</returns>
-        private static double GetAverageAdjustedDamagePerAttack(int damagePerAttack, DefenderDTO? defender)
+        /// <returns>An integer value containing the average amount of damage per attack after applying defensive modifiers</returns>
+        private static int GetAverageAdjustedDamagePerAttack(int damagePerAttack, DefenderDTO? defender)
         {
             // Validate inputs
             if (damagePerAttack <= 0)
@@ -357,10 +366,98 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
+            // TODO: Account for damage reduction
+            var damageReductor = 0;
+            var damageAfterReduction = damagePerAttack - damageReductor;
+
             // Account for feel no pains
             var feelNoPainSuccessProbability = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(defender.FeelNoPain));
-            var damageAfterFeelNoPain = damagePerAttack * (1 - feelNoPainSuccessProbability);
-            return damageAfterFeelNoPain;
+            var averageDamageAfterFeelNoPain = damageAfterReduction * (1 - feelNoPainSuccessProbability);
+            var returnValue = (int)Math.Floor(averageDamageAfterFeelNoPain);
+
+            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Raw damage per attack: {damagePerAttack}");
+            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Damage reductor: {damageReductor}");
+            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Damage after reduction: {damageAfterReduction}");
+            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Feel no pain success probability: {feelNoPainSuccessProbability}");
+            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Average damage after feel no pain: {averageDamageAfterFeelNoPain}");
+            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Return value: {returnValue}");
+
+            return returnValue;
+        }
+
+        /// <summary>
+        /// Determines the minimum amount of damage per attack that the attacker can do, after applying defensive modifiers
+        /// </summary>
+        /// <param name="damagePerAttack">The amount of damage done per attack.</param>
+        /// <param name="defender">The defender object containing defensive attributes such as Feel No Pain.</param>
+        /// <returns>An integer value containing the minimum amount of damage per attack after applying defensive modifiers</returns>
+        private static int GetMinimumAdjustedDamagePerAttack(int damagePerAttack, DefenderDTO? defender)
+        {
+            // Validate inputs
+            if (damagePerAttack <= 0)
+            {
+                Debug.WriteLine($"GetMinimumAdjustedDamagePerAttack() | Input damage is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetMinimumAdjustedDamagePerAttack() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            // If the defender has feel no pains, then the minimum amount of damage is 0, since it is possible for the defender to succeed in all of their feel no pain rolls.
+            if (defender.FeelNoPain >= 2 && defender.FeelNoPain <= 6)
+            {
+                Debug.WriteLine($"GetMinimumAdjustedDamagePerAttack() | Defender has feel no pains. Returning 0 ...");
+                return 0;
+            }
+
+            // TODO: Account for damage reduction
+            var damageReductor = 0;
+            var damageAfterReduction = damagePerAttack - damageReductor;
+
+            Debug.WriteLine($"GetMinimumAdjustedDamagePerAttack() | Raw damage per attack: {damagePerAttack}");
+            Debug.WriteLine($"GetMinimumAdjustedDamagePerAttack() | Damage reductor: {damageReductor}");
+            Debug.WriteLine($"GetMinimumAdjustedDamagePerAttack() | Damage after reduction: {damageAfterReduction}");
+            Debug.WriteLine($"GetMinimumAdjustedDamagePerAttack() | Return value: {damageAfterReduction}");
+
+            return damageAfterReduction;
+        }
+
+        /// <summary>
+        /// Determines the maximum amount of damage per attack that the attacker can do, after applying defensive modifiers
+        /// </summary>
+        /// <param name="damagePerAttack">The amount of damage done per attack.</param>
+        /// <param name="defender">The defender object containing defensive attributes such as Feel No Pain.</param>
+        /// <returns>An integer value containing the maximum amount of damage per attack after applying defensive modifiers</returns>
+        private static int GetMaximumAdjustedDamagePerAttack(int damagePerAttack, DefenderDTO? defender)
+        {
+            // Validate inputs
+            if (damagePerAttack <= 0)
+            {
+                Debug.WriteLine($"GetMaximumAdjustedDamagePerAttack() | Input damage is less than or equal to 0. Returning 0 ...");
+                return 0;
+            }
+
+            if (defender == null)
+            {
+                Debug.WriteLine($"GetMaximumAdjustedDamagePerAttack() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            // TODO: Account for damage reduction
+            var damageReductor = 0;
+            var damageAfterReduction = damagePerAttack - damageReductor;
+
+            Debug.WriteLine($"GetMaximumAdjustedDamagePerAttack() | Raw damage per attack: {damagePerAttack}");
+            Debug.WriteLine($"GetMaximumAdjustedDamagePerAttack() | Damage reductor: {damageReductor}");
+            Debug.WriteLine($"GetMaximumAdjustedDamagePerAttack() | Damage after reduction: {damageAfterReduction}");
+            Debug.WriteLine($"GetMaximumAdjustedDamagePerAttack() | Feel no pain rolls are assumed to fail");
+            Debug.WriteLine($"GetMaximumAdjustedDamagePerAttack() | Return value: {damageAfterReduction}");
+
+            // Feel no pains are ignored, as the maximum amount of damage is done when defender fails all of their feel no pain rolls
+            return damageAfterReduction;
         }
 
         /// <summary>
@@ -407,12 +504,12 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// Determines the number of successful, unblocked attacks required to destroy a single model from the defending unit.
         /// </summary>
-        /// <param name="attackerWeaponDamage">The damage stat of the attacker's weapon.</param>
+        /// <param name="damagePerAttack">The amount of damage being dealt per attack</param>
         /// <param name="defender">The defender data object.</param>
         /// <returns>An integer value representing the minimum number of successful attacks required to destroy a single model in the defending unit.</returns>
-        private static int GetAttacksRequiredToDestroyOneModel(int attackerWeaponDamage, DefenderDTO? defender)
+        private static int GetAttacksRequiredToDestroyOneModel(int damagePerAttack, DefenderDTO? defender)
         {
-            if (attackerWeaponDamage <= 0)
+            if (damagePerAttack <= 0)
             {
                 Debug.WriteLine($"GetAttacksRequiredToDestroyOneModel() | Attacker weapon damage is less than or equal to 0. Returning 0 ...");
                 return 0;
@@ -424,18 +521,8 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            /*
-
-            // Factor in feel no pains by calculating the feel no pain probability,
-            // and using that to determine average weapon damage.
-            var adjustedWeaponDamage = GetAdjustedDamage(defender, attackerWeaponDamage);
-
             // If the result is a decimal, round up to the next highest int value (as it will require another full attack to destroy the model).
-            return (int)Math.Ceiling(defender.Wounds / adjustedWeaponDamage);
-
-            */
-
-            return 0;
+            return (int)Math.Ceiling((double)defender.Wounds / damagePerAttack);
         }
 
         #endregion
@@ -913,7 +1000,7 @@ namespace WarhammerCombatMathLibrary
 
             var averageSuccessfulAttacks = GetExpectedFailedSaves(attacker, defender);
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            var adjustedDamagePerAttack = (int)Math.Round(GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender));
+            var adjustedDamagePerAttack = GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender);
             var averageModelsDestroyed = GetModelsDestroyed(averageSuccessfulAttacks, adjustedDamagePerAttack, defender);
 
             Debug.WriteLine($"GetMeanDestroyedModels() | Average successful attacks: {averageSuccessfulAttacks}");
@@ -959,7 +1046,7 @@ namespace WarhammerCombatMathLibrary
 
             var standardDeviationSuccessfulAttacks = (int)Math.Floor(GetStandardDeviationFailedSaves(attacker, defender));
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            var adjustedDamagePerAttack = (int)Math.Floor(GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender));
+            var adjustedDamagePerAttack = GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender);
             var standardDeviationDestroyedModels = GetModelsDestroyed(standardDeviationSuccessfulAttacks, adjustedDamagePerAttack, defender);
 
             Debug.WriteLine($"GetStandardDeviationDestroyedModels() | Standard deviation successful attacks: {standardDeviationSuccessfulAttacks}");
@@ -990,13 +1077,25 @@ namespace WarhammerCombatMathLibrary
                 return new List<BinomialOutcome>();
             }
 
+            // Get probability of a successful attack
+            var probability = GetProbabilityFailedSave(attacker, defender);
+
+            // Get upper and lower bounds for the number of trials
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
-            var probability = GetProbabilityFailedSave(attacker, defender);
-            var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            var adjustedDamagePerAttack = (int)Math.Floor(GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender));
-            var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(adjustedDamagePerAttack, defender);
-            return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability, groupSuccessCount);
+
+            // Get upper bound of group success count
+            var minimumDamagePerAttack = GetMinimumDamagePerAttack(attacker);
+            var minimumAdjustedDamagePerAttack = GetMinimumAdjustedDamagePerAttack(minimumDamagePerAttack, defender);
+            var minGroupSuccessCount = GetAttacksRequiredToDestroyOneModel(minimumAdjustedDamagePerAttack, defender);
+
+            // Get lower bound of group success count
+            var maximumDamagePerAttack = GetMaximumDamagePerAttack(attacker);
+            var maximumAdjustedDamagePerAttack = GetMaximumAdjustedDamagePerAttack(maximumDamagePerAttack, defender);
+            var maxGroupSuccessCount = GetAttacksRequiredToDestroyOneModel(maximumAdjustedDamagePerAttack, defender);
+
+            // TODO: Use version of the method that allows for variable group success count
+            return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability, 0);
         }
 
         /// <summary>
