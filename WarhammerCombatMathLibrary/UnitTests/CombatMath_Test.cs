@@ -3175,7 +3175,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationDamage_SingleModelAttacker_DefenderHasFeelNoPains()
         {
-            var expected = 1.438;
+            var expected = 2.157;
             var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_DEATH_GUARD_MORTARION), 4);
             Assert.AreEqual(expected, actual);
         }
@@ -3186,7 +3186,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationDamage_MultiModelAttacker_DefenderHasFeelNoPains()
         {
-            var expected = 1.0591;
+            var expected = 1.5887;
             var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN), 4);
             Assert.AreEqual(expected, actual);
         }
@@ -3197,7 +3197,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationDamage_SingleModelAttacker_AttackerHasVariableDamage()
         {
-            var expected = 14.8148;
+            var expected = 6.8293;
             var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
@@ -3208,7 +3208,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationDamage_MultiModelAttacker_AttackerHasVariableDamage()
         {
-            var expected = 13.3333;
+            var expected = 5.5777;
             var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }

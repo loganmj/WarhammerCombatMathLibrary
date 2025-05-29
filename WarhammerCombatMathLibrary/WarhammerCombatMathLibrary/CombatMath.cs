@@ -232,21 +232,21 @@ namespace WarhammerCombatMathLibrary
             // If attacker parameter is null, return 0
             if (attacker == null)
             {
-                Debug.WriteLine($"GetAverageDamage() | Attacker is null, returning 0 ...");
+                Debug.WriteLine($"GetAverageDamagePerAttack() | Attacker is null, returning 0 ...");
                 return 0;
             }
 
             // If both the variable scalar and the flat number of attacks are less than or equal to 0, then there are no attacks.
             if (attacker.WeaponScalarOfVariableAttacks <= 0 && attacker.WeaponFlatAttacks <= 0)
             {
-                Debug.WriteLine($"GetAverageDamage() | Attacker has no attacks value, returning 0 ...");
+                Debug.WriteLine($"GetAverageDamagePerAttack() | Attacker has no attacks value, returning 0 ...");
                 return 0;
             }
 
             // If both the variable scalar and the flat value of damage are less than or equal to 0, then there is no damage.
             if (attacker.WeaponScalarOfVariableDamage <= 0 && attacker.WeaponFlatAttacks <= 0)
             {
-                Debug.WriteLine($"GetAverageDamage() | Attacker has no damage value, returning 0 ...");
+                Debug.WriteLine($"GetAverageDamagePerAttack() | Attacker has no damage value, returning 0 ...");
                 return 0;
             }
 
@@ -255,10 +255,10 @@ namespace WarhammerCombatMathLibrary
             var flatDamage = attacker.WeaponFlatDamage;
             var averageDamagePerAttack = (numberOfDamageDieRolls * averageDamagePerDieRoll) + flatDamage;
 
-            Debug.WriteLine($"Number of damage die rolls: {numberOfDamageDieRolls}");
-            Debug.WriteLine($"Average damage per die roll: {averageDamagePerDieRoll}");
-            Debug.WriteLine($"Flat damage: {flatDamage}");
-            Debug.WriteLine($"Average damage per attack: {averageDamagePerAttack}");
+            Debug.WriteLine($"GetAverageDamagePerAttack() | Number of damage die rolls: {numberOfDamageDieRolls}");
+            Debug.WriteLine($"GetAverageDamagePerAttack() | Average damage per die roll: {averageDamagePerDieRoll}");
+            Debug.WriteLine($"GetAverageDamagePerAttack() | Flat damage: {flatDamage}");
+            Debug.WriteLine($"GetAverageDamagePerAttack() | Average damage per attack: {averageDamagePerAttack}");
 
             return averageDamagePerAttack;
         }
@@ -337,7 +337,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="defender">The defender object containing defensive attributes such as Feel No Pain.</param>
         /// <param name="damage">The initial amount of damage to be adjusted.</param>
         /// <returns>The adjusted damage value after applying defensive modifiers.</returns>
-        private static double GetAdjustedDamage(DefenderDTO? defender, int damage)
+        private static double GetAdjustedDamage(DefenderDTO? defender, double damage)
         {
             // Validate inputs
             if (defender == null)
@@ -844,7 +844,8 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Gets the average amount of damage done after all rolls have been completed and after all modifers and feel no pains have been accounted for.
+        /// Gets the average amount of damage done by the attacker after all hit, wound, and save rolls have been completed.
+        /// This does not take into account feel no pain rolls or damage reduction abilities.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
@@ -864,11 +865,17 @@ namespace WarhammerCombatMathLibrary
             }
 
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            return GetMeanFailedSaves(attacker, defender) * averageDamagePerAttack;
+            var averageTotalDamage = GetMeanFailedSaves(attacker, defender) * averageDamagePerAttack;
+
+            Debug.WriteLine($"GetMeanDamage() | Average damage per attack: {averageDamagePerAttack}");
+            Debug.WriteLine($"GetMeanDamage() | Average total damage: {averageTotalDamage}");
+
+            return averageTotalDamage;
         }
 
         /// <summary>
-        /// Gets the discrete expected total amount of damage, after all modifers and feel no pains have been accounted for.
+        /// Gets the discrete expected total amount of damage after all hit, wound, and save rolls have been completed.
+        /// This does not take into account feel no pain rolls or damage reduction abilities.
         /// </summary>
         /// <param name="attacker"></param>
         /// <returns></returns>
@@ -886,13 +893,13 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            var averageTotalDamage = GetMeanFailedSaves(attacker, defender) * averageDamagePerAttack;
-            return (int)Math.Floor(averageTotalDamage);
+            var meanDamage = GetMeanDamage(attacker, defender);
+            return (int)Math.Floor(meanDamage);
         }
 
         /// <summary>
-        /// Gets the standard deviation of damage done after all rolls have been completed and after all modifers and feel no pains have been accounted for.
+        /// Gets the standard deviation of damage done after all hit, wound, and save rolls have been completed.
+        /// This does not take into account feel no pain rolls or damage reduction abilities.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
@@ -912,8 +919,8 @@ namespace WarhammerCombatMathLibrary
             }
 
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            var adjustedDamage = GetAdjustedDamage(defender, averageDamagePerAttack);
-            return GetStandardDeviationFailedSaves(attacker, defender) * adjustedDamage;
+            var standardDeviationFailedSaves = GetStandardDeviationFailedSaves(attacker, defender);
+            return standardDeviationFailedSaves * averageDamagePerAttack;
         }
 
         /// <summary>
