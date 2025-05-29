@@ -3397,6 +3397,28 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDestroyedModels_SingleModelAttacker_VariableDamage()
+        {
+            var expected = 2;
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDestroyedModels_MultiModelAttacker_VariableDamage()
+        {
+            var expected = 3;
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetStandardDeviationDestroyedModels()

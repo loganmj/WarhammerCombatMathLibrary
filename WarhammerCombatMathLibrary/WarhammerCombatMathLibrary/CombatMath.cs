@@ -978,21 +978,7 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static int GetExpectedDestroyedModels(AttackerDTO? attacker, DefenderDTO? defender)
         {
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetExpectedDestroyedModels() | Attacker is null. Returning 0 ...");
-                return 0;
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetExpectedDestroyedModels() | Defender is null. Returning 0 ...");
-                return 0;
-            }
-
-            var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            var totalDamage = GetExpectedDamage(attacker, defender);
-            return GetModelsDestroyed(averageDamagePerAttack, totalDamage, defender);
+            return (int)Math.Floor(GetMeanDestroyedModels(attacker, defender));
         }
 
         /// <summary>
