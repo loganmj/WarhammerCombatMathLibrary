@@ -3215,6 +3215,109 @@ namespace UnitTests
 
         #endregion
 
+        #region Unit Tests - GetMeanDestroyedModels()
+
+        /// <summary>
+        /// Test the case where the attacker object is null
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDestroyedModels_NullAttacker()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetMeanDestroyedModels(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the case where the defender object is null
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDestroyedModels_NullDefender()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDestroyedModels_SingleModelAttacker_NoDefenderSpecialRules()
+        {
+            var expected = 2;
+            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDestroyedModels_MultiModelAttacker_NoDefenderSpecialRules()
+        {
+            var expected = 1;
+            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDestroyedModels_SingleModelAttacker_DefenderHasInvulnerableSave()
+        {
+            var expected = 1;
+            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDestroyedModels_SingleModelAttacker_VariableAttacks_DefenderHasFeelNoPain()
+        {
+            var expected = 1;
+            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDestroyedModels_MultiModelAttacker_VariableAttacks_DefenderHasFeelNoPain()
+        {
+            var expected = 0;
+            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDestroyedModels_SingleModelAttacker_VariableDamage()
+        {
+            var expected = 2;
+            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDestroyedModels_MultiModelAttacker_VariableDamage()
+        {
+            var expected = 3;
+            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
+
         #region Unit Tests - GetExpectedDestroyedModels()
 
         /// <summary>

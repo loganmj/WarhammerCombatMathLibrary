@@ -71,9 +71,9 @@
         {
             return $"Attacker: [NumberOfModels: {NumberOfModels}, "
                    + $"Weapon Attacks: {(WeaponScalarOfVariableAttacks > 0 ? $"{WeaponScalarOfVariableAttacks} {WeaponVariableAttackType} + {WeaponFlatAttacks}" : WeaponFlatAttacks.ToString())}, "
-                   + $"WeaponSkill: {WeaponSkill},"
-                   + $"WeaponStrength: {WeaponStrength},"
-                   + $"WeaponArmorPierce: -{WeaponArmorPierce},"
+                   + $"WeaponSkill: {WeaponSkill}, "
+                   + $"WeaponStrength: {WeaponStrength}, "
+                   + $"WeaponArmorPierce: -{WeaponArmorPierce}, "
                    + $"WeaponDamage: {(WeaponScalarOfVariableDamage > 0 ? $"{WeaponScalarOfVariableDamage} {WeaponVariableDamageType} + {WeaponFlatDamage}" : WeaponFlatDamage)}]";
         }
 
