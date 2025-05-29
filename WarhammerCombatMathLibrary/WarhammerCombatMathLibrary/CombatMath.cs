@@ -224,24 +224,15 @@ namespace WarhammerCombatMathLibrary
         /// Returns the average amount of damage that the attacker's weapon is able to deal.
         /// This takes into account: 
         /// - The average of any variable attacks added to the flat number of attacks.
-        /// - The average of any variable damage rolls added to the flat amount of damage.
-        /// - The number of models in the attacking unit.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <returns>An integer value containing the average amount of damage that the attacker is able to do.</returns>
-        private static int GetAverageDamage(AttackerDTO? attacker)
+        private static int GetAverageDamagePerAttack(AttackerDTO? attacker)
         {
             // If attacker parameter is null, return 0
             if (attacker == null)
             {
                 Debug.WriteLine($"GetAverageDamage() | Attacker is null, returning 0 ...");
-                return 0;
-            }
-
-            // If either the number of models or the weapon attacks is less than 1, return 0.
-            if (attacker.NumberOfModels < 1)
-            {
-                Debug.WriteLine($"GetAverageDamage() | Number of models is less than 1, returning 0 ...");
                 return 0;
             }
 
@@ -259,10 +250,17 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageAttacks = GetAverageAttacks(attacker);
-            var averageDamagePerAttack = (attacker.WeaponScalarOfVariableDamage * Statistics.AverageResult((int)attacker.WeaponVariableDamageType)) + attacker.WeaponFlatDamage;
-            var averageCombinedDamage = averageAttacks * averageDamagePerAttack;
-            return averageCombinedDamage * attacker.NumberOfModels;
+            var numberOfDamageDieRolls = attacker.WeaponScalarOfVariableDamage;
+            var averageDamagePerDieRoll = Statistics.AverageResult((int)attacker.WeaponVariableDamageType);
+            var flatDamage = attacker.WeaponFlatDamage;
+            var averageDamagePerAttack = (numberOfDamageDieRolls * averageDamagePerDieRoll) + flatDamage;
+
+            Debug.WriteLine($"Number of damage die rolls: {numberOfDamageDieRolls}");
+            Debug.WriteLine($"Average damage per die roll: {averageDamagePerDieRoll}");
+            Debug.WriteLine($"Flat damage: {flatDamage}");
+            Debug.WriteLine($"Average damage per attack: {averageDamagePerAttack}");
+
+            return averageDamagePerAttack;
         }
 
         /// <summary>
@@ -865,8 +863,8 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageDamage = GetAverageDamage(attacker);
-            return GetMeanFailedSaves(attacker, defender) * averageDamage;
+            var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
+            return GetMeanFailedSaves(attacker, defender) * averageDamagePerAttack;
         }
 
         /// <summary>
@@ -888,8 +886,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageDamage = GetAverageDamage(attacker);
-            return (int)Math.Floor(GetMeanFailedSaves(attacker, defender) * averageDamage);
+            var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
+            var averageTotalDamage = GetMeanFailedSaves(attacker, defender) * averageDamagePerAttack;
+            return (int)Math.Floor(averageTotalDamage);
         }
 
         /// <summary>
@@ -912,7 +911,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageDamagePerAttack = GetAverageDamage(attacker);
+            var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
             var adjustedDamage = GetAdjustedDamage(defender, averageDamagePerAttack);
             return GetStandardDeviationFailedSaves(attacker, defender) * adjustedDamage;
         }
@@ -937,7 +936,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageDamagePerAttack = GetAverageDamage(attacker);
+            var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
             var totalDamage = GetExpectedDamage(attacker, defender);
             return GetModelsDestroyed(averageDamagePerAttack, totalDamage, defender);
         }
@@ -962,7 +961,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageDamagePerAttack = GetAverageDamage(attacker);
+            var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
             var standardDeviationDamage = (int)Math.Floor(GetStandardDeviationDamage(attacker, defender));
             return GetModelsDestroyed(averageDamagePerAttack, standardDeviationDamage, defender);
         }
@@ -990,7 +989,7 @@ namespace WarhammerCombatMathLibrary
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
             var probability = GetProbabilityFailedSave(attacker, defender);
-            var averageDamagePerAttack = GetAverageDamage(attacker);
+            var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
             var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(averageDamagePerAttack, defender);
             return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability, groupSuccessCount);
         }
@@ -1018,7 +1017,7 @@ namespace WarhammerCombatMathLibrary
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
             var probability = GetProbabilityFailedSave(attacker, defender);
-            var averageDamagePerAttack = GetAverageDamage(attacker);
+            var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
             var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(averageDamagePerAttack, defender);
             return Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probability, groupSuccessCount);
         }

@@ -121,7 +121,7 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="numberOfPossibleResults"></param>
         /// <param name="numberOfSuccessfulResults"></param>
-        /// <returns></returns>
+        /// <returns>A double value containing the probability of success.</returns>
         public static double ProbabilityOfSuccess(int numberOfPossibleResults, int numberOfSuccessfulResults)
         {
             // Validate parameters

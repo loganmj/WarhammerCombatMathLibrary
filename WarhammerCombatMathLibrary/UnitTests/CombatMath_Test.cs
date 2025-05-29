@@ -98,7 +98,7 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Attack profile for a Space Marine Infernus Squad.
+        /// Attack profile for a World Eaters Jakhal Squad.
         /// </summary>
         public static readonly AttackerDTO ATTACKER_WORLD_EATERS_JAKHALS = new()
         {
@@ -110,6 +110,40 @@ namespace UnitTests
             WeaponStrength = 3,
             WeaponArmorPierce = 0,
             WeaponFlatDamage = 1
+        };
+
+        /// <summary>
+        /// Attack profile for a World Eaters Maulerfiend.
+        /// </summary>
+        public static readonly AttackerDTO ATTACKER_WORLD_EATERS_MAULERFIEND = new()
+        {
+            NumberOfModels = 1,
+            WeaponScalarOfVariableAttacks = 0,
+            WeaponVariableAttackType = 0,
+            WeaponFlatAttacks = 8,
+            WeaponSkill = 3,
+            WeaponStrength = 14,
+            WeaponArmorPierce = 2,
+            WeaponScalarOfVariableDamage = 1,
+            WeaponVariableDamageType = DiceType.D6,
+            WeaponFlatDamage = 1
+        };
+
+        /// <summary>
+        /// Attack profile for an Adepta Sororitas Retributor Squad.
+        /// </summary>
+        public static readonly AttackerDTO ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD = new()
+        {
+            NumberOfModels = 4,
+            WeaponScalarOfVariableAttacks = 0,
+            WeaponVariableAttackType = 0,
+            WeaponFlatAttacks = 2,
+            WeaponSkill = 4,
+            WeaponStrength = 9,
+            WeaponArmorPierce = 4,
+            WeaponScalarOfVariableDamage = 1,
+            WeaponVariableDamageType = DiceType.D6,
+            WeaponFlatDamage = 0
         };
 
         /// <summary>
@@ -2995,6 +3029,28 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamage_SingleModelAttacker_AttackerHasVariableDamage()
+        {
+            var expected = 14.8148;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamage_MultiModelAttacker_AttackerHasVariableDamage()
+        {
+            var expected = 13.3333;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetExpectedDamage()
@@ -3054,6 +3110,28 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamage_SingleModelAttacker_AttackerHasVariableDamage()
+        {
+            var expected = 14;
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamage_MultiModelAttacker_AttackerHasVariableDamage()
+        {
+            var expected = 13;
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetStandardDeviationDamage()
@@ -3110,6 +3188,28 @@ namespace UnitTests
         {
             var expected = 1.0591;
             var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamage_SingleModelAttacker_AttackerHasVariableDamage()
+        {
+            var expected = 14.8148;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamage_MultiModelAttacker_AttackerHasVariableDamage()
+        {
+            var expected = 13.3333;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
             Assert.AreEqual(expected, actual);
         }
 
