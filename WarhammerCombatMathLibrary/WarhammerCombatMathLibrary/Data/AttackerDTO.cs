@@ -13,7 +13,7 @@
         public int NumberOfModels { get; set; }
 
         /// <summary>
-        /// The scalar number of variable attacks that the attacker gets.
+        /// The scalar number of variable attack rolls that the attacker gets.
         /// </summary>
         public int WeaponScalarOfVariableAttacks { get; set; }
 
@@ -23,7 +23,7 @@
         public DiceType WeaponVariableAttackType { get; set; }
 
         /// <summary>
-        /// The number of flat attacks the attacker gets.
+        /// The additional number of flat attacks the attacker gets.
         /// </summary>
         public int WeaponFlatAttacks { get; set; }
 
@@ -48,9 +48,19 @@
         public int WeaponArmorPierce { get; set; }
 
         /// <summary>
-        /// The damage value of the attacker's weapon.
+        /// The scalar number of variable damage rolls that the attacker gets.
         /// </summary>
-        public int WeaponDamage { get; set; }
+        public int WeaponScalarOfVariableDamage { get; set; }
+
+        /// <summary>
+        /// The dice type used to determine the variable amount of damage.
+        /// </summary>
+        public DiceType WeaponVariableDamageType { get; set; }
+
+        /// <summary>
+        /// The addition amount of flat damage the weapon has.
+        /// </summary>
+        public int WeaponFlatDamage { get; set; }
 
         #endregion
 
@@ -61,10 +71,10 @@
         {
             return $"Attacker: [NumberOfModels: {NumberOfModels}, "
                    + $"Weapon Attacks: {(WeaponScalarOfVariableAttacks > 0 ? $"{WeaponScalarOfVariableAttacks} {WeaponVariableAttackType} + {WeaponFlatAttacks}" : WeaponFlatAttacks.ToString())}, "
-                   + $"WeaponSkill: {WeaponSkill},"
-                   + $"WeaponStrength: {WeaponStrength},"
-                   + $"WeaponArmorPierce: -{WeaponArmorPierce},"
-                   + $"WeaponDamage: {WeaponDamage}]";
+                   + $"WeaponSkill: {WeaponSkill}, "
+                   + $"WeaponStrength: {WeaponStrength}, "
+                   + $"WeaponArmorPierce: -{WeaponArmorPierce}, "
+                   + $"WeaponDamage: {(WeaponScalarOfVariableDamage > 0 ? $"{WeaponScalarOfVariableDamage} {WeaponVariableDamageType} + {WeaponFlatDamage}" : WeaponFlatDamage)}]";
         }
 
         #endregion
