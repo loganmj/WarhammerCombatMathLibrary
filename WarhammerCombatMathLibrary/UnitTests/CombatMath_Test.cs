@@ -3816,26 +3816,34 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
                 {
-                    new(0, 0.0152),
-                    new(1, 0.0911),
-                    new(2, 0.1138),
-                    new(3, 0.1119),
-                    new(4, 0.0983),
-                    new(5, 0.0666),
-                    new(6, 0.0320),
-                    new(7, 0.0104),
-                    new(8, 0.0022),
-                    new(9, 0.0003),
-                    new(10, 0),
-                    new(11, 0),
-                    new(12, 0),
-                    new(13, 0),
-                    new(14, 0),
-                    new(15, 0)
+                    new(0, 0.0247),
+                    new(1, 0.1162),
+                    new(2, 0.2393),
+                    new(3, 0.2815),
+                    new(4, 0.2070),
+                    new(5, 0.0974),
+                    new(6, 0.0287),
+                    new(7, 0.0048),
+                    new(8, 0.0004)
                 };
 
             var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
-            Assert.AreEqual(expected, actual);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -3846,26 +3854,74 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
                 {
-                    new(0, 0.0152),
-                    new(1, 0.0911),
-                    new(2, 0.1138),
-                    new(3, 0.1119),
-                    new(4, 0.0983),
-                    new(5, 0.0666),
-                    new(6, 0.0320),
-                    new(7, 0.0104),
-                    new(8, 0.0022),
-                    new(9, 0.0003),
-                    new(10, 0),
-                    new(11, 0),
-                    new(12, 0),
-                    new(13, 0),
-                    new(14, 0),
-                    new(15, 0)
+                    new(0, 0.0134),
+                    new(1, 0.1341),
+                    new(2, 0.2179),
+                    new(3, 0.1617),
+                    new(4, 0.1226),
+                    new(5, 0.0698),
+                    new(6, 0.0249),
+                    new(7, 0.0051),
+                    new(8, 0.0005),
+                    new(9, 0),
+                    new(10, 0)
                 };
 
             var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
-            Assert.AreEqual(expected, actual);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionDestroyedModels_MultiModelAttacker_VariableDamage_DefenderHasFeelNoPain()
+        {
+            var expected = new List<BinomialOutcome>()
+                {
+                    new(0, 0.0390),
+                    new(1, 0.1068),
+                    new(2, 0.0512),
+                    new(3, 0.0322),
+                    new(4, 0.0190),
+                    new(5, 0.0076),
+                    new(6, 0.0019),
+                    new(7, 0.0003),
+                    new(8, 0)
+                };
+
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         #endregion

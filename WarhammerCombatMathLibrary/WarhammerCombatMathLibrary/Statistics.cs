@@ -75,12 +75,12 @@ namespace WarhammerCombatMathLibrary
             // Create map of binomial data
             var distributionMap = new Dictionary<int, double>();
 
+            // Determine the max number of successes k based on the minimum group success count
+            var maxK = Math.Floor((double)numberOfTrials / minGroupSuccessCount);
+
             for (int g = minGroupSuccessCount; g <= maxGroupSuccessCount; g++)
             {
-                // Calculate the maximum number of grouped successes
-                var maxGroupSuccesses = Math.Floor((double)numberOfTrials / g);
-
-                for (int k = 0; k <= maxGroupSuccesses; k++)
+                for (int k = 0; k <= maxK; k++)
                 {
                     var groupedSuccesses = k * g;
                     double discreteProbability = 0;

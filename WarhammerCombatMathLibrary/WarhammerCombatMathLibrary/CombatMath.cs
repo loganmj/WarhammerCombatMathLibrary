@@ -509,15 +509,15 @@ namespace WarhammerCombatMathLibrary
         /// <returns>An integer value representing the minimum number of successful attacks required to destroy a single model in the defending unit.</returns>
         private static int GetAttacksRequiredToDestroyOneModel(int damagePerAttack, DefenderDTO? defender)
         {
-            if (damagePerAttack <= 0)
-            {
-                Debug.WriteLine($"GetAttacksRequiredToDestroyOneModel() | Attacker weapon damage is less than or equal to 0. Returning 0 ...");
-                return 0;
-            }
-
             if (defender == null)
             {
                 Debug.WriteLine($"GetAttacksRequiredToDestroyOneModel() | Defender is null. Returning 0 ...");
+                return 0;
+            }
+
+            if (damagePerAttack <= 0)
+            {
+                Debug.WriteLine($"GetAttacksRequiredToDestroyOneModel() | Attacker weapon damage is less than or equal to 0. Returning 0 ...");
                 return 0;
             }
 
@@ -1085,17 +1085,34 @@ namespace WarhammerCombatMathLibrary
             var maximumAttacks = GetMaximumAttacks(attacker);
 
             // Get lower bound of group success count
-            var minimumDamagePerAttack = GetMaximumDamagePerAttack(attacker);
-            var minimumAdjustedDamagePerAttack = GetMaximumAdjustedDamagePerAttack(minimumDamagePerAttack, defender);
-            var minGroupSuccessCount = GetAttacksRequiredToDestroyOneModel(minimumAdjustedDamagePerAttack, defender);
+            var maximumDamagePerAttack = GetMaximumDamagePerAttack(attacker);
+            var maximumAdjustedDamagePerAttack = GetMaximumAdjustedDamagePerAttack(maximumDamagePerAttack, defender);
+            var minimumAttacksRequiredToDestroyOneModel = GetAttacksRequiredToDestroyOneModel(maximumAdjustedDamagePerAttack, defender);
+            var minGroupSuccessCount = minimumAttacksRequiredToDestroyOneModel;
 
             // Get upper bound of group success count
-            var maximumDamagePerAttack = GetMinimumDamagePerAttack(attacker);
-            var maximumAdjustedDamagePerAttack = GetMinimumAdjustedDamagePerAttack(maximumDamagePerAttack, defender);
-            var maxGroupSuccessCount = GetAttacksRequiredToDestroyOneModel(maximumAdjustedDamagePerAttack, defender);
+            var minimumDamagePerAttack = GetMinimumDamagePerAttack(attacker);
+            var minimumAdjustedDamagePerAttack = GetMinimumAdjustedDamagePerAttack(minimumDamagePerAttack, defender);
+            var maxAttacksRequiredToDestroyOneModel = GetAttacksRequiredToDestroyOneModel(minimumAdjustedDamagePerAttack, defender);
+            var maxGroupSuccessCount = maxAttacksRequiredToDestroyOneModel == 0 ? maximumAttacks + 1 : maxAttacksRequiredToDestroyOneModel;
 
-            return Statistics.BinomialDistribution(maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
-            // TODO: return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
+            // Get distribution, this will be based on the number of attacks made, and so may need to be trimmed based on the max number of defending models
+            var distribution = Statistics.BinomialDistribution(maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
+
+            // Trim entries that show more successes than the number of models
+            if ((defender.NumberOfModels + 1) < distribution.Count)
+            {
+                distribution.RemoveRange(defender.NumberOfModels + 1, distribution.Count - (defender.NumberOfModels + 1));
+                return distribution;
+            }
+
+            // If there are not enough attacks to destroy all the models, backfill the distribution with outcomes where probability is 0.
+            while ((distribution.Count - 1) < defender.NumberOfModels)
+            {
+                distribution.Add(new BinomialOutcome { Successes = distribution.Count, Probability = 0 });
+            }
+
+            return distribution;
         }
 
         /// <summary>
