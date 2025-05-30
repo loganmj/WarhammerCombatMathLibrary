@@ -1086,22 +1086,7 @@ namespace WarhammerCombatMathLibrary
             var maxGroupSuccessCount = maxAttacksRequiredToDestroyOneModel == 0 ? maximumAttacks + 1 : maxAttacksRequiredToDestroyOneModel;
 
             // Get distribution, this will be based on the number of attacks made, and so may need to be trimmed based on the max number of defending models
-            var distribution = Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
-
-            // Trim entries that show more successes than the number of models
-            if ((defender.NumberOfModels + 1) < distribution.Count)
-            {
-                distribution.RemoveRange(defender.NumberOfModels + 1, distribution.Count - (defender.NumberOfModels + 1));
-                return distribution;
-            }
-
-            // If there are not enough attacks to destroy all the models, backfill the distribution with outcomes where probability is 0.
-            while ((distribution.Count - 1) < defender.NumberOfModels)
-            {
-                distribution.Add(new BinomialOutcome { Successes = distribution.Count, Probability = 0 });
-            }
-
-            return distribution;
+            return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
         }
 
         /// <summary>
@@ -1124,29 +1109,27 @@ namespace WarhammerCombatMathLibrary
                 return [];
             }
 
+            // Get probability of a successful attack
+            var probability = GetProbabilityFailedSave(attacker, defender);
+
+            // Get upper and lower bounds for the number of trials
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
-            var probability = GetProbabilityFailedSave(attacker, defender);
-            var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(averageDamagePerAttack, defender);
+
+            // Get lower bound of group success count
+            var maximumDamagePerAttack = GetMaximumDamagePerAttack(attacker);
+            var maximumAdjustedDamagePerAttack = GetMaximumAdjustedDamagePerAttack(maximumDamagePerAttack, defender);
+            var minimumAttacksRequiredToDestroyOneModel = GetAttacksRequiredToDestroyOneModel(maximumAdjustedDamagePerAttack, defender);
+            var minGroupSuccessCount = minimumAttacksRequiredToDestroyOneModel;
+
+            // Get upper bound of group success count
+            var minimumDamagePerAttack = GetMinimumDamagePerAttack(attacker);
+            var minimumAdjustedDamagePerAttack = GetMinimumAdjustedDamagePerAttack(minimumDamagePerAttack, defender);
+            var maxAttacksRequiredToDestroyOneModel = GetAttacksRequiredToDestroyOneModel(minimumAdjustedDamagePerAttack, defender);
+            var maxGroupSuccessCount = maxAttacksRequiredToDestroyOneModel == 0 ? maximumAttacks + 1 : maxAttacksRequiredToDestroyOneModel;
 
             // Get distribution, this will be based on the number of attacks made, and so may need to be trimmed based on the max number of defending models
-            var distribution = Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probability, groupSuccessCount);
-
-            // Trim entries that show more successes than the number of models
-            if ((defender.NumberOfModels + 1) < distribution.Count)
-            {
-                distribution.RemoveRange(defender.NumberOfModels + 1, distribution.Count - (defender.NumberOfModels + 1));
-                return distribution;
-            }
-
-            // If there are not enough attacks to destroy all the models, backfill the distribution with outcomes where probability is 0.
-            while ((distribution.Count - 1) < defender.NumberOfModels)
-            {
-                distribution.Add(new BinomialOutcome { Successes = distribution.Count, Probability = 0 });
-            }
-
-            return distribution;
+            return Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
         }
 
         #endregion
