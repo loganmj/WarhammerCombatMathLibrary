@@ -149,8 +149,9 @@ namespace WarhammerCombatMathLibrary
             // Calculate the binomial results for each success value k, and average the results for each value of n
             for (int k = 0; k <= Math.Floor((double)maxNumberOfTrials / groupSuccessCount); k++)
             {
+                var groupedSuccesses = k * groupSuccessCount;
                 double combinedProbability = 0;
-                var startingValue = Math.Max(minNumberOfTrials, k * groupSuccessCount);
+                var startingValue = Math.Max(minNumberOfTrials, groupedSuccesses);
 
                 for (int n = startingValue; n <= maxNumberOfTrials; n++)
                 {
@@ -159,16 +160,16 @@ namespace WarhammerCombatMathLibrary
                     switch (distributionType)
                     {
                         case (DistributionTypes.Binomial):
-                            massFunctionResult = ProbabilityMassFunction(n, k * groupSuccessCount, probability);
+                            massFunctionResult = ProbabilityMassFunction(n, groupedSuccesses, probability);
                             break;
                         case (DistributionTypes.LowerCumulative):
-                            massFunctionResult = LowerCumulativeProbability(n, k * groupSuccessCount, probability);
+                            massFunctionResult = LowerCumulativeProbability(n, groupedSuccesses, probability);
                             break;
                         case (DistributionTypes.UpperCumulative):
-                            massFunctionResult = UpperCumulativeProbability(n, k * groupSuccessCount, probability);
+                            massFunctionResult = UpperCumulativeProbability(n, groupedSuccesses, probability);
                             break;
                         case (DistributionTypes.Survivor):
-                            massFunctionResult = SurvivorFunction(n, k * groupSuccessCount, probability);
+                            massFunctionResult = SurvivorFunction(n, groupedSuccesses, probability);
                             break;
                     }
 
@@ -189,6 +190,127 @@ namespace WarhammerCombatMathLibrary
             }
 
             return distribution;
+        }
+
+        /// <summary>
+        /// Creates a distribution based on the given probability function.
+        /// Allows for variable number of trials and variable group success count.
+        /// </summary>
+        /// <param name="distributionType">The type of distribution to create.</param>
+        /// <param name="minNumberOfTrials">The minimum number of trials</param>
+        /// <param name="maxNumberOfTrials">The maximum number of trials</param>
+        /// <param name="probability">The probability of success p</param>
+        /// <param name="minGroupSuccessCount">Value used to define the minimum number of combined success that consitute a "single" trial success.</param>
+        /// <param name="maxGroupSuccessCount">Value used to define the maximum number of combined success that consitute a "single" trial success.</param>
+        /// <returns>A List<BinomialOutcome> containing the distribution of result objects.</returns>
+        private static List<BinomialOutcome> CreateDistribution(DistributionTypes distributionType, int minNumberOfTrials, int maxNumberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
+        {
+            Debug.WriteLine($"Creating new {distributionType} distribution ...");
+            Debug.WriteLine($"Minimum number of trials: {minNumberOfTrials}");
+            Debug.WriteLine($"Maximum number of trials: {maxNumberOfTrials}");
+            Debug.WriteLine($"Minimum group successes: {minGroupSuccessCount}");
+            Debug.WriteLine($"Maximum group successes: {maxGroupSuccessCount}");
+            Debug.WriteLine($"Discrete Success probability: {probability}");
+
+            // Keep track of successes for each group number using a map, for faster lookups
+            var probabilitySumsMap = new Dictionary<int, List<double>>();
+
+            // Create map of binomial data
+            var distributionMap = new Dictionary<int, double>();
+
+            // Determine the max number of successes k based on the minimum group success count
+            var maxK = Math.Floor((double)maxNumberOfTrials / minGroupSuccessCount);
+
+            Debug.WriteLine($"Maximum possible successes k = {maxK}");
+
+            for (int g = minGroupSuccessCount; g <= maxGroupSuccessCount; g++)
+            {
+
+                Debug.WriteLine($"Beginning calculations for group success count g = {g} ...");
+
+                // Calculate the binomial results for each success value k, and average the results for each value of n
+                for (int k = 0; k <= maxK; k++)
+                {
+                    Debug.WriteLine($"Beginning calculations for discrete success count k = {k}, g = {g} ...");
+
+                    var groupedSuccesses = k * g;
+                    double combinedProbability = 0;
+                    var startingValue = Math.Max(minNumberOfTrials, groupedSuccesses);
+
+                    Debug.WriteLine($"Grouped successes k * g = {groupedSuccesses}");
+                    Debug.WriteLine($"Starting value of n = {startingValue}");
+
+                    for (int n = startingValue; n <= maxNumberOfTrials; n++)
+                    {
+                        Debug.WriteLine($"Beginning calculations for trial count n = {n}, k = {k}, g = {g} ...");
+
+                        double massFunctionResult = 0;
+
+                        switch (distributionType)
+                        {
+                            case (DistributionTypes.Binomial):
+                                massFunctionResult = ProbabilityMassFunction(n, groupedSuccesses, probability);
+                                break;
+                            case (DistributionTypes.LowerCumulative):
+                                massFunctionResult = LowerCumulativeProbability(n, groupedSuccesses, probability);
+                                break;
+                            case (DistributionTypes.UpperCumulative):
+                                massFunctionResult = UpperCumulativeProbability(n, groupedSuccesses, probability);
+                                break;
+                            case (DistributionTypes.Survivor):
+                                massFunctionResult = SurvivorFunction(n, groupedSuccesses, probability);
+                                break;
+                        }
+
+                        Debug.WriteLine($"Mass function result for n={n}, k={k}, g={g}: {massFunctionResult}");
+                        Debug.WriteLine($"Combined mass function result: Current Total = {combinedProbability}, New Result = {massFunctionResult}, New Total = {combinedProbability + massFunctionResult}");
+
+                        combinedProbability += massFunctionResult;
+                    }
+
+                    // Average all the probabilities for that value of n
+                    if (combinedProbability > 0)
+                    {
+                        var numerator = combinedProbability;
+                        var denominator = (maxNumberOfTrials - (startingValue - 1));
+
+                        Debug.WriteLine($"Combined results = {combinedProbability}");
+                        Debug.WriteLine($"Number of trials to average by: {denominator}");
+
+                        combinedProbability = (double)numerator / denominator;
+
+                        Debug.WriteLine($"Average mass function result for all values of n, k = {k}, g = {g}: {combinedProbability}");
+                    }
+
+                    // Add the combined probability to the map for that value of k
+                    Debug.WriteLine($"Adding value to map: [ k: {k} p: {combinedProbability} ]");
+
+                    if (!probabilitySumsMap.TryGetValue(k, out List<double>? value))
+                    {
+                        value = [];
+                        probabilitySumsMap[k] = value;
+                    }
+
+                    value.Add(combinedProbability);
+                }
+            }
+
+            // Create a distribution list using the average probabilities for each k
+            var finalDistribution = probabilitySumsMap
+                .Select(pair => new BinomialOutcome
+                {
+                    Successes = pair.Key,
+                    Probability = pair.Value.Average()
+                })
+                .OrderBy(outcome => outcome.Successes)
+                .ToList();
+
+            foreach (var outcome in finalDistribution)
+            {
+                Debug.WriteLine($"Averaged outcome: {outcome}");
+            }
+
+            return finalDistribution;
         }
 
         #endregion
@@ -594,6 +716,92 @@ namespace WarhammerCombatMathLibrary
 
             // Create distribution
             return CreateDistribution(DistributionTypes.Binomial, minNumberOfTrials, maxNumberOfTrials, probability, groupSuccessCount);
+        }
+
+        /// <summary>
+        /// Calculates the combined binomial distribution of trial data using a variable group success count.
+        /// </summary>
+        /// <param name="numberOfTrials">The number of trials in the process.</param>
+        /// <param name="probability">The probability of success for a single trial.</param>
+        /// <param name="minGroupSuccessCount">The minimum number of grouped trial successes that count as a success.</param>
+        /// <param name="maxGroupSuccessCount">The maximum number of grouped trial successes that count as a success.</param>
+        /// <returns>A binomial distribution of trial results and their respective probabilities.</returns>
+        public static List<BinomialOutcome> BinomialDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
+        {
+            // Validate parameters
+            if (minNumberOfTrials < 1)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Min number of trials is less than 1.");
+                return [new(0, 1)];
+            }
+
+            if (maxNumberOfTrials < 1)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Max number of trials is less than 1.");
+                return [new(0, 1)];
+            }
+
+            if (probability <= 0)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Probability is less than or equal to 0.");
+
+                // The probability of 0 successes should be 1, all other probabilities should be 0.
+                var adjustedDistribution = new List<BinomialOutcome>
+                {
+                    new(0, 1)
+                };
+
+                for (int k = 1; k <= maxNumberOfTrials; k++)
+                {
+                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
+                }
+
+                return adjustedDistribution;
+            }
+
+            if (probability >= 1)
+            {
+                Debug.WriteLine($"BinomialDistribution() | Probability is greater than or equal to 1.");
+
+                // All probabilities should be 0, except the probability of all successes should be 1.
+                var adjustedDistribution = new List<BinomialOutcome>();
+
+                for (int k = 0; k <= maxNumberOfTrials - 1; k++)
+                {
+                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
+                }
+
+                adjustedDistribution.Add(new BinomialOutcome(maxNumberOfTrials, 1));
+
+                return adjustedDistribution;
+            }
+
+            if (minGroupSuccessCount < 1)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Minimum group success count is less than 1.");
+                return [new BinomialOutcome(0, 1)];
+            }
+
+            if (maxGroupSuccessCount < 1)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Maximum group success count is less than 1.");
+                return [new BinomialOutcome(0, 1)];
+            }
+
+            if (minGroupSuccessCount > maxGroupSuccessCount)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Minimum group success count is greater than maximum group success count.");
+                return [new BinomialOutcome(0, 1)];
+            }
+
+            if (minGroupSuccessCount > maxNumberOfTrials)
+            {
+                Debug.WriteLine($"BinomialDistributionVariableTrials() | Minimum group success count is greater than the total number of trials.");
+                return [new BinomialOutcome(0, 1)];
+            }
+
+            // Create distribution
+            return CreateDistribution(DistributionTypes.Binomial, minNumberOfTrials, maxNumberOfTrials, probability, minGroupSuccessCount, maxGroupSuccessCount);
         }
 
         /// <summary>

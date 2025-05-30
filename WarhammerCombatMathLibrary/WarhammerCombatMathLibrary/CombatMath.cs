@@ -76,8 +76,11 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageVariableAttacks = (attacker.WeaponScalarOfVariableAttacks * Statistics.AverageResult((int)attacker.WeaponVariableAttackType)) + attacker.WeaponFlatAttacks;
-            return averageVariableAttacks * attacker.NumberOfModels;
+            var averageAttackDieResult = Statistics.AverageResult((int)attacker.WeaponVariableAttackType);
+            var averageVariableAttacksPerModel = attacker.WeaponScalarOfVariableAttacks * averageAttackDieResult;
+            var totalAverageAttacksPerModel = averageVariableAttacksPerModel + attacker.WeaponFlatAttacks;
+            var totalAverageAttacks = totalAverageAttacksPerModel * attacker.NumberOfModels;
+            return totalAverageAttacks;
         }
 
         /// <summary>
@@ -108,8 +111,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var minimumAttacks = attacker.WeaponScalarOfVariableAttacks + attacker.WeaponFlatAttacks;
-            return minimumAttacks * attacker.NumberOfModels;
+            var minimumAttacksPerModel = attacker.WeaponScalarOfVariableAttacks + attacker.WeaponFlatAttacks;
+            var totalMinimumAttacks = minimumAttacksPerModel * attacker.NumberOfModels;
+            return totalMinimumAttacks;
         }
 
         /// <summary>
@@ -140,8 +144,11 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var maximumAttacks = (attacker.WeaponScalarOfVariableAttacks * (int)attacker.WeaponVariableAttackType) + attacker.WeaponFlatAttacks;
-            return maximumAttacks * attacker.NumberOfModels;
+            var maximumAttackRollValue = (int)attacker.WeaponVariableAttackType;
+            var maximumVariableAttacksPerModel = (attacker.WeaponScalarOfVariableAttacks * maximumAttackRollValue);
+            var totalMaximumAttacksPerModel = maximumVariableAttacksPerModel + attacker.WeaponFlatAttacks;
+            var totalMaximumAttacks = totalMaximumAttacksPerModel * attacker.NumberOfModels;
+            return totalMaximumAttacks;
         }
 
         /// <summary>
@@ -1097,7 +1104,7 @@ namespace WarhammerCombatMathLibrary
             var maxGroupSuccessCount = maxAttacksRequiredToDestroyOneModel == 0 ? maximumAttacks + 1 : maxAttacksRequiredToDestroyOneModel;
 
             // Get distribution, this will be based on the number of attacks made, and so may need to be trimmed based on the max number of defending models
-            var distribution = Statistics.BinomialDistribution(maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
+            var distribution = Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
 
             // Trim entries that show more successes than the number of models
             if ((defender.NumberOfModels + 1) < distribution.Count)
@@ -1140,7 +1147,24 @@ namespace WarhammerCombatMathLibrary
             var probability = GetProbabilityFailedSave(attacker, defender);
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
             var groupSuccessCount = GetAttacksRequiredToDestroyOneModel(averageDamagePerAttack, defender);
-            return Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probability, groupSuccessCount);
+
+            // Get distribution, this will be based on the number of attacks made, and so may need to be trimmed based on the max number of defending models
+            var distribution = Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probability, groupSuccessCount);
+
+            // Trim entries that show more successes than the number of models
+            if ((defender.NumberOfModels + 1) < distribution.Count)
+            {
+                distribution.RemoveRange(defender.NumberOfModels + 1, distribution.Count - (defender.NumberOfModels + 1));
+                return distribution;
+            }
+
+            // If there are not enough attacks to destroy all the models, backfill the distribution with outcomes where probability is 0.
+            while ((distribution.Count - 1) < defender.NumberOfModels)
+            {
+                distribution.Add(new BinomialOutcome { Successes = distribution.Count, Probability = 0 });
+            }
+
+            return distribution;
         }
 
         #endregion
