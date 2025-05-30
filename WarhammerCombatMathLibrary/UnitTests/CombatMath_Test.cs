@@ -3585,17 +3585,19 @@ namespace UnitTests
         public void GetBinomialDistributionDestroyedModels_SingleModelAttacker_NoDefenderSpecialRules()
         {
             var expected = new List<BinomialOutcome>
-                {
-                    new(0, 0.0247),
-                    new(1, 0.1162),
-                    new(2, 0.2393),
-                    new(3, 0.2815),
-                    new(4, 0.2070),
-                    new(5, 0.0974),
-                    new(6, 0.0287),
-                    new(7, 0.0048),
-                    new(8, 0.0004)
-                };
+            {
+                new(0, 0.0247),
+                new(1, 0.1162),
+                new(2, 0.2393),
+                new(3, 0.2815),
+                new(4, 0.2070),
+                new(5, 0.0974),
+                new(6, 0.0287),
+                new(7, 0.0048),
+                new(8, 0.0004),
+                new(9, 0),
+                new(10, 0)
+            };
 
             var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
@@ -3663,17 +3665,14 @@ namespace UnitTests
         public void GetBinomialDistributionDestroyedModels_SingleModelAttacker_DefenderHasInvulnerableSave()
         {
             var expected = new List<BinomialOutcome>()
-                {
-                    new(0, 0.0740),
-                    new(1, 0.2278),
-                    new(2, 0.3066),
-                    new(3, 0.2358),
-                    new(4, 0.1134),
-                    new(5, 0.0349),
-                    new(6, 0.0067),
-                    new(7, 0.0007),
-                    new(8, 0)
-                };
+            {
+                new(0, 0.0740),
+                new(1, 0.2278),
+                new(2, 0.3066),
+                new(3, 0.2358),
+                new(4, 0.1134),
+                new(5, 0.0349)
+            };
 
             var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
 
@@ -3701,13 +3700,11 @@ namespace UnitTests
         public void GetBinomialDistributionDestroyedModels_SingleModelAttacker_VariableAttacks_DefenderHasFeelNoPain()
         {
             var expected = new List<BinomialOutcome>()
-                {
-                    new(0, 0.0225),
-                    new(1, 0.2066),
-                    new(2, 0.2250),
-                    new(3, 0.1251),
-                    new(4, 0.0227)
-                };
+            {
+                new(0, 0.0225),
+                new(1, 0.1186),
+                new(2, 0.0414)
+            };
 
             var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
 
@@ -3735,14 +3732,11 @@ namespace UnitTests
         public void GetBinomialDistributionDestroyedModels_MultiModelAttacker_VariableAttacks_DefenderHasFeelNoPain()
         {
             var expected = new List<BinomialOutcome>()
-                {
-                    new(0, 0.0849),
-                    new(1, 0.2117),
-                    new(2, 0.0257),
-                    new(3, 0.0007),
-                    new(4, 0),
-                    new(5, 0)
-                };
+            {
+                new(0, 0.0849),
+                new(1, 0.0440),
+                new(2, 0.0099)
+            };
 
             var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
 
@@ -3770,24 +3764,19 @@ namespace UnitTests
         public void GetBinomialDistributionDestroyedModels_MultiModelAttacker_VariableAttacks_WeaponHasTorrent()
         {
             var expected = new List<BinomialOutcome>()
-                {
-                    new(0, 0.0152),
-                    new(1, 0.0911),
-                    new(2, 0.1138),
-                    new(3, 0.1119),
-                    new(4, 0.0983),
-                    new(5, 0.0666),
-                    new(6, 0.0320),
-                    new(7, 0.0104),
-                    new(8, 0.0022),
-                    new(9, 0.0003),
-                    new(10, 0),
-                    new(11, 0),
-                    new(12, 0),
-                    new(13, 0),
-                    new(14, 0),
-                    new(15, 0)
-                };
+            {
+                new(0, 0.0152),
+                new(1, 0.0911),
+                new(2, 0.1138),
+                new(3, 0.1119),
+                new(4, 0.0983),
+                new(5, 0.0666),
+                new(6, 0.0320),
+                new(7, 0.0104),
+                new(8, 0.0022),
+                new(9, 0.0003),
+                new(10, 0)
+            };
 
             var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
@@ -3815,17 +3804,19 @@ namespace UnitTests
         public void GetBinomialDistributionDestroyedModels_SingleModelAttacker_VariableDamage()
         {
             var expected = new List<BinomialOutcome>()
-                {
-                    new(0, 0.0247),
-                    new(1, 0.1162),
-                    new(2, 0.2393),
-                    new(3, 0.2815),
-                    new(4, 0.2070),
-                    new(5, 0.0974),
-                    new(6, 0.0287),
-                    new(7, 0.0048),
-                    new(8, 0.0004)
-                };
+            {
+                new(0, 0.0247),
+                new(1, 0.1162),
+                new(2, 0.2393),
+                new(3, 0.2815),
+                new(4, 0.2070),
+                new(5, 0.0974),
+                new(6, 0.0287),
+                new(7, 0.0048),
+                new(8, 0.0004),
+                new(9, 0),
+                new(10, 0)
+            };
 
             var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
@@ -3893,17 +3884,11 @@ namespace UnitTests
         public void GetBinomialDistributionDestroyedModels_MultiModelAttacker_VariableDamage_DefenderHasFeelNoPain()
         {
             var expected = new List<BinomialOutcome>()
-                {
-                    new(0, 0.0390),
-                    new(1, 0.1068),
-                    new(2, 0.0512),
-                    new(3, 0.0322),
-                    new(4, 0.0190),
-                    new(5, 0.0076),
-                    new(6, 0.0019),
-                    new(7, 0.0003),
-                    new(8, 0)
-                };
+            {
+                new(0, 0.0390),
+                new(1, 0.1068),
+                new(2, 0.0512)
+            };
 
             var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
 

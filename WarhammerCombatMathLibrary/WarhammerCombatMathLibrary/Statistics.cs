@@ -237,9 +237,6 @@ namespace WarhammerCombatMathLibrary
                     double combinedProbability = 0;
                     var startingValue = Math.Max(minNumberOfTrials, groupedSuccesses);
 
-                    Debug.WriteLine($"Grouped successes k * g = {groupedSuccesses}");
-                    Debug.WriteLine($"Starting value of n = {startingValue}");
-
                     for (int n = startingValue; n <= maxNumberOfTrials; n++)
                     {
                         Debug.WriteLine($"Beginning calculations for trial count n = {n}, k = {k}, g = {g} ...");
@@ -262,9 +259,6 @@ namespace WarhammerCombatMathLibrary
                                 break;
                         }
 
-                        Debug.WriteLine($"Mass function result for n={n}, k={k}, g={g}: {massFunctionResult}");
-                        Debug.WriteLine($"Combined mass function result: Current Total = {combinedProbability}, New Result = {massFunctionResult}, New Total = {combinedProbability + massFunctionResult}");
-
                         combinedProbability += massFunctionResult;
                     }
 
@@ -273,9 +267,6 @@ namespace WarhammerCombatMathLibrary
                     {
                         var numerator = combinedProbability;
                         var denominator = (maxNumberOfTrials - (startingValue - 1));
-
-                        Debug.WriteLine($"Combined results = {combinedProbability}");
-                        Debug.WriteLine($"Number of trials to average by: {denominator}");
 
                         combinedProbability = (double)numerator / denominator;
 

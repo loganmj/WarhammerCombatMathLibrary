@@ -261,12 +261,6 @@ namespace WarhammerCombatMathLibrary
             var averageDamagePerDieRoll = Statistics.AverageResult((int)attacker.WeaponVariableDamageType);
             var flatDamage = attacker.WeaponFlatDamage;
             var averageDamagePerAttack = (numberOfDamageDieRolls * averageDamagePerDieRoll) + flatDamage;
-
-            Debug.WriteLine($"GetAverageDamagePerAttack() | Number of damage die rolls: {numberOfDamageDieRolls}");
-            Debug.WriteLine($"GetAverageDamagePerAttack() | Average damage per die roll: {averageDamagePerDieRoll}");
-            Debug.WriteLine($"GetAverageDamagePerAttack() | Flat damage: {flatDamage}");
-            Debug.WriteLine($"GetAverageDamagePerAttack() | Average damage per attack: {averageDamagePerAttack}");
-
             return averageDamagePerAttack;
         }
 
@@ -302,12 +296,6 @@ namespace WarhammerCombatMathLibrary
             var minimumDamagePerDieRoll = 1;
             var flatDamage = attacker.WeaponFlatDamage;
             var minimumDamagePerAttack = (numberOfDamageDieRolls * minimumDamagePerDieRoll) + flatDamage;
-
-            Debug.WriteLine($"GetMinimumDamagePerAttack() | Number of damage die rolls: {numberOfDamageDieRolls}");
-            Debug.WriteLine($"GetMinimumDamagePerAttack() | Minimum damage per die roll: {minimumDamagePerDieRoll}");
-            Debug.WriteLine($"GetMinimumDamagePerAttack() | Flat damage: {flatDamage}");
-            Debug.WriteLine($"GetMinimumDamagePerAttack() | Minimum damage per attack: {minimumDamagePerAttack}");
-
             return minimumDamagePerAttack;
         }
 
@@ -343,12 +331,6 @@ namespace WarhammerCombatMathLibrary
             var maximumDamagePerDieRoll = (int)attacker.WeaponVariableDamageType;
             var flatDamage = attacker.WeaponFlatDamage;
             var maximumDamagePerAttack = (numberOfDamageDieRolls * maximumDamagePerDieRoll) + flatDamage;
-
-            Debug.WriteLine($"GetMaximumDamagePerAttack() | Number of damage die rolls: {numberOfDamageDieRolls}");
-            Debug.WriteLine($"GetMaximumDamagePerAttack() | Maximum damage per die roll: {maximumDamagePerDieRoll}");
-            Debug.WriteLine($"GetMaximumDamagePerAttack() | Flat damage: {flatDamage}");
-            Debug.WriteLine($"GetMaximumDamagePerAttack() | Maximum damage per attack: {maximumDamagePerAttack}");
-
             return maximumDamagePerAttack;
         }
 
