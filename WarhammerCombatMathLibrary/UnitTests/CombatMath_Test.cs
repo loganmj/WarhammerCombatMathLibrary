@@ -57,8 +57,8 @@ namespace UnitTests
         public static readonly AttackerDTO ATTACKER_WORLD_EATERS_FORGEFIEND = new()
         {
             NumberOfModels = 1,
-            WeaponScalarOfVariableAttacks = 3,
-            WeaponVariableAttackType = DiceType.D3,
+            WeaponNumberOfAttackDice = 3,
+            WeaponAttackDiceType = DiceType.D3,
             WeaponFlatAttacks = 0,
             WeaponSkill = 3,
             WeaponStrength = 10,
@@ -72,8 +72,8 @@ namespace UnitTests
         public static readonly AttackerDTO ATTACKER_WORLD_EATERS_CHAOS_SPAWN = new()
         {
             NumberOfModels = 2,
-            WeaponScalarOfVariableAttacks = 1,
-            WeaponVariableAttackType = DiceType.D6,
+            WeaponNumberOfAttackDice = 1,
+            WeaponAttackDiceType = DiceType.D6,
             WeaponFlatAttacks = 2,
             WeaponSkill = 4,
             WeaponStrength = 6,
@@ -87,8 +87,8 @@ namespace UnitTests
         public static readonly AttackerDTO ATTACKER_SPACE_MARINE_INFERNUS_SQUAD = new()
         {
             NumberOfModels = 5,
-            WeaponScalarOfVariableAttacks = 1,
-            WeaponVariableAttackType = DiceType.D6,
+            WeaponNumberOfAttackDice = 1,
+            WeaponAttackDiceType = DiceType.D6,
             WeaponFlatAttacks = 0,
             WeaponSkill = 0,
             WeaponStrength = 5,
@@ -103,8 +103,8 @@ namespace UnitTests
         public static readonly AttackerDTO ATTACKER_WORLD_EATERS_JAKHALS = new()
         {
             NumberOfModels = 10,
-            WeaponScalarOfVariableAttacks = 0,
-            WeaponVariableAttackType = 0,
+            WeaponNumberOfAttackDice = 0,
+            WeaponAttackDiceType = 0,
             WeaponFlatAttacks = 3,
             WeaponSkill = 4,
             WeaponStrength = 3,
@@ -118,14 +118,14 @@ namespace UnitTests
         public static readonly AttackerDTO ATTACKER_WORLD_EATERS_MAULERFIEND = new()
         {
             NumberOfModels = 1,
-            WeaponScalarOfVariableAttacks = 0,
-            WeaponVariableAttackType = 0,
+            WeaponNumberOfAttackDice = 0,
+            WeaponAttackDiceType = 0,
             WeaponFlatAttacks = 8,
             WeaponSkill = 3,
             WeaponStrength = 14,
             WeaponArmorPierce = 2,
-            WeaponScalarOfVariableDamage = 1,
-            WeaponVariableDamageType = DiceType.D6,
+            WeaponNumberOfDamageDice = 1,
+            WeaponDamageDiceType = DiceType.D6,
             WeaponFlatDamage = 1
         };
 
@@ -135,14 +135,14 @@ namespace UnitTests
         public static readonly AttackerDTO ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD = new()
         {
             NumberOfModels = 4,
-            WeaponScalarOfVariableAttacks = 0,
-            WeaponVariableAttackType = 0,
+            WeaponNumberOfAttackDice = 0,
+            WeaponAttackDiceType = 0,
             WeaponFlatAttacks = 2,
             WeaponSkill = 4,
             WeaponStrength = 9,
             WeaponArmorPierce = 4,
-            WeaponScalarOfVariableDamage = 1,
-            WeaponVariableDamageType = DiceType.D6,
+            WeaponNumberOfDamageDice = 1,
+            WeaponDamageDiceType = DiceType.D6,
             WeaponFlatDamage = 0
         };
 

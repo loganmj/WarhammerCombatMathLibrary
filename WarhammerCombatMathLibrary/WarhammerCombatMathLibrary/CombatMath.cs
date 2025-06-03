@@ -70,14 +70,14 @@ namespace WarhammerCombatMathLibrary
             }
 
             // If both the variable scalar and the flat value of attacks are less than or equal to 0, then there are no attacks.
-            if (attacker.WeaponScalarOfVariableAttacks <= 0 && attacker.WeaponFlatAttacks <= 0)
+            if (attacker.WeaponNumberOfAttackDice <= 0 && attacker.WeaponFlatAttacks <= 0)
             {
                 Debug.WriteLine($"GetAverageAttacks() | Attacker has no attacks value, returning 0 ...");
                 return 0;
             }
 
-            var averageAttackDieResult = Statistics.AverageResult((int)attacker.WeaponVariableAttackType);
-            var averageVariableAttacksPerModel = attacker.WeaponScalarOfVariableAttacks * averageAttackDieResult;
+            var averageAttackDieResult = Statistics.AverageResult((int)attacker.WeaponAttackDiceType);
+            var averageVariableAttacksPerModel = attacker.WeaponNumberOfAttackDice * averageAttackDieResult;
             var totalAverageAttacksPerModel = averageVariableAttacksPerModel + attacker.WeaponFlatAttacks;
             var totalAverageAttacks = totalAverageAttacksPerModel * attacker.NumberOfModels;
             return totalAverageAttacks;
@@ -105,13 +105,13 @@ namespace WarhammerCombatMathLibrary
             }
 
             // If both the variable salar and the flat value of attacks are less than or equal to 0, then there are no attacks.
-            if (attacker.WeaponScalarOfVariableAttacks <= 0 && attacker.WeaponFlatAttacks <= 0)
+            if (attacker.WeaponNumberOfAttackDice <= 0 && attacker.WeaponFlatAttacks <= 0)
             {
                 Debug.WriteLine($"GetMinimumAttacks() | Attacker has no attacks value, returning 0 ...");
                 return 0;
             }
 
-            var minimumAttacksPerModel = attacker.WeaponScalarOfVariableAttacks + attacker.WeaponFlatAttacks;
+            var minimumAttacksPerModel = attacker.WeaponNumberOfAttackDice + attacker.WeaponFlatAttacks;
             var totalMinimumAttacks = minimumAttacksPerModel * attacker.NumberOfModels;
             return totalMinimumAttacks;
         }
@@ -138,14 +138,14 @@ namespace WarhammerCombatMathLibrary
             }
 
             // If both the variable salar and the flat value of attacks are less than or equal to 0, then there are no attacks.
-            if (attacker.WeaponScalarOfVariableAttacks <= 0 && attacker.WeaponFlatAttacks <= 0)
+            if (attacker.WeaponNumberOfAttackDice <= 0 && attacker.WeaponFlatAttacks <= 0)
             {
                 Debug.WriteLine($"GetMaximumAttacks() | Attacker has no attacks value, returning 0 ...");
                 return 0;
             }
 
-            var maximumAttackRollValue = (int)attacker.WeaponVariableAttackType;
-            var maximumVariableAttacksPerModel = (attacker.WeaponScalarOfVariableAttacks * maximumAttackRollValue);
+            var maximumAttackRollValue = (int)attacker.WeaponAttackDiceType;
+            var maximumVariableAttacksPerModel = (attacker.WeaponNumberOfAttackDice * maximumAttackRollValue);
             var totalMaximumAttacksPerModel = maximumVariableAttacksPerModel + attacker.WeaponFlatAttacks;
             var totalMaximumAttacks = totalMaximumAttacksPerModel * attacker.NumberOfModels;
             return totalMaximumAttacks;
@@ -244,21 +244,21 @@ namespace WarhammerCombatMathLibrary
             }
 
             // If both the variable scalar and the flat number of attacks are less than or equal to 0, then there are no attacks.
-            if (attacker.WeaponScalarOfVariableAttacks <= 0 && attacker.WeaponFlatAttacks <= 0)
+            if (attacker.WeaponNumberOfAttackDice <= 0 && attacker.WeaponFlatAttacks <= 0)
             {
                 Debug.WriteLine($"GetAverageDamagePerAttack() | Attacker has no attacks value, returning 0 ...");
                 return 0;
             }
 
             // If both the variable scalar and the flat value of damage are less than or equal to 0, then there is no damage.
-            if (attacker.WeaponScalarOfVariableDamage <= 0 && attacker.WeaponFlatDamage <= 0)
+            if (attacker.WeaponNumberOfDamageDice <= 0 && attacker.WeaponFlatDamage <= 0)
             {
                 Debug.WriteLine($"GetAverageDamagePerAttack() | Attacker has no damage value, returning 0 ...");
                 return 0;
             }
 
-            var numberOfDamageDieRolls = attacker.WeaponScalarOfVariableDamage;
-            var averageDamagePerDieRoll = Statistics.AverageResult((int)attacker.WeaponVariableDamageType);
+            var numberOfDamageDieRolls = attacker.WeaponNumberOfDamageDice;
+            var averageDamagePerDieRoll = Statistics.AverageResult((int)attacker.WeaponDamageDiceType);
             var flatDamage = attacker.WeaponFlatDamage;
             var averageDamagePerAttack = (numberOfDamageDieRolls * averageDamagePerDieRoll) + flatDamage;
             return averageDamagePerAttack;
@@ -279,20 +279,20 @@ namespace WarhammerCombatMathLibrary
             }
 
             // If both the variable scalar and the flat number of attacks are less than or equal to 0, then there are no attacks.
-            if (attacker.WeaponScalarOfVariableAttacks <= 0 && attacker.WeaponFlatAttacks <= 0)
+            if (attacker.WeaponNumberOfAttackDice <= 0 && attacker.WeaponFlatAttacks <= 0)
             {
                 Debug.WriteLine($"GetMinimumDamagePerAttack() | Attacker has no attacks value, returning 0 ...");
                 return 0;
             }
 
             // If both the variable scalar and the flat value of damage are less than or equal to 0, then there is no damage.
-            if (attacker.WeaponScalarOfVariableDamage <= 0 && attacker.WeaponFlatDamage <= 0)
+            if (attacker.WeaponNumberOfDamageDice <= 0 && attacker.WeaponFlatDamage <= 0)
             {
                 Debug.WriteLine($"GetMinimumDamagePerAttack() | Attacker has no damage value, returning 0 ...");
                 return 0;
             }
 
-            var numberOfDamageDieRolls = attacker.WeaponScalarOfVariableDamage;
+            var numberOfDamageDieRolls = attacker.WeaponNumberOfDamageDice;
             var minimumDamagePerDieRoll = 1;
             var flatDamage = attacker.WeaponFlatDamage;
             var minimumDamagePerAttack = (numberOfDamageDieRolls * minimumDamagePerDieRoll) + flatDamage;
@@ -314,21 +314,21 @@ namespace WarhammerCombatMathLibrary
             }
 
             // If both the variable scalar and the flat number of attacks are less than or equal to 0, then there are no attacks.
-            if (attacker.WeaponScalarOfVariableAttacks <= 0 && attacker.WeaponFlatAttacks <= 0)
+            if (attacker.WeaponNumberOfAttackDice <= 0 && attacker.WeaponFlatAttacks <= 0)
             {
                 Debug.WriteLine($"GetMaximumDamagePerAttack() | Attacker has no attacks value, returning 0 ...");
                 return 0;
             }
 
             // If both the variable scalar and the flat value of damage are less than or equal to 0, then there is no damage.
-            if (attacker.WeaponScalarOfVariableDamage <= 0 && attacker.WeaponFlatDamage <= 0)
+            if (attacker.WeaponNumberOfDamageDice <= 0 && attacker.WeaponFlatDamage <= 0)
             {
                 Debug.WriteLine($"GetMaximumDamagePerAttack() | Attacker has no damage value, returning 0 ...");
                 return 0;
             }
 
-            var numberOfDamageDieRolls = attacker.WeaponScalarOfVariableDamage;
-            var maximumDamagePerDieRoll = (int)attacker.WeaponVariableDamageType;
+            var numberOfDamageDieRolls = attacker.WeaponNumberOfDamageDice;
+            var maximumDamagePerDieRoll = (int)attacker.WeaponDamageDiceType;
             var flatDamage = attacker.WeaponFlatDamage;
             var maximumDamagePerAttack = (numberOfDamageDieRolls * maximumDamagePerDieRoll) + flatDamage;
             return maximumDamagePerAttack;
