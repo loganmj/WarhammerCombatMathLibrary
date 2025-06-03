@@ -42,7 +42,11 @@
         /// </summary>
         public int WeaponSkill { get; set; }
 
-        // TODO: Weapon has lethal hits
+        /// <summary>
+        /// The attacker's weapon has the Lethal Hits keyword ability
+        /// </summary>
+        public bool WeaponHasLethalHits { get; set; }
+
         // TODO: Weapon has full rerolls
         // TODO: Weapon has reroll 1s
 
@@ -83,6 +87,7 @@
                    + $"Weapon Attacks: {(WeaponNumberOfAttackDice > 0 ? $"{WeaponNumberOfAttackDice} {WeaponAttackDiceType} + {WeaponFlatAttacks}" : WeaponFlatAttacks.ToString())}, "
                    + $"WeaponHasTorrent: {WeaponHasTorrent}, "
                    + $"WeaponSkill: {WeaponSkill}, "
+                   + $"WeaponHasLethalHits: {WeaponHasLethalHits}, "
                    + $"WeaponStrength: {WeaponStrength}, "
                    + $"WeaponArmorPierce: -{WeaponArmorPierce}, "
                    + $"WeaponDamage: {(WeaponNumberOfDamageDice > 0 ? $"{WeaponNumberOfDamageDice} {WeaponDamageDiceType} + {WeaponFlatDamage}" : WeaponFlatDamage)}]";
@@ -110,6 +115,7 @@
                    && WeaponFlatAttacks == other.WeaponFlatAttacks
                    && WeaponHasTorrent == other.WeaponHasTorrent
                    && WeaponSkill == other.WeaponSkill
+                   && WeaponHasLethalHits == other.WeaponHasLethalHits
                    && WeaponStrength == other.WeaponStrength
                    && WeaponArmorPierce == other.WeaponArmorPierce
                    && WeaponNumberOfDamageDice == other.WeaponNumberOfDamageDice
@@ -120,14 +126,18 @@
         /// <inheritdoc/>
         public override int GetHashCode()
         {
+            // Combine the weapon keyword abilities into a single byte
+            var weaponKeywordFlags = ((WeaponHasTorrent ? 1 : 0) << 0)
+                                     | ((WeaponHasLethalHits ? 1 : 0) << 1);
+
             return HashCode.Combine(Name?.ToLowerInvariant(),
                                     NumberOfModels,
                                     (WeaponNumberOfAttackDice * (int)WeaponAttackDiceType) + WeaponFlatAttacks,
-                                    WeaponHasTorrent,
                                     WeaponSkill,
                                     WeaponStrength,
                                     WeaponArmorPierce,
-                                    (WeaponNumberOfDamageDice * (int)WeaponDamageDiceType) + WeaponFlatDamage);
+                                    (WeaponNumberOfDamageDice * (int)WeaponDamageDiceType) + WeaponFlatDamage,
+                                    weaponKeywordFlags);
         }
 
         #endregion
