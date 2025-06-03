@@ -3,9 +3,14 @@
     /// <summary>
     /// A data transfer object representing the attacker in a combat scenario.
     /// </summary>
-    public class AttackerDTO
+    public class AttackerDTO : IComparable<AttackerDTO>, IEquatable<AttackerDTO>
     {
         #region Properties
+
+        /// <summary>
+        /// The name of the attacking model.
+        /// </summary>
+        public string? Name { get; set; }
 
         /// <summary>
         /// The number of models in the attacker's unit.
@@ -13,17 +18,17 @@
         public int NumberOfModels { get; set; }
 
         /// <summary>
-        /// The scalar number of variable attack rolls that the attacker gets.
+        /// The number of attacks dice that the weapon gets as part of its attacks stat.
         /// </summary>
-        public int WeaponScalarOfVariableAttacks { get; set; }
+        public int WeaponNumberOfAttackDice { get; set; }
 
         /// <summary>
-        /// The dice type used to determine the variable number of attacks.
+        /// The attack dice type used to determine the variable number of attacks.
         /// </summary>
-        public DiceType WeaponVariableAttackType { get; set; }
+        public DiceType WeaponAttackDiceType { get; set; }
 
         /// <summary>
-        /// The additional number of flat attacks the attacker gets.
+        /// The number of flat attacks that the attacker gets.
         /// </summary>
         public int WeaponFlatAttacks { get; set; }
 
@@ -37,6 +42,10 @@
         /// </summary>
         public int WeaponSkill { get; set; }
 
+        // TODO: Weapon has lethal hits
+        // TODO: Weapon has full rerolls
+        // TODO: Weapon has reroll 1s
+
         /// <summary>
         /// The strength of the attacker's weapon.
         /// </summary>
@@ -48,17 +57,17 @@
         public int WeaponArmorPierce { get; set; }
 
         /// <summary>
-        /// The scalar number of variable damage rolls that the attacker gets.
+        /// The number of damage dice that the weapon gets as part of its damage stat.
         /// </summary>
-        public int WeaponScalarOfVariableDamage { get; set; }
+        public int WeaponNumberOfDamageDice { get; set; }
 
         /// <summary>
-        /// The dice type used to determine the variable amount of damage.
+        /// The damage dice type used to determine the variable amount of damage.
         /// </summary>
-        public DiceType WeaponVariableDamageType { get; set; }
+        public DiceType WeaponDamageDiceType { get; set; }
 
         /// <summary>
-        /// The addition amount of flat damage the weapon has.
+        /// The amount of flat damage the weapon deals.
         /// </summary>
         public int WeaponFlatDamage { get; set; }
 
@@ -69,12 +78,99 @@
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"Attacker: [NumberOfModels: {NumberOfModels}, "
-                   + $"Weapon Attacks: {(WeaponScalarOfVariableAttacks > 0 ? $"{WeaponScalarOfVariableAttacks} {WeaponVariableAttackType} + {WeaponFlatAttacks}" : WeaponFlatAttacks.ToString())}, "
+            return $"Attacker: [ Name: '{Name}', "
+                   + $"NumberOfModels: {NumberOfModels}, "
+                   + $"Weapon Attacks: {(WeaponNumberOfAttackDice > 0 ? $"{WeaponNumberOfAttackDice} {WeaponAttackDiceType} + {WeaponFlatAttacks}" : WeaponFlatAttacks.ToString())}, "
                    + $"WeaponSkill: {WeaponSkill}, "
                    + $"WeaponStrength: {WeaponStrength}, "
                    + $"WeaponArmorPierce: -{WeaponArmorPierce}, "
-                   + $"WeaponDamage: {(WeaponScalarOfVariableDamage > 0 ? $"{WeaponScalarOfVariableDamage} {WeaponVariableDamageType} + {WeaponFlatDamage}" : WeaponFlatDamage)}]";
+                   + $"WeaponDamage: {(WeaponNumberOfDamageDice > 0 ? $"{WeaponNumberOfDamageDice} {WeaponDamageDiceType} + {WeaponFlatDamage}" : WeaponFlatDamage)}]";
+        }
+
+        /// <inheritdoc/>
+        public int CompareTo(AttackerDTO? other)
+        {
+            if (other == null)
+            {
+                return 1;
+            }
+
+            var result = string.Compare(Name, other.Name, StringComparison.OrdinalIgnoreCase);
+            if (result != 0)
+            {
+                return result;
+            }
+
+            result = NumberOfModels.CompareTo(other.NumberOfModels);
+            if (result != 0)
+            {
+                return result;
+            }
+
+            result = ((WeaponNumberOfAttackDice * (int)WeaponAttackDiceType) + WeaponFlatAttacks).CompareTo((other.WeaponNumberOfAttackDice * (int)other.WeaponAttackDiceType) + other.WeaponFlatAttacks);
+            if (result != 0)
+            {
+                return result;
+            }
+
+            result = WeaponSkill.CompareTo(other.WeaponSkill);
+            if (result != 0)
+            {
+                return result;
+            }
+
+            result = WeaponStrength.CompareTo(other.WeaponStrength);
+            if (result != 0)
+            {
+                return result;
+            }
+
+            result = WeaponArmorPierce.CompareTo(other.WeaponArmorPierce);
+            if (result != 0)
+            {
+                return result;
+            }
+
+            result = WeaponFlatDamage.CompareTo(other.WeaponFlatDamage);
+            return result;
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as AttackerDTO);
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(AttackerDTO? other)
+        {
+            if (other == null) return false;
+
+            return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase) &&
+            NumberOfModels == other.NumberOfModels &&
+            WeaponNumberOfAttackDice == other.WeaponNumberOfAttackDice &&
+            WeaponAttackDiceType == other.WeaponAttackDiceType &&
+            WeaponFlatAttacks == other.WeaponFlatAttacks &&
+            WeaponHasTorrent == other.WeaponHasTorrent &&
+            WeaponSkill == other.WeaponSkill &&
+            WeaponStrength == other.WeaponStrength &&
+            WeaponArmorPierce == other.WeaponArmorPierce &&
+            WeaponNumberOfDamageDice == other.WeaponNumberOfDamageDice &&
+            WeaponDamageDiceType == other.WeaponDamageDiceType &&
+            WeaponFlatDamage == other.WeaponFlatDamage;
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name?.ToLowerInvariant(),
+                                    NumberOfModels,
+                                    (WeaponNumberOfAttackDice * (int)WeaponAttackDiceType) + WeaponFlatAttacks,
+                                    WeaponHasTorrent,
+                                    WeaponSkill,
+                                    WeaponStrength,
+                                    WeaponArmorPierce,
+                                    (WeaponNumberOfDamageDice * (int)WeaponDamageDiceType) + WeaponFlatDamage);
         }
 
         #endregion
