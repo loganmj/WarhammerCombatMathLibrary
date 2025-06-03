@@ -1072,7 +1072,7 @@ namespace UnitTests
             var expected = 0;
 
             var defender = new DefenderDTO();
-            var actual = CombatMath.GetProbabilityWound(null, defender);
+            var actual = CombatMath.GetProbabilityOfHitAndWound(null, defender);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1086,7 +1086,7 @@ namespace UnitTests
             var expected = 0;
 
             var attacker = new AttackerDTO();
-            var actual = CombatMath.GetProbabilityWound(attacker, null);
+            var actual = CombatMath.GetProbabilityOfHitAndWound(attacker, null);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1098,7 +1098,7 @@ namespace UnitTests
         public void GetProbabilityOfWound_HigherStrength()
         {
             var expected = 0.5556;
-            var actual = Math.Round(CombatMath.GetProbabilityWound(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1110,7 +1110,7 @@ namespace UnitTests
         public void GetProbabilityOfWound_EqualStrengthAndToughness()
         {
             var expected = 0.3333;
-            var actual = Math.Round(CombatMath.GetProbabilityWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1122,7 +1122,7 @@ namespace UnitTests
         public void GetProbabilityOfWound_HigherToughness()
         {
             var expected = 0.2222;
-            var actual = Math.Round(CombatMath.GetProbabilityWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }

@@ -632,23 +632,65 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetProbabilityWound(AttackerDTO? attacker, DefenderDTO? defender)
+        public static double GetProbabilityOfHitAndWound(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
-                Debug.WriteLine($"GetProbabilityOfWound() | Attacker is null. Returning 0 ...");
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Attacker is null. Returning 0 ...");
                 return 0;
             }
 
             if (defender == null)
             {
-                Debug.WriteLine($"GetProbabilityOfWound() | Defender is null. Returning 0 ...");
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Defender is null. Returning 0 ...");
                 return 0;
             }
 
+            // Declare return variable
+            double probabilityOfHitAndWound = 0;
+
+            // Calculate the probability of succeeding on a wound roll
             var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
-            var numberOfSuccessfulResults = GetNumberOfSuccessfulResults(woundSuccessThreshold);
-            return GetProbabilityOfHit(attacker) * Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
+            var numberOfSuccessfulWoundResults = GetNumberOfSuccessfulResults(woundSuccessThreshold);
+            var probabilityOfWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulWoundResults);
+
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Attacker has torrent: {attacker.WeaponHasTorrent}");
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Attacker has lethal hits: {attacker.WeaponHasLethalHits}");
+
+            // If the weapon has lethal hits, wound probability must account for this
+            if (!attacker.WeaponHasTorrent && attacker.WeaponHasLethalHits)
+            {
+                // TODO: Calculate the probability of a normal hit, based on the number of successful results without the lethal hit case
+                var baseHitSuccessThreshold = attacker.WeaponSkill == 1 ? 2 : attacker.WeaponSkill;
+                var normalHitSuccessThreshold = baseHitSuccessThreshold - 1;
+                var probabilityOfNormalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, normalHitSuccessThreshold);
+
+                // Calculate the probability of a lethal hit
+                var probabilityOfLethalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
+
+                // Calculate the probility of succeeding on both a hit and wound roll
+                probabilityOfHitAndWound = probabilityOfLethalHit + (probabilityOfNormalHit * probabilityOfWound);
+
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Base hit success threshold: {baseHitSuccessThreshold}");
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Normal hit success threshold: {normalHitSuccessThreshold}");
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of normal hit: {probabilityOfNormalHit}");
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of lethal hit: {probabilityOfLethalHit}");
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Calculation for hit and wound: P_lethalHit + (P_normalHit * P_wound)");
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of hit and wound: {probabilityOfHitAndWound}");
+
+                return probabilityOfHitAndWound;
+            }
+
+            // Calculate the probability of succeeding on a hit roll
+            var probabilityOfHit = GetProbabilityOfHit(attacker);
+            probabilityOfHitAndWound = probabilityOfHit * probabilityOfWound;
+
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of hit: {probabilityOfHit}");
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Calculation for hit and wound: P_hit * P_wound");
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of hit and wound: {probabilityOfHitAndWound}");
+
+            // Return the probability of succeeding on both a hit and wound roll
+            return probabilityOfHitAndWound;
         }
 
         /// <summary>
@@ -672,7 +714,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             var averageAttacks = GetAverageAttacks(attacker);
-            var probabilityOfWound = GetProbabilityWound(attacker, defender);
+            var probabilityOfWound = GetProbabilityOfHitAndWound(attacker, defender);
             return Statistics.Mean(averageAttacks, probabilityOfWound);
         }
 
@@ -707,7 +749,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             var averageAttacks = GetAverageAttacks(attacker);
-            var probabilityOfWound = GetProbabilityWound(attacker, defender);
+            var probabilityOfWound = GetProbabilityOfHitAndWound(attacker, defender);
             return Statistics.StandardDeviation(averageAttacks, probabilityOfWound);
         }
 
@@ -733,7 +775,7 @@ namespace WarhammerCombatMathLibrary
 
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
-            var probability = GetProbabilityWound(attacker, defender);
+            var probability = GetProbabilityOfHitAndWound(attacker, defender);
             return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability);
         }
 
@@ -758,7 +800,7 @@ namespace WarhammerCombatMathLibrary
 
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
-            var probability = GetProbabilityWound(attacker, defender);
+            var probability = GetProbabilityOfHitAndWound(attacker, defender);
             return Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probability);
         }
 
@@ -785,7 +827,7 @@ namespace WarhammerCombatMathLibrary
             var adjustedArmorSave = GetAdjustedArmorSave(attacker, defender);
             var numberOfSuccessfulResults = GetNumberOfSuccessfulResults(adjustedArmorSave);
             var probabilityOfSuccessfulSave = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
-            return GetProbabilityWound(attacker, defender) * (1 - probabilityOfSuccessfulSave);
+            return GetProbabilityOfHitAndWound(attacker, defender) * (1 - probabilityOfSuccessfulSave);
         }
 
         /// <summary>
