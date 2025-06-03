@@ -81,6 +81,7 @@
             return $"Attacker: [ Name: '{Name}', "
                    + $"NumberOfModels: {NumberOfModels}, "
                    + $"Weapon Attacks: {(WeaponNumberOfAttackDice > 0 ? $"{WeaponNumberOfAttackDice} {WeaponAttackDiceType} + {WeaponFlatAttacks}" : WeaponFlatAttacks.ToString())}, "
+                   + $"WeaponHasTorrent: {WeaponHasTorrent}, "
                    + $"WeaponSkill: {WeaponSkill}, "
                    + $"WeaponStrength: {WeaponStrength}, "
                    + $"WeaponArmorPierce: -{WeaponArmorPierce}, "
