@@ -3,7 +3,7 @@
     /// <summary>
     /// A data transfer object representing the attacker in a combat scenario.
     /// </summary>
-    public class AttackerDTO : IComparable<AttackerDTO>, IEquatable<AttackerDTO>
+    public class AttackerDTO : IEquatable<AttackerDTO>
     {
         #region Properties
 
@@ -88,76 +88,32 @@
         }
 
         /// <inheritdoc/>
-        public int CompareTo(AttackerDTO? other)
-        {
-            if (other == null)
-            {
-                return 1;
-            }
-
-            var result = string.Compare(Name, other.Name, StringComparison.OrdinalIgnoreCase);
-            if (result != 0)
-            {
-                return result;
-            }
-
-            result = NumberOfModels.CompareTo(other.NumberOfModels);
-            if (result != 0)
-            {
-                return result;
-            }
-
-            result = ((WeaponNumberOfAttackDice * (int)WeaponAttackDiceType) + WeaponFlatAttacks).CompareTo((other.WeaponNumberOfAttackDice * (int)other.WeaponAttackDiceType) + other.WeaponFlatAttacks);
-            if (result != 0)
-            {
-                return result;
-            }
-
-            result = WeaponSkill.CompareTo(other.WeaponSkill);
-            if (result != 0)
-            {
-                return result;
-            }
-
-            result = WeaponStrength.CompareTo(other.WeaponStrength);
-            if (result != 0)
-            {
-                return result;
-            }
-
-            result = WeaponArmorPierce.CompareTo(other.WeaponArmorPierce);
-            if (result != 0)
-            {
-                return result;
-            }
-
-            result = WeaponFlatDamage.CompareTo(other.WeaponFlatDamage);
-            return result;
-        }
-
-        /// <inheritdoc/>
         public override bool Equals(object? obj)
         {
             return Equals(obj as AttackerDTO);
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Checks if the given AttackerDTO object is equal to this one.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns>A boolean value. True if the objects are the same, False otherwise.</returns>
         public bool Equals(AttackerDTO? other)
         {
             if (other == null) return false;
 
-            return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase) &&
-            NumberOfModels == other.NumberOfModels &&
-            WeaponNumberOfAttackDice == other.WeaponNumberOfAttackDice &&
-            WeaponAttackDiceType == other.WeaponAttackDiceType &&
-            WeaponFlatAttacks == other.WeaponFlatAttacks &&
-            WeaponHasTorrent == other.WeaponHasTorrent &&
-            WeaponSkill == other.WeaponSkill &&
-            WeaponStrength == other.WeaponStrength &&
-            WeaponArmorPierce == other.WeaponArmorPierce &&
-            WeaponNumberOfDamageDice == other.WeaponNumberOfDamageDice &&
-            WeaponDamageDiceType == other.WeaponDamageDiceType &&
-            WeaponFlatDamage == other.WeaponFlatDamage;
+            return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase)
+                   && NumberOfModels == other.NumberOfModels
+                   && WeaponNumberOfAttackDice == other.WeaponNumberOfAttackDice
+                   && WeaponAttackDiceType == other.WeaponAttackDiceType
+                   && WeaponFlatAttacks == other.WeaponFlatAttacks
+                   && WeaponHasTorrent == other.WeaponHasTorrent
+                   && WeaponSkill == other.WeaponSkill
+                   && WeaponStrength == other.WeaponStrength
+                   && WeaponArmorPierce == other.WeaponArmorPierce
+                   && WeaponNumberOfDamageDice == other.WeaponNumberOfDamageDice
+                   && WeaponDamageDiceType == other.WeaponDamageDiceType
+                   && WeaponFlatDamage == other.WeaponFlatDamage;
         }
 
         /// <inheritdoc/>
