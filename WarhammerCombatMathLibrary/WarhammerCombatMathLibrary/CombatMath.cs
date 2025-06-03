@@ -816,7 +816,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static double GetProbabilityFailedSave(AttackerDTO? attacker, DefenderDTO? defender)
+        public static double GetProbabilityOfHitAndWoundAndFailedSave(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -831,9 +831,21 @@ namespace WarhammerCombatMathLibrary
             }
 
             var adjustedArmorSave = GetAdjustedArmorSave(attacker, defender);
-            var numberOfSuccessfulResults = GetNumberOfSuccessfulResults(adjustedArmorSave);
-            var probabilityOfSuccessfulSave = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulResults);
-            return GetProbabilityOfHitAndWound(attacker, defender) * (1 - probabilityOfSuccessfulSave);
+            var numberOfSuccessfulSaveResults = GetNumberOfSuccessfulResults(adjustedArmorSave);
+            var probabilityOfSuccessfulSave = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulSaveResults);
+            var probabilityOfFailedSave = (1 - probabilityOfSuccessfulSave);
+            var probabilityOfHitAndWoundAndFailedSave = GetProbabilityOfHitAndWound(attacker, defender) * probabilityOfFailedSave;
+
+            Debug.WriteLine($"GetProbabilityOfFailedSave() | Attacker armor pierce: {attacker.WeaponArmorPierce}");
+            Debug.WriteLine($"GetProbabilityOfFailedSave() | Defender armor save: {defender.ArmorSave}");
+            Debug.WriteLine($"GetProbabilityOfFailedSave() | Defender invulnerable save: {defender.InvulnerableSave}");
+            Debug.WriteLine($"GetProbabilityOfFailedSave() | Adjusted armor save: {adjustedArmorSave}");
+            Debug.WriteLine($"GetProbabilityOfFailedSave() | Number of successful save results: {numberOfSuccessfulSaveResults}");
+            Debug.WriteLine($"GetProbabilityOfFailedSave() | Probability of successful save: {probabilityOfSuccessfulSave}");
+            Debug.WriteLine($"GetProbabilityOfFailedSave() | Probability of failed save: {probabilityOfFailedSave}");
+            Debug.WriteLine($"GetProbabilityOfFailedSave() | Probability of hit, wound, and failed save: {probabilityOfHitAndWoundAndFailedSave}");
+
+            return probabilityOfHitAndWoundAndFailedSave;
         }
 
         /// <summary>
@@ -857,7 +869,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             var averageAttacks = GetAverageAttacks(attacker);
-            var probabilityOfFailedSave = GetProbabilityFailedSave(attacker, defender);
+            var probabilityOfFailedSave = GetProbabilityOfHitAndWoundAndFailedSave(attacker, defender);
             return Statistics.Mean(averageAttacks, probabilityOfFailedSave);
         }
 
@@ -892,7 +904,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             var averageAttacks = GetAverageAttacks(attacker);
-            var probabilityOfFailedSave = GetProbabilityFailedSave(attacker, defender);
+            var probabilityOfFailedSave = GetProbabilityOfHitAndWoundAndFailedSave(attacker, defender);
             return Statistics.StandardDeviation(averageAttacks, probabilityOfFailedSave);
         }
 
@@ -918,7 +930,7 @@ namespace WarhammerCombatMathLibrary
 
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
-            var probability = GetProbabilityFailedSave(attacker, defender);
+            var probability = GetProbabilityOfHitAndWoundAndFailedSave(attacker, defender);
             return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability);
         }
 
@@ -943,7 +955,7 @@ namespace WarhammerCombatMathLibrary
 
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
-            var probability = GetProbabilityFailedSave(attacker, defender);
+            var probability = GetProbabilityOfHitAndWoundAndFailedSave(attacker, defender);
             return Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probability);
         }
 
@@ -968,9 +980,11 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
+            var averageFailedSaves = GetMeanFailedSaves(attacker, defender);
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            var averageTotalDamage = GetMeanFailedSaves(attacker, defender) * averageDamagePerAttack;
+            var averageTotalDamage = averageFailedSaves * averageDamagePerAttack;
 
+            Debug.WriteLine($"GetMeanDamage() | Average failed saves: {averageFailedSaves}");
             Debug.WriteLine($"GetMeanDamage() | Average damage per attack: {averageDamagePerAttack}");
             Debug.WriteLine($"GetMeanDamage() | Average total damage: {averageTotalDamage}");
 
@@ -1115,7 +1129,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Get probability of a successful attack
-            var probability = GetProbabilityFailedSave(attacker, defender);
+            var probability = GetProbabilityOfHitAndWoundAndFailedSave(attacker, defender);
 
             // Get upper and lower bounds for the number of trials
             var minimumAttacks = GetMinimumAttacks(attacker);
@@ -1158,7 +1172,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Get probability of a successful attack
-            var probability = GetProbabilityFailedSave(attacker, defender);
+            var probability = GetProbabilityOfHitAndWoundAndFailedSave(attacker, defender);
 
             // Get upper and lower bounds for the number of trials
             var minimumAttacks = GetMinimumAttacks(attacker);

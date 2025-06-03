@@ -1144,6 +1144,42 @@ namespace UnitTests
         }
 
         /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_VariableAttacks_SingleModelAttacker()
+        {
+            var expected = 0.5556;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_VariableAttacks_MultiModelAttacker()
+        {
+            var expected = 0.3333;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = 0.6667;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
@@ -1247,6 +1283,18 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanWounds_WeaponHasLethalHits()
+        {
+            var expected = 6.25;
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetExpectedWounds()
@@ -1330,6 +1378,18 @@ namespace UnitTests
         {
             var expected = 13;
             var actual = CombatMath.GetExpectedWounds(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedWounds_VariableAttacks_WeaponHasLethalHits()
+        {
+            var expected = 6;
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1418,6 +1478,18 @@ namespace UnitTests
         {
             var expected = 2.1082;
             var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationWounds_WeaponHasLethalHits()
+        {
+            var expected = 1.9094;
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1693,6 +1765,51 @@ namespace UnitTests
             };
 
             var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionWounds_WeaponHasLethalHits()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 0.0003),
+                new(1, 0.0033),
+                new(2, 0.0165),
+                new(3, 0.0511),
+                new(4, 0.1095),
+                new(5, 0.1721),
+                new(6, 0.2048),
+                new(7, 0.1881),
+                new(8, 0.1344),
+                new(9, 0.0746),
+                new(10, 0.0320),
+                new(11, 0.0104),
+                new(12, 0.0025),
+                new(13, 0.0004),
+                new(14, 0),
+                new(15, 0)
+            };
+
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2000,6 +2117,51 @@ namespace UnitTests
             CollectionAssert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionWounds_WeaponHasLethalHits()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.9997),
+                new(2, 0.9964),
+                new(3, 0.9799),
+                new(4, 0.9288),
+                new(5, 0.8193),
+                new(6, 0.6472),
+                new(7, 0.4424),
+                new(8, 0.2543),
+                new(9, 0.1199),
+                new(10, 0.0453),
+                new(11, 0.0133),
+                new(12, 0.0029),
+                new(13, 0.0005),
+                new(14, 0),
+                new(15, 0)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetProbabilityFailedSave()
@@ -2008,10 +2170,10 @@ namespace UnitTests
         /// Test the case where the attacker object is null
         /// </summary>
         [TestMethod]
-        public void GetProbabilityFailedSave_NullAttacker()
+        public void GetProbabilityOfHitAndWoundAndFailedSave_AttackerIsNull()
         {
             var expected = 0;
-            var actual = CombatMath.GetProbabilityFailedSave(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2019,43 +2181,94 @@ namespace UnitTests
         /// Test the case where the defender object is null
         /// </summary>
         [TestMethod]
-        public void GetProbabilityFailedSave_NullDefender()
+        public void GetProbabilityOfHitAndWoundAndFailedSave_DefenderIsNull()
         {
             var expected = 0;
-            var actual = CombatMath.GetProbabilityFailedSave(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_KHARN_THE_BETRAYER, null);
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the case with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityFailedSave_TestParams1()
+        public void GetProbabilityOfHitAndWoundAndFailedSave_HigherStrength()
         {
             var expected = 0.3704;
-            var actual = Math.Round(CombatMath.GetProbabilityFailedSave(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityFailedSave_TestParams2()
+        public void GetProbabilityOfHitAndWoundAndFailedSave_EqualStrengthAndToughness()
         {
             var expected = 0.1667;
-            var actual = Math.Round(CombatMath.GetProbabilityFailedSave(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityFailedSave_TestParams3()
+        public void GetProbabilityOfHitAndWoundAndFailedSave_HigherToughness()
         {
             var expected = 0.0741;
-            var actual = Math.Round(CombatMath.GetProbabilityFailedSave(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWoundAndFailedSave_VariableAttacks_SingleModelAttacker()
+        {
+            var expected = 0.2778;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWoundAndFailedSave_VariableAttacks_MultiModelAttacker()
+        {
+            var expected = 0.1667;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWoundAndFailedSave_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = 0.3333;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWoundAndFailedSave_LethalHits()
+        {
+            var expected = 0.2083;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
             Assert.AreEqual(expected, actual);
         }
 
@@ -2150,6 +2363,18 @@ namespace UnitTests
         {
             var expected = 6.6667;
             var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanFailedSaves_WeaponHasLethalHits()
+        {
+            var expected = 3.125;
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2249,6 +2474,18 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedFailedSaves_WeaponHasLethalHits()
+        {
+            var expected = 3;
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            Assert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetStandardDeviationFailedSaves()
@@ -2340,6 +2577,18 @@ namespace UnitTests
         {
             var expected = 2.1082;
             var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationFailedSaves_WeaponHasLethalHits()
+        {
+            var expected = 1.5729;
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2653,6 +2902,51 @@ namespace UnitTests
             };
 
             var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionFailedSaves_WeaponHasLethalHits()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 0.0301),
+                new(1, 0.1187),
+                new(2, 0.2187),
+                new(3, 0.2493),
+                new(4, 0.1968),
+                new(5, 0.1140),
+                new(6, 0.0500),
+                new(7, 0.0169),
+                new(8, 0.0045),
+                new(9, 0.0009),
+                new(10, 0.0001),
+                new(11, 0),
+                new(12, 0),
+                new(13, 0),
+                new(14, 0),
+                new(15, 0)
+            };
+
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2998,6 +3292,51 @@ namespace UnitTests
             CollectionAssert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionFailedSaves_WeaponHasLethalHits()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.9699),
+                new(2, 0.8512),
+                new(3, 0.6326),
+                new(4, 0.3832),
+                new(5, 0.1864),
+                new(6, 0.0724),
+                new(7, 0.0224),
+                new(8, 0.0055),
+                new(9, 0.0011),
+                new(10, 0.0002),
+                new(11, 0),
+                new(12, 0),
+                new(13, 0),
+                new(14, 0),
+                new(15, 0)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetMeanDamage()
@@ -3039,6 +3378,17 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
+        public void GetMeanDamage_MultiModelAttacker_NoDefenderSpecialRules()
+        {
+            var expected = 3.3333;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
         public void GetMeanDamage_SingleModelAttacker_DefenderHasFeelNoPains()
         {
             var expected = 1.6667;
@@ -3061,6 +3411,41 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
+        public void GetMeanDamage_DefenderHasInvulnerableSave()
+        {
+            var expected = 6.6667;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamage_VariableAttacks_SingleModelAttacker()
+        {
+            var expected = 5;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamage_VariableAttacks_MultiModelAttacker()
+        {
+            var expected = 4;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
         public void GetMeanDamage_SingleModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 14.8148;
@@ -3076,6 +3461,30 @@ namespace UnitTests
         {
             var expected = 13.3333;
             var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamage_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = 6.6667;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamage_WeaponHasLethalHits()
+        {
+            var expected = 6.25;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
             Assert.AreEqual(expected, actual);
         }
 
@@ -3120,6 +3529,17 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
+        public void GetExpectedDamage_MultiModelAttacker_NoDefenderSpecialRules()
+        {
+            var expected = 3;
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
         public void GetExpectedDamage_SingleModelAttacker_DefenderHasFeelNoPains()
         {
             var expected = 1;
@@ -3142,6 +3562,41 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
+        public void GetExpectedDamage_DefenderHasInvulnerableSave()
+        {
+            var expected = 6;
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamage_VariableAttacks_SingleModelAttacker()
+        {
+            var expected = 5;
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamage_VariableAttacks_MultiModelAttacker()
+        {
+            var expected = 4;
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
         public void GetExpectedDamage_SingleModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 14;
@@ -3157,6 +3612,30 @@ namespace UnitTests
         {
             var expected = 13;
             var actual = CombatMath.GetExpectedDamage(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamage_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = 6;
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetExpectedDamage_WeaponHasLethalHits()
+        {
+            var expected = 6;
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+
             Assert.AreEqual(expected, actual);
         }
 
@@ -3201,6 +3680,17 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
+        public void GetStandardDeviationDamage_MultiModelAttacker_NoDefenderSpecialRules()
+        {
+            var expected = 1.6667;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
         public void GetStandardDeviationDamage_SingleModelAttacker_DefenderHasFeelNoPains()
         {
             var expected = 2.157;
@@ -3223,6 +3713,52 @@ namespace UnitTests
         /// Test the method with given parameters.
         /// </summary>
         [TestMethod]
+        public void GetStandardDeviationDamage_DefenderHasInvulnerableSave()
+        {
+            var expected = 3.8006;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamage_VariableAttacks_SingleModelAttacker()
+        {
+            var expected = 3.2914;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamage_VariableAttacks_MultiModelAttacker()
+        {
+            var expected = 2.582;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamage_MultiModelAttacker_VariableAttacks_DefenderHasFeelNoPains()
+        {
+            var expected = 2.8803;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_WORLD_EATERS_CHAOS_SPAWN), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
         public void GetStandardDeviationDamage_SingleModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 6.8293;
@@ -3238,6 +3774,41 @@ namespace UnitTests
         {
             var expected = 5.5777;
             var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamage_MultiModelAttacker_VariableDamage_DefenderHasFeelNoPains()
+        {
+            var expected = 5.3333;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamage_VariableAttacks_WeaponHasTorrent()
+        {
+            var expected = 2.1082;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationDamage_WeaponHasLethalHits()
+        {
+            var expected = 3.1458;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+
             Assert.AreEqual(expected, actual);
         }
 
