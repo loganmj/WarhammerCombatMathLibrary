@@ -147,6 +147,22 @@ namespace UnitTests
         };
 
         /// <summary>
+        /// Attack profile for an Adepta Sororitas Celestian Sacresants.
+        /// </summary>
+        public static readonly AttackerDTO ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS = new()
+        {
+            NumberOfModels = 5,
+            WeaponNumberOfAttackDice = 0,
+            WeaponAttackDiceType = 0,
+            WeaponFlatAttacks = 3,
+            WeaponHasLethalHits = true,
+            WeaponSkill = 3,
+            WeaponStrength = 4,
+            WeaponArmorPierce = 1,
+            WeaponFlatDamage = 2
+        };
+
+        /// <summary>
         /// Defense profile for a 10 man squad of Space Marine Intercessors
         /// </summary>
         public static readonly DefenderDTO DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD = new()
@@ -1061,13 +1077,13 @@ namespace UnitTests
 
         #endregion
 
-        #region Unit Tests - GetProbabilityOfWound()
+        #region Unit Tests - GetProbabilityOfHitAndWound()
 
         /// <summary>
         /// Tests the case where the attacker is null.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfWound_AttackerIsNull()
+        public void GetProbabilityOfHitAndWound_AttackerIsNull()
         {
             var expected = 0;
 
@@ -1081,7 +1097,7 @@ namespace UnitTests
         /// Tests the case where the defender is null.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfWound_DefenderIsNull()
+        public void GetProbabilityOfHitAndWound_DefenderIsNull()
         {
             var expected = 0;
 
@@ -1095,7 +1111,7 @@ namespace UnitTests
         /// Tests the case with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfWound_HigherStrength()
+        public void GetProbabilityOfHitAndWound_HigherStrength()
         {
             var expected = 0.5556;
             var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
@@ -1107,7 +1123,7 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfWound_EqualStrengthAndToughness()
+        public void GetProbabilityOfHitAndWound_EqualStrengthAndToughness()
         {
             var expected = 0.3333;
             var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
@@ -1119,10 +1135,22 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfWound_HigherToughness()
+        public void GetProbabilityOfHitAndWound_HigherToughness()
         {
             var expected = 0.2222;
             var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_LethalHits()
+        {
+            var expected = 0.4167;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
 
             Assert.AreEqual(expected, actual);
         }

@@ -539,8 +539,9 @@ namespace WarhammerCombatMathLibrary
             }
 
             // A roll of 1 always fails, so if the attacker data object has a weapon skill value of 1+, treat it as 2+
-            var successThreshold = attacker.WeaponSkill == 1 ? 2 : attacker.WeaponSkill;
-            return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(successThreshold));
+            var hitSuccessThreshold = attacker.WeaponSkill == 1 ? 2 : attacker.WeaponSkill;
+            var numberOfSuccessfulHitResults = GetNumberOfSuccessfulResults(hitSuccessThreshold);
+            return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulHitResults);
         }
 
         /// <summary>
@@ -661,9 +662,11 @@ namespace WarhammerCombatMathLibrary
             if (!attacker.WeaponHasTorrent && attacker.WeaponHasLethalHits)
             {
                 // TODO: Calculate the probability of a normal hit, based on the number of successful results without the lethal hit case
+                // A roll of 1 always fails, so if the attacker data object has a weapon skill value of 1+, treat it as 2+
                 var baseHitSuccessThreshold = attacker.WeaponSkill == 1 ? 2 : attacker.WeaponSkill;
-                var normalHitSuccessThreshold = baseHitSuccessThreshold - 1;
-                var probabilityOfNormalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, normalHitSuccessThreshold);
+                var normalHitSuccessThreshold = baseHitSuccessThreshold + 1;
+                var normalNumberOfSuccessfulHitResults = GetNumberOfSuccessfulResults(normalHitSuccessThreshold);
+                var probabilityOfNormalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, normalNumberOfSuccessfulHitResults);
 
                 // Calculate the probability of a lethal hit
                 var probabilityOfLethalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
@@ -673,8 +676,10 @@ namespace WarhammerCombatMathLibrary
 
                 Debug.WriteLine($"GetProbabilityOfHitAndWound() | Base hit success threshold: {baseHitSuccessThreshold}");
                 Debug.WriteLine($"GetProbabilityOfHitAndWound() | Normal hit success threshold: {normalHitSuccessThreshold}");
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Normal number of successful hit results: {normalNumberOfSuccessfulHitResults}");
                 Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of normal hit: {probabilityOfNormalHit}");
                 Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of lethal hit: {probabilityOfLethalHit}");
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of wound: {probabilityOfWound}");
                 Debug.WriteLine($"GetProbabilityOfHitAndWound() | Calculation for hit and wound: P_lethalHit + (P_normalHit * P_wound)");
                 Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of hit and wound: {probabilityOfHitAndWound}");
 
@@ -686,6 +691,7 @@ namespace WarhammerCombatMathLibrary
             probabilityOfHitAndWound = probabilityOfHit * probabilityOfWound;
 
             Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of hit: {probabilityOfHit}");
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of wound: {probabilityOfWound}");
             Debug.WriteLine($"GetProbabilityOfHitAndWound() | Calculation for hit and wound: P_hit * P_wound");
             Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of hit and wound: {probabilityOfHitAndWound}");
 
@@ -714,8 +720,8 @@ namespace WarhammerCombatMathLibrary
             }
 
             var averageAttacks = GetAverageAttacks(attacker);
-            var probabilityOfWound = GetProbabilityOfHitAndWound(attacker, defender);
-            return Statistics.Mean(averageAttacks, probabilityOfWound);
+            var probabilityOfHitAndWound = GetProbabilityOfHitAndWound(attacker, defender);
+            return Statistics.Mean(averageAttacks, probabilityOfHitAndWound);
         }
 
         /// <summary>
