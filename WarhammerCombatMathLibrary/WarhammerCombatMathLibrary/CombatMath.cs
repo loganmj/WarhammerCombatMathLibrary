@@ -1095,10 +1095,10 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var standardDeviationSuccessfulAttacks = (int)Math.Floor(GetStandardDeviationFailedSaves(attacker, defender));
+            var standardDeviationSuccessfulAttacks = Math.Floor(GetStandardDeviationFailedSaves(attacker, defender));
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
             var adjustedDamagePerAttack = GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender);
-            var standardDeviationDestroyedModels = GetModelsDestroyed(standardDeviationSuccessfulAttacks, adjustedDamagePerAttack, defender);
+            var standardDeviationDestroyedModels = GetModelsDestroyed((int)standardDeviationSuccessfulAttacks, adjustedDamagePerAttack, defender);
 
             Debug.WriteLine($"GetStandardDeviationDestroyedModels() | Standard deviation successful attacks: {standardDeviationSuccessfulAttacks}");
             Debug.WriteLine($"GetStandardDeviationDestroyedModels() | Average damage per attack: {averageDamagePerAttack}");
@@ -1147,7 +1147,7 @@ namespace WarhammerCombatMathLibrary
             var maxAttacksRequiredToDestroyOneModel = GetAttacksRequiredToDestroyOneModel(minimumAdjustedDamagePerAttack, defender);
             var maxGroupSuccessCount = maxAttacksRequiredToDestroyOneModel == 0 ? maximumAttacks + 1 : maxAttacksRequiredToDestroyOneModel;
 
-            // Get distribution, this will be based on the number of attacks made, and so may need to be trimmed based on the max number of defending models
+            // Get distribution
             return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
         }
 
@@ -1190,7 +1190,7 @@ namespace WarhammerCombatMathLibrary
             var maxAttacksRequiredToDestroyOneModel = GetAttacksRequiredToDestroyOneModel(minimumAdjustedDamagePerAttack, defender);
             var maxGroupSuccessCount = maxAttacksRequiredToDestroyOneModel == 0 ? maximumAttacks + 1 : maxAttacksRequiredToDestroyOneModel;
 
-            // Get distribution, this will be based on the number of attacks made, and so may need to be trimmed based on the max number of defending models
+            // Get distribution
             return Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
         }
 
