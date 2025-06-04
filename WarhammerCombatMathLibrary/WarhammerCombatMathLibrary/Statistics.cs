@@ -9,6 +9,16 @@ namespace WarhammerCombatMathLibrary
     /// </summary>
     public static class Statistics
     {
+        #region Fields
+
+        /// <summary>
+        /// Used as a cache for memoization of probability mass calculations.
+        /// This should greatly reduce resource usage.
+        /// </summary>
+        private static readonly Dictionary<(int, int, double), double> _probabilityMassFunctionCache = [];
+
+        #endregion
+
         #region Private Methods
 
         /// <summary>
@@ -395,45 +405,40 @@ namespace WarhammerCombatMathLibrary
         /// <param name="numberOfSuccesses">The number of successes.</param>
         /// <param name="probability">The probability of success for a single die roll.</param>
         /// <returns></returns>
+
         public static double ProbabilityMassFunction(int numberOfTrials, int numberOfSuccesses, double probability)
         {
-            // Validate parameters
-            if (numberOfTrials < 1)
+            // Create the cache key for this calculation
+            var key = (numberOfTrials, numberOfSuccesses, probability);
+
+            // If this calculation has already been done, retrieve it from the cache
+            if (_probabilityMassFunctionCache.TryGetValue(key, out var cached))
             {
-                Debug.WriteLine($"ProbabilityMassFunction() | Number of trials is less than 1. Returning 0 ...");
-                return 0;
+                return cached;
             }
 
-            if (numberOfSuccesses < 0)
+            // Validate inputs
+            if (numberOfTrials < 1 || numberOfSuccesses < 0 || numberOfSuccesses > numberOfTrials || probability <= 0)
             {
-                Debug.WriteLine($"ProbabilityMassFunction() | Number of successes is less than 0. Returning 0 ...");
-                return 0;
-            }
-
-            if (numberOfSuccesses > numberOfTrials)
-            {
-                Debug.WriteLine($"ProbabilityMassFunction() | Number of successes is greater than number of trials. Returning 0 ...");
-                return 0;
-            }
-
-            if (probability <= 0)
-            {
-                Debug.WriteLine($"ProbabilityMassFunction() | Probability is less than or equal to 0. Returning 0 ...");
                 return 0;
             }
 
             if (probability >= 1)
             {
-                Debug.WriteLine($"ProbabilityMassFunction() | Probability is greater than or equal to 1. Returning 1 ...");
-                return 1;
+                return numberOfSuccesses == numberOfTrials ? 1 : 0;
             }
 
-            // Perform calculation
             var binomialCoefficient = BinomialCoefficient(numberOfTrials, numberOfSuccesses);
             var successProbability = ProbabilityOfMultipleSuccesses(probability, numberOfSuccesses);
             var failureProbability = ProbabilityOfMultipleSuccesses(1 - probability, numberOfTrials - numberOfSuccesses);
-            return (double)binomialCoefficient * successProbability * failureProbability;
+            var result = (double)binomialCoefficient * successProbability * failureProbability;
+
+            // Cache this result
+            _probabilityMassFunctionCache[key] = result;
+
+            return result;
         }
+
 
         /// <summary>
         /// Calculates the binomial distribution of trial data.
