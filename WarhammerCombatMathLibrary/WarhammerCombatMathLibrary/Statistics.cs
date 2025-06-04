@@ -9,13 +9,22 @@ namespace WarhammerCombatMathLibrary
     /// </summary>
     public static class Statistics
     {
+        #region Constants
+
+        /// <summary>
+        /// The maximum cache size for calculation caches.
+        /// </summary>
+        private const int MAX_CACHE_SIZE = 1000;
+
+        #endregion
+
         #region Fields
 
         // Uses caches for discrete probability calculations, as they are resource-heavy and oft repeated
-        private static readonly BoundedCache<(int, int, double), double> _probabilityMassFunctionCache = new(5000);
-        private static readonly BoundedCache<(int, int, double), double> _lowerCumulativeProbabilityFunctionCache = new(5000);
-        private static readonly BoundedCache<(int, int, double), double> _upperCumulativeProbabilityFunctionCache = new(5000);
-        private static readonly BoundedCache<(int, int, double), double> _survivorFunctionCache = new(5000);
+        private static readonly BoundedCache<(int, int, double), double> _probabilityMassFunctionCache = new(MAX_CACHE_SIZE);
+        private static readonly BoundedCache<(int, int, double), double> _lowerCumulativeProbabilityFunctionCache = new(MAX_CACHE_SIZE);
+        private static readonly BoundedCache<(int, int, double), double> _upperCumulativeProbabilityFunctionCache = new(MAX_CACHE_SIZE);
+        private static readonly BoundedCache<(int, int, double), double> _survivorFunctionCache = new(MAX_CACHE_SIZE);
 
         #endregion
 
@@ -101,11 +110,13 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Keep track of successes for each group number using a map, for faster lookups
-            var probabilitySumsMap = new Dictionary<int, List<double>>();
+            var probabilitySums = new Dictionary<int, double>();
+            var probabilityWeights = new Dictionary<int, int>();
 
             // Determine the max number of successes k based on the minimum group success count
             var maxK = Math.Floor((double)numberOfTrials / minGroupSuccessCount);
 
+            // Calculate the results for each possible group success count
             for (int g = minGroupSuccessCount; g <= maxGroupSuccessCount; g++)
             {
                 for (int k = 0; k <= maxK; k++)
@@ -113,28 +124,30 @@ namespace WarhammerCombatMathLibrary
                     var groupedSuccesses = k * g;
                     var discreteProbability = GetDiscreteProbability(distributionType, numberOfTrials, groupedSuccesses, probability);
 
-                    // Add the probability to the list for that value of k
-                    if (!probabilitySumsMap.TryGetValue(k, out List<double>? value))
+                    // Add an empty value for k if none exists
+                    if (!probabilitySums.ContainsKey(k))
                     {
-                        value = [];
-                        probabilitySumsMap[k] = value;
+                        probabilitySums[k] = 0;
+                        probabilityWeights[k] = 0;
                     }
 
-                    value.Add(discreteProbability);
+                    // Increment the value at key 'k' by the calculated combined probability
+                    probabilitySums[k] += discreteProbability;
+                    probabilityWeights[k]++;
                 }
             }
 
-            // Create a distribution list using the average probabilities for each k
-            var finalDistribution = probabilitySumsMap
-                .Select(pair => new BinomialOutcome
-                {
-                    Successes = pair.Key,
-                    Probability = pair.Value.Average()
-                })
-                .OrderBy(outcome => outcome.Successes)
-                .ToList();
+            var finalDistribution = probabilitySums
+            .Select(pair => new BinomialOutcome
+            {
+                Successes = pair.Key,
+                Probability = pair.Value / probabilityWeights[pair.Key]
+            })
+            .OrderBy(outcome => outcome.Successes)
+            .ToList();
 
             return finalDistribution;
+
         }
 
         /// <summary>
@@ -155,17 +168,19 @@ namespace WarhammerCombatMathLibrary
                 return CreateDistribution(distributionType, maxNumberOfTrials, probability, groupSuccessCount);
             }
 
-            var distribution = new List<BinomialOutcome>();
+            // Keep track of successes for each group number using a map, for faster lookups
+            var probabilitySums = new Dictionary<int, double>();
+            var probabilityWeights = new Dictionary<int, int>();
 
             // Determine the max number of successes k based on the minimum group success count
             var maxK = Math.Floor((double)maxNumberOfTrials / groupSuccessCount);
 
-            // Calculate the binomial results for each success value k, and average the results for each value of n
+            // Calculate the binomial results for each success value k, and average the results for each possible value of n
             for (int k = 0; k <= maxK; k++)
             {
                 var groupedSuccesses = k * groupSuccessCount;
-                double combinedProbability = 0;
                 var startingValue = Math.Max(minNumberOfTrials, groupedSuccesses);
+                double combinedProbability = 0;
 
                 for (int n = startingValue; n <= maxNumberOfTrials; n++)
                 {
@@ -173,20 +188,37 @@ namespace WarhammerCombatMathLibrary
                     combinedProbability += discreteProbability;
                 }
 
-                // Average all the probabilities for that value of n
-                var numerator = combinedProbability;
-                var denominator = (maxNumberOfTrials - (startingValue - 1));
-                combinedProbability = (double)numerator / denominator;
-
-                // Add the result to the distribution
-                distribution.Add(new BinomialOutcome
+                // Only need to perform division if combined probability is nonzero
+                if (combinedProbability > 0)
                 {
-                    Successes = k,
-                    Probability = combinedProbability
-                });
+                    var denominator = (maxNumberOfTrials - (startingValue - 1));
+                    combinedProbability /= denominator;
+                }
+
+                // Add an empty value for k if none exists
+                if (!probabilitySums.ContainsKey(k))
+                {
+                    probabilitySums[k] = 0;
+                    probabilityWeights[k] = 0;
+                }
+
+                // Increment the value at key 'k' by the calculated combined probability
+                probabilitySums[k] += combinedProbability;
+                probabilityWeights[k]++;
             }
 
-            return distribution;
+            // Create a distribution list using the average probabilities for each k
+            // Results are weighted based on the number of calculations made for them
+            var finalDistribution = probabilitySums
+             .Select(pair => new BinomialOutcome
+             {
+                 Successes = pair.Key,
+                 Probability = pair.Value / probabilityWeights[pair.Key]
+             })
+             .OrderBy(outcome => outcome.Successes)
+             .ToList();
+
+            return finalDistribution;
         }
 
         /// <summary>
@@ -214,17 +246,16 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Keep track of successes for each group number using a map, for faster lookups
-            var probabilitySumsMap = new Dictionary<int, List<double>>();
-
-            // Create map of binomial data
-            var distributionMap = new Dictionary<int, double>();
+            var probabilitySums = new Dictionary<int, double>();
+            var probabilityWeights = new Dictionary<int, int>();
 
             // Determine the max number of successes k based on the minimum group success count
             var maxK = Math.Floor((double)maxNumberOfTrials / minGroupSuccessCount);
 
+            // Calculate the results for each possible group success count
             for (int g = minGroupSuccessCount; g <= maxGroupSuccessCount; g++)
             {
-                // Calculate the binomial results for each success value k, and average the results for each value of n
+                // Calculate the binomial results for each success value k, and average the results for each possible value of n
                 for (int k = 0; k <= maxK; k++)
                 {
                     var groupedSuccesses = k * g;
@@ -237,34 +268,36 @@ namespace WarhammerCombatMathLibrary
                         combinedProbability += discreteProbability;
                     }
 
-                    // Average all the probabilities for that value of n
+                    // Only need to perform division if combined probability is nonzero
                     if (combinedProbability > 0)
                     {
-                        var numerator = combinedProbability;
                         var denominator = (maxNumberOfTrials - (startingValue - 1));
-                        combinedProbability = (double)numerator / denominator;
+                        combinedProbability /= denominator;
                     }
 
-                    // Add the combined probability to the map for that value of k
-                    if (!probabilitySumsMap.TryGetValue(k, out List<double>? value))
+                    // Add an empty value for k if none exists
+                    if (!probabilitySums.ContainsKey(k))
                     {
-                        value = [];
-                        probabilitySumsMap[k] = value;
+                        probabilitySums[k] = 0;
+                        probabilityWeights[k] = 0;
                     }
 
-                    value.Add(combinedProbability);
+                    // Increment the value at key 'k' by the calculated combined probability
+                    probabilitySums[k] += combinedProbability;
+                    probabilityWeights[k]++;
                 }
             }
 
             // Create a distribution list using the average probabilities for each k
-            var finalDistribution = probabilitySumsMap
-                .Select(pair => new BinomialOutcome
-                {
-                    Successes = pair.Key,
-                    Probability = pair.Value.Average()
-                })
-                .OrderBy(outcome => outcome.Successes)
-                .ToList();
+            // Results are weighted based on the number of calculations made for them
+            var finalDistribution = probabilitySums
+             .Select(pair => new BinomialOutcome
+             {
+                 Successes = pair.Key,
+                 Probability = pair.Value / probabilityWeights[pair.Key]
+             })
+             .OrderBy(outcome => outcome.Successes)
+             .ToList();
 
             return finalDistribution;
         }
@@ -772,46 +805,27 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A double containing the cumulative probability value.</returns>
         public static double LowerCumulativeProbability(int numberOfTrials, int numberOfSuccesses, double probability)
         {
-            // Validate parameters
-            if (numberOfTrials <= 0)
+            // Create cache key
+            var key = (numberOfTrials, numberOfSuccesses, probability);
+
+            // If this calculation has recently been done, return the cached result
+            if (_lowerCumulativeProbabilityFunctionCache.TryGetValue(key, out var cached))
             {
-                Debug.WriteLine($"LowerCumulativeProbability() | Number of trials is less than 1. Returning 0 ...");
+                return cached;
+            }
+
+            // Validate inputs
+            if (numberOfTrials <= 0 || numberOfSuccesses < 0 || numberOfSuccesses > numberOfTrials || probability <= 0)
+            {
                 return 0;
             }
 
-            if (numberOfSuccesses < 0)
-            {
-                Debug.WriteLine($"LowerCumulativeProbability() | Number of successes is less than 0. Returning 0 ...");
-                return 0;
-            }
-
-            if (numberOfSuccesses > numberOfTrials)
-            {
-                Debug.WriteLine($"LowerCumulativeProbability() | Number of successes is greater than number of trials. Returning 0 ...");
-                return 0;
-            }
-
-            if (probability <= 0)
-            {
-                Debug.WriteLine($"LowerCumulativeProbability() | Probability is less than or equal to 0. Returning 0 ...");
-                return 0;
-            }
-
-            // In the case where probability is greater than or equal to 1, all discrete values up to the max possible successes are equal to 0,
-            // and the max possible successes has a probability of 1.
-            // Therefore, the sum of all values up to the max number of successes is 0.
             if (probability >= 1)
             {
-                if (numberOfSuccesses == numberOfTrials)
-                {
-                    Debug.WriteLine($"LowerCumulativeProbability() | Probability is greater than or equal to 1, and the number of successes equals the number of trials. Returning 1 ...");
-                    return 1;
-                }
-
-                Debug.WriteLine($"LowerCumulativeProbability() | Probability is greater than or equal to 1, and the number of successes does not equal the number of trials. Returning 1 ...");
-                return 0;
+                return numberOfSuccesses == numberOfTrials ? 1 : 0;
             }
 
+            // Perform calculation
             double cumulativeProbability = 0;
 
             for (int i = 0; i <= numberOfSuccesses; i++)
@@ -819,8 +833,12 @@ namespace WarhammerCombatMathLibrary
                 cumulativeProbability += ProbabilityMassFunction(numberOfTrials, i, probability);
             }
 
+            // Cache this calculation
+            _lowerCumulativeProbabilityFunctionCache.Add(key, cumulativeProbability);
+
             return cumulativeProbability;
         }
+
 
         /// <summary>
         /// Calculates the lower cumulative distribution P(X≤k) of trial data.
@@ -1164,49 +1182,35 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A double containing the cumulative probability value.</returns>
         public static double UpperCumulativeProbability(int numberOfTrials, int numberOfSuccesses, double probability)
         {
-            // Validate parameters
-            if (numberOfTrials < 1)
+            // Create cache key
+            var key = (numberOfTrials, numberOfSuccesses, probability);
+
+            // If this calculation has recently been done, return the cached result
+            if (_upperCumulativeProbabilityFunctionCache.TryGetValue(key, out var cached))
             {
-                Debug.WriteLine($"UpperCumulativeProbability() | Number of trials is less than 1. Returning 0 ...");
+                return cached;
+            }
+
+            // Validate inputs
+            if (numberOfTrials < 1 || numberOfSuccesses < 0 || numberOfSuccesses > numberOfTrials || probability <= 0)
+            {
                 return 0;
             }
 
-            if (numberOfSuccesses < 0)
-            {
-                Debug.WriteLine($"UpperCumulativeProbability() | Number of successes is less than 0. Returning 0 ...");
-                return 0;
-            }
-
-            if (numberOfSuccesses > numberOfTrials)
-            {
-                Debug.WriteLine($"UpperCumulativeProbability() | Number of successes is greater than number of trials. Returning 0 ...");
-                return 0;
-            }
-
-            if (probability <= 0)
-            {
-                Debug.WriteLine($"UpperCumulativeProbability() | Probability is less than or equal to 0. Returning 0 ...");
-                return 0;
-            }
-
-            // In the case where probability is greater than or equal to 1, all discrete values up to the max possible successes are equal to 0,
-            // and the max possible successes has a probability of 1.
-            // Therefore, the sum of all values that include the max value should equal 1.
-            // Additionally P(X > k) should be 0 when k = MaxValue because it is impossible to get more than the max value of successes.
             if (probability >= 1)
             {
-                if (numberOfSuccesses == numberOfTrials)
-                {
-                    Debug.WriteLine($"UpperCumulativeProbability() | Probability is greater than or equal to 1, and the number of successes equals the number of trials. Returning 0 ...");
-                    return 0;
-                }
-
-                Debug.WriteLine($"UpperCumulativeProbability() | Probability is greater than or equal to 1, and the number of successes does not equal the number of trials. Returning 1 ...");
-                return 1;
+                return numberOfSuccesses == numberOfTrials ? 0 : 1;
             }
 
-            return 1 - LowerCumulativeProbability(numberOfTrials, numberOfSuccesses, probability);
+            // Perform calculation
+            double result = 1 - LowerCumulativeProbability(numberOfTrials, numberOfSuccesses, probability);
+
+            // Cache the result
+            _upperCumulativeProbabilityFunctionCache.Add(key, result);
+
+            return result;
         }
+
 
         /// <summary>
         /// Calculates the upper cumulative distribution P(X>k) or 1-P(X≤k) of trial data.
@@ -1532,20 +1536,17 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double SurvivorFunction(int numberOfTrials, int successes, double probability)
         {
+            // Create cache key
+            var key = (numberOfTrials, successes, probability);
+
+            // If this calculation has recently been done, return the cached result
+            if (_survivorFunctionCache.TryGetValue(key, out var cached))
+            {
+                return cached;
+            }
+
             // Validate inputs
-            if (numberOfTrials < 0)
-            {
-                Debug.WriteLine($"SurvivorFunction() | Binomial is null. Returning 0 ...");
-                return 0;
-            }
-
-            if (successes < 0)
-            {
-                Debug.WriteLine($"SurvivorFunction() | Successes is less than 0. Returning 0 ...");
-                return 0;
-            }
-
-            if (probability < 0)
+            if (numberOfTrials < 0 || successes < 0 || probability < 0)
             {
                 return 0;
             }
@@ -1555,10 +1556,15 @@ namespace WarhammerCombatMathLibrary
                 return 1;
             }
 
-            // Perform calculation by taking 1 minus the lower cumulative probability.
-            // NOTE: Make sure to calculate lower cumulative probability at k-1, since the survivor function must include P(k).
-            return 1 - LowerCumulativeProbability(numberOfTrials, successes - 1, probability);
+            // Perform calculation
+            double result = 1 - LowerCumulativeProbability(numberOfTrials, successes - 1, probability);
+
+            // Cache result
+            _survivorFunctionCache.Add(key, result);
+
+            return result;
         }
+
 
         /// <summary>
         /// Gets the survivor function distribution P(X≥k) of trial data.
