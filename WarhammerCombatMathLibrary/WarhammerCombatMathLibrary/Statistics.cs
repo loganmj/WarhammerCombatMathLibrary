@@ -11,11 +11,11 @@ namespace WarhammerCombatMathLibrary
     {
         #region Fields
 
-        /// <summary>
-        /// Used as a cache for memoization of probability mass calculations.
-        /// This should greatly reduce resource usage.
-        /// </summary>
-        private static readonly Dictionary<(int, int, double), double> _probabilityMassFunctionCache = [];
+        // Uses caches for discrete probability calculations, as they are resource-heavy and oft repeated
+        private static readonly BoundedCache<(int, int, double), double> _probabilityMassFunctionCache = new(5000);
+        private static readonly BoundedCache<(int, int, double), double> _lowerCumulativeProbabilityFunctionCache = new(5000);
+        private static readonly BoundedCache<(int, int, double), double> _upperCumulativeProbabilityFunctionCache = new(5000);
+        private static readonly BoundedCache<(int, int, double), double> _survivorFunctionCache = new(5000);
 
         #endregion
 
@@ -434,7 +434,7 @@ namespace WarhammerCombatMathLibrary
             var result = (double)binomialCoefficient * successProbability * failureProbability;
 
             // Cache this result
-            _probabilityMassFunctionCache[key] = result;
+            _probabilityMassFunctionCache.Add(key, result);
 
             return result;
         }

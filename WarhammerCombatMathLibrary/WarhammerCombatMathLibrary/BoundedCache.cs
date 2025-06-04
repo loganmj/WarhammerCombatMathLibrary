@@ -1,20 +1,20 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace WarhammerCombatMathLibrary
+﻿namespace WarhammerCombatMathLibrary
 {
     /// <summary>
     /// A helper class that implements a bounded cache object.
     /// This allows the program to create caches for expensive operations that are bounded using a FIFO process to help avoid using too much memory.
+    /// Implements "Least Recently Used" algorithm for determing which items to dump when cache reaches its max capacity.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    internal class BoundedCache<TKey, TValue>(int maxSize) where TKey : notnull
+    internal class BoundedCache<TKey, TValue>(int capacity) where TKey : notnull
     {
         #region Fields
 
-        private readonly int _maxSize = maxSize;
-        private readonly Dictionary<TKey, TValue> _cache = [];
-        private readonly Queue<TKey> _order = new();
+        private readonly int _capacity = capacity;
+        private readonly Dictionary<TKey, LinkedListNode<(TKey Key, TValue Value)>> _cacheMap = [];
+        private readonly LinkedList<(TKey Key, TValue Value)> _leastRecentlyUsedList = [];
+        private readonly object _lock = new();
 
         #endregion
 
@@ -26,10 +26,24 @@ namespace WarhammerCombatMathLibrary
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns>A boolean value, indicating whether the data pair with the given key and value were able to be retrieved.</returns>
-        public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
+        public bool TryGetValue(TKey key, out TValue value)
         {
-            return _cache.TryGetValue(key, out value);
+            lock (_lock)
+            {
+                if (_cacheMap.TryGetValue(key, out var node))
+                {
+                    _leastRecentlyUsedList.Remove(node);
+                    _leastRecentlyUsedList.AddFirst(node);
+                    value = node.Value.Value;
+                    return true;
+                }
+
+                value = default!;
+                return false;
+            }
+
         }
+
 
         /// <summary>
         /// Adds a key/value pair to the cache.
@@ -38,16 +52,24 @@ namespace WarhammerCombatMathLibrary
         /// <param name="value"></param>
         public void Add(TKey key, TValue value)
         {
-            if (_cache.ContainsKey(key)) return;
-
-            if (_cache.Count >= _maxSize)
+            lock (_lock)
             {
-                var oldestKey = _order.Dequeue();
-                _cache.Remove(oldestKey);
-            }
+                if (_cacheMap.TryGetValue(key, out var existingNode))
+                {
+                    _leastRecentlyUsedList.Remove(existingNode);
+                }
+                else if (_cacheMap.Count >= _capacity)
+                {
+                    // Remove least recently used item
+                    var lru = _leastRecentlyUsedList.Last!;
+                    _cacheMap.Remove(lru.Value.Key);
+                    _leastRecentlyUsedList.RemoveLast();
+                }
 
-            _cache[key] = value;
-            _order.Enqueue(key);
+                var newNode = new LinkedListNode<(TKey, TValue)>((key, value));
+                _leastRecentlyUsedList.AddFirst(newNode);
+                _cacheMap[key] = newNode;
+            }
         }
 
         /// <summary>
@@ -55,8 +77,11 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         public void Clear()
         {
-            _cache.Clear();
-            _order.Clear();
+            lock (_lock)
+            {
+                _cacheMap.Clear();
+                _leastRecentlyUsedList.Clear();
+            }
         }
 
         #endregion
