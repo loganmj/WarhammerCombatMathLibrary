@@ -939,14 +939,14 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9921),
-                new(2, 0.9366),
-                new(3, 0.7865),
-                new(4, 0.6725),
-                new(5, 0.5300),
-                new(6, 0.3674),
-                new(7, 0.2103),
-                new(8, 0.0910),
+                new(1, 1),
+                new(2, 1),
+                new(3, 1),
+                new(4, 0.9303),
+                new(5, 0.6994),
+                new(6, 0.4633),
+                new(7, 0.2536),
+                new(8, 0.1040),
                 new(9, 0.0260)
             };
 
@@ -978,21 +978,21 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9972),
-                new(2, 0.9773),
-                new(3, 0.9150),
-                new(4, 0.7969),
-                new(5, 0.6394),
-                new(6, 0.4734),
-                new(7, 0.3540),
-                new(8, 0.2410),
-                new(9, 0.1462),
-                new(10, 0.0772),
-                new(11, 0.0346),
-                new(12, 0.0129),
-                new(13, 0.0038),
+                new(1, 1),
+                new(2, 1),
+                new(3, 1),
+                new(4, 0.8872),
+                new(5, 0.7297),
+                new(6, 0.5638),
+                new(7, 0.4121),
+                new(8, 0.2751),
+                new(9, 0.1639),
+                new(10, 0.0853),
+                new(11, 0.0378),
+                new(12, 0.0139),
+                new(13, 0.0041),
                 new(14, 0.0009),
-                new(15, 0.0001),
+                new(15, 0.0002),
                 new(16, 0)
             };
 
@@ -1976,19 +1976,19 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetSurvivorDistributionWounds_VariableAttakcs_SingleModelAttacker()
+        public void GetSurvivorDistributionWounds_VariableAttacks_SingleModelAttacker()
         {
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9775),
-                new(2, 0.8713),
-                new(3, 0.6647),
-                new(4, 0.5042),
-                new(5, 0.3350),
-                new(6, 0.1853),
-                new(7, 0.0803),
-                new(8, 0.0252),
+                new(1, 1),
+                new(2, 1),
+                new(3, 0.8607),
+                new(4, 0.6282),
+                new(5, 0.4031),
+                new(6, 0.2163),
+                new(7, 0.0912),
+                new(8, 0.0277),
                 new(9, 0.0050)
             };
 
@@ -2020,17 +2020,17 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9763),
-                new(2, 0.8832),
-                new(3, 0.7097),
-                new(4, 0.4998),
-                new(5, 0.3087),
-                new(6, 0.1666),
-                new(7, 0.0855),
-                new(8, 0.0377),
-                new(9, 0.0141),
-                new(10, 0.0044),
-                new(11, 0.0011),
+                new(1, 0.9902),
+                new(2, 0.8971),
+                new(3, 0.7235),
+                new(4, 0.5137),
+                new(5, 0.3226),
+                new(6, 0.1805),
+                new(7, 0.0916),
+                new(8, 0.0400),
+                new(9, 0.0148),
+                new(10, 0.0046),
+                new(11, 0.0012),
                 new(12, 0.0002),
                 new(13, 0),
                 new(14, 0),
@@ -2066,33 +2066,33 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9998),
-                new(2, 0.9972),
-                new(3, 0.9850),
-                new(4, 0.9539),
-                new(5, 0.9038),
-                new(6, 0.8800),
-                new(7, 0.8542),
-                new(8, 0.8261),
-                new(9, 0.7955),
-                new(10, 0.7619),
-                new(11, 0.7250),
-                new(12, 0.6842),
-                new(13, 0.6390),
-                new(14, 0.5888),
-                new(15, 0.5328),
-                new(16, 0.4711),
-                new(17, 0.4039),
-                new(18, 0.3329),
-                new(19, 0.2609),
-                new(20, 0.1923),
-                new(21, 0.1314),
-                new(22, 0.0822),
-                new(23, 0.0463),
-                new(24, 0.0231),
-                new(25, 0.0100),
-                new(26, 0.0037),
-                new(27, 0.0011),
+                new(1, 1),
+                new(2, 1),
+                new(3, 1),
+                new(4, 1),
+                new(5, 1),
+                new(6, 1),
+                new(7, 1),
+                new(8, 1),
+                new(9, 1),
+                new(10, 1),
+                new(11, 1),
+                new(12, 0.9287),
+                new(13, 0.8499),
+                new(14, 0.7669),
+                new(15, 0.6796),
+                new(16, 0.5884),
+                new(17, 0.4943),
+                new(18, 0.3995),
+                new(19, 0.3075),
+                new(20, 0.2228),
+                new(21, 0.1500),
+                new(22, 0.0925),
+                new(23, 0.0515),
+                new(24, 0.0254),
+                new(25, 0.0109),
+                new(26, 0.0040),
+                new(27, 0.0012),
                 new(28, 0.0003),
                 new(29, 0),
                 new(30, 0),
@@ -3156,12 +3156,12 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.8261),
-                new(2, 0.5051),
-                new(3, 0.2302),
-                new(4, 0.0932),
-                new(5, 0.0292),
-                new(6, 0.0069),
+                new(1, 0.8460),
+                new(2, 0.5250),
+                new(3, 0.2501),
+                new(4, 0.0998),
+                new(5, 0.0309),
+                new(6, 0.0072),
                 new(7, 0.0012),
                 new(8, 0.0001),
                 new(9, 0)
@@ -3195,13 +3195,13 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.8419),
-                new(2, 0.5482),
-                new(3, 0.2787),
-                new(4, 0.1136),
-                new(5, 0.0378),
-                new(6, 0.0103),
-                new(7, 0.0025),
+                new(1, 0.8422),
+                new(2, 0.5485),
+                new(3, 0.2789),
+                new(4, 0.1139),
+                new(5, 0.0381),
+                new(6, 0.0106),
+                new(7, 0.0026),
                 new(8, 0.0005),
                 new(9, 0.0001),
                 new(10, 0),
@@ -3241,22 +3241,22 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9848),
-                new(2, 0.9316),
-                new(3, 0.8405),
-                new(4, 0.7306),
-                new(5, 0.6168),
-                new(6, 0.5248),
-                new(7, 0.4301),
-                new(8, 0.3365),
-                new(9, 0.2490),
-                new(10, 0.1728),
-                new(11, 0.1115),
-                new(12, 0.0664),
-                new(13, 0.0363),
-                new(14, 0.0182),
-                new(15, 0.0082),
-                new(16, 0.0034),
+                new(1, 1),
+                new(2, 1),
+                new(3, 0.9230),
+                new(4, 0.8131),
+                new(5, 0.6993),
+                new(6, 0.5871),
+                new(7, 0.4752),
+                new(8, 0.3676),
+                new(9, 0.2693),
+                new(10, 0.1852),
+                new(11, 0.1186),
+                new(12, 0.0702),
+                new(13, 0.0382),
+                new(14, 0.0190),
+                new(15, 0.0086),
+                new(16, 0.0035),
                 new(17, 0.0013),
                 new(18, 0.0004),
                 new(19, 0.0001),
@@ -5006,19 +5006,19 @@ namespace UnitTests
         public void GetSurvivorDistributionDestroyedModels_MultiModelAttacker_NoDefenderSpecialRules()
         {
             var expected = new List<BinomialOutcome>()
-                {
-                    new(0, 1),
-                    new(1, 0.8696),
-                    new(2, 0.4335),
-                    new(3, 0.1018),
-                    new(4, 0.0113),
-                    new(5, 0.0006),
-                    new(6, 0),
-                    new(7, 0),
-                    new(8, 0),
-                    new(9, 0),
-                    new(10, 0)
-                };
+            {
+                new(0, 1),
+                new(1, 0.4741),
+                new(2, 0.2758),
+                new(3, 0.0736),
+                new(4, 0.0089),
+                new(5, 0.0005),
+                new(6, 0),
+                new(7, 0),
+                new(8, 0),
+                new(9, 0),
+                new(10, 0)
+            };
 
             var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
 
@@ -5079,11 +5079,11 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.0333),
-                new(2, 0.6114),
-                new(3, 0.7778),
-                new(4, 0.8889),
-                new(5, 0.9444)
+                new(1, 0.0193),
+                new(2, 0.0002),
+                new(3, 0),
+                new(4, 0),
+                new(5, 0)
             };
 
             var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
@@ -5152,12 +5152,12 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.8261),
-                new(2, 0.5051),
-                new(3, 0.2302),
-                new(4, 0.0932),
-                new(5, 0.0292),
-                new(6, 0.0069),
+                new(1, 0.8460),
+                new(2, 0.5250),
+                new(3, 0.2501),
+                new(4, 0.0998),
+                new(5, 0.0309),
+                new(6, 0.0072),
                 new(7, 0.0012),
                 new(8, 0.0001),
                 new(9, 0)
@@ -5191,13 +5191,13 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.8419),
-                new(2, 0.5482),
-                new(3, 0.2787),
-                new(4, 0.1136),
-                new(5, 0.0378),
-                new(6, 0.0103),
-                new(7, 0.0025),
+                new(1, 0.8422),
+                new(2, 0.5485),
+                new(3, 0.2789),
+                new(4, 0.1139),
+                new(5, 0.0381),
+                new(6, 0.0106),
+                new(7, 0.0026),
                 new(8, 0.0005),
                 new(9, 0.0001),
                 new(10, 0),
@@ -5237,10 +5237,10 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.2968),
-                new(2, 0.0794),
-                new(3, 0.0212),
-                new(4, 0.0028)
+                new(1, 0.1770),
+                new(2, 0.0584),
+                new(3, 0.0170),
+                new(4, 0.0025)
             };
 
             var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
@@ -5271,9 +5271,9 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.0957),
-                new(2, 0.0170),
-                new(3, 0.0024),
+                new(1, 0.0558),
+                new(2, 0.0117),
+                new(3, 0.0018),
                 new(4, 0.0002),
                 new(5, 0),
                 new(6, 0),
@@ -5309,15 +5309,15 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9316),
-                new(2, 0.7306),
-                new(3, 0.5248),
-                new(4, 0.3365),
-                new(5, 0.1728),
-                new(6, 0.0664),
-                new(7, 0.0182),
-                new(8, 0.0034),
-                new(9, 0.0004),
+                new(1, 0.5267),
+                new(2, 0.4356),
+                new(3, 0.3217),
+                new(4, 0.2099),
+                new(5, 0.1116),
+                new(6, 0.0450),
+                new(7, 0.0129),
+                new(8, 0.0025),
+                new(9, 0.0003),
                 new(10, 0),
                 new(11, 0),
                 new(12, 0),
@@ -5392,14 +5392,14 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9483),
-                new(2, 0.6774),
-                new(3, 0.3897),
+                new(1, 0.7366),
+                new(2, 0.6025),
+                new(3, 0.3846),
                 new(4, 0.2229),
-                new(5, 0.6003),
-                new(6, 0.5305),
-                new(7, 0.5055),
-                new(8, 0.5005)
+                new(5, 0.1003),
+                new(6, 0.0305),
+                new(7, 0.0055),
+                new(8, 0.0005)
             };
 
             var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
@@ -5430,14 +5430,14 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.2963),
-                new(2, 0.6759),
-                new(3, 0.7279),
-                new(4, 0.8065),
-                new(5, 0.8987),
-                new(6, 0.8911),
-                new(7, 0.8892),
-                new(8, 0.8889)
+                new(1, 0.2190),
+                new(2, 0.1122),
+                new(3, 0.0610),
+                new(4, 0.0288),
+                new(5, 0.0098),
+                new(6, 0.0022),
+                new(7, 0.0003),
+                new(8, 0)
             };
 
             var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
@@ -5468,15 +5468,15 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9316),
-                new(2, 0.7306),
-                new(3, 0.5248),
-                new(4, 0.3365),
-                new(5, 0.1728),
-                new(6, 0.0664),
-                new(7, 0.0182),
-                new(8, 0.0034),
-                new(9, 0.0004),
+                new(1, 0.5267),
+                new(2, 0.4356),
+                new(3, 0.3217),
+                new(4, 0.2099),
+                new(5, 0.1116),
+                new(6, 0.0450),
+                new(7, 0.0129),
+                new(8, 0.0025),
+                new(9, 0.0003),
                 new(10, 0),
                 new(11, 0),
                 new(12, 0),

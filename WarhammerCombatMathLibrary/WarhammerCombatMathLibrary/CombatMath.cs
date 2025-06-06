@@ -648,7 +648,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Declare return variable
-            double probabilityOfHitAndWound = 0;
+            double probabilityOfHitAndWound;
 
             // Calculate the probability of succeeding on a wound roll
             var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
