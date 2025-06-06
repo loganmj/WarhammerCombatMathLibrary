@@ -22,9 +22,6 @@ namespace WarhammerCombatMathLibrary
 
         // Uses caches for discrete probability calculations, as they are resource-heavy and oft repeated
         private static readonly BoundedCache<(int, int, double), double> _probabilityMassFunctionCache = new(MAX_CACHE_SIZE);
-        private static readonly BoundedCache<(int, int, double), double> _lowerCumulativeProbabilityFunctionCache = new(MAX_CACHE_SIZE);
-        private static readonly BoundedCache<(int, int, double), double> _upperCumulativeProbabilityFunctionCache = new(MAX_CACHE_SIZE);
-        private static readonly BoundedCache<(int, int, double), double> _survivorFunctionCache = new(MAX_CACHE_SIZE);
 
         #endregion
 

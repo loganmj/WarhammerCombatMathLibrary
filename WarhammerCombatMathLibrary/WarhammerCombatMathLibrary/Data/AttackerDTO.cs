@@ -33,22 +33,9 @@
         public int WeaponFlatAttacks { get; set; }
 
         /// <summary>
-        /// Denotes whether the weapon has the Torrent keyword.
-        /// </summary>
-        public bool WeaponHasTorrent { get; set; }
-
-        /// <summary>
         /// The ballistic/weapon skill threshold value of the attacker.
         /// </summary>
         public int WeaponSkill { get; set; }
-
-        /// <summary>
-        /// The attacker's weapon has the Lethal Hits keyword ability
-        /// </summary>
-        public bool WeaponHasLethalHits { get; set; }
-
-        // TODO: Weapon has full rerolls
-        // TODO: Weapon has reroll 1s
 
         /// <summary>
         /// The strength of the attacker's weapon.
@@ -75,6 +62,24 @@
         /// </summary>
         public int WeaponFlatDamage { get; set; }
 
+        /// <summary>
+        /// Attacker has Torrent keyword
+        /// </summary>
+        public bool WeaponHasTorrent { get; set; }
+
+        /// <summary>
+        /// Attacker has Lethal Hits keyword
+        /// </summary>
+        public bool WeaponHasLethalHits { get; set; }
+
+        // TODO: Weapon has full reroll hits
+        // TODO: Weapon has reroll hits of 1
+
+        /// <summary>
+        /// Attacker has DevastatingWounds keyword
+        /// </summary>
+        public bool WeaponHasDevastatingWounds { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -85,12 +90,13 @@
             return $"Attacker: [ Name: '{Name}', "
                    + $"NumberOfModels: {NumberOfModels}, "
                    + $"Weapon Attacks: {(WeaponNumberOfAttackDice > 0 ? $"{WeaponNumberOfAttackDice} {WeaponAttackDiceType} + {WeaponFlatAttacks}" : WeaponFlatAttacks.ToString())}, "
-                   + $"WeaponHasTorrent: {WeaponHasTorrent}, "
                    + $"WeaponSkill: {WeaponSkill}, "
-                   + $"WeaponHasLethalHits: {WeaponHasLethalHits}, "
                    + $"WeaponStrength: {WeaponStrength}, "
                    + $"WeaponArmorPierce: -{WeaponArmorPierce}, "
-                   + $"WeaponDamage: {(WeaponNumberOfDamageDice > 0 ? $"{WeaponNumberOfDamageDice} {WeaponDamageDiceType} + {WeaponFlatDamage}" : WeaponFlatDamage)}]";
+                   + $"WeaponDamage: {(WeaponNumberOfDamageDice > 0 ? $"{WeaponNumberOfDamageDice} {WeaponDamageDiceType} + {WeaponFlatDamage}" : WeaponFlatDamage)}]"
+                   + $"WeaponHasTorrent: {WeaponHasTorrent}, "
+                   + $"WeaponHasLethalHits: {WeaponHasLethalHits}, "
+                   + $"WeaponHasDevastatingWounds: {WeaponHasDevastatingWounds}, ";
         }
 
         /// <inheritdoc/>
@@ -113,14 +119,15 @@
                    && WeaponNumberOfAttackDice == other.WeaponNumberOfAttackDice
                    && WeaponAttackDiceType == other.WeaponAttackDiceType
                    && WeaponFlatAttacks == other.WeaponFlatAttacks
-                   && WeaponHasTorrent == other.WeaponHasTorrent
                    && WeaponSkill == other.WeaponSkill
-                   && WeaponHasLethalHits == other.WeaponHasLethalHits
                    && WeaponStrength == other.WeaponStrength
                    && WeaponArmorPierce == other.WeaponArmorPierce
                    && WeaponNumberOfDamageDice == other.WeaponNumberOfDamageDice
                    && WeaponDamageDiceType == other.WeaponDamageDiceType
-                   && WeaponFlatDamage == other.WeaponFlatDamage;
+                   && WeaponFlatDamage == other.WeaponFlatDamage
+                   && WeaponHasTorrent == other.WeaponHasTorrent
+                   && WeaponHasLethalHits == other.WeaponHasLethalHits
+                   && WeaponHasDevastatingWounds == other.WeaponHasDevastatingWounds;
         }
 
         /// <inheritdoc/>
@@ -128,7 +135,8 @@
         {
             // Combine the weapon keyword abilities into a single byte
             var weaponKeywordFlags = ((WeaponHasTorrent ? 1 : 0) << 0)
-                                     | ((WeaponHasLethalHits ? 1 : 0) << 1);
+                                     | ((WeaponHasLethalHits ? 1 : 0) << 1)
+                                     | ((WeaponHasDevastatingWounds ? 1 : 0) << 2);
 
             return HashCode.Combine(Name?.ToLowerInvariant(),
                                     NumberOfModels,
