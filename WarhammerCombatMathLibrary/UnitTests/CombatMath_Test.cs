@@ -5354,17 +5354,17 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9753),
-                new(2, 0.8591),
-                new(3, 0.6198),
-                new(4, 0.3382),
-                new(5, 0.1312),
-                new(6, 0.0338),
-                new(7, 0.0052),
-                new(8, 0.0004)
+                new(1, 0.6764),
+                new(2, 0.4092),
+                new(3, 0.1992),
+                new(4, 0.0779),
+                new(5, 0.0212),
+                new(6, 0.0037),
+                new(7, 0.0004),
+                new(8, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
 
             // Print expected
             Debug.WriteLine($"Expected: ");

@@ -14,7 +14,7 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// The maximum cache size for calculation caches.
         /// </summary>
-        private const int MAX_CACHE_SIZE = 1000;
+        private const int MAX_CACHE_SIZE = 5000;
 
         #endregion
 
@@ -22,9 +22,6 @@ namespace WarhammerCombatMathLibrary
 
         // Uses caches for discrete probability calculations, as they are resource-heavy and oft repeated
         private static readonly BoundedCache<(int, int, double), double> _probabilityMassFunctionCache = new(MAX_CACHE_SIZE);
-        private static readonly BoundedCache<(int, int, double), double> _lowerCumulativeProbabilityFunctionCache = new(MAX_CACHE_SIZE);
-        private static readonly BoundedCache<(int, int, double), double> _upperCumulativeProbabilityFunctionCache = new(MAX_CACHE_SIZE);
-        private static readonly BoundedCache<(int, int, double), double> _survivorFunctionCache = new(MAX_CACHE_SIZE);
 
         #endregion
 
@@ -50,6 +47,9 @@ namespace WarhammerCombatMathLibrary
                 });
             }
 
+            // P(max) should always be 1
+            cumulativeDistribution[^1].Probability = 1;
+
             return cumulativeDistribution;
         }
 
@@ -61,9 +61,23 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A List<BinomialOutcome> representing a survivor distribution P(X≥k) representation of the given binomial distribution data.</returns>
         private static List<BinomialOutcome> ApplySurvivorFunction(List<BinomialOutcome> distribution)
         {
-            var cumulativeList = ApplyCumulativeFunction(distribution);
-            cumulativeList.Reverse();
-            return cumulativeList;
+            var survivorDistribution = new List<BinomialOutcome>();
+            double cumulative = 0;
+
+            for (int i = distribution.Count - 1; i >= 0; i--)
+            {
+                cumulative += distribution[i].Probability;
+                survivorDistribution.Insert(0, new BinomialOutcome
+                {
+                    Successes = distribution[i].Successes,
+                    Probability = Math.Min(cumulative, 1.0)
+                });
+            }
+
+            // P(0) should always be 1
+            survivorDistribution[0].Probability = 1;
+
+            return survivorDistribution;
         }
 
 
