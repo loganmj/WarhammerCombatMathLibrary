@@ -50,9 +50,6 @@ namespace WarhammerCombatMathLibrary
                 });
             }
 
-            // P(max) should always be 1
-            cumulativeDistribution[^1].Probability = 1;
-
             return cumulativeDistribution;
         }
 
@@ -64,23 +61,9 @@ namespace WarhammerCombatMathLibrary
         /// <returns>A List<BinomialOutcome> representing a survivor distribution P(X≥k) representation of the given binomial distribution data.</returns>
         private static List<BinomialOutcome> ApplySurvivorFunction(List<BinomialOutcome> distribution)
         {
-            var survivorDistribution = new List<BinomialOutcome>();
-            double cumulative = 0;
-
-            for (int i = distribution.Count - 1; i >= 0; i--)
-            {
-                cumulative += distribution[i].Probability;
-                survivorDistribution.Insert(0, new BinomialOutcome
-                {
-                    Successes = distribution[i].Successes,
-                    Probability = Math.Min(cumulative, 1.0)
-                });
-            }
-
-            // P(0) should always be 1
-            survivorDistribution[0].Probability = 1;
-
-            return survivorDistribution;
+            var cumulativeList = ApplyCumulativeFunction(distribution);
+            cumulativeList.Reverse();
+            return cumulativeList;
         }
 
 
