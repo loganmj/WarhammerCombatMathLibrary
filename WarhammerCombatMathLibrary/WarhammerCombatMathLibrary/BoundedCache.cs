@@ -2,8 +2,8 @@
 {
     /// <summary>
     /// A helper class that implements a bounded cache object.
-    /// This allows the program to create caches for expensive operations that are bounded using a FIFO process to help avoid using too much memory.
-    /// Implements "Least Recently Used" algorithm for determing which items to dump when cache reaches its max capacity.
+    /// This allows the program to create caches for expensive operations that are bounded to help avoid using too much memory.
+    /// Implements "Least Recently Used" algorithm for determining which items to dump when cache reaches its max capacity.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
@@ -43,7 +43,6 @@
             }
 
         }
-
 
         /// <summary>
         /// Adds a key/value pair to the cache.
