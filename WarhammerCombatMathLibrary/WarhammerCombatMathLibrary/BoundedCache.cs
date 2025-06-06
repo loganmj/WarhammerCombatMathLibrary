@@ -7,7 +7,7 @@
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    internal class BoundedCache<TKey, TValue>(int capacity) where TKey : notnull
+    public class BoundedCache<TKey, TValue>(int capacity) where TKey : notnull
     {
         #region Fields
 
