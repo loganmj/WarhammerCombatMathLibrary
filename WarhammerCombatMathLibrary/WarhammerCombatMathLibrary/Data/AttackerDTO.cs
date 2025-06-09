@@ -72,6 +72,11 @@
         /// </summary>
         public bool WeaponHasLethalHits { get; set; }
 
+        /// <summary>
+        /// Attacker has Sustained Hits keyword
+        /// </summary>
+        public bool WeaponHasSustainedHits { get; set; }
+
         // TODO: Weapon has full reroll hits
         // TODO: Weapon has reroll hits of 1
 
