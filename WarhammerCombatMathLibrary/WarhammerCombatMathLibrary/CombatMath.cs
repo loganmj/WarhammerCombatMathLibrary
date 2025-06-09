@@ -810,6 +810,33 @@ namespace WarhammerCombatMathLibrary
             var probabilityOfSuccessfulSave = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulSaveResults);
             var probabilityOfFailedSave = (1 - probabilityOfSuccessfulSave);
 
+            // Account for the combination of Lethal Hits and Devastating Wounds
+            // An attack that triggers a Lethal Hit bypasses the wound roll, and so cannot also trigger devastating wounds
+            if (attacker.WeaponHasLethalHits && attacker.WeaponHasDevastatingWounds)
+            {
+                // Lethal hits auto-wound on a hit roll of 6, but cannot cause devastating wounds
+                var probabilityOfLethalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
+                var baseProbabilityOfHit = GetProbabilityOfHit(attacker);
+                var probabilityOfNormalHit = baseProbabilityOfHit - probabilityOfLethalHit;
+
+                // For normal hits, calculate wound probability
+                var woundThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
+                var numberOfSuccessfulWoundResults = GetNumberOfSuccessfulResults(woundThreshold);
+                var probabilityOfWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulWoundResults);
+
+                // Probability of critical wound (6 to wound) from normal hits
+                var probabilityOfCriticalWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
+
+                // Probability of devastating wound = P(normalHit) * P(criticalWound)
+                var probabilityOfDevastatingWound = probabilityOfNormalHit * probabilityOfCriticalWound;
+
+                // Remaining normal wounds (non-critical)
+                var probabilityOfNormalWound = probabilityOfNormalHit * (probabilityOfWound - probabilityOfCriticalWound);
+
+                // Probability of hit, wound, and failed save, including devastating wounds, is: P(lethalHit) + P(devWound) + (P(normalWound) * P(failedSave))
+                return probabilityOfLethalHit + probabilityOfDevastatingWound + (probabilityOfNormalWound * probabilityOfFailedSave);
+            }
+
             // Account for devastating wounds
             // TODO: Account for the edge case where a weapon may have both lethal hits and devastating wounds
             if (attacker.WeaponHasDevastatingWounds)
