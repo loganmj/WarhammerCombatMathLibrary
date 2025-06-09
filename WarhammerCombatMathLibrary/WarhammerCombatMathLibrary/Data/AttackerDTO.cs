@@ -77,6 +77,11 @@
         /// </summary>
         public bool WeaponHasSustainedHits { get; set; }
 
+        /// <summary>
+        /// The amount of additional hits the weapon gets when Sustained Hits is triggers.
+        /// </summary>
+        public int WeaponSustainedHitsValue { get; set; }
+
         // TODO: Weapon has full reroll hits
         // TODO: Weapon has reroll hits of 1
 
