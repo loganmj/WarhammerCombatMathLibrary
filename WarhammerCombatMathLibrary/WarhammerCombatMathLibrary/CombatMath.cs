@@ -838,7 +838,7 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Account for devastating wounds
-            // TODO: Account for the edge case where a weapon may have both lethal hits and devastating wounds
+            
             if (attacker.WeaponHasDevastatingWounds)
             {
                 // Split the hit probability of getting a hit and wound into normal and devastating wound probabilities
