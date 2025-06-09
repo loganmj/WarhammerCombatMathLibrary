@@ -93,10 +93,10 @@
                    + $"WeaponSkill: {WeaponSkill}, "
                    + $"WeaponStrength: {WeaponStrength}, "
                    + $"WeaponArmorPierce: -{WeaponArmorPierce}, "
-                   + $"WeaponDamage: {(WeaponNumberOfDamageDice > 0 ? $"{WeaponNumberOfDamageDice} {WeaponDamageDiceType} + {WeaponFlatDamage}" : WeaponFlatDamage)}]"
+                   + $"WeaponDamage: {(WeaponNumberOfDamageDice > 0 ? $"{WeaponNumberOfDamageDice} {WeaponDamageDiceType} + {WeaponFlatDamage}" : WeaponFlatDamage)}, "
                    + $"WeaponHasTorrent: {WeaponHasTorrent}, "
                    + $"WeaponHasLethalHits: {WeaponHasLethalHits}, "
-                   + $"WeaponHasDevastatingWounds: {WeaponHasDevastatingWounds}, ";
+                   + $"WeaponHasDevastatingWounds: {WeaponHasDevastatingWounds} ]";
         }
 
         /// <inheritdoc/>
