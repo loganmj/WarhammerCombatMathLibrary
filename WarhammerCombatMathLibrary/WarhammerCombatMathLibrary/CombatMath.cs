@@ -152,63 +152,12 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns the success threshold for wounding the defender.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        private static int GetSuccessThresholdOfWound(int attackerWeaponStrength, int defenderToughness)
-        {
-            if (attackerWeaponStrength <= 0)
-            {
-                Debug.WriteLine($"GetSuccessThresholdOfWound() | Attacker strength is less than or equal to 0. Returning 6+ ...");
-                return 6;
-            }
-
-            if (defenderToughness <= 0)
-            {
-                Debug.WriteLine($"GetSuccessThresholdOfWound() | Defender toughness is less than or equal to 0. Returning 6+ ...");
-                return 6;
-            }
-
-            // The attacker's weapon Strength is greater than or equal to double the defender's Toughness.
-            if (attackerWeaponStrength >= 2 * defenderToughness)
-            {
-                return 2;
-            }
-
-            // The attacker's weapon Strength is greater than, but less than double, the defender's Toughness.
-            else if (attackerWeaponStrength > defenderToughness)
-            {
-                return 3;
-            }
-
-            // The attacker's weapon Strength is equal to the defender's Toughness.
-            else if (attackerWeaponStrength == defenderToughness)
-            {
-                return 4;
-            }
-
-            // The attacker's weapon Strength is less than, but more than half, the defender's Toughness.
-            else if (attackerWeaponStrength > defenderToughness / 2)
-            {
-                return 5;
-            }
-
-            // The attacker's weapon Strength is less than or equal to half the defender's Toughness.
-            else
-            {
-                return 6;
-            }
-        }
-
-        /// <summary>
         /// Returns the adjusted armor save of the defender after applying the attacker's armor pierce.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        private static int GetAdjustedArmorSave(AttackerDTO? attacker, DefenderDTO? defender)
+        private static int GetAdjustedArmorSaveThreshold(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -224,7 +173,8 @@ namespace WarhammerCombatMathLibrary
 
             // If the defender has an invulnerable save, and the invulnerable save is lower than the regular save after applying armor pierce,
             // then use the invulnerable save.
-            return Math.Min(defender.ArmorSave + attacker.WeaponArmorPierce, defender.InvulnerableSave);
+            var piercedArmorSaveThreshold = defender.ArmorSave + attacker.WeaponArmorPierce;
+            return Math.Min(piercedArmorSaveThreshold, defender.InvulnerableSave);
         }
 
         /// <summary>
@@ -519,10 +469,10 @@ namespace WarhammerCombatMathLibrary
         #region Public Methods
 
         /// <summary>
-        /// Returns the probability of succeeding a roll with a single dice, given the desired success threshold.
+        /// Returns the attacker's probability of succeeding any single hit roll.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
-        /// <returns>A double value containing the probability of success for a single trial.</returns>
+        /// <returns>A double value containing the probability of succeeding on any single hit roll.</returns>
         public static double GetProbabilityOfHit(AttackerDTO? attacker)
         {
             // Validate inputs
@@ -535,10 +485,11 @@ namespace WarhammerCombatMathLibrary
             // If the attacker's weapon has torrent, all attacks will automatically hit.
             if (attacker.WeaponHasTorrent)
             {
+                Debug.WriteLine($"GetProbabilityOfHit() | Attacker has torrent, returning 1 ...");
                 return 1;
             }
 
-            // A roll of 1 always fails, so if the attacker data object has a weapon skill value of 1+, treat it as 2+
+            // A roll of 1 always fails, so if the attacker has a weapon skill value of 1+, treat it as 2+
             var hitSuccessThreshold = attacker.WeaponSkill == 1 ? 2 : attacker.WeaponSkill;
             var numberOfSuccessfulHitResults = GetNumberOfSuccessfulResults(hitSuccessThreshold);
             return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulHitResults);
@@ -628,6 +579,57 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Returns the success threshold for wounding the defender.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        public static int GetSuccessThresholdOfWound(int attackerWeaponStrength, int defenderToughness)
+        {
+            if (attackerWeaponStrength <= 0)
+            {
+                Debug.WriteLine($"GetSuccessThresholdOfWound() | Attacker strength is less than or equal to 0. Returning 6+ ...");
+                return 6;
+            }
+
+            if (defenderToughness <= 0)
+            {
+                Debug.WriteLine($"GetSuccessThresholdOfWound() | Defender toughness is less than or equal to 0. Returning 6+ ...");
+                return 6;
+            }
+
+            // The attacker's weapon Strength is greater than or equal to double the defender's Toughness.
+            if (attackerWeaponStrength >= 2 * defenderToughness)
+            {
+                return 2;
+            }
+
+            // The attacker's weapon Strength is greater than, but less than double, the defender's Toughness.
+            else if (attackerWeaponStrength > defenderToughness)
+            {
+                return 3;
+            }
+
+            // The attacker's weapon Strength is equal to the defender's Toughness.
+            else if (attackerWeaponStrength == defenderToughness)
+            {
+                return 4;
+            }
+
+            // The attacker's weapon Strength is less than, but more than half, the defender's Toughness.
+            else if (attackerWeaponStrength > defenderToughness / 2)
+            {
+                return 5;
+            }
+
+            // The attacker's weapon Strength is less than or equal to half the defender's Toughness.
+            else
+            {
+                return 6;
+            }
+        }
+
+        /// <summary>
         /// Returns the probability of succeeding in both a hit and a wound roll for any one attack.
         /// </summary>
         /// <param name="attacker"></param>
@@ -647,56 +649,28 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            // Declare return variable
-            double probabilityOfHitAndWound;
-
             // Calculate the probability of succeeding on a wound roll
             var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
             var numberOfSuccessfulWoundResults = GetNumberOfSuccessfulResults(woundSuccessThreshold);
             var probabilityOfWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulWoundResults);
 
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Attacker has torrent: {attacker.WeaponHasTorrent}");
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Attacker has lethal hits: {attacker.WeaponHasLethalHits}");
-
             // If the weapon has lethal hits, wound probability must account for this
             if (!attacker.WeaponHasTorrent && attacker.WeaponHasLethalHits)
             {
-                // TODO: Calculate the probability of a normal hit, based on the number of successful results without the lethal hit case
-                // A roll of 1 always fails, so if the attacker data object has a weapon skill value of 1+, treat it as 2+
-                var baseHitSuccessThreshold = attacker.WeaponSkill == 1 ? 2 : attacker.WeaponSkill;
-                var normalHitSuccessThreshold = baseHitSuccessThreshold + 1;
-                var normalNumberOfSuccessfulHitResults = GetNumberOfSuccessfulResults(normalHitSuccessThreshold);
-                var probabilityOfNormalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, normalNumberOfSuccessfulHitResults);
-
-                // Calculate the probability of a lethal hit
+                // Split the hit probability of getting a hit into normal and lethal hit probabilities
+                var baseProbabilityOfHit = GetProbabilityOfHit(attacker);
                 var probabilityOfLethalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
+                var probabilityOfNormalHit = baseProbabilityOfHit - probabilityOfLethalHit;
 
-                // Calculate the probility of succeeding on both a hit and wound roll
-                probabilityOfHitAndWound = probabilityOfLethalHit + (probabilityOfNormalHit * probabilityOfWound);
-
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Base hit success threshold: {baseHitSuccessThreshold}");
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Normal hit success threshold: {normalHitSuccessThreshold}");
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Normal number of successful hit results: {normalNumberOfSuccessfulHitResults}");
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of normal hit: {probabilityOfNormalHit}");
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of lethal hit: {probabilityOfLethalHit}");
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of wound: {probabilityOfWound}");
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Calculation for hit and wound: P_lethalHit + (P_normalHit * P_wound)");
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of hit and wound: {probabilityOfHitAndWound}");
-
-                return probabilityOfHitAndWound;
+                // Probability of hit and wound, including lethal hits, is: P(lethalHit) + (P(normalHit) * P(wound))
+                return probabilityOfLethalHit + (probabilityOfNormalHit * probabilityOfWound);
             }
 
             // Calculate the probability of succeeding on a hit roll
             var probabilityOfHit = GetProbabilityOfHit(attacker);
-            probabilityOfHitAndWound = probabilityOfHit * probabilityOfWound;
 
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of hit: {probabilityOfHit}");
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of wound: {probabilityOfWound}");
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Calculation for hit and wound: P_hit * P_wound");
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Probability of hit and wound: {probabilityOfHitAndWound}");
-
-            // Return the probability of succeeding on both a hit and wound roll
-            return probabilityOfHitAndWound;
+            // Probability of hit and wound is: P(hit) * P(wound)
+            return probabilityOfHit * probabilityOfWound;
         }
 
         /// <summary>
@@ -830,22 +804,57 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var adjustedArmorSave = GetAdjustedArmorSave(attacker, defender);
-            var numberOfSuccessfulSaveResults = GetNumberOfSuccessfulResults(adjustedArmorSave);
+            // Determine armor save
+            var adjustedArmorSaveThreshold = GetAdjustedArmorSaveThreshold(attacker, defender);
+            var numberOfSuccessfulSaveResults = GetNumberOfSuccessfulResults(adjustedArmorSaveThreshold);
             var probabilityOfSuccessfulSave = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulSaveResults);
             var probabilityOfFailedSave = (1 - probabilityOfSuccessfulSave);
-            var probabilityOfHitAndWoundAndFailedSave = GetProbabilityOfHitAndWound(attacker, defender) * probabilityOfFailedSave;
 
-            Debug.WriteLine($"GetProbabilityOfFailedSave() | Attacker armor pierce: {attacker.WeaponArmorPierce}");
-            Debug.WriteLine($"GetProbabilityOfFailedSave() | Defender armor save: {defender.ArmorSave}");
-            Debug.WriteLine($"GetProbabilityOfFailedSave() | Defender invulnerable save: {defender.InvulnerableSave}");
-            Debug.WriteLine($"GetProbabilityOfFailedSave() | Adjusted armor save: {adjustedArmorSave}");
-            Debug.WriteLine($"GetProbabilityOfFailedSave() | Number of successful save results: {numberOfSuccessfulSaveResults}");
-            Debug.WriteLine($"GetProbabilityOfFailedSave() | Probability of successful save: {probabilityOfSuccessfulSave}");
-            Debug.WriteLine($"GetProbabilityOfFailedSave() | Probability of failed save: {probabilityOfFailedSave}");
-            Debug.WriteLine($"GetProbabilityOfFailedSave() | Probability of hit, wound, and failed save: {probabilityOfHitAndWoundAndFailedSave}");
+            // Account for the combination of Lethal Hits and Devastating Wounds
+            // An attack that triggers a Lethal Hit bypasses the wound roll, and so cannot also trigger devastating wounds
+            if (attacker.WeaponHasLethalHits && attacker.WeaponHasDevastatingWounds)
+            {
+                // Lethal hits auto-wound on a hit roll of 6, but cannot cause devastating wounds
+                var probabilityOfLethalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
+                var baseProbabilityOfHit = GetProbabilityOfHit(attacker);
+                var probabilityOfNormalHit = baseProbabilityOfHit - probabilityOfLethalHit;
 
-            return probabilityOfHitAndWoundAndFailedSave;
+                // For normal hits, calculate wound probability
+                var woundThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
+                var numberOfSuccessfulWoundResults = GetNumberOfSuccessfulResults(woundThreshold);
+                var probabilityOfWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulWoundResults);
+
+                // Probability of critical wound (6 to wound) from normal hits
+                var probabilityOfCriticalWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
+
+                // Probability of devastating wound = P(normalHit) * P(criticalWound)
+                var probabilityOfDevastatingWound = probabilityOfNormalHit * probabilityOfCriticalWound;
+
+                // Remaining normal wounds (non-critical)
+                var probabilityOfNormalWound = probabilityOfNormalHit * (probabilityOfWound - probabilityOfCriticalWound);
+
+                // Probability of hit, wound, and failed save, including devastating wounds, is: P(lethalHit) + P(devWound) + (P(normalWound) * P(failedSave))
+                return probabilityOfLethalHit + probabilityOfDevastatingWound + (probabilityOfNormalWound * probabilityOfFailedSave);
+            }
+
+            // Account for devastating wounds
+            
+            if (attacker.WeaponHasDevastatingWounds)
+            {
+                // Split the hit probability of getting a hit and wound into normal and devastating wound probabilities
+                var baseProbabilityOfHitAndWound = GetProbabilityOfHitAndWound(attacker, defender);
+                var probabilityOfDevastatingWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
+                var probabilityOfNormalWound = baseProbabilityOfHitAndWound - probabilityOfDevastatingWound;
+
+                // Probability of hit, wound, and failed save, including devastating wounds, is: P(devWound) + (P(normalWound) * P(failedSave))
+                return probabilityOfDevastatingWound + (probabilityOfNormalWound * probabilityOfFailedSave);
+            }
+
+            // Get probability of hit and wound
+            var probabilityOfHitAndWound = GetProbabilityOfHitAndWound(attacker, defender);
+
+            // Probability of hit, wound, and failed save is: P(hitAndWound) * P(failedSave)
+            return probabilityOfHitAndWound * probabilityOfFailedSave;
         }
 
         /// <summary>
