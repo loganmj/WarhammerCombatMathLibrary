@@ -314,13 +314,6 @@ namespace WarhammerCombatMathLibrary
             var averageDamageAfterFeelNoPain = damageAfterReduction * (1 - feelNoPainSuccessProbability);
             var returnValue = (int)Math.Floor(averageDamageAfterFeelNoPain);
 
-            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Raw damage per attack: {damagePerAttack}");
-            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Damage reductor: {damageReductor}");
-            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Damage after reduction: {damageAfterReduction}");
-            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Feel no pain success probability: {feelNoPainSuccessProbability}");
-            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Average damage after feel no pain: {averageDamageAfterFeelNoPain}");
-            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Return value: {returnValue}");
-
             return returnValue;
         }
 
@@ -850,7 +843,7 @@ namespace WarhammerCombatMathLibrary
             var adjustedArmorSaveThreshold = GetAdjustedArmorSaveThreshold(attacker, defender);
             var numberOfSuccessfulSaveResults = GetNumberOfSuccessfulResults(adjustedArmorSaveThreshold);
             var probabilityOfSuccessfulSave = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulSaveResults);
-            var probabilityOfFailedSave = (1 - probabilityOfSuccessfulSave);
+            var probabilityOfFailedSave = 1 - probabilityOfSuccessfulSave;
 
             // Determine probability of wound
             var woundThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
@@ -860,12 +853,16 @@ namespace WarhammerCombatMathLibrary
             var probabilityOfNormalWound = probabilityOfWound - probabilityOfCriticalWound;
 
             // A weapon with Torrent and Devastating Wounds will:
-            // - Automatically succeed all hit rolls, bypassing any critical hit abilities
-            // - Bypass the save roll on a critical wound
+            // - Automatically succeed all hit rolls, bypassing any critical hit abilities (Torrent)
+            // - Bypass the save roll on a critical wound (Devastating Wounds)
             if (attacker.WeaponHasTorrent && attacker.WeaponHasDevastatingWounds)
             {
-                // Probability of wound, and failed save is: P(criticalWound) + (P(normalWound) * P(failedSave))
-                return probabilityOfCriticalWound + (probabilityOfNormalWound * probabilityOfFailedSave);
+                // Calculate probabilities for possible successful outcomes
+                var probabilityOfDevastatingWound = probabilityOfCriticalWound;
+                var probabilityOfNormalWoundAndFailedSave = probabilityOfNormalWound * probabilityOfFailedSave;
+
+                // Combine probabilities
+                return probabilityOfDevastatingWound + probabilityOfNormalWoundAndFailedSave;
             }
 
             // A weapon with Torrent and will automatically succeed all hit rolls, bypassing any critical hit abilities
@@ -1095,10 +1092,6 @@ namespace WarhammerCombatMathLibrary
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
             var averageTotalDamage = averageFailedSaves * averageDamagePerAttack;
 
-            Debug.WriteLine($"GetMeanDamage() | Average failed saves: {averageFailedSaves}");
-            Debug.WriteLine($"GetMeanDamage() | Average damage per attack: {averageDamagePerAttack}");
-            Debug.WriteLine($"GetMeanDamage() | Average total damage: {averageTotalDamage}");
-
             return averageTotalDamage;
         }
 
@@ -1160,15 +1153,10 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageSuccessfulAttacks = GetExpectedFailedSaves(attacker, defender);
+            var expectedSuccessfulAttacks = GetExpectedFailedSaves(attacker, defender);
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
             var adjustedDamagePerAttack = GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender);
-            var averageModelsDestroyed = GetModelsDestroyed(averageSuccessfulAttacks, adjustedDamagePerAttack, defender);
-
-            Debug.WriteLine($"GetMeanDestroyedModels() | Average successful attacks: {averageSuccessfulAttacks}");
-            Debug.WriteLine($"GetMeanDestroyedModels() | Average damage per attack: {averageDamagePerAttack}");
-            Debug.WriteLine($"GetMeanDestroyedModels() | Average adjusted damage per attack: {adjustedDamagePerAttack}");
-            Debug.WriteLine($"GetMeanDestroyedModels() | Average models destroyed: {averageModelsDestroyed}");
+            var averageModelsDestroyed = GetModelsDestroyed(expectedSuccessfulAttacks, adjustedDamagePerAttack, defender);
 
             return averageModelsDestroyed;
         }
