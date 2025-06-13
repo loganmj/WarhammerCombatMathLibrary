@@ -2010,22 +2010,22 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0003),
-                new(1, 0.0033),
-                new(2, 0.0165),
-                new(3, 0.0511),
-                new(4, 0.1095),
-                new(5, 0.1721),
-                new(6, 0.2048),
-                new(7, 0.1881),
-                new(8, 0.1344),
-                new(9, 0.0746),
-                new(10, 0.0320),
-                new(11, 0.0104),
-                new(12, 0.0025),
-                new(13, 0.0004),
-                new(14, 0),
-                new(15, 0)
+                new(0, 0),
+                new(1, 0.0001),
+                new(2, 0.0009),
+                new(3, 0.0046),
+                new(4, 0.0174),
+                new(5, 0.0478),
+                new(6, 0.0996),
+                new(7, 0.1600),
+                new(8, 0.2000),
+                new(9, 0.1945),
+                new(10, 0.1459),
+                new(11, 0.0829),
+                new(12, 0.0345),
+                new(13, 0.0100),
+                new(14, 0.0018),
+                new(15, 0.0001)
             };
 
             var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL);
@@ -2055,22 +2055,22 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0003),
-                new(1, 0.0033),
-                new(2, 0.0165),
-                new(3, 0.0511),
-                new(4, 0.1095),
-                new(5, 0.1721),
-                new(6, 0.2048),
-                new(7, 0.1881),
-                new(8, 0.1344),
-                new(9, 0.0746),
-                new(10, 0.0320),
-                new(11, 0.0104),
-                new(12, 0.0025),
-                new(13, 0.0004),
-                new(14, 0),
-                new(15, 0)
+                new(0, 0),
+                new(1, 0),
+                new(2, 0),
+                new(3, 0.0003),
+                new(4, 0.0015),
+                new(5, 0.0067),
+                new(6, 0.0223),
+                new(7, 0.0574),
+                new(8, 0.1148),
+                new(9, 0.1786),
+                new(10, 0.2143),
+                new(11, 0.1948),
+                new(12, 0.1299),
+                new(13, 0.0599),
+                new(14, 0.0171),
+                new(15, 0.0023)
             };
 
             var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_SUSTAINED_HITS_2, DEFENDER_MULTI_MODEL);
@@ -2472,22 +2472,22 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0003),
-                new(1, 0.0033),
-                new(2, 0.0165),
-                new(3, 0.0511),
-                new(4, 0.1095),
-                new(5, 0.1721),
-                new(6, 0.2048),
-                new(7, 0.1881),
-                new(8, 0.1344),
-                new(9, 0.0746),
-                new(10, 0.0320),
-                new(11, 0.0104),
-                new(12, 0.0025),
-                new(13, 0.0004),
-                new(14, 0),
-                new(15, 0)
+                new(0, 1),
+                new(1, 1),
+                new(2, 0.9999),
+                new(3, 0.9990),
+                new(4, 0.9944),
+                new(5, 0.9770),
+                new(6, 0.9292),
+                new(7, 0.8297),
+                new(8, 0.6696),
+                new(9, 0.4696),
+                new(10, 0.2751),
+                new(11, 0.1293),
+                new(12, 0.0464),
+                new(13, 0.0119),
+                new(14, 0.0019),
+                new(15, 0.0001)
             };
 
             var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL);
@@ -2517,22 +2517,22 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0003),
-                new(1, 0.0033),
-                new(2, 0.0165),
-                new(3, 0.0511),
-                new(4, 0.1095),
-                new(5, 0.1721),
-                new(6, 0.2048),
-                new(7, 0.1881),
-                new(8, 0.1344),
-                new(9, 0.0746),
-                new(10, 0.0320),
-                new(11, 0.0104),
-                new(12, 0.0025),
-                new(13, 0.0004),
-                new(14, 0),
-                new(15, 0)
+                new(0, 1),
+                new(1, 1),
+                new(2, 1),
+                new(3, 1),
+                new(4, 0.9997),
+                new(5, 0.9982),
+                new(6, 0.9915),
+                new(7, 0.9692),
+                new(8, 0.9118),
+                new(9, 0.7970),
+                new(10, 0.6184),
+                new(11, 0.4041),
+                new(12, 0.2092),
+                new(13, 0.0794),
+                new(14, 0.0194),
+                new(15, 0.0023)
             };
 
             var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_SUSTAINED_HITS_2, DEFENDER_MULTI_MODEL);
@@ -2562,22 +2562,15 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0003),
-                new(1, 0.0033),
-                new(2, 0.0165),
-                new(3, 0.0511),
-                new(4, 0.1095),
-                new(5, 0.1721),
-                new(6, 0.2048),
-                new(7, 0.1881),
-                new(8, 0.1344),
-                new(9, 0.0746),
-                new(10, 0.0320),
-                new(11, 0.0104),
-                new(12, 0.0025),
-                new(13, 0.0004),
-                new(14, 0),
-                new(15, 0)
+                new(0, 1),
+                new(1, 1),
+                new(2, 0.9992),
+                new(3, 0.9925),
+                new(4, 0.9576),
+                new(5, 0.8442),
+                new(6, 0.6084),
+                new(7, 0.3018),
+                new(8, 0.0740)
             };
 
             var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL);
@@ -4106,20 +4099,20 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0003),
-                new(1, 0.0033),
-                new(2, 0.0165),
-                new(3, 0.0511),
-                new(4, 0.1095),
-                new(5, 0.1721),
-                new(6, 0.2048),
-                new(7, 0.1881),
-                new(8, 0.1344),
-                new(9, 0.0746),
-                new(10, 0.0320),
-                new(11, 0.0104),
-                new(12, 0.0025),
-                new(13, 0.0004),
+                new(0, 1),
+                new(1, 0.9769),
+                new(2, 0.8781),
+                new(3, 0.6805),
+                new(4, 0.4358),
+                new(5, 0.2260),
+                new(6, 0.0942),
+                new(7, 0.0314),
+                new(8, 0.0083),
+                new(9, 0.0018),
+                new(10, 0.0003),
+                new(11, 0),
+                new(12, 0),
+                new(13, 0),
                 new(14, 0),
                 new(15, 0)
             };
