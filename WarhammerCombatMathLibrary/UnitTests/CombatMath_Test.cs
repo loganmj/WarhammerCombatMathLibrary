@@ -13,9 +13,9 @@ namespace UnitTests
         #region Constants
 
         /// <summary>
-        /// Attack profile for Kharn the Betrayer
+        /// Attack profile for an elite character
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_KHARN_THE_BETRAYER = new()
+        public static readonly AttackerDTO ATTACKER_SINGLE_MODEL = new()
         {
             NumberOfModels = 1,
             WeaponFlatAttacks = 8,
@@ -26,24 +26,9 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Attack profile for Kharn the Betrayer, blessed with both Lethal Hits and Devastating Wounds
-        /// </summary>
-        public static readonly AttackerDTO ATTACKER_KHARN_THE_BETRAYER_BLESSED = new()
-        {
-            NumberOfModels = 1,
-            WeaponFlatAttacks = 8,
-            WeaponSkill = 2,
-            WeaponStrength = 6,
-            WeaponArmorPierce = 2,
-            WeaponFlatDamage = 3,
-            WeaponHasLethalHits = true,
-            WeaponHasDevastatingWounds = true
-        };
-
-        /// <summary>
         /// Attack profile for a 10 man squad of Space Marine Intercessors, all equipped with Bolt Rifles
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD = new()
+        public static readonly AttackerDTO ATTACKER_MULTI_MODEL = new()
         {
             NumberOfModels = 10,
             WeaponFlatAttacks = 2,
@@ -54,22 +39,9 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Attack profile for a five man squad of Space Marine Terminators, all equipped with Chain Fists
+        /// Attack profile for a unit with variable attacks, rolling a D3 type attack die.
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD = new()
-        {
-            NumberOfModels = 5,
-            WeaponFlatAttacks = 3,
-            WeaponSkill = 4,
-            WeaponStrength = 8,
-            WeaponArmorPierce = 2,
-            WeaponFlatDamage = 2
-        };
-
-        /// <summary>
-        /// Attack profile for a World Eaters Forgefiend.
-        /// </summary>
-        public static readonly AttackerDTO ATTACKER_WORLD_EATERS_FORGEFIEND = new()
+        public static readonly AttackerDTO ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS = new()
         {
             NumberOfModels = 1,
             WeaponNumberOfAttackDice = 3,
@@ -82,9 +54,9 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Attack profile for a unit of World Eaters Chaos Spawn.
+        /// Attack profile for a unit with variable attacks, rolling a D6 type attack die.
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_WORLD_EATERS_CHAOS_SPAWN = new()
+        public static readonly AttackerDTO ATTACKER_VARIABLE_D6_ATTACKS = new()
         {
             NumberOfModels = 2,
             WeaponNumberOfAttackDice = 1,
@@ -97,9 +69,9 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Attack profile for a Space Marine Infernus Squad.
+        /// Attack profile for a multi-model unit with variable attacks, rolling a D6 type attacks die.
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_SPACE_MARINE_INFERNUS_SQUAD = new()
+        public static readonly AttackerDTO ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS = new()
         {
             NumberOfModels = 5,
             WeaponNumberOfAttackDice = 1,
@@ -113,24 +85,9 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Attack profile for a World Eaters Jakhal Squad.
+        /// Attack profile for a unit with variable damage, rolling a D6 type damage die
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_WORLD_EATERS_JAKHALS = new()
-        {
-            NumberOfModels = 10,
-            WeaponNumberOfAttackDice = 0,
-            WeaponAttackDiceType = 0,
-            WeaponFlatAttacks = 3,
-            WeaponSkill = 4,
-            WeaponStrength = 3,
-            WeaponArmorPierce = 0,
-            WeaponFlatDamage = 1
-        };
-
-        /// <summary>
-        /// Attack profile for a World Eaters Maulerfiend.
-        /// </summary>
-        public static readonly AttackerDTO ATTACKER_WORLD_EATERS_MAULERFIEND = new()
+        public static readonly AttackerDTO ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE = new()
         {
             NumberOfModels = 1,
             WeaponNumberOfAttackDice = 0,
@@ -145,9 +102,9 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Attack profile for an Adepta Sororitas Retributor Squad.
+        /// Attack profile for a multi-model unit with variable damage, rolling a D6 type damage die
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD = new()
+        public static readonly AttackerDTO ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE = new()
         {
             NumberOfModels = 4,
             WeaponNumberOfAttackDice = 0,
@@ -162,23 +119,23 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Attack profile for an Adepta Sororitas Celestian Sacresants.
+        /// Attack profile for a unit with Lethal Hits
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS = new()
+        public static readonly AttackerDTO ATTACKER_LETHAL_HITS = new()
         {
             NumberOfModels = 5,
             WeaponFlatAttacks = 3,
-            WeaponHasLethalHits = true,
             WeaponSkill = 3,
             WeaponStrength = 4,
             WeaponArmorPierce = 1,
-            WeaponFlatDamage = 2
+            WeaponFlatDamage = 2,
+            WeaponHasLethalHits = true
         };
 
         /// <summary>
-        /// Attack profile for a Chaos Knight Abominant using its Volkite Combustor weapon.
+        /// Attack profile for a unit with Devastating Wounds
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_CHAOS_KNIGHT_ABOMINANT = new()
+        public static readonly AttackerDTO ATTACKER_DEVASTATING_WOUNDS = new()
         {
             NumberOfModels = 1,
             WeaponFlatAttacks = 9,
@@ -190,9 +147,103 @@ namespace UnitTests
         };
 
         /// <summary>
+        /// Attack profile for a unit with Sustained Hits 1.
+        /// </summary>
+        public static readonly AttackerDTO ATTACKER_SUSTAINED_HITS_1 = new()
+        {
+            NumberOfModels = 5,
+            WeaponFlatAttacks = 3,
+            WeaponSkill = 3,
+            WeaponStrength = 5,
+            WeaponArmorPierce = 1,
+            WeaponFlatDamage = 2,
+            WeaponHasSustainedHits = true,
+            WeaponSustainedHitsValue = 1
+        };
+
+        /// <summary>
+        /// Attack profile for a unit with Sustained Hits 2.
+        /// </summary>
+        public static readonly AttackerDTO ATTACKER_SUSTAINED_HITS_2 = new()
+        {
+            NumberOfModels = 5,
+            WeaponFlatAttacks = 3,
+            WeaponSkill = 3,
+            WeaponStrength = 5,
+            WeaponArmorPierce = 1,
+            WeaponFlatDamage = 2,
+            WeaponHasSustainedHits = true,
+            WeaponSustainedHitsValue = 2
+        };
+
+        /// <summary>
+        /// Attack profile for a hyper-elite character with Lethal Hits, Sustained Hits 1, and Devastating Wounds
+        /// </summary>
+        public static readonly AttackerDTO ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1 = new()
+        {
+            NumberOfModels = 1,
+            WeaponFlatAttacks = 8,
+            WeaponSkill = 2,
+            WeaponStrength = 6,
+            WeaponArmorPierce = 2,
+            WeaponFlatDamage = 3,
+            WeaponHasLethalHits = true,
+            WeaponHasSustainedHits = true,
+            WeaponSustainedHitsValue = 1
+        };
+
+        /// <summary>
+        /// Attack profile for a hyper-elite character with Lethal Hits, Sustained Hits 1, and Devastating Wounds
+        /// </summary>
+        public static readonly AttackerDTO ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS = new()
+        {
+            NumberOfModels = 1,
+            WeaponFlatAttacks = 8,
+            WeaponSkill = 2,
+            WeaponStrength = 6,
+            WeaponArmorPierce = 2,
+            WeaponFlatDamage = 3,
+            WeaponHasLethalHits = true,
+            WeaponHasDevastatingWounds = true
+        };
+
+        /// <summary>
+        /// Attack profile for a hyper-elite character with Lethal Hits, Sustained Hits 1, and Devastating Wounds
+        /// </summary>
+        public static readonly AttackerDTO ATTACKER_SUSTAINED_HITS_1_DEVASTATING_WOUNDS = new()
+        {
+            NumberOfModels = 1,
+            WeaponFlatAttacks = 8,
+            WeaponSkill = 2,
+            WeaponStrength = 6,
+            WeaponArmorPierce = 2,
+            WeaponFlatDamage = 3,
+            WeaponHasDevastatingWounds = true,
+            WeaponHasSustainedHits = true,
+            WeaponSustainedHitsValue = 1
+        };
+
+        /// <summary>
+        /// Attack profile for a hyper-elite character with Lethal Hits, Sustained Hits 1, and Devastating Wounds
+        /// </summary>
+        public static readonly AttackerDTO ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS = new()
+        {
+            NumberOfModels = 1,
+            WeaponFlatAttacks = 8,
+            WeaponSkill = 2,
+            WeaponStrength = 6,
+            WeaponArmorPierce = 2,
+            WeaponFlatDamage = 3,
+            WeaponHasLethalHits = true,
+            WeaponHasDevastatingWounds = true,
+            WeaponHasSustainedHits = true,
+            WeaponSustainedHitsValue = 1
+        };
+
+        /// <summary>
         /// Defense profile for a 10 man squad of Space Marine Intercessors
         /// </summary>
-        public static readonly DefenderDTO DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD = new()
+        public static readonly DefenderDTO DEFENDER_MULTI_MODEL = new()
         {
             NumberOfModels = 10,
             Toughness = 4,
@@ -205,7 +256,7 @@ namespace UnitTests
         /// <summary>
         /// Defense profile for a 5 man squad of Space Marine Terminators
         /// </summary>
-        public static readonly DefenderDTO DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD = new()
+        public static readonly DefenderDTO DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE = new()
         {
             NumberOfModels = 5,
             Toughness = 5,
@@ -218,7 +269,7 @@ namespace UnitTests
         /// <summary>
         /// Defense profile for a unit of World Eaters Chaos Spawn
         /// </summary>
-        public static readonly DefenderDTO DEFENDER_WORLD_EATERS_CHAOS_SPAWN = new()
+        public static readonly DefenderDTO DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5 = new()
         {
             NumberOfModels = 2,
             Toughness = 5,
@@ -231,7 +282,7 @@ namespace UnitTests
         /// <summary>
         /// Defense profile for Mortarian, primarch of the Death Guard
         /// </summary>
-        public static readonly DefenderDTO DEFENDER_DEATH_GUARD_MORTARION = new()
+        public static readonly DefenderDTO DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4 = new()
         {
             NumberOfModels = 1,
             Toughness = 12,
@@ -328,7 +379,7 @@ namespace UnitTests
         public void GetProbabilityOfHit_TestParams1()
         {
             var expected = 0.8333;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHit(ATTACKER_KHARN_THE_BETRAYER), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(ATTACKER_SINGLE_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -340,19 +391,7 @@ namespace UnitTests
         public void GetProbabilityOfHit_TestParams2()
         {
             var expected = 0.6667;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHit(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetProbabilityOfHit_TestParams3()
-        {
-            var expected = 0.5;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHit(ATTACKER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(ATTACKER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -377,7 +416,7 @@ namespace UnitTests
         public void GetMeanHits_SingleModelAttacker()
         {
             var expected = 6.6667;
-            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_KHARN_THE_BETRAYER), 4);
+            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_SINGLE_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -389,7 +428,7 @@ namespace UnitTests
         public void GetMeanHits_MultiModelAttacker()
         {
             var expected = 13.3333;
-            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -401,7 +440,7 @@ namespace UnitTests
         public void GetMeanHits_VariableAttacks_SingleModelAttacker()
         {
             var expected = 4;
-            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_WORLD_EATERS_FORGEFIEND), 4);
+            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -413,7 +452,7 @@ namespace UnitTests
         public void GetMeanHits_VariableAttacks_MultiModelAttacker()
         {
             var expected = 6;
-            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN), 4);
+            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_VARIABLE_D6_ATTACKS), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -425,7 +464,7 @@ namespace UnitTests
         public void GetMeanHits_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 20;
-            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -450,7 +489,7 @@ namespace UnitTests
         public void GetExpectedHits_SingleModelAttacker()
         {
             var expected = 6;
-            var actual = CombatMath.GetExpectedHits(ATTACKER_KHARN_THE_BETRAYER);
+            var actual = CombatMath.GetExpectedHits(ATTACKER_SINGLE_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -462,7 +501,7 @@ namespace UnitTests
         public void GetExpectedHits_MultiModelAttacker()
         {
             var expected = 13;
-            var actual = CombatMath.GetExpectedHits(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedHits(ATTACKER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -474,7 +513,7 @@ namespace UnitTests
         public void GetExpectedHits_VariableAttacks_SingleModelAttacker()
         {
             var expected = 4;
-            var actual = CombatMath.GetExpectedHits(ATTACKER_WORLD_EATERS_FORGEFIEND);
+            var actual = CombatMath.GetExpectedHits(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS);
 
             Assert.AreEqual(expected, actual);
         }
@@ -486,7 +525,7 @@ namespace UnitTests
         public void GetExpectedHits_VariableAttacks_MultiModelAttacker()
         {
             var expected = 6;
-            var actual = CombatMath.GetExpectedHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetExpectedHits(ATTACKER_VARIABLE_D6_ATTACKS);
 
             Assert.AreEqual(expected, actual);
         }
@@ -498,7 +537,7 @@ namespace UnitTests
         public void GetExpectedHits_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 20;
-            var actual = CombatMath.GetExpectedHits(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD);
+            var actual = CombatMath.GetExpectedHits(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS);
 
             Assert.AreEqual(expected, actual);
         }
@@ -523,7 +562,7 @@ namespace UnitTests
         public void GetStandardDeviationHits_SingleModelAttacker()
         {
             var expected = 1.0541;
-            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_KHARN_THE_BETRAYER), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_SINGLE_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -535,7 +574,7 @@ namespace UnitTests
         public void GetStandardDeviationHits_MultiModelAttacker()
         {
             var expected = 2.1082;
-            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -547,7 +586,7 @@ namespace UnitTests
         public void GetStandardDeviationHits_VariableAttacks_SingleModelAttacker()
         {
             var expected = 1.1547;
-            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_WORLD_EATERS_FORGEFIEND), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -559,7 +598,7 @@ namespace UnitTests
         public void GetStandardDeviationHits_VariableAttacks_MultiModelAttacker()
         {
             var expected = 1.7321;
-            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_VARIABLE_D6_ATTACKS), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -571,7 +610,7 @@ namespace UnitTests
         public void GetStandardDeviationHits_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 0;
-            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -625,7 +664,7 @@ namespace UnitTests
                 new(8, 0.2326)
             };
 
-            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_KHARN_THE_BETRAYER);
+            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_SINGLE_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -675,7 +714,7 @@ namespace UnitTests
                 new(20, 0.0003)
             };
 
-            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -714,7 +753,7 @@ namespace UnitTests
                 new(9, 0.0260)
             };
 
-            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_WORLD_EATERS_FORGEFIEND);
+            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -760,7 +799,7 @@ namespace UnitTests
                 new(16, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_VARIABLE_D6_ATTACKS);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -820,7 +859,7 @@ namespace UnitTests
                 new(30, 1)
             };
 
-            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -888,7 +927,7 @@ namespace UnitTests
                 new(8, 0.2326)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_KHARN_THE_BETRAYER);
+            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_SINGLE_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -938,7 +977,7 @@ namespace UnitTests
                 new(20, 0.0003)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -977,7 +1016,7 @@ namespace UnitTests
                 new(9, 0.0260)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_WORLD_EATERS_FORGEFIEND);
+            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1023,7 +1062,7 @@ namespace UnitTests
                 new(16, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_VARIABLE_D6_ATTACKS);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1083,7 +1122,7 @@ namespace UnitTests
                 new(30, 1)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1141,7 +1180,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWound_HigherStrength()
         {
             var expected = 0.5556;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1153,7 +1192,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWound_EqualStrengthAndToughness()
         {
             var expected = 0.3333;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1165,7 +1204,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWound_HigherToughness()
         {
             var expected = 0.2222;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1177,7 +1216,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWound_VariableAttacks_SingleModelAttacker()
         {
             var expected = 0.5556;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1189,7 +1228,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWound_VariableAttacks_MultiModelAttacker()
         {
             var expected = 0.3333;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1201,7 +1240,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWound_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 0.6667;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1213,7 +1252,43 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWound_LethalHits()
         {
             var expected = 0.4167;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_SustainedHits1()
+        {
+            var expected = 0.5556;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_SustainedHits2()
+        {
+            var expected = 0.6667;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_SUSTAINED_HITS_2, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_LethalHitsAndSustainedHits1()
+        {
+            var expected = 0.7222;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1257,7 +1332,7 @@ namespace UnitTests
         public void GetMeanWounds_SingleModelAttacker()
         {
             var expected = 4.4444;
-            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1269,7 +1344,7 @@ namespace UnitTests
         public void GetMeanWounds_MultiModelAttacker()
         {
             var expected = 6.6667;
-            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1281,7 +1356,7 @@ namespace UnitTests
         public void GetMeanWounds_VariableAttacks_SingleModelAttacker()
         {
             var expected = 3.3333;
-            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1293,7 +1368,7 @@ namespace UnitTests
         public void GetMeanWounds_VariableAttacks_MultiModelAttacker()
         {
             var expected = 4;
-            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1305,7 +1380,7 @@ namespace UnitTests
         public void GetMeanWounds_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 13.3333;
-            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1317,7 +1392,43 @@ namespace UnitTests
         public void GetMeanWounds_WeaponHasLethalHits()
         {
             var expected = 6.25;
-            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanWounds_SustainedHits1()
+        {
+            var expected = 8.3333;
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanWounds_SustainedHits2()
+        {
+            var expected = 10;
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_SUSTAINED_HITS_2, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanWounds_LethalHitsAndSustainedHits1()
+        {
+            var expected = 5.7778;
+            var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1333,7 +1444,7 @@ namespace UnitTests
         public void GetExpectedWounds_AttackerIsNull()
         {
             var expected = 0;
-            var actual = CombatMath.GetExpectedWounds(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedWounds(null, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -1344,7 +1455,7 @@ namespace UnitTests
         public void GetExpectedWounds_DefenderIsNull()
         {
             var expected = 0;
-            var actual = CombatMath.GetExpectedWounds(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_SINGLE_MODEL, null);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1356,7 +1467,7 @@ namespace UnitTests
         public void GetExpectedWounds_SingleModelAttacker()
         {
             var expected = 4;
-            var actual = CombatMath.GetExpectedWounds(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1368,7 +1479,7 @@ namespace UnitTests
         public void GetExpectedWounds_MultiModelAttacker()
         {
             var expected = 6;
-            var actual = CombatMath.GetExpectedWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1380,7 +1491,7 @@ namespace UnitTests
         public void GetExpectedWounds_VariableAttacks_SingleModelAttacker()
         {
             var expected = 3;
-            var actual = CombatMath.GetExpectedWounds(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1392,7 +1503,7 @@ namespace UnitTests
         public void GetExpectedWounds_VariableAttacks_MultiModelAttacker()
         {
             var expected = 4;
-            var actual = CombatMath.GetExpectedWounds(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1404,7 +1515,7 @@ namespace UnitTests
         public void GetExpectedWounds_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 13;
-            var actual = CombatMath.GetExpectedWounds(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1416,7 +1527,7 @@ namespace UnitTests
         public void GetExpectedWounds_VariableAttacks_WeaponHasLethalHits()
         {
             var expected = 6;
-            var actual = CombatMath.GetExpectedWounds(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedWounds(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1432,7 +1543,7 @@ namespace UnitTests
         public void GetStandardDeviationWounds_AttackerIsNull()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationWounds(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationWounds(null, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1444,7 +1555,7 @@ namespace UnitTests
         public void GetStandardDeviationWounds_DefenderIsNull()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationWounds(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetStandardDeviationWounds(ATTACKER_SINGLE_MODEL, null);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1456,7 +1567,7 @@ namespace UnitTests
         public void GetStandardDeviationWounds_SingleModelAttacker()
         {
             var expected = 1.4055;
-            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1468,7 +1579,7 @@ namespace UnitTests
         public void GetStandardDeviationWounds_MultiModelAttacker()
         {
             var expected = 2.1082;
-            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1480,7 +1591,7 @@ namespace UnitTests
         public void GetStandardDeviationWounds_VariableAttacks_SingleModelAttacker()
         {
             var expected = 1.2172;
-            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1492,7 +1603,7 @@ namespace UnitTests
         public void GetStandardDeviationWounds_VariableAttacks_MultiModelAttacker()
         {
             var expected = 1.633;
-            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1504,7 +1615,7 @@ namespace UnitTests
         public void GetStandardDeviationWounds_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 2.1082;
-            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1516,7 +1627,43 @@ namespace UnitTests
         public void GetStandardDeviationWounds_WeaponHasLethalHits()
         {
             var expected = 1.9094;
-            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationWounds_SustainedHits1()
+        {
+            var expected = 1.9245;
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationWounds_SustainedHits2()
+        {
+            var expected = 1.8257;
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_SUSTAINED_HITS_2, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetStandardDeviationWounds_LethalHitsAndSustainedHits1()
+        {
+            var expected = 1.2669;
+            var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -1532,7 +1679,7 @@ namespace UnitTests
         public void GetBinomialDistributionWounds_AttackerIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetBinomialDistributionWounds(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionWounds(null, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1558,7 +1705,7 @@ namespace UnitTests
         public void GetBinomialDistributionWounds_DefenderIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_SINGLE_MODEL, null);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1596,7 +1743,7 @@ namespace UnitTests
                 new(8, 0.0091)
             };
 
-            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1646,7 +1793,7 @@ namespace UnitTests
                 new(20, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1685,7 +1832,7 @@ namespace UnitTests
                 new(9, 0.0050)
             };
 
-            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1731,7 +1878,7 @@ namespace UnitTests
                 new(16, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1791,7 +1938,7 @@ namespace UnitTests
                 new(30, 0),
             };
 
-            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1836,7 +1983,135 @@ namespace UnitTests
                 new(15, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionWounds_SustainedHits1()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 0),
+                new(1, 0.0001),
+                new(2, 0.0009),
+                new(3, 0.0046),
+                new(4, 0.0174),
+                new(5, 0.0478),
+                new(6, 0.0996),
+                new(7, 0.1600),
+                new(8, 0.2000),
+                new(9, 0.1945),
+                new(10, 0.1459),
+                new(11, 0.0829),
+                new(12, 0.0345),
+                new(13, 0.0100),
+                new(14, 0.0018),
+                new(15, 0.0001)
+            };
+
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionWounds_SustainedHits2()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 0),
+                new(1, 0),
+                new(2, 0),
+                new(3, 0.0003),
+                new(4, 0.0015),
+                new(5, 0.0067),
+                new(6, 0.0223),
+                new(7, 0.0574),
+                new(8, 0.1148),
+                new(9, 0.1786),
+                new(10, 0.2143),
+                new(11, 0.1948),
+                new(12, 0.1299),
+                new(13, 0.0599),
+                new(14, 0.0171),
+                new(15, 0.0023)
+            };
+
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_SUSTAINED_HITS_2, DEFENDER_MULTI_MODEL);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetBinomialDistributionWounds_LethalHitsAndSustainedHits1()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 0),
+                new(1, 0.0007),
+                new(2, 0.0067),
+                new(3, 0.0349),
+                new(4, 0.1134),
+                new(5, 0.2358),
+                new(6, 0.3066),
+                new(7, 0.2278),
+                new(8, 0.0740)
+            };
+
+            var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1866,7 +2141,7 @@ namespace UnitTests
         public void GetSurvivorDistributionWounds_AttackerIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetSurvivorDistributionWounds(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionWounds(null, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1892,7 +2167,7 @@ namespace UnitTests
         public void GetSurvivorDistributionWounds_DefenderIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_SINGLE_MODEL, null);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1930,7 +2205,7 @@ namespace UnitTests
                 new(8, 0.0091)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1980,7 +2255,7 @@ namespace UnitTests
                 new(20, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2019,7 +2294,7 @@ namespace UnitTests
                 new(9, 0.0050)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2065,7 +2340,7 @@ namespace UnitTests
                 new(16, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2125,7 +2400,7 @@ namespace UnitTests
                 new(30, 0),
             };
 
-            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2170,7 +2445,135 @@ namespace UnitTests
                 new(15, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionWounds_SustainedHits1()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 1),
+                new(2, 0.9999),
+                new(3, 0.9990),
+                new(4, 0.9944),
+                new(5, 0.9770),
+                new(6, 0.9292),
+                new(7, 0.8297),
+                new(8, 0.6696),
+                new(9, 0.4696),
+                new(10, 0.2751),
+                new(11, 0.1293),
+                new(12, 0.0464),
+                new(13, 0.0119),
+                new(14, 0.0019),
+                new(15, 0.0001)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionWounds_SustainedHits2()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 1),
+                new(2, 1),
+                new(3, 1),
+                new(4, 0.9997),
+                new(5, 0.9982),
+                new(6, 0.9915),
+                new(7, 0.9692),
+                new(8, 0.9118),
+                new(9, 0.7970),
+                new(10, 0.6184),
+                new(11, 0.4041),
+                new(12, 0.2092),
+                new(13, 0.0794),
+                new(14, 0.0194),
+                new(15, 0.0023)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_SUSTAINED_HITS_2, DEFENDER_MULTI_MODEL);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionWounds_LethalHitsAndSustainedHits1()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 1),
+                new(2, 0.9992),
+                new(3, 0.9925),
+                new(4, 0.9576),
+                new(5, 0.8442),
+                new(6, 0.6084),
+                new(7, 0.3018),
+                new(8, 0.0740)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2200,7 +2603,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWoundAndFailedSave_AttackerIsNull()
         {
             var expected = 0;
-            var actual = CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(null, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2211,7 +2614,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWoundAndFailedSave_DefenderIsNull()
         {
             var expected = 0;
-            var actual = CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_SINGLE_MODEL, null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2222,7 +2625,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWoundAndFailedSave_HigherStrength()
         {
             var expected = 0.3704;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2234,7 +2637,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWoundAndFailedSave_EqualStrengthAndToughness()
         {
             var expected = 0.1667;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2246,7 +2649,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWoundAndFailedSave_HigherToughness()
         {
             var expected = 0.0741;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2258,7 +2661,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWoundAndFailedSave_VariableAttacks_SingleModelAttacker()
         {
             var expected = 0.2778;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2270,7 +2673,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWoundAndFailedSave_VariableAttacks_MultiModelAttacker()
         {
             var expected = 0.1667;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2282,7 +2685,7 @@ namespace UnitTests
         public void GetProbabilityOfHitAndWoundAndFailedSave_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 0.3333;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2293,8 +2696,8 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfHitAndWoundAndFailedSave_LethalHits()
         {
-            var expected = 0.2083;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 0.1667;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2305,8 +2708,8 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfHitAndWoundAndFailedSave_DevastatingWounds()
         {
-            var expected = 0.2963;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_CHAOS_KNIGHT_ABOMINANT, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 0.2593;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2317,8 +2720,8 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfHitAndWoundAndFailedSave_LethalHitsAndDevastatingWounds()
         {
-            var expected = 0.5;
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_KHARN_THE_BETRAYER_BLESSED, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 0.5278;
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2334,7 +2737,7 @@ namespace UnitTests
         public void GetMeanFailedSaves_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetMeanFailedSaves(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetMeanFailedSaves(null, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2345,7 +2748,7 @@ namespace UnitTests
         public void GetMeanFailedSaves_NullDefender()
         {
             var expected = 0;
-            var actual = CombatMath.GetMeanFailedSaves(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetMeanFailedSaves(ATTACKER_SINGLE_MODEL, null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2356,7 +2759,7 @@ namespace UnitTests
         public void GetMeanFailedSaves_SingleModelAttacker()
         {
             var expected = 2.963;
-            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2367,7 +2770,7 @@ namespace UnitTests
         public void GetMeanFailedSaves_MultiModelAttacker()
         {
             var expected = 3.3333;
-            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2378,7 +2781,7 @@ namespace UnitTests
         public void GetMeanFailedSaves_DefenderHasInvulnerableSave()
         {
             var expected = 2.2222;
-            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2389,7 +2792,7 @@ namespace UnitTests
         public void GetMeanFailedSaves_VariableAttacks_SingleModelAttacker()
         {
             var expected = 1.6667;
-            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2401,7 +2804,7 @@ namespace UnitTests
         public void GetMeanFailedSaves_VariableAttacks_MultiModelAttacker()
         {
             var expected = 2;
-            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2413,7 +2816,7 @@ namespace UnitTests
         public void GetMeanFailedSaves_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 6.6667;
-            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2424,8 +2827,44 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanFailedSaves_WeaponHasLethalHits()
         {
-            var expected = 3.125;
-            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 2.5;
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanFailedSaves_WeaponHasSustainedHits1()
+        {
+            var expected = 3.3333;
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanFailedSaves_WeaponHasSustainedHits2()
+        {
+            var expected = 3.3333;
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_SUSTAINED_HITS_2, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanFailedSaves_WeaponHasDevastatingWounds()
+        {
+            var expected = 2.3333;
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2434,10 +2873,34 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetMeanFailedSaves_DevastatingWounds()
+        public void GetMeanFailedSaves_WeaponHasLethalHitsAndSustainedHits1()
         {
-            var expected = 2.6667;
-            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_CHAOS_KNIGHT_ABOMINANT, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 2.963;
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanFailedSaves_WeaponHasLethalHitsAndDevastatingWounds()
+        {
+            var expected = 3.5556;
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with given parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetMeanFailedSaves_WeaponHasSustainedHits1AndDevastatingWounds()
+        {
+            var expected = 3.3333;
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2446,10 +2909,10 @@ namespace UnitTests
         /// Tests the method with a given parameter.
         /// </summary>
         [TestMethod]
-        public void GetMeanFailedSaves_LethalHitsAndDevastatingWounds()
+        public void GetMeanFailedSaves_LethalHitsAndSustainedHits1AndDevastatingWounds()
         {
-            var expected = 4;
-            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_KHARN_THE_BETRAYER_BLESSED, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 4.2222;
+            var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2465,7 +2928,7 @@ namespace UnitTests
         public void GetExpectedFailedSaves_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetExpectedFailedSaves(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedFailedSaves(null, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2476,7 +2939,7 @@ namespace UnitTests
         public void GetExpectedFailedSaves_NullDefender()
         {
             var expected = 0;
-            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_SINGLE_MODEL, null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2487,7 +2950,7 @@ namespace UnitTests
         public void GetExpectedFailedSaves_SingleModelAttacker()
         {
             var expected = 2;
-            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2498,7 +2961,7 @@ namespace UnitTests
         public void GetExpectedFailedSaves_MultiModelAttacker()
         {
             var expected = 3;
-            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2509,7 +2972,7 @@ namespace UnitTests
         public void GetExpectedFailedSaves_DefenderHasInvulnerableSave()
         {
             var expected = 2;
-            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2520,7 +2983,7 @@ namespace UnitTests
         public void GetExpectedFailedSaves_VariableAttacks_SingleModelAttacker()
         {
             var expected = 1;
-            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2532,7 +2995,7 @@ namespace UnitTests
         public void GetExpectedFailedSaves_VariableAttacks_MultiModelAttacker()
         {
             var expected = 2;
-            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2544,7 +3007,7 @@ namespace UnitTests
         public void GetExpectedFailedSaves_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 6;
-            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2555,8 +3018,8 @@ namespace UnitTests
         [TestMethod]
         public void GetExpectedFailedSaves_WeaponHasLethalHits()
         {
-            var expected = 3;
-            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var expected = 2;
+            var actual = CombatMath.GetExpectedFailedSaves(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2572,7 +3035,7 @@ namespace UnitTests
         public void GetStandardDeviationFailedSaves_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationFailedSaves(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationFailedSaves(null, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2583,7 +3046,7 @@ namespace UnitTests
         public void GetStandardDeviationFailedSaves_NullDefender()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationFailedSaves(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SINGLE_MODEL, null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2594,7 +3057,7 @@ namespace UnitTests
         public void GetStandardDeviationFailedSaves_SingleModelAttacker()
         {
             var expected = 1.3659;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2605,7 +3068,7 @@ namespace UnitTests
         public void GetStandardDeviationFailedSaves_MultiModelAttacker()
         {
             var expected = 1.6667;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2616,7 +3079,7 @@ namespace UnitTests
         public void GetStandardDeviationFailedSaves_DefenderHasInvulnerableSave()
         {
             var expected = 1.2669;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2627,7 +3090,7 @@ namespace UnitTests
         public void GetStandardDeviationFailedSaves_VariableAttacks_SingleModelAttacker()
         {
             var expected = 1.0971;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2639,7 +3102,7 @@ namespace UnitTests
         public void GetStandardDeviationFailedSaves_VariableAttacks_MultiModelAttacker()
         {
             var expected = 1.2910;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2651,7 +3114,7 @@ namespace UnitTests
         public void GetStandardDeviationFailedSaves_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 2.1082;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2662,8 +3125,8 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationFailedSaves_WeaponHasLethalHits()
         {
-            var expected = 1.5729;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 1.4434;
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2674,8 +3137,8 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationFailedSaves_DevastatingWounds()
         {
-            var expected = 1.3699;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_CHAOS_KNIGHT_ABOMINANT, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 1.3147;
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2686,8 +3149,8 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationFailedSaves_LethalHitsAndDevastatingWounds()
         {
-            var expected = 1.4142;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_KHARN_THE_BETRAYER_BLESSED, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 1.412;
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -2703,7 +3166,7 @@ namespace UnitTests
         public void GetBinomialDistributionFailedSaves_AttackerIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(null, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2729,7 +3192,7 @@ namespace UnitTests
         public void GetBinomialDistributionFailedSaves_DefenderIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SINGLE_MODEL, null);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2767,7 +3230,7 @@ namespace UnitTests
                 new(8, 0.0004)
             };
 
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2817,7 +3280,7 @@ namespace UnitTests
                 new(20, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2855,7 +3318,7 @@ namespace UnitTests
                 new(8, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2894,7 +3357,7 @@ namespace UnitTests
                 new(9, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2940,7 +3403,7 @@ namespace UnitTests
                 new(16, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3000,7 +3463,7 @@ namespace UnitTests
                 new(30, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3027,17 +3490,17 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0301),
-                new(1, 0.1187),
-                new(2, 0.2187),
-                new(3, 0.2493),
-                new(4, 0.1968),
-                new(5, 0.1140),
-                new(6, 0.0500),
-                new(7, 0.0169),
-                new(8, 0.0045),
-                new(9, 0.0009),
-                new(10, 0.0001),
+                new(0, 0.0649),
+                new(1, 0.1947),
+                new(2, 0.2726),
+                new(3, 0.2363),
+                new(4, 0.1418),
+                new(5, 0.0624),
+                new(6, 0.0208),
+                new(7, 0.0053),
+                new(8, 0.0011),
+                new(9, 0.0002),
+                new(10, 0),
                 new(11, 0),
                 new(12, 0),
                 new(13, 0),
@@ -3045,7 +3508,7 @@ namespace UnitTests
                 new(15, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3072,19 +3535,19 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0423),
-                new(1, 0.1604),
-                new(2, 0.2701),
-                new(3, 0.2653),
-                new(4, 0.1676),
-                new(5, 0.0706),
-                new(6, 0.0198),
-                new(7, 0.0036),
-                new(8, 0.0004),
+                new(0, 0.0671),
+                new(1, 0.2115),
+                new(2, 0.2961),
+                new(3, 0.2418),
+                new(4, 0.1270),
+                new(5, 0.0444),
+                new(6, 0.0104),
+                new(7, 0.0016),
+                new(8, 0.0001),
                 new(9, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_CHAOS_KNIGHT_ABOMINANT, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3111,18 +3574,18 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0039),
-                new(1, 0.0312),
-                new(2, 0.1094),
-                new(3, 0.2188),
-                new(4, 0.2734),
-                new(5, 0.2188),
-                new(6, 0.1094),
-                new(7, 0.0312),
-                new(8, 0.0039)
+                new(0, 0.0025),
+                new(1, 0.0221),
+                new(2, 0.0865),
+                new(3, 0.1933),
+                new(4, 0.2701),
+                new(5, 0.2415),
+                new(6, 0.1349),
+                new(7, 0.0431),
+                new(8, 0.0060)
             };
 
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_KHARN_THE_BETRAYER_BLESSED, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3152,7 +3615,7 @@ namespace UnitTests
         public void GetSurvivorDistributionFailedSaves_AttackerIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(null, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3178,7 +3641,7 @@ namespace UnitTests
         public void GetSurvivorDistributionFailedSaves_DefenderIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SINGLE_MODEL, null);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3216,7 +3679,7 @@ namespace UnitTests
                 new(8, 0.0004)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3266,7 +3729,7 @@ namespace UnitTests
                 new(20, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3304,7 +3767,7 @@ namespace UnitTests
                 new(8, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3343,7 +3806,7 @@ namespace UnitTests
                 new(9, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3389,7 +3852,7 @@ namespace UnitTests
                 new(16, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3449,7 +3912,7 @@ namespace UnitTests
                 new(30, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3477,16 +3940,16 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9699),
-                new(2, 0.8512),
-                new(3, 0.6326),
-                new(4, 0.3832),
-                new(5, 0.1864),
-                new(6, 0.0724),
-                new(7, 0.0224),
-                new(8, 0.0055),
-                new(9, 0.0011),
-                new(10, 0.0002),
+                new(1, 0.9351),
+                new(2, 0.7404),
+                new(3, 0.4678),
+                new(4, 0.2315),
+                new(5, 0.0898),
+                new(6, 0.0274),
+                new(7, 0.0066),
+                new(8, 0.0013),
+                new(9, 0.0002),
+                new(10, 0),
                 new(11, 0),
                 new(12, 0),
                 new(13, 0),
@@ -3494,7 +3957,7 @@ namespace UnitTests
                 new(15, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3522,18 +3985,18 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9577),
-                new(2, 0.7973),
-                new(3, 0.5273),
-                new(4, 0.2619),
-                new(5, 0.0943),
-                new(6, 0.0238),
-                new(7, 0.0040),
-                new(8, 0.0004),
+                new(1, 0.9329),
+                new(2, 0.7214),
+                new(3, 0.4253),
+                new(4, 0.1834),
+                new(5, 0.0565),
+                new(6, 0.0121),
+                new(7, 0.0017),
+                new(8, 0.0001),
                 new(9, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_CHAOS_KNIGHT_ABOMINANT, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3561,17 +4024,176 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9961),
-                new(2, 0.9648),
-                new(3, 0.8555),
-                new(4, 0.6367),
-                new(5, 0.3633),
-                new(6, 0.1445),
-                new(7, 0.0352),
-                new(8, 0.0039)
+                new(1, 0.9975),
+                new(2, 0.9754),
+                new(3, 0.8889),
+                new(4, 0.6956),
+                new(5, 0.4255),
+                new(6, 0.1841),
+                new(7, 0.0491),
+                new(8, 0.0060)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_KHARN_THE_BETRAYER_BLESSED, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionFailedSaves_SustainedHits1()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.9753),
+                new(2, 0.8591),
+                new(3, 0.6198),
+                new(4, 0.3382),
+                new(5, 0.1312),
+                new(6, 0.0338),
+                new(7, 0.0052),
+                new(8, 0.0004)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionFailedSaves_SustainedHits2()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.9769),
+                new(2, 0.8781),
+                new(3, 0.6805),
+                new(4, 0.4358),
+                new(5, 0.2260),
+                new(6, 0.0942),
+                new(7, 0.0314),
+                new(8, 0.0083),
+                new(9, 0.0018),
+                new(10, 0.0003),
+                new(11, 0),
+                new(12, 0),
+                new(13, 0),
+                new(14, 0),
+                new(15, 0)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SUSTAINED_HITS_2, DEFENDER_MULTI_MODEL);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionFailedSaves_LethalHitsAndSustainedHits1()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.9753),
+                new(2, 0.8591),
+                new(3, 0.6198),
+                new(4, 0.3382),
+                new(5, 0.1312),
+                new(6, 0.0338),
+                new(7, 0.0052),
+                new(8, 0.0004)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL);
+
+            // Print expected
+            Debug.WriteLine($"Expected: ");
+            foreach (var value in expected)
+            {
+                Debug.WriteLine(value);
+            }
+
+            // Print actual
+            Debug.WriteLine($"Actual: ");
+            foreach (var value in actual)
+            {
+                Debug.WriteLine(value);
+            }
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the method with a given parameter.
+        /// </summary>
+        [TestMethod]
+        public void GetSurvivorDistributionFailedSaves_LethalHitsAndSustainedHits1AndDevastatingWounds()
+        {
+            var expected = new List<BinomialOutcome>()
+            {
+                new(0, 1),
+                new(1, 0.9975),
+                new(2, 0.9754),
+                new(3, 0.8889),
+                new(4, 0.6956),
+                new(5, 0.4255),
+                new(6, 0.1841),
+                new(7, 0.0491),
+                new(8, 0.0060)
+            };
+
+            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3601,7 +4223,7 @@ namespace UnitTests
         public void GetMeanDamage_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetMeanDamage(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetMeanDamage(null, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3612,7 +4234,7 @@ namespace UnitTests
         public void GetMeanDamage_NullDefender()
         {
             var expected = 0;
-            var actual = CombatMath.GetMeanDamage(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetMeanDamage(ATTACKER_SINGLE_MODEL, null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3623,7 +4245,7 @@ namespace UnitTests
         public void GetMeanDamage_SingleModelAttacker_NoDefenderSpecialRules()
         {
             var expected = 8.8889;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3634,7 +4256,7 @@ namespace UnitTests
         public void GetMeanDamage_MultiModelAttacker_NoDefenderSpecialRules()
         {
             var expected = 3.3333;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3645,7 +4267,7 @@ namespace UnitTests
         public void GetMeanDamage_SingleModelAttacker_DefenderHasFeelNoPains()
         {
             var expected = 1.6667;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_DEATH_GUARD_MORTARION), 4);
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SINGLE_MODEL, DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3656,7 +4278,7 @@ namespace UnitTests
         public void GetMeanDamage_MultiModelAttacker_DefenderHasFeelNoPains()
         {
             var expected = 2.963;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN), 4);
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3667,7 +4289,7 @@ namespace UnitTests
         public void GetMeanDamage_DefenderHasInvulnerableSave()
         {
             var expected = 6.6667;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3678,7 +4300,7 @@ namespace UnitTests
         public void GetMeanDamage_VariableAttacks_SingleModelAttacker()
         {
             var expected = 5;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3690,7 +4312,7 @@ namespace UnitTests
         public void GetMeanDamage_VariableAttacks_MultiModelAttacker()
         {
             var expected = 4;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3702,7 +4324,7 @@ namespace UnitTests
         public void GetMeanDamage_SingleModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 14.8148;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3713,7 +4335,7 @@ namespace UnitTests
         public void GetMeanDamage_MultiModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 13.3333;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3724,7 +4346,7 @@ namespace UnitTests
         public void GetMeanDamage_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 6.6667;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3735,8 +4357,8 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanDamage_WeaponHasLethalHits()
         {
-            var expected = 6.25;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 5;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3747,8 +4369,8 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanDamage_DevastatingWounds()
         {
-            var expected = 8;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_CHAOS_KNIGHT_ABOMINANT, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 7;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3759,8 +4381,8 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanDamage_LethalHitsAndDevastatingWounds()
         {
-            var expected = 12;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_KHARN_THE_BETRAYER_BLESSED, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 12.6667;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3776,7 +4398,7 @@ namespace UnitTests
         public void GetExpectedDamage_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetExpectedDamage(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDamage(null, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3787,7 +4409,7 @@ namespace UnitTests
         public void GetExpectedDamage_NullDefender()
         {
             var expected = 0;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_SINGLE_MODEL, null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3798,7 +4420,7 @@ namespace UnitTests
         public void GetExpectedDamage_SingleModelAttacker_NoDefenderSpecialRules()
         {
             var expected = 8;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3809,7 +4431,7 @@ namespace UnitTests
         public void GetExpectedDamage_MultiModelAttacker_NoDefenderSpecialRules()
         {
             var expected = 3;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3820,7 +4442,7 @@ namespace UnitTests
         public void GetExpectedDamage_SingleModelAttacker_DefenderHasFeelNoPains()
         {
             var expected = 1;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_DEATH_GUARD_MORTARION);
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_SINGLE_MODEL, DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3831,7 +4453,7 @@ namespace UnitTests
         public void GetExpectedDamage_MultiModelAttacker_DefenderHasFeelNoPains()
         {
             var expected = 2;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3842,7 +4464,7 @@ namespace UnitTests
         public void GetExpectedDamage_DefenderHasInvulnerableSave()
         {
             var expected = 6;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3853,7 +4475,7 @@ namespace UnitTests
         public void GetExpectedDamage_VariableAttacks_SingleModelAttacker()
         {
             var expected = 5;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3865,7 +4487,7 @@ namespace UnitTests
         public void GetExpectedDamage_VariableAttacks_MultiModelAttacker()
         {
             var expected = 4;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3877,7 +4499,7 @@ namespace UnitTests
         public void GetExpectedDamage_SingleModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 14;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3888,7 +4510,7 @@ namespace UnitTests
         public void GetExpectedDamage_MultiModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 13;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3899,7 +4521,7 @@ namespace UnitTests
         public void GetExpectedDamage_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 6;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3910,8 +4532,8 @@ namespace UnitTests
         [TestMethod]
         public void GetExpectedDamage_WeaponHasLethalHits()
         {
-            var expected = 6;
-            var actual = CombatMath.GetExpectedDamage(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var expected = 5;
+            var actual = CombatMath.GetExpectedDamage(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3927,7 +4549,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDamage(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDamage(null, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3938,7 +4560,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_NullDefender()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDamage(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetStandardDeviationDamage(ATTACKER_SINGLE_MODEL, null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3949,7 +4571,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_SingleModelAttacker_NoDefenderSpecialRules()
         {
             var expected = 4.0976;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3960,7 +4582,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_MultiModelAttacker_NoDefenderSpecialRules()
         {
             var expected = 1.6667;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3971,7 +4593,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_SingleModelAttacker_DefenderHasFeelNoPains()
         {
             var expected = 2.157;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_DEATH_GUARD_MORTARION), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SINGLE_MODEL, DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3982,7 +4604,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_MultiModelAttacker_DefenderHasFeelNoPains()
         {
             var expected = 1.5887;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -3993,7 +4615,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_DefenderHasInvulnerableSave()
         {
             var expected = 3.8006;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4004,7 +4626,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_VariableAttacks_SingleModelAttacker()
         {
             var expected = 3.2914;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4016,7 +4638,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_VariableAttacks_MultiModelAttacker()
         {
             var expected = 2.582;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4028,7 +4650,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_MultiModelAttacker_VariableAttacks_DefenderHasFeelNoPains()
         {
             var expected = 2.8803;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_WORLD_EATERS_CHAOS_SPAWN), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4039,7 +4661,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_SingleModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 6.8293;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4050,7 +4672,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_MultiModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 5.5777;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4061,7 +4683,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_MultiModelAttacker_VariableDamage_DefenderHasFeelNoPains()
         {
             var expected = 5.3333;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4072,7 +4694,7 @@ namespace UnitTests
         public void GetStandardDeviationDamage_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 2.1082;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4083,8 +4705,8 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationDamage_WeaponHasLethalHits()
         {
-            var expected = 3.1458;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 2.8868;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4095,8 +4717,8 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationDamage_DevastatingWounds()
         {
-            var expected = 4.1096;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_CHAOS_KNIGHT_ABOMINANT, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 3.9441;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4107,8 +4729,8 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationDamage_LethalHitsAndDevastatingWounds()
         {
-            var expected = 4.2426;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_KHARN_THE_BETRAYER_BLESSED, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 4.2361;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4124,7 +4746,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetMeanDestroyedModels(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetMeanDestroyedModels(null, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4135,7 +4757,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_NullDefender()
         {
             var expected = 0;
-            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL, null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4146,7 +4768,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_SingleModelAttacker_NoDefenderSpecialRules()
         {
             var expected = 2;
-            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4157,7 +4779,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_MultiModelAttacker_NoDefenderSpecialRules()
         {
             var expected = 1;
-            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4168,7 +4790,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_SingleModelAttacker_DefenderHasFeelNoPains()
         {
             var expected = 0;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_DEATH_GUARD_MORTARION), 4);
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL, DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4179,7 +4801,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_MultiModelAttacker_DefenderHasFeelNoPains()
         {
             var expected = 0;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN), 4);
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4190,7 +4812,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_DefenderHasInvulnerableSave()
         {
             var expected = 2;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4201,7 +4823,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_VariableAttacks_SingleModelAttacker()
         {
             var expected = 1;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4213,7 +4835,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_VariableAttacks_MultiModelAttacker()
         {
             var expected = 2;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4225,7 +4847,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_MultiModelAttacker_VariableAttacks_DefenderHasFeelNoPains()
         {
             var expected = 0;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_WORLD_EATERS_CHAOS_SPAWN), 4);
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4236,7 +4858,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_SingleModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 2;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4247,7 +4869,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_MultiModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 3;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4258,7 +4880,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_MultiModelAttacker_VariableDamage_DefenderHasFeelNoPains()
         {
             var expected = 1;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN), 4);
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4269,7 +4891,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 3;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4280,8 +4902,8 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanDestroyedModels_WeaponHasLethalHits()
         {
-            var expected = 3;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var expected = 2;
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4293,7 +4915,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_DevastatingWounds()
         {
             var expected = 2;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_CHAOS_KNIGHT_ABOMINANT, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4305,7 +4927,7 @@ namespace UnitTests
         public void GetMeanDestroyedModels_LethalHitsAndDevastatingWounds()
         {
             var expected = 4;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_KHARN_THE_BETRAYER_BLESSED, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD), 4);
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4321,7 +4943,7 @@ namespace UnitTests
         public void GetExpectedDestroyedModels_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetExpectedDestroyedModels(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDestroyedModels(null, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4332,7 +4954,7 @@ namespace UnitTests
         public void GetExpectedDestroyedModels_NullDefender()
         {
             var expected = 0;
-            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_SINGLE_MODEL, null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4343,7 +4965,7 @@ namespace UnitTests
         public void GetExpectedDestroyedModels_SingleModelAttacker_NoDefenderSpecialRules()
         {
             var expected = 2;
-            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4354,7 +4976,7 @@ namespace UnitTests
         public void GetExpectedDestroyedModels_MultiModelAttacker_NoDefenderSpecialRules()
         {
             var expected = 1;
-            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4365,7 +4987,7 @@ namespace UnitTests
         public void GetExpectedDestroyedModels_SingleModelAttacker_DefenderHasInvulnerableSave()
         {
             var expected = 1;
-            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4376,7 +4998,7 @@ namespace UnitTests
         public void GetExpectedDestroyedModels_SingleModelAttacker_VariableAttacks_DefenderHasFeelNoPain()
         {
             var expected = 1;
-            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4387,7 +5009,7 @@ namespace UnitTests
         public void GetExpectedDestroyedModels_MultiModelAttacker_VariableAttacks_DefenderHasFeelNoPain()
         {
             var expected = 0;
-            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4398,7 +5020,7 @@ namespace UnitTests
         public void GetExpectedDestroyedModels_SingleModelAttacker_VariableDamage()
         {
             var expected = 2;
-            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4409,7 +5031,7 @@ namespace UnitTests
         public void GetExpectedDestroyedModels_MultiModelAttacker_VariableDamage()
         {
             var expected = 3;
-            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetExpectedDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4424,7 +5046,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_NullAttacker()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(null, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4435,7 +5057,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_NullDefender()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL, null);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4446,7 +5068,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_SingleModelAttacker_NoDefenderSpecialRules()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4457,7 +5079,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_MultiModelAttacker_NoDefenderSpecialRules()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4468,7 +5090,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_SingleModelAttacker_DefenderHasFeelNoPains()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_DEATH_GUARD_MORTARION);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL, DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4479,7 +5101,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_MultiModelAttacker_DefenderHasFeelNoPains()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4490,7 +5112,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_DefenderHasInvulnerableSave()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4501,7 +5123,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_VariableAttacks_SingleModelAttacker()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4513,7 +5135,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_VariableAttacks_MultiModelAttacker()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4525,7 +5147,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_MultiModelAttacker_VariableAttacks_DefenderHasFeelNoPains()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4536,7 +5158,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_SingleModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4547,7 +5169,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_MultiModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4558,7 +5180,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_MultiModelAttacker_VariableDamage_DefenderHasFeelNoPains()
         {
             var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
             Assert.AreEqual(expected, actual);
         }
 
@@ -4569,7 +5191,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4581,7 +5203,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_WeaponHasLethalHits()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4593,7 +5215,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_DevastatingWounds()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_CHAOS_KNIGHT_ABOMINANT, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4605,7 +5227,7 @@ namespace UnitTests
         public void GetStandardDeviationDestroyedModels_LethalHitsAndDevastatingWounds()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_KHARN_THE_BETRAYER_BLESSED, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL);
 
             Assert.AreEqual(expected, actual);
         }
@@ -4621,7 +5243,7 @@ namespace UnitTests
         public void GetBinomialDistributionDestroyedModels_AttackerIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(null, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -4647,7 +5269,7 @@ namespace UnitTests
         public void GetBinomialDistributionDestroyedModels_DefenderIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL, null);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -4685,7 +5307,7 @@ namespace UnitTests
                 new(8, 0.0004)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -4725,7 +5347,7 @@ namespace UnitTests
                 new(10, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -4756,7 +5378,7 @@ namespace UnitTests
                 new(1, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_DEATH_GUARD_MORTARION);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL, DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -4791,7 +5413,7 @@ namespace UnitTests
                 new(5, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -4829,7 +5451,7 @@ namespace UnitTests
                 new(8, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -4868,7 +5490,7 @@ namespace UnitTests
                 new(9, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -4914,7 +5536,7 @@ namespace UnitTests
                 new(16, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -4948,7 +5570,7 @@ namespace UnitTests
                 new(4, 0.0025)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -4986,7 +5608,7 @@ namespace UnitTests
                 new(8, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5031,7 +5653,7 @@ namespace UnitTests
                 new(15, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5069,7 +5691,7 @@ namespace UnitTests
                 new(8, 0.0004)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5107,7 +5729,7 @@ namespace UnitTests
                     new(8, 0.0005)
                 };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5145,7 +5767,7 @@ namespace UnitTests
                 new(8, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5190,7 +5812,7 @@ namespace UnitTests
                 new(15, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5217,17 +5839,17 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0301),
-                new(1, 0.1187),
-                new(2, 0.2187),
-                new(3, 0.2493),
-                new(4, 0.1968),
-                new(5, 0.1140),
-                new(6, 0.0500),
-                new(7, 0.0169),
-                new(8, 0.0045),
-                new(9, 0.0009),
-                new(10, 0.0001),
+                new(0, 0.0649),
+                new(1, 0.1947),
+                new(2, 0.2726),
+                new(3, 0.2363),
+                new(4, 0.1418),
+                new(5, 0.0624),
+                new(6, 0.0208),
+                new(7, 0.0053),
+                new(8, 0.0011),
+                new(9, 0.0002),
+                new(10, 0),
                 new(11, 0),
                 new(12, 0),
                 new(13, 0),
@@ -5235,7 +5857,7 @@ namespace UnitTests
                 new(15, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5262,19 +5884,19 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0423),
-                new(1, 0.1604),
-                new(2, 0.2701),
-                new(3, 0.2653),
-                new(4, 0.1676),
-                new(5, 0.0706),
-                new(6, 0.0198),
-                new(7, 0.0036),
-                new(8, 0.0004),
+                new(0, 0.0671),
+                new(1, 0.2115),
+                new(2, 0.2961),
+                new(3, 0.2418),
+                new(4, 0.1270),
+                new(5, 0.0444),
+                new(6, 0.0104),
+                new(7, 0.0016),
+                new(8, 0.0001),
                 new(9, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_CHAOS_KNIGHT_ABOMINANT, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5301,18 +5923,18 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0039),
-                new(1, 0.0312),
-                new(2, 0.1094),
-                new(3, 0.2188),
-                new(4, 0.2734),
-                new(5, 0.2188),
-                new(6, 0.1094),
-                new(7, 0.0312),
-                new(8, 0.0039)
+                new(0, 0.0025),
+                new(1, 0.0221),
+                new(2, 0.0865),
+                new(3, 0.1933),
+                new(4, 0.2701),
+                new(5, 0.2415),
+                new(6, 0.1349),
+                new(7, 0.0431),
+                new(8, 0.0060)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER_BLESSED, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5342,7 +5964,7 @@ namespace UnitTests
         public void GetSurvivorDistributionDestroyedModels_AttackerIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(null, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(null, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5368,7 +5990,7 @@ namespace UnitTests
         public void GetSurvivorDistributionDestroyedModels_DefenderIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, null);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL, null);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5406,7 +6028,7 @@ namespace UnitTests
                 new(8, 0.0004)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5446,7 +6068,7 @@ namespace UnitTests
                 new(10, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5477,7 +6099,7 @@ namespace UnitTests
                 new(1, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_DEATH_GUARD_MORTARION);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL, DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5512,7 +6134,7 @@ namespace UnitTests
                 new(5, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INTERCESSOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5550,7 +6172,7 @@ namespace UnitTests
                 new(8, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5589,7 +6211,7 @@ namespace UnitTests
                 new(9, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_SPACE_MARINE_TERMINATOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5635,7 +6257,7 @@ namespace UnitTests
                 new(16, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5669,7 +6291,7 @@ namespace UnitTests
                 new(4, 0.0025)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_WORLD_EATERS_FORGEFIEND, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5707,7 +6329,7 @@ namespace UnitTests
                 new(8, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_WORLD_EATERS_CHAOS_SPAWN, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5752,7 +6374,7 @@ namespace UnitTests
                 new(15, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5790,7 +6412,7 @@ namespace UnitTests
                 new(8, 0.0004)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_WORLD_EATERS_MAULERFIEND, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5828,7 +6450,7 @@ namespace UnitTests
                 new(8, 0.0005)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5866,7 +6488,7 @@ namespace UnitTests
                 new(8, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_ADEPTA_SORORITAS_RETRIBUTOR_SQUAD, DEFENDER_WORLD_EATERS_CHAOS_SPAWN);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5911,7 +6533,7 @@ namespace UnitTests
                 new(15, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SPACE_MARINE_INFERNUS_SQUAD, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5939,16 +6561,16 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9699),
-                new(2, 0.8512),
-                new(3, 0.6326),
-                new(4, 0.3832),
-                new(5, 0.1864),
-                new(6, 0.0724),
-                new(7, 0.0224),
-                new(8, 0.0055),
-                new(9, 0.0011),
-                new(10, 0.0002),
+                new(1, 0.9351),
+                new(2, 0.7404),
+                new(3, 0.4678),
+                new(4, 0.2315),
+                new(5, 0.0898),
+                new(6, 0.0274),
+                new(7, 0.0066),
+                new(8, 0.0013),
+                new(9, 0.0002),
+                new(10, 0),
                 new(11, 0),
                 new(12, 0),
                 new(13, 0),
@@ -5956,7 +6578,7 @@ namespace UnitTests
                 new(15, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_ADEPTA_SORORITAS_CELESTIAN_SACRESANTS, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_LETHAL_HITS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5984,18 +6606,18 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9577),
-                new(2, 0.7973),
-                new(3, 0.5273),
-                new(4, 0.2619),
-                new(5, 0.0943),
-                new(6, 0.0238),
-                new(7, 0.0040),
-                new(8, 0.0004),
+                new(1, 0.9329),
+                new(2, 0.7214),
+                new(3, 0.4253),
+                new(4, 0.1834),
+                new(5, 0.0565),
+                new(6, 0.0121),
+                new(7, 0.0017),
+                new(8, 0.0001),
                 new(9, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_CHAOS_KNIGHT_ABOMINANT, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -6023,17 +6645,17 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.9961),
-                new(2, 0.9648),
-                new(3, 0.8555),
-                new(4, 0.6367),
-                new(5, 0.3633),
-                new(6, 0.1445),
-                new(7, 0.0352),
-                new(8, 0.0039)
+                new(1, 0.9975),
+                new(2, 0.9754),
+                new(3, 0.8889),
+                new(4, 0.6956),
+                new(5, 0.4255),
+                new(6, 0.1841),
+                new(7, 0.0491),
+                new(8, 0.0060)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_KHARN_THE_BETRAYER_BLESSED, DEFENDER_SPACE_MARINE_INTERCESSOR_SQUAD);
+            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
