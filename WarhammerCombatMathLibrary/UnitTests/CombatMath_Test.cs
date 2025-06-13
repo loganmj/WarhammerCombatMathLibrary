@@ -617,16 +617,16 @@ namespace UnitTests
 
         #endregion
 
-        #region Unit Tests - GetBinomialDistributionHits()
+        #region Unit Tests - GetDistributionHits()
 
         /// <summary>
         /// Tests the case where the attacker parameter is null.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionHits_AttackerIsNull()
+        public void GetDistributionHits_AttackerIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetBinomialDistributionHits(null);
+            var actual = CombatMath.GetDistributionHits(null);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -649,7 +649,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionHits_SingleModelAttacker()
+        public void GetDistributionHits_BinomialDistribution()
         {
             var expected = new List<BinomialOutcome>
             {
@@ -664,7 +664,7 @@ namespace UnitTests
                 new(8, 0.2326)
             };
 
-            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_SINGLE_MODEL);
+            var actual = CombatMath.GetDistributionHits(ATTACKER_SINGLE_MODEL);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -687,232 +687,7 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionHits_MultiModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0),
-                new(1, 0),
-                new(2, 0),
-                new(3, 0),
-                new(4, 0),
-                new(5, 0.0001),
-                new(6, 0.0007),
-                new(7, 0.0028),
-                new(8, 0.0092),
-                new(9, 0.0247),
-                new(10, 0.0543),
-                new(11, 0.0987),
-                new(12, 0.148),
-                new(13, 0.1821),
-                new(14, 0.1821),
-                new(15, 0.1457),
-                new(16, 0.0911),
-                new(17, 0.0429),
-                new(18, 0.0143),
-                new(19, 0.003),
-                new(20, 0.0003)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_MULTI_MODEL);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionHits_VariableAttacks_SingleModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0079),
-                new(1, 0.0555),
-                new(2, 0.1501),
-                new(3, 0.2101),
-                new(4, 0.2309),
-                new(5, 0.2361),
-                new(6, 0.2097),
-                new(7, 0.1496),
-                new(8, 0.0780),
-                new(9, 0.0260)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionHits_VariableAttacks_MultiModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0028),
-                new(1, 0.0199),
-                new(2, 0.0623),
-                new(3, 0.1182),
-                new(4, 0.1575),
-                new(5, 0.1659),
-                new(6, 0.1516),
-                new(7, 0.1371),
-                new(8, 0.1111),
-                new(9, 0.0786),
-                new(10, 0.0475),
-                new(11, 0.0239),
-                new(12, 0.0098),
-                new(13, 0.0032),
-                new(14, 0.0008),
-                new(15, 0.0001),
-                new(16, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_VARIABLE_D6_ATTACKS);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionHits_VariableAttacks_WeaponHasTorrent()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0),
-                new(1, 0),
-                new(2, 0),
-                new(3, 0),
-                new(4, 0),
-                new(5, 0),
-                new(6, 0),
-                new(7, 0),
-                new(8, 0),
-                new(9, 0),
-                new(10, 0),
-                new(11, 0),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0),
-                new(16, 0),
-                new(17, 0),
-                new(18, 0),
-                new(19, 0),
-                new(20, 0),
-                new(21, 0),
-                new(22, 0),
-                new(23, 0),
-                new(24, 0),
-                new(25, 0),
-                new(26, 0),
-                new(27, 0),
-                new(28, 0),
-                new(29, 0),
-                new(30, 1)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionHits(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        #endregion
-
-        #region Unit Tests - GetSurvivorDistributionHits()
-
-        /// <summary>
-        /// Tests the case where the attacker parameter is null.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionHits_AttackerIsNull()
-        {
-            var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetSurvivorDistributionHits(null);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionHits_SingleModelAttacker()
+        public void GetDistributionHits_CumulativeDistribution()
         {
             var expected = new List<BinomialOutcome>
             {
@@ -927,7 +702,7 @@ namespace UnitTests
                 new(8, 0.2326)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_SINGLE_MODEL);
+            var actual = CombatMath.GetDistributionHits(ATTACKER_SINGLE_MODEL, DistributionTypes.Cumulative);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -950,179 +725,22 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetSurvivorDistributionHits_MultiModelAttacker()
+        public void GetDistributionHits_SurvivorDistribution()
         {
-            var expected = new List<BinomialOutcome>()
+            var expected = new List<BinomialOutcome>
             {
                 new(0, 1),
                 new(1, 1),
                 new(2, 1),
-                new(3, 1),
-                new(4, 1),
-                new(5, 1),
-                new(6, 0.9998),
-                new(7, 0.9991),
-                new(8, 0.9963),
-                new(9, 0.9870),
-                new(10, 0.9624),
-                new(11, 0.9081),
-                new(12, 0.8095),
-                new(13, 0.6615),
-                new(14, 0.4793),
-                new(15, 0.2972),
-                new(16, 0.1515),
-                new(17, 0.0604),
-                new(18, 0.0176),
-                new(19, 0.0033),
-                new(20, 0.0003)
+                new(3, 0.9996),
+                new(4, 0.9954),
+                new(5, 0.9693),
+                new(6, 0.8652),
+                new(7, 0.6047),
+                new(8, 0.2326)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_MULTI_MODEL);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionHits_VariableAttacks_SingleModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 1),
-                new(2, 1),
-                new(3, 1),
-                new(4, 0.9303),
-                new(5, 0.6994),
-                new(6, 0.4633),
-                new(7, 0.2536),
-                new(8, 0.1040),
-                new(9, 0.0260)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionHits_VariableAttacks_MultiModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 1),
-                new(2, 1),
-                new(3, 1),
-                new(4, 0.8872),
-                new(5, 0.7297),
-                new(6, 0.5638),
-                new(7, 0.4121),
-                new(8, 0.2751),
-                new(9, 0.1639),
-                new(10, 0.0853),
-                new(11, 0.0378),
-                new(12, 0.0139),
-                new(13, 0.0041),
-                new(14, 0.0009),
-                new(15, 0.0002),
-                new(16, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_VARIABLE_D6_ATTACKS);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the weapon has torrent.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionHits_VariableAttacks_WeaponHasTorrent()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 1),
-                new(2, 1),
-                new(3, 1),
-                new(4, 1),
-                new(5, 1),
-                new(6, 1),
-                new(7, 1),
-                new(8, 1),
-                new(9, 1),
-                new(10, 1),
-                new(11, 1),
-                new(12, 1),
-                new(13, 1),
-                new(14, 1),
-                new(15, 1),
-                new(16, 1),
-                new(17, 1),
-                new(18, 1),
-                new(19, 1),
-                new(20, 1),
-                new(21, 1),
-                new(22, 1),
-                new(23, 1),
-                new(24, 1),
-                new(25, 1),
-                new(26, 1),
-                new(27, 1),
-                new(28, 1),
-                new(29, 1),
-                new(30, 1)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionHits(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS);
+            var actual = CombatMath.GetDistributionHits(ATTACKER_SINGLE_MODEL, DistributionTypes.Survivor);
 
             // Print expected
             Debug.WriteLine($"Expected: ");

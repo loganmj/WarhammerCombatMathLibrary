@@ -15,6 +15,16 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         private const int POSSIBLE_RESULTS_SIX_SIDED_DIE = 6;
 
+        /// <summary>
+        /// A result of 1 on a die is always considered a failure.
+        /// </summary>
+        private const int AUTOMATIC_FAIL_RESULT = 1;
+
+        /// <summary>
+        /// The maximum result of a die is always considered a success.
+        /// </summary>
+        private const int AUTOMATIC_SUCCESS_RESULT = 6;
+
         #endregion
 
         #region Private Methods
@@ -53,15 +63,8 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <returns>An integer value containing the average number of attacks made by the attacking unit.</returns>
-        private static int GetAverageAttacks(AttackerDTO? attacker)
+        private static int GetAverageAttacks(AttackerDTO attacker)
         {
-            // If attacker parameter is null, return 0
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetAverageAttacks() | Attacker is null, returning 0 ...");
-                return 0;
-            }
-
             // If either the number of models or the weapon attacks is less than 1, return 0.
             if (attacker.NumberOfModels < 1)
             {
@@ -88,15 +91,8 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <returns>An integer value containing the minimum number attacks made by the attacking unit.</returns>
-        private static int GetMinimumAttacks(AttackerDTO? attacker)
+        private static int GetMinimumAttacks(AttackerDTO attacker)
         {
-            // If attacker parameter is null, return 0
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetMinimumAttacks() | Attacker is null, returning 0 ...");
-                return 0;
-            }
-
             // If either the number of models or the weapon attacks is less than 1, return 0.
             if (attacker.NumberOfModels < 1)
             {
@@ -121,15 +117,8 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <returns>An integer value containing the maximum number attacks made by the attacking unit.</returns>
-        private static int GetMaximumAttacks(AttackerDTO? attacker)
+        private static int GetMaximumAttacks(AttackerDTO attacker)
         {
-            // If attacker parameter is null, return 0
-            if (attacker == null)
-            {
-                Debug.WriteLine($"GetMaximumAttacks() | Attacker is null, returning 0 ...");
-                return 0;
-            }
-
             // If either the number of models or the weapon attacks is less than 1, return 0.
             if (attacker.NumberOfModels < 1)
             {
@@ -152,29 +141,112 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Gets the base probability of hit roll success of the attacker.
+        /// This takes into account the attacker's weapon skill.
+        /// </summary>
+        /// <param name="attacker">The attacker data object</param>
+        /// <returns>A double containing the base probability of a successful hit roll</returns>
+        private static double GetBaseProbabilityOfHit(AttackerDTO attacker)
+        {
+            // Validate inputs
+            if (attacker.WeaponSkill <= 0)
+            {
+                Debug.WriteLine($"GetBaseProbabilityOfHit() | Attacker weapon skill is less than or equal to 0, returning 0 ...");
+                return 0;
+            }
+
+            // Account for the fact that the smallest possible result on the die is considered an automatic failure,
+            // and should not count as part of the success threshold
+            var hitSuccessThreshold = attacker.WeaponSkill == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : attacker.WeaponSkill;
+            return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(hitSuccessThreshold));
+        }
+
+        /// <summary>
+        /// Gets the probability of a critical hit.
+        /// This is based on the critical hit threshold of the attacker.
+        /// </summary>
+        /// <param name="attacker">The attacker data object</param>
+        /// <returns>A double containing the probability of a critical hit roll</returns>
+        private static double GetProbabilityOfCriticalHit(AttackerDTO attacker)
+        {
+            // If critical hit threshold is out of bounds, return base result
+            if (attacker.CriticalHitThreshold <= 0 || attacker.CriticalHitThreshold >= 7)
+            {
+                return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
+            }
+
+            // Account for the fact that the smallest possible result on the die is considered an automatic failure,
+            // and should not count as part of the success threshold
+            var adjustedCriticalHitThreshold = attacker.CriticalHitThreshold == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : attacker.CriticalHitThreshold;
+            return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(adjustedCriticalHitThreshold));
+        }
+
+        /// <summary>
+        /// Gets the probability of a normal (non-critical) hit roll success.
+        /// </summary>
+        /// <param name="attacker">The attacker data object</param>
+        /// <returns>A double containing the probability of a non-critical hit roll</returns>
+        private static double GetProbabilityOfNormalHit(AttackerDTO attacker)
+        {
+            return GetBaseProbabilityOfHit(attacker) - GetProbabilityOfCriticalHit(attacker);
+        }
+
+
+        /// <summary>
+        /// Get the probability of failing a hit roll and re-rolling it into a success.
+        /// </summary>
+        /// <returns></returns>
+        private static double GetProbabilityOfFailedHitAndRerolledHit(double probabilityOfHit)
+        {
+            return (1 - probabilityOfHit) * probabilityOfHit;
+        }
+
+        /// <summary>
+        /// Get the probability of rolling a hit roll of 1 and re-rolling it into a success
+        /// </summary>
+        /// <param name="probabilityOfHit"></param>
+        /// <returns></returns>
+        private static double GetProbabilityOfHitRollOf1AndRerolledHit(double probabilityOfHit)
+        {
+            return (1.0 / POSSIBLE_RESULTS_SIX_SIDED_DIE) * probabilityOfHit;
+        }
+
+        /// <summary>
         /// Returns the adjusted armor save of the defender after applying the attacker's armor pierce.
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        private static int GetAdjustedArmorSaveThreshold(AttackerDTO? attacker, DefenderDTO? defender)
+        private static int GetAdjustedArmorSaveThreshold(AttackerDTO attacker, DefenderDTO defender)
         {
-            if (attacker == null)
+            if ((defender.ArmorSave <= 0 && defender.InvulnerableSave <= 0)
+                || (defender.ArmorSave <= 0 && defender.InvulnerableSave >= 7)
+                || (defender.ArmorSave >= 7 && defender.InvulnerableSave <= 0)
+                || (defender.ArmorSave >= 7 && defender.InvulnerableSave >= 7))
             {
-                Debug.WriteLine($"GetAdjustedArmorSave() | Attacker is null, returning 0 ...");
-                return 0;
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetAdjustedArmorSave() | Defender is null, returning 0 ...");
-                return 0;
+                Debug.WriteLine($"GetAdjustedArmorSaveThreshold() | Defender has invalid armor save and invulnverable save values. Returning adjusted save value of 7+ ...");
+                return 6;
             }
 
             // If the defender has an invulnerable save, and the invulnerable save is lower than the regular save after applying armor pierce,
             // then use the invulnerable save.
+            // Compare against minimum armor save to guard against negative armor pierce values.
+            var minimumArmorSave = 2;
             var piercedArmorSaveThreshold = defender.ArmorSave + attacker.WeaponArmorPierce;
-            return Math.Min(piercedArmorSaveThreshold, defender.InvulnerableSave);
+            var adjustedArmorSave = Math.Min(piercedArmorSaveThreshold, defender.InvulnerableSave);
+            return Math.Max(minimumArmorSave, adjustedArmorSave);
+        }
+
+        /// <summary>
+        /// Gets the base probability of succeeding on a wound roll, based on the attacker and defender stats.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        private static double GetBaseProbabilityOfWound(AttackerDTO attacker, DefenderDTO defender)
+        {
+            var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
+            return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(woundSuccessThreshold));
         }
 
         /// <summary>
@@ -475,24 +547,40 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            // If the attacker's weapon has torrent, all attacks will automatically hit.
+            // A weapon with Torrent will automatically hit, bypassing the hit roll
             if (attacker.WeaponHasTorrent)
             {
-                Debug.WriteLine($"GetProbabilityOfHit() | Attacker has torrent, returning 1 ...");
                 return 1;
             }
 
-            // A roll of 1 always fails, so if the attacker has a weapon skill value of 1+, treat it as 2+
-            var hitSuccessThreshold = attacker.WeaponSkill == 1 ? 2 : attacker.WeaponSkill;
-            var numberOfSuccessfulHitResults = GetNumberOfSuccessfulResults(hitSuccessThreshold);
-            return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulHitResults);
+            // A weapon with reroll hits will:
+            // - On a failed hit, attempt to reroll the dice
+            if (attacker.WeaponHasRerollHitRolls)
+            {
+                var baseProbabilityOfHit = GetBaseProbabilityOfHit(attacker);
+                var probabilityOfFailedHitAndRerolledHit = GetProbabilityOfFailedHitAndRerolledHit(baseProbabilityOfHit);
+
+                return baseProbabilityOfHit + probabilityOfFailedHitAndRerolledHit;
+            }
+
+            // A weapon with reroll hits of 1 will:
+            // - On a hit roll result of 1, attempt to reroll the dice
+            if (attacker.WeaponHasRerollHitRollsOf1)
+            {
+                var baseProbabilityOfHit = GetBaseProbabilityOfHit(attacker);
+                var probabilityOfHitRollOf1AndRerolledHit = GetProbabilityOfHitRollOf1AndRerolledHit(baseProbabilityOfHit);
+
+                return baseProbabilityOfHit + probabilityOfHitRollOf1AndRerolledHit;
+            }
+
+            return GetBaseProbabilityOfHit(attacker);
         }
 
         /// <summary>
         /// Returns the mean of the attacker's hit roll distribution.
         /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns></returns>
+        /// <param name="attacker">The attacker data object</param>
+        /// <returns>A double value containing the average number of successful hit rolls</returns>
         public static double GetMeanHits(AttackerDTO? attacker)
         {
             if (attacker == null)
@@ -535,10 +623,12 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns a binomial distribution of attack roll results based on the process data.
+        /// Returns a calculated distribution of hit roll results.
         /// </summary>
-        /// <returns>A BinomialDistribution object containing the hit success data.</returns>
-        public static List<BinomialOutcome> GetBinomialDistributionHits(AttackerDTO? attacker)
+        /// <param name="attacker">The attacker data object</param>
+        /// <param name="distributionType">The type of distribution to create. Defaults to a Binomial distribution.</param>
+        /// <returns>A List of BinomomialOutcome data objects, representing a distribution of hit roll outcomes.</returns>
+        public static List<BinomialOutcome> GetDistributionHits(AttackerDTO? attacker, DistributionTypes distributionType = DistributionTypes.Binomial)
         {
             if (attacker == null)
             {
@@ -549,26 +639,14 @@ namespace WarhammerCombatMathLibrary
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
             var probabilityOfHit = GetProbabilityOfHit(attacker);
-            return Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probabilityOfHit);
-        }
 
-        /// <summary>
-        /// Gets a distribution of all discrete survivor function values for a successful hit roll.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns></returns>
-        public static List<BinomialOutcome> GetSurvivorDistributionHits(AttackerDTO? attacker)
-        {
-            if (attacker == null)
+            return distributionType switch
             {
-                Debug.WriteLine($"GetSurvivorDistributionHits() | Attacker is null. Returning empty list ...");
-                return [];
-            }
-
-            var minimumAttacks = GetMinimumAttacks(attacker);
-            var maximumAttacks = GetMaximumAttacks(attacker);
-            var probabilityOfHit = GetProbabilityOfHit(attacker);
-            return Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probabilityOfHit);
+                DistributionTypes.Binomial => Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probabilityOfHit),
+                DistributionTypes.Cumulative => Statistics.CumulativeDistribution(minimumAttacks, maximumAttacks, probabilityOfHit),
+                DistributionTypes.Survivor => Statistics.SurvivorDistribution(minimumAttacks, maximumAttacks, probabilityOfHit),
+                _ => Statistics.BinomialDistribution(minimumAttacks, maximumAttacks, probabilityOfHit),
+            };
         }
 
         /// <summary>
@@ -587,8 +665,8 @@ namespace WarhammerCombatMathLibrary
 
             if (defenderToughness <= 0)
             {
-                Debug.WriteLine($"GetSuccessThresholdOfWound() | Defender toughness is less than or equal to 0. Returning 6+ ...");
-                return 6;
+                Debug.WriteLine($"GetSuccessThresholdOfWound() | Defender toughness is less than or equal to 0. Returning 2+ ...");
+                return 2;
             }
 
             // The attacker's weapon Strength is greater than or equal to double the defender's Toughness.
@@ -642,10 +720,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            // Calculate the probability of succeeding on a wound roll
+            // Calculate wound roll probability
             var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
-            var numberOfSuccessfulWoundResults = GetNumberOfSuccessfulResults(woundSuccessThreshold);
-            var probabilityOfWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulWoundResults);
+            var probabilityOfWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(woundSuccessThreshold));
 
             // A weapon with Torrent and Devastating Wounds will automatically succeed all hit rolls, bypassing any critical hit abilities
             if (attacker.WeaponHasTorrent)
@@ -653,10 +730,97 @@ namespace WarhammerCombatMathLibrary
                 return probabilityOfWound;
             }
 
-            // For all other calculations, include the hit calculations
+            // Calculate hit roll probability
             var probabilityOfHit = GetProbabilityOfHit(attacker);
             var probabilityOfCriticalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
             var probabilityOfNormalHit = probabilityOfHit - probabilityOfCriticalHit;
+            var probabilityOfFailedHit = 1 - probabilityOfHit;
+
+            // A weapon with Reroll hits and Lethal Hits and Sustained Hits X will:
+            // - On a failed hit, attempt to reroll the dice (Reroll Hits)
+            // - Bypass the wound roll on a critical hit (Lethal Hits)
+            // - Add an additional X attacks to the wound roll (Sustained Hits)
+            if (attacker.WeaponHasRerollHitRolls && attacker.WeaponHasLethalHits && attacker.WeaponHasSustainedHits)
+            {
+                // Calculate expected sustained hits
+                var expectedSustainedHits = attacker.WeaponSustainedHitsValue * probabilityOfCriticalHit;
+
+                // Possible success results:
+                var probabilityOfNormalHitAndWound = probabilityOfNormalHit * probabilityOfWound;
+                var probabilityOfNormalHitAndRerolledLethalHit = probabilityOfNormalHit * probabilityOfCriticalHit;
+                var probabilityOfNormalHitAndRerolledSustainedHitAndWound = probabilityOfNormalHit * expectedSustainedHits * probabilityOfWound;
+                var probabilityOfFailedHitAndRerolledNormalHitAndWound = probabilityOfFailedHit * probabilityOfNormalHit * probabilityOfWound;
+                var probabilityOfFailedHitAndRerolledLethalHit = probabilityOfFailedHit * probabilityOfCriticalHit;
+                var probabilityOfFailedHitAndRerolledSustainedHitAndWound = probabilityOfFailedHit * expectedSustainedHits * probabilityOfWound;
+                var probabilityOfLethalHit = probabilityOfCriticalHit;
+                var probabilityOfSustainedHitAndWound = expectedSustainedHits * probabilityOfWound;
+
+                return probabilityOfNormalHitAndWound
+                       + probabilityOfNormalHitAndRerolledLethalHit
+                       + probabilityOfNormalHitAndRerolledSustainedHitAndWound
+                       + probabilityOfFailedHitAndRerolledNormalHitAndWound
+                       + probabilityOfFailedHitAndRerolledLethalHit
+                       + probabilityOfFailedHitAndRerolledSustainedHitAndWound
+                       + probabilityOfLethalHit
+                       + probabilityOfSustainedHitAndWound;
+            }
+
+            /*
+
+            // A weapon with Reroll hits of 1 and Lethal Hits and Sustained Hits X will:
+            // - On a hit roll result of 1, attempt to reroll the dice (Reroll Hits of 1)
+            // - Bypass the wound roll on a critical hit (Lethal Hits)
+            // - Add an additional X attacks to the wound roll (Sustained Hits)
+            if (attacker.WeaponHasRerollHitRollsOf1 && attacker.WeaponHasLethalHits && attacker.WeaponHasSustainedHits)
+            {
+
+            }
+
+            // A weapon with Lethal Hits, and Sustained Hits X will:
+            // - Bypass the wound roll on a critical hit (Lethal Hits)
+            // - Add an additional X attacks to the wound roll (Sustained Hits)
+            if (attacker.WeaponHasRerollHitRolls && attacker.WeaponHasSustainedHits)
+            {
+
+            }
+
+            // A weapon with Reroll Hits, and Lethal HIts will:
+            // - On a failed hit, attempt to reroll the dice (Reroll Hits)
+            // - Bypass the wound roll on a critical hit (Lethal Hits)
+            if (attacker.WeaponHasRerollHitRolls && attacker.WeaponHasLethalHits)
+            {
+                // Possible results
+                // - normal hit and wound
+                // - normal hit and critical hit
+                // - failed hit and normal hit and wound
+                // - failed hit and critical hit
+                // - critical hit
+                var probabilityOfNormalHitAndWound = probabilityOfNormalHit * probabilityOfWound;
+            }
+
+            // A weapon with Lethal Hits, and Sustained Hits X will:
+            // - Bypass the wound roll on a critical hit (Lethal Hits)
+            // - Add an additional X attacks to the wound roll (Sustained Hits)
+            if (attacker.WeaponHasRerollHitRolls && attacker.WeaponHasSustainedHits)
+            {
+
+            }
+
+            // A weapon with Lethal Hits, and Sustained Hits X will:
+            // - Bypass the wound roll on a critical hit (Lethal Hits)
+            // - Add an additional X attacks to the wound roll (Sustained Hits)
+            if (attacker.WeaponHasRerollHitRollsOf1 && attacker.WeaponHasLethalHits)
+            {
+
+            }
+
+            // A weapon with Lethal Hits, and Sustained Hits X will:
+            // - Bypass the wound roll on a critical hit (Lethal Hits)
+            // - Add an additional X attacks to the wound roll (Sustained Hits)
+            if (attacker.WeaponHasRerollHitRollsOf1 && attacker.WeaponHasSustainedHits)
+            {
+
+            }
 
             // A weapon with Lethal Hits, and Sustained Hits X will:
             // - Bypass the wound roll on a critical hit (Lethal Hits)
@@ -677,16 +841,33 @@ namespace WarhammerCombatMathLibrary
                        + probabilityOfSustainedHitsAndWound;
             }
 
+            // A weapon with reroll hits will:
+            // - On a failed hit, attempt to reroll the dice
+            if (attacker.WeaponHasRerollHitRolls)
+            {
+                var probabilityOfHitAndWound = probabilityOfHit * probabilityOfWound;
+                var probabilityOfRerollHitAndWound = (1 - probabilityOfHit) * probabilityOfHit * probabilityOfWound;
+
+                return probabilityOfHitAndWound + probabilityOfRerollHitAndWound;
+            }
+
+            // A weapon with reroll hits of 1 will:
+            // - On a hit roll result of 1, attempt to reroll the dice
+            if (attacker.WeaponHasRerollHitRollsOf1)
+            {
+                var probabilityOfHitAndWound = probabilityOfHit * probabilityOfWound;
+                var probabilityOfRerollHitOf1AndWound = (1.0 / POSSIBLE_RESULTS_SIX_SIDED_DIE) * probabilityOfHit * probabilityOfWound;
+
+                return probabilityOfHitAndWound + probabilityOfRerollHitOf1AndWound;
+            }
+
             // A weapon with Lethal Hits will bypass the wound roll on a critical hit
             if (attacker.WeaponHasLethalHits)
             {
-                // Calculate probabilities for possible successful outcomes
                 var probabilityOfNormalHitAndWound = probabilityOfNormalHit * probabilityOfWound;
                 var probabilityOfLethalHit = probabilityOfCriticalHit;
 
-                // Combine probabilities
-                return probabilityOfNormalHitAndWound
-                       + probabilityOfLethalHit;
+                return probabilityOfNormalHitAndWound + probabilityOfLethalHit;
             }
 
             // A weapon with Sustained Hits X will add an additional X attacks to the wound roll
@@ -694,14 +875,13 @@ namespace WarhammerCombatMathLibrary
             {
                 var expectedSustainedHits = attacker.WeaponSustainedHitsValue * probabilityOfCriticalHit;
 
-                // Calculate probabilities for possible successful outcomes
-                var probabilityOfSustainedHitsAndWound = expectedSustainedHits * probabilityOfWound;
                 var probabilityOfHitAndWound = probabilityOfHit * probabilityOfWound;
+                var probabilityOfSustainedHitsAndWound = expectedSustainedHits * probabilityOfWound;
 
-                // Combine probabilities
-                return probabilityOfSustainedHitsAndWound
-                       + probabilityOfHitAndWound;
+                return probabilityOfHitAndWound + probabilityOfSustainedHitsAndWound;
             }
+
+            */
 
             // Probability of unmodified hit and wound
             return probabilityOfHit * probabilityOfWound;
