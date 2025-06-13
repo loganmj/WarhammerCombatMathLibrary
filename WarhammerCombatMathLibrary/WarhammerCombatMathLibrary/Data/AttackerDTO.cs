@@ -80,7 +80,7 @@
         /// <summary>
         /// The amount of additional hits the weapon gets when Sustained Hits is triggered.
         /// </summary>
-        public int WeaponSustainedHitsValue { get; set; }
+        public int WeaponSustainedHitsMultiplier { get; set; }
 
         /// <summary>
         /// Attacker has DevastatingWounds keyword
@@ -144,7 +144,7 @@
                    + $"WeaponHasTorrent: {WeaponHasTorrent}, "
                    + $"WeaponHasLethalHits: {WeaponHasLethalHits}, "
                    + $"WeaponHasSustainedHits: {WeaponHasSustainedHits}, "
-                   + $"WeaponSustainedHitsValue: {WeaponSustainedHitsValue}, "
+                   + $"WeaponSustainedHitsValue: {WeaponSustainedHitsMultiplier}, "
                    + $"WeaponHasRerollHitRolls: {WeaponHasRerollHitRolls}, "
                    + $"WeaponHasRerollHitRollsOf1: {WeaponHasRerollHitRollsOf1}, "
                    + $"WeaponHasDevastatingWounds: {WeaponHasDevastatingWounds}, "
@@ -185,7 +185,7 @@
                    && WeaponHasTorrent == other.WeaponHasTorrent
                    && WeaponHasLethalHits == other.WeaponHasLethalHits
                    && WeaponHasSustainedHits == other.WeaponHasSustainedHits
-                   && WeaponSustainedHitsValue == other.WeaponSustainedHitsValue
+                   && WeaponSustainedHitsMultiplier == other.WeaponSustainedHitsMultiplier
                    && WeaponHasRerollHitRolls == other.WeaponHasRerollHitRolls
                    && WeaponHasRerollHitRollsOf1 == other.WeaponHasRerollHitRollsOf1
                    && WeaponHasDevastatingWounds == other.WeaponHasDevastatingWounds
@@ -218,7 +218,7 @@
                                     (WeaponNumberOfDamageDice * (int)WeaponDamageDiceType) + WeaponFlatDamage,
                                     weaponKeywordFlags,
                                     rerollFlags,
-                                    WeaponSustainedHitsValue);
+                                    WeaponSustainedHitsMultiplier);
         }
 
         #endregion

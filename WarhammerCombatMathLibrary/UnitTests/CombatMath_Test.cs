@@ -158,7 +158,7 @@ namespace UnitTests
             WeaponArmorPierce = 1,
             WeaponFlatDamage = 2,
             WeaponHasSustainedHits = true,
-            WeaponSustainedHitsValue = 1
+            WeaponSustainedHitsMultiplier = 1
         };
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace UnitTests
             WeaponArmorPierce = 1,
             WeaponFlatDamage = 2,
             WeaponHasSustainedHits = true,
-            WeaponSustainedHitsValue = 2
+            WeaponSustainedHitsMultiplier = 2
         };
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace UnitTests
             WeaponFlatDamage = 3,
             WeaponHasLethalHits = true,
             WeaponHasSustainedHits = true,
-            WeaponSustainedHitsValue = 1
+            WeaponSustainedHitsMultiplier = 1
         };
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace UnitTests
             WeaponFlatDamage = 3,
             WeaponHasDevastatingWounds = true,
             WeaponHasSustainedHits = true,
-            WeaponSustainedHitsValue = 1
+            WeaponSustainedHitsMultiplier = 1
         };
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace UnitTests
             WeaponHasLethalHits = true,
             WeaponHasDevastatingWounds = true,
             WeaponHasSustainedHits = true,
-            WeaponSustainedHitsValue = 1
+            WeaponSustainedHitsMultiplier = 1
         };
 
         /// <summary>
