@@ -78,7 +78,7 @@
         public bool WeaponHasSustainedHits { get; set; }
 
         /// <summary>
-        /// The amount of additional hits the weapon gets when Sustained Hits is triggers.
+        /// The amount of additional hits the weapon gets when Sustained Hits is triggered.
         /// </summary>
         public int WeaponSustainedHitsValue { get; set; }
 
