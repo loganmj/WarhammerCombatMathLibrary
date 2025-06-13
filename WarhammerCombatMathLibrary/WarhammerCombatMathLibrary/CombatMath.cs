@@ -314,13 +314,6 @@ namespace WarhammerCombatMathLibrary
             var averageDamageAfterFeelNoPain = damageAfterReduction * (1 - feelNoPainSuccessProbability);
             var returnValue = (int)Math.Floor(averageDamageAfterFeelNoPain);
 
-            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Raw damage per attack: {damagePerAttack}");
-            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Damage reductor: {damageReductor}");
-            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Damage after reduction: {damageAfterReduction}");
-            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Feel no pain success probability: {feelNoPainSuccessProbability}");
-            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Average damage after feel no pain: {averageDamageAfterFeelNoPain}");
-            Debug.WriteLine($"GetAverageAdjustedDamagePerAttack() | Return value: {returnValue}");
-
             return returnValue;
         }
 
@@ -654,22 +647,63 @@ namespace WarhammerCombatMathLibrary
             var numberOfSuccessfulWoundResults = GetNumberOfSuccessfulResults(woundSuccessThreshold);
             var probabilityOfWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulWoundResults);
 
-            // If the weapon has lethal hits, wound probability must account for this
-            if (!attacker.WeaponHasTorrent && attacker.WeaponHasLethalHits)
+            // A weapon with Torrent and Devastating Wounds will automatically succeed all hit rolls, bypassing any critical hit abilities
+            if (attacker.WeaponHasTorrent)
             {
-                // Split the hit probability of getting a hit into normal and lethal hit probabilities
-                var baseProbabilityOfHit = GetProbabilityOfHit(attacker);
-                var probabilityOfLethalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
-                var probabilityOfNormalHit = baseProbabilityOfHit - probabilityOfLethalHit;
-
-                // Probability of hit and wound, including lethal hits, is: P(lethalHit) + (P(normalHit) * P(wound))
-                return probabilityOfLethalHit + (probabilityOfNormalHit * probabilityOfWound);
+                return probabilityOfWound;
             }
 
-            // Calculate the probability of succeeding on a hit roll
+            // For all other calculations, include the hit calculations
             var probabilityOfHit = GetProbabilityOfHit(attacker);
+            var probabilityOfCriticalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
+            var probabilityOfNormalHit = probabilityOfHit - probabilityOfCriticalHit;
 
-            // Probability of hit and wound is: P(hit) * P(wound)
+            // A weapon with Lethal Hits, and Sustained Hits X will:
+            // - Bypass the wound roll on a critical hit (Lethal Hits)
+            // - Add an additional X attacks to the wound roll (Sustained Hits)
+            if (attacker.WeaponHasLethalHits && attacker.WeaponHasSustainedHits)
+            {
+                // Calculate expected sustained hits
+                var expectedSustainedHits = attacker.WeaponSustainedHitsValue * probabilityOfCriticalHit;
+
+                // Calculate probabilities for possible successful outcomes
+                var probabilityOfNormalHitAndWound = probabilityOfNormalHit * probabilityOfWound;
+                var probabilityOfLethalHit = probabilityOfCriticalHit;
+                var probabilityOfSustainedHitsAndWound = expectedSustainedHits * probabilityOfWound;
+
+                // Combine probabilities
+                return probabilityOfNormalHitAndWound
+                       + probabilityOfLethalHit
+                       + probabilityOfSustainedHitsAndWound;
+            }
+
+            // A weapon with Lethal Hits will bypass the wound roll on a critical hit
+            if (attacker.WeaponHasLethalHits)
+            {
+                // Calculate probabilities for possible successful outcomes
+                var probabilityOfNormalHitAndWound = probabilityOfNormalHit * probabilityOfWound;
+                var probabilityOfLethalHit = probabilityOfCriticalHit;
+
+                // Combine probabilities
+                return probabilityOfNormalHitAndWound
+                       + probabilityOfLethalHit;
+            }
+
+            // A weapon with Sustained Hits X will add an additional X attacks to the wound roll
+            if (attacker.WeaponHasSustainedHits)
+            {
+                var expectedSustainedHits = attacker.WeaponSustainedHitsValue * probabilityOfCriticalHit;
+
+                // Calculate probabilities for possible successful outcomes
+                var probabilityOfSustainedHitsAndWound = expectedSustainedHits * probabilityOfWound;
+                var probabilityOfHitAndWound = probabilityOfHit * probabilityOfWound;
+
+                // Combine probabilities
+                return probabilityOfSustainedHitsAndWound
+                       + probabilityOfHitAndWound;
+            }
+
+            // Probability of unmodified hit and wound
             return probabilityOfHit * probabilityOfWound;
         }
 
@@ -792,6 +826,7 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static double GetProbabilityOfHitAndWoundAndFailedSave(AttackerDTO? attacker, DefenderDTO? defender)
         {
+            // Validate inputs
             if (attacker == null)
             {
                 Debug.WriteLine($"GetProbabilityOfFailedSave() | Attacker is null, returning 0 ...");
@@ -808,53 +843,117 @@ namespace WarhammerCombatMathLibrary
             var adjustedArmorSaveThreshold = GetAdjustedArmorSaveThreshold(attacker, defender);
             var numberOfSuccessfulSaveResults = GetNumberOfSuccessfulResults(adjustedArmorSaveThreshold);
             var probabilityOfSuccessfulSave = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulSaveResults);
-            var probabilityOfFailedSave = (1 - probabilityOfSuccessfulSave);
+            var probabilityOfFailedSave = 1 - probabilityOfSuccessfulSave;
 
-            // Account for the combination of Lethal Hits and Devastating Wounds
-            // An attack that triggers a Lethal Hit bypasses the wound roll, and so cannot also trigger devastating wounds
+            // Determine probability of wound
+            var woundThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
+            var numberOfSuccessfulWoundResults = GetNumberOfSuccessfulResults(woundThreshold);
+            var probabilityOfWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulWoundResults);
+            var probabilityOfCriticalWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
+            var probabilityOfNormalWound = probabilityOfWound - probabilityOfCriticalWound;
+
+            // A weapon with Torrent and Devastating Wounds will:
+            // - Automatically succeed all hit rolls, bypassing any critical hit abilities (Torrent)
+            // - Bypass the save roll on a critical wound (Devastating Wounds)
+            if (attacker.WeaponHasTorrent && attacker.WeaponHasDevastatingWounds)
+            {
+                // Calculate probabilities for possible successful outcomes
+                var probabilityOfDevastatingWound = probabilityOfCriticalWound;
+                var probabilityOfNormalWoundAndFailedSave = probabilityOfNormalWound * probabilityOfFailedSave;
+
+                // Combine probabilities
+                return probabilityOfDevastatingWound + probabilityOfNormalWoundAndFailedSave;
+            }
+
+            // A weapon with Torrent and will automatically succeed all hit rolls, bypassing any critical hit abilities
+            if (attacker.WeaponHasTorrent)
+            {
+                // Probability of wound, and failed save is: P(wound) * P(failedSave)
+                return probabilityOfWound * probabilityOfFailedSave;
+            }
+
+            // For all other calculations, include the hit calculations
+            var probabilityOfHit = GetProbabilityOfHit(attacker);
+            var probabilityOfCriticalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
+            var probabilityOfNormalHit = probabilityOfHit - probabilityOfCriticalHit;
+
+            // A weapon with Lethal Hits, Sustained Hits X, and Devastating Wounds will:
+            // - Bypass the wound roll on a critical hit (Lethal Hits)
+            // - Add an additional X attacks to the wound roll (Sustained Hits)
+            // - Bypass the save roll on a critical wound (Devastating Wounds)
+            // - A Lethal Hit will bypass the wound roll and cannot trigger Devastating Wounds
+            if (attacker.WeaponHasLethalHits && attacker.WeaponHasSustainedHits && attacker.WeaponHasDevastatingWounds)
+            {
+                // Calculate expected sustained hits
+                var expectedSustainedHits = attacker.WeaponSustainedHitsValue * probabilityOfCriticalHit;
+
+                // Calculate probabilities for possible successful outcomes
+                var probabilityOfNormalHitAndNormalWoundAndFailedSave = probabilityOfNormalHit * probabilityOfNormalWound * probabilityOfFailedSave;
+                var probabilityOfNormalHitAndDevastatingWound = probabilityOfNormalHit * probabilityOfCriticalWound;
+                var probabilityOfLethalHitAndFailedSave = probabilityOfCriticalHit * probabilityOfFailedSave;
+                var probabilityOfSustainedHitsAndNormalWoundAndFailedSave = expectedSustainedHits * probabilityOfNormalWound * probabilityOfFailedSave;
+                var probabilityOfSustainedHitsAndDevastatingWound = expectedSustainedHits * probabilityOfCriticalWound;
+
+                // Combine probabilities
+                return probabilityOfNormalHitAndNormalWoundAndFailedSave
+                       + probabilityOfNormalHitAndDevastatingWound
+                       + probabilityOfLethalHitAndFailedSave
+                       + probabilityOfSustainedHitsAndNormalWoundAndFailedSave
+                       + probabilityOfSustainedHitsAndDevastatingWound;
+            }
+
+            // A weapon with Lethal Hits, and Devastating Wounds will:
+            // - Bypass the wound roll on a critical hit (Lethal Hits)
+            // - Bypass the save roll on a critical wound (Devastating Wounds)
+            // - A Lethal Hit will bypass the wound roll and cannot trigger Devastating Wounds
             if (attacker.WeaponHasLethalHits && attacker.WeaponHasDevastatingWounds)
             {
-                // Lethal hits auto-wound on a hit roll of 6, but cannot cause devastating wounds
-                var probabilityOfLethalHit = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
-                var baseProbabilityOfHit = GetProbabilityOfHit(attacker);
-                var probabilityOfNormalHit = baseProbabilityOfHit - probabilityOfLethalHit;
+                // Calculate probabilities for possible successful outcomes
+                var probabilityOfNormalHitAndNormalWoundAndFailedSave = probabilityOfNormalHit * probabilityOfNormalWound * probabilityOfFailedSave;
+                var probabilityOfNormalHitAndDevastatingWound = probabilityOfNormalHit * probabilityOfCriticalWound;
+                var probabilityOfLethalHitAndFailedSave = probabilityOfCriticalHit * probabilityOfFailedSave;
 
-                // For normal hits, calculate wound probability
-                var woundThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
-                var numberOfSuccessfulWoundResults = GetNumberOfSuccessfulResults(woundThreshold);
-                var probabilityOfWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, numberOfSuccessfulWoundResults);
-
-                // Probability of critical wound (6 to wound) from normal hits
-                var probabilityOfCriticalWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
-
-                // Probability of devastating wound = P(normalHit) * P(criticalWound)
-                var probabilityOfDevastatingWound = probabilityOfNormalHit * probabilityOfCriticalWound;
-
-                // Remaining normal wounds (non-critical)
-                var probabilityOfNormalWound = probabilityOfNormalHit * (probabilityOfWound - probabilityOfCriticalWound);
-
-                // Probability of hit, wound, and failed save, including devastating wounds, is: P(lethalHit) + P(devWound) + (P(normalWound) * P(failedSave))
-                return probabilityOfLethalHit + probabilityOfDevastatingWound + (probabilityOfNormalWound * probabilityOfFailedSave);
+                // Combine probabilities
+                return probabilityOfNormalHitAndNormalWoundAndFailedSave
+                       + probabilityOfNormalHitAndDevastatingWound
+                       + probabilityOfLethalHitAndFailedSave;
             }
 
-            // Account for devastating wounds
-            
+            // A weapon with Sustained Hits X, and Devastating Wounds will:
+            // - Add an additional X attacks to the wound roll (Sustained Hits)
+            // - Bypass the save roll on a critical wound (Devastating Wounds)
+            if (attacker.WeaponHasSustainedHits && attacker.WeaponHasDevastatingWounds)
+            {
+                // Calculate expected sustained hits
+                var expectedSustainedHits = attacker.WeaponSustainedHitsValue * probabilityOfCriticalHit;
+
+                // Calculate probabilities for possible successful outcomes
+                var probabilityOfNormalHitAndNormalWoundAndFailedSave = probabilityOfNormalHit * probabilityOfNormalWound * probabilityOfFailedSave;
+                var probabilityOfNormalHitAndDevastatingWound = probabilityOfNormalHit * probabilityOfCriticalWound;
+                var probabilityOfSustainedHitsAndNormalWoundAndFailedSave = expectedSustainedHits * probabilityOfNormalWound * probabilityOfFailedSave;
+                var probabilityOfSustainedHitsAndDevastatingWound = expectedSustainedHits * probabilityOfCriticalWound;
+
+                // Combine probabilities
+                return probabilityOfNormalHitAndNormalWoundAndFailedSave
+                       + probabilityOfNormalHitAndDevastatingWound
+                       + probabilityOfSustainedHitsAndNormalWoundAndFailedSave
+                       + probabilityOfSustainedHitsAndDevastatingWound;
+            }
+
+            // Devastating Wounds will bypass the save roll on a critical wound
             if (attacker.WeaponHasDevastatingWounds)
             {
-                // Split the hit probability of getting a hit and wound into normal and devastating wound probabilities
-                var baseProbabilityOfHitAndWound = GetProbabilityOfHitAndWound(attacker, defender);
-                var probabilityOfDevastatingWound = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
-                var probabilityOfNormalWound = baseProbabilityOfHitAndWound - probabilityOfDevastatingWound;
+                // Calculate probabilities for possible successful outcomes
+                var probabilityOfHitAndNormalWoundAndFailedSave = probabilityOfHit * probabilityOfNormalWound * probabilityOfFailedSave;
+                var probabilityOfHitAndDevastatingWound = probabilityOfHit * probabilityOfCriticalWound;
 
-                // Probability of hit, wound, and failed save, including devastating wounds, is: P(devWound) + (P(normalWound) * P(failedSave))
-                return probabilityOfDevastatingWound + (probabilityOfNormalWound * probabilityOfFailedSave);
+                // Combine probabilities
+                return probabilityOfHitAndNormalWoundAndFailedSave
+                       + probabilityOfHitAndDevastatingWound;
             }
 
-            // Get probability of hit and wound
-            var probabilityOfHitAndWound = GetProbabilityOfHitAndWound(attacker, defender);
-
-            // Probability of hit, wound, and failed save is: P(hitAndWound) * P(failedSave)
-            return probabilityOfHitAndWound * probabilityOfFailedSave;
+            // Probability of unmodified hit, wound, and failed save
+            return probabilityOfHit * probabilityOfWound * probabilityOfFailedSave;
         }
 
         /// <summary>
@@ -993,10 +1092,6 @@ namespace WarhammerCombatMathLibrary
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
             var averageTotalDamage = averageFailedSaves * averageDamagePerAttack;
 
-            Debug.WriteLine($"GetMeanDamage() | Average failed saves: {averageFailedSaves}");
-            Debug.WriteLine($"GetMeanDamage() | Average damage per attack: {averageDamagePerAttack}");
-            Debug.WriteLine($"GetMeanDamage() | Average total damage: {averageTotalDamage}");
-
             return averageTotalDamage;
         }
 
@@ -1058,15 +1153,10 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageSuccessfulAttacks = GetExpectedFailedSaves(attacker, defender);
+            var expectedSuccessfulAttacks = GetExpectedFailedSaves(attacker, defender);
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
             var adjustedDamagePerAttack = GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender);
-            var averageModelsDestroyed = GetModelsDestroyed(averageSuccessfulAttacks, adjustedDamagePerAttack, defender);
-
-            Debug.WriteLine($"GetMeanDestroyedModels() | Average successful attacks: {averageSuccessfulAttacks}");
-            Debug.WriteLine($"GetMeanDestroyedModels() | Average damage per attack: {averageDamagePerAttack}");
-            Debug.WriteLine($"GetMeanDestroyedModels() | Average adjusted damage per attack: {adjustedDamagePerAttack}");
-            Debug.WriteLine($"GetMeanDestroyedModels() | Average models destroyed: {averageModelsDestroyed}");
+            var averageModelsDestroyed = GetModelsDestroyed(expectedSuccessfulAttacks, adjustedDamagePerAttack, defender);
 
             return averageModelsDestroyed;
         }
