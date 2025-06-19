@@ -192,16 +192,6 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Get the probability of a hit.
-        /// Weapon has torrent
-        /// </summary>
-        /// <returns></returns>
-        private static double GetProbabilityOfHit_Torrent()
-        {
-            return 1;
-        }
-
-        /// <summary>
         /// Get the probability of failing a hit roll and re-rolling it into a success.
         /// </summary>
         /// <param name="baseProbabilityOfHit"></param>
@@ -988,43 +978,28 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            // A weapon with Torrent will automatically hit, bypassing the hit roll
+            // If weapon has torrent, no other modifiers are added
             if (attacker.WeaponHasTorrent)
             {
-                return GetProbabilityOfHit_Torrent();
+                return 1;
             }
 
             // Calculate base hit probability
-            var baseProbabilityOfHit = GetBaseProbabilityOfHit(attacker);
+            var baseHitProbability = GetBaseProbabilityOfHit(attacker);
 
-            return baseProbabilityOfHit
-                + (attacker.WeaponHasRerollHitRolls ? GetProbabilityOfHit_FailedHitAndRerolledHit(baseProbabilityOfHit) : 0)
-                + (attacker.WeaponHasRerollHitRollsOf1 ? GetProbabilityOfHit_HitRollOf1AndRerolledHit(baseProbabilityOfHit) : 0);
+            // Add modifiers
+            double totalModifiers = 0;
 
-            /*
-
-            // Calculate base hit probability
-            var baseProbabilityOfHit = GetBaseProbabilityOfHit(attacker);
-
-            // A weapon with reroll hits will:
-            // - On a failed hit, attempt to reroll the dice
             if (attacker.WeaponHasRerollHitRolls)
             {
-                return baseProbabilityOfHit
-                       + GetProbabilityOfHit_FailedHitAndRerolledHit(baseProbabilityOfHit);
+                totalModifiers += GetProbabilityOfHit_FailedHitAndRerolledHit(baseHitProbability);
             }
-
-            // A weapon with reroll hits of 1 will:
-            // - On a hit roll result of 1, attempt to reroll the dice
-            if (attacker.WeaponHasRerollHitRollsOf1)
+            else if (attacker.WeaponHasRerollHitRollsOf1)
             {
-                return baseProbabilityOfHit
-                       + GetProbabilityOfHit_HitRollOf1AndRerolledHit(baseProbabilityOfHit);
+                totalModifiers += GetProbabilityOfHit_HitRollOf1AndRerolledHit(baseHitProbability);
             }
 
-            return baseProbabilityOfHit;
-
-            */
+            return baseHitProbability + totalModifiers;
         }
 
         /// <summary>
