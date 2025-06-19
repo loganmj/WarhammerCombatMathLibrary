@@ -691,15 +691,15 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>
             {
-                new(0, 1),
-                new(1, 1),
-                new(2, 1),
-                new(3, 0.9996),
-                new(4, 0.9954),
-                new(5, 0.9693),
-                new(6, 0.8652),
-                new(7, 0.6047),
-                new(8, 0.2326)
+                new(0, 0),
+                new(1, 0),
+                new(2, 0.0004),
+                new(3, 0.0046),
+                new(4, 0.0307),
+                new(5, 0.1348),
+                new(6, 0.3953),
+                new(7, 0.7674),
+                new(8, 1)
             };
 
             var actual = CombatMath.GetDistributionHits(ATTACKER_SINGLE_MODEL, DistributionTypes.Cumulative);
@@ -905,7 +905,7 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfHitAndWound_LethalHitsAndSustainedHits1()
         {
-            var expected = 0.7222;
+            var expected = 0.8333;
             var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
@@ -1045,7 +1045,7 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanWounds_LethalHitsAndSustainedHits1()
         {
-            var expected = 5.7778;
+            var expected = 6.6667;
             var actual = Math.Round(CombatMath.GetMeanWounds(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
@@ -1280,7 +1280,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationWounds_LethalHitsAndSustainedHits1()
         {
-            var expected = 1.2669;
+            var expected = 1.0541;
             var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL), 4);
 
             Assert.AreEqual(expected, actual);
@@ -1719,14 +1719,14 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 0),
-                new(1, 0.0007),
-                new(2, 0.0067),
-                new(3, 0.0349),
-                new(4, 0.1134),
-                new(5, 0.2358),
-                new(6, 0.3066),
-                new(7, 0.2278),
-                new(8, 0.0740)
+                new(1, 0),
+                new(2, 0.0004),
+                new(3, 0.0042),
+                new(4, 0.0260),
+                new(5, 0.1042),
+                new(6, 0.2605),
+                new(7, 0.3721),
+                new(8, 0.2326)
             };
 
             var actual = CombatMath.GetBinomialDistributionWounds(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL);
@@ -2182,13 +2182,13 @@ namespace UnitTests
             {
                 new(0, 1),
                 new(1, 1),
-                new(2, 0.9992),
-                new(3, 0.9925),
-                new(4, 0.9576),
-                new(5, 0.8442),
-                new(6, 0.6084),
-                new(7, 0.3018),
-                new(8, 0.0740)
+                new(2, 1),
+                new(3, 0.9996),
+                new(4, 0.9954),
+                new(5, 0.9693),
+                new(6, 0.8652),
+                new(7, 0.6047),
+                new(8, 0.2326)
             };
 
             var actual = CombatMath.GetSurvivorDistributionWounds(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL);
