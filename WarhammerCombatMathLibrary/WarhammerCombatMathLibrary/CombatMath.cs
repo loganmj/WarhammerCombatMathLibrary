@@ -714,29 +714,29 @@ namespace WarhammerCombatMathLibrary
             var baseHitProbability = GetBaseProbabilityOfHit(attacker);
 
             // Calculate modifiers
-            double totalModifiers = 0;
+            double totalHitModifiers = 0;
 
             // Full rerolls overrides rerolls of 1
             if (attacker.WeaponHasRerollHitRolls)
             {
                 var rerollModifier = GetHitModifier_RerollHits(baseHitProbability);
                 Debug.WriteLine($"GetProbabilityOfHit() | Reroll hits modifier: {rerollModifier}");
-                totalModifiers += rerollModifier;
+                totalHitModifiers += rerollModifier;
             }
             else if (attacker.WeaponHasRerollHitRollsOf1)
             {
                 var rerollModifier = GetHitModifier_RerollHitsOf1(baseHitProbability);
                 Debug.WriteLine($"GetProbabilityOfHit() | Reroll hits of 1 modifier: {rerollModifier}");
-                totalModifiers += rerollModifier;
+                totalHitModifiers += rerollModifier;
             }
 
-            var result = Math.Min(1, baseHitProbability + totalModifiers);
+            var totalHitProbability = baseHitProbability + totalHitModifiers;
 
             Debug.WriteLine($"GetProbabilityOfHitAndWound() | Base hit probability: {baseHitProbability}");
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Total modifiers: {totalModifiers}");
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Total hit probability: {result}");
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Total hit modifiers: {totalHitModifiers}");
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Total hit probability: {totalHitProbability}");
 
-            return result;
+            return totalHitProbability;
         }
 
         /// <summary>
@@ -760,7 +760,7 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// Gets the discrete expected number of successful hit rolls, based on the average probability.
         /// </summary>
-        /// <param name="attacker"></param>
+        /// <param name="attacker">The attacker data object</param>
         /// <returns></returns>
         public static int GetExpectedHits(AttackerDTO? attacker)
         {
@@ -771,7 +771,7 @@ namespace WarhammerCombatMathLibrary
         /// Returns the standard deviation of the attacker's hit roll distribution.
         /// </summary>
         /// <param name="attacker"></param>
-        /// <returns></returns>
+        /// <returns>A double value containing the standard deviation of successful hits</returns>
         public static double GetStandardDeviationHits(AttackerDTO? attacker)
         {
             if (attacker == null)
@@ -815,9 +815,9 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// Returns the success threshold for wounding the defender.
         /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
+        /// <param name="attackerWeaponStrength"></param>
+        /// <param name="defenderToughness"></param>
+        /// <returns>An integer value containing the success threshold of the wound roll</returns>
         public static int GetSuccessThresholdOfWound(int attackerWeaponStrength, int defenderToughness)
         {
             Debug.WriteLine($"GetSuccessThresholdOfWound() | Attacker strength: {attackerWeaponStrength}");
@@ -871,7 +871,7 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
-        /// <returns></returns>
+        /// <returns>A double value containing the probability of hitting and wounding with a single attack</returns>
         public static double GetProbabilityOfHitAndWound(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
@@ -887,67 +887,75 @@ namespace WarhammerCombatMathLibrary
             }
 
             // Calculate wound roll probability
-            var woundProbability = GetBaseProbabilityOfWound(attacker, defender);
+            var baseWoundProbability = GetBaseProbabilityOfWound(attacker, defender);
+
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Base wound probability: {baseWoundProbability}");
 
             // A weapon with Torrent will automatically hit, bypassing the hit roll (and any critical hit abilities)
             if (attacker.WeaponHasTorrent)
             {
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Weapon has torrent. Hits auto-succeed. Total hit and wound probability: {woundProbability}");
-                return woundProbability;
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Weapon has torrent. Hits auto-succeed. Total hit and wound probability: {baseWoundProbability}");
+                return baseWoundProbability;
             }
 
             var baseHitProbability = GetProbabilityOfHit(attacker);
-            var hasWoundBypassModifiers = attacker.WeaponHasLethalHits;
             var criticalHitProbability = GetProbabilityOfCriticalHit(attacker);
             var normalHitProbability = baseHitProbability - criticalHitProbability;
-            var hitProbability = hasWoundBypassModifiers ? normalHitProbability : baseHitProbability;
+
+            // Lethal Hits will bypass the wound roll.
+            // If the attacker has Lethal Hits, we have to use the normal hit probability
+            // to avoid double-counting the critical hit probability
+            var hitProbability = attacker.WeaponHasLethalHits ? normalHitProbability : baseHitProbability;
 
             // DEBUG
-            if (hasWoundBypassModifiers)
+            if (attacker.WeaponHasLethalHits)
             {
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Attacker has wound bypass modifiers.");
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Attacker has Lethal Hits.");
                 Debug.WriteLine($"GetProbabilityOfHitAndWound() | Separating base hit probability {baseHitProbability} into normal hit {normalHitProbability} and critical hit {criticalHitProbability}");
             }
 
-            // Calculate base hit and wound probability
-            var baseHitAndWoundProbability = hitProbability * woundProbability;
-
             // Calculate modifiers
-            double modifiers = 0;
+            double totalWoundModifiers = 0;
 
             if (attacker.WeaponHasLethalHits)
             {
                 var lethalHitsModifier = GetWoundModifier_LethalHits(criticalHitProbability);
                 Debug.WriteLine($"GetProbabilityOfHitAndWound() | Lethal Hits modifier: {lethalHitsModifier}");
-                modifiers += lethalHitsModifier;
+                totalWoundModifiers += lethalHitsModifier;
             }
 
             if (attacker.WeaponHasSustainedHits)
             {
-                var sustainedHitsModifier = GetWoundModifier_SustainedHits(criticalHitProbability, attacker.WeaponSustainedHitsMultiplier, woundProbability);
+                var sustainedHitsModifier = GetWoundModifier_SustainedHits(criticalHitProbability, attacker.WeaponSustainedHitsMultiplier, baseWoundProbability);
                 Debug.WriteLine($"GetProbabilityOfHitAndWound() | Sustained Hits {attacker.WeaponSustainedHitsMultiplier} modifier: {sustainedHitsModifier}");
-                modifiers += sustainedHitsModifier;
+                totalWoundModifiers += sustainedHitsModifier;
             }
 
             // Reroll wounds overrides reroll wounds of 1
             if (attacker.WeaponHasRerollWoundRolls)
             {
-                var rerollModifier = GetWoundModifier_RerollWounds(woundProbability);
+                var rerollModifier = GetWoundModifier_RerollWounds(baseWoundProbability);
                 Debug.WriteLine($"GetProbabilityOfHitAndWound() | Reroll wounds modifier: {rerollModifier}");
-                modifiers += rerollModifier;
+                totalWoundModifiers += rerollModifier;
             }
             else if (attacker.WeaponHasRerollWoundRollsOf1)
             {
-                var rerollModifier = GetWoundModifier_RerollWounds(woundProbability);
+                var rerollModifier = GetWoundModifier_RerollWoundsOf1(baseWoundProbability);
                 Debug.WriteLine($"GetProbabilityOfHitAndWound() | Reroll wounds modifier: {rerollModifier}");
-                modifiers += GetWoundModifier_RerollWoundsOf1(rerollModifier);
+                totalWoundModifiers += rerollModifier;
             }
 
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Base hit and wound probability: {hitProbability} * {woundProbability} = {baseHitAndWoundProbability}");
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Total modifiers: {modifiers}");
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Total hit and wound probability: {Math.Min(1, baseHitAndWoundProbability + modifiers)}");
+            // Calculate total wound probability
+            var totalWoundProbability = baseWoundProbability + totalWoundModifiers;
 
-            return Math.Min(1, baseHitAndWoundProbability + modifiers);
+            // Calculate combined hit and wound probability
+            var totalHitAndWoundProbability = hitProbability * totalWoundProbability;
+
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Total wound modifiers: {totalWoundModifiers}");
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Total wound probability: {totalWoundProbability}");
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Total hit and wound probability: {hitProbability} * {totalWoundProbability} = {totalHitAndWoundProbability}");
+
+            return totalHitAndWoundProbability;
         }
 
         /// <summary>
