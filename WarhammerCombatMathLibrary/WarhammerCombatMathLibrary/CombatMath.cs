@@ -158,7 +158,12 @@ namespace WarhammerCombatMathLibrary
             // Account for the fact that the smallest possible result on the die is considered an automatic failure,
             // and should not count as part of the success threshold
             var hitSuccessThreshold = attacker.WeaponSkill == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : attacker.WeaponSkill;
-            return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(hitSuccessThreshold));
+            var result = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(hitSuccessThreshold));
+
+            Debug.WriteLine($"GetBaseProbabilityOfHit() | Hit success threshold: {hitSuccessThreshold}+");
+            Debug.WriteLine($"GetBaseProbabilityOfHit() | Hit probability: {result}");
+
+            return result;
         }
 
         /// <summary>
@@ -192,23 +197,23 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Get the probability of failing a hit roll and re-rolling it into a success.
+        /// Get the hit probability modifier of the Reroll Hits ability.
         /// </summary>
-        /// <param name="baseProbabilityOfHit"></param>
-        /// <returns></returns>
-        private static double GetHitModifier_RerollHits(double baseProbabilityOfHit)
+        /// <param name="probabilityOfHit"></param>
+        /// <returns>A double value containing the probability modifier</returns>
+        private static double GetHitModifier_RerollHits(double probabilityOfHit)
         {
-            return (1 - baseProbabilityOfHit) * baseProbabilityOfHit;
+            return (1 - probabilityOfHit) * probabilityOfHit;
         }
 
         /// <summary>
-        /// Get the probability of rolling a hit roll of 1 and re-rolling it into a success
+        /// Get the hit probability modifier of the Reroll Hits of 1 ability.
         /// </summary>
-        /// <param name="baseProbabilityOfHit"></param>
-        /// <returns></returns>
-        private static double GetHitModifier_RerollHitsOf1(double baseProbabilityOfHit)
+        /// <param name="probabilityOfHit"></param>
+        /// <returns>A double value containing the probability modifier</returns>
+        private static double GetHitModifier_RerollHitsOf1(double probabilityOfHit)
         {
-            return (1.0 / POSSIBLE_RESULTS_SIX_SIDED_DIE) * baseProbabilityOfHit;
+            return (1.0 / POSSIBLE_RESULTS_SIX_SIDED_DIE) * probabilityOfHit;
         }
 
         /// <summary>
@@ -240,13 +245,18 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// Gets the base probability of succeeding on a wound roll, based on the attacker and defender stats.
         /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
+        /// <param name="attacker">The attacker data object</param>
+        /// <param name="defender">The defender data object</param>
         /// <returns></returns>
         private static double GetBaseProbabilityOfWound(AttackerDTO attacker, DefenderDTO defender)
         {
             var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
-            return Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(woundSuccessThreshold));
+            var result = Statistics.ProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(woundSuccessThreshold));
+
+            Debug.WriteLine($"GetBaseProbabilityOfWound() | Wound success threshold: {woundSuccessThreshold}+");
+            Debug.WriteLine($"GetBaseProbabilityOfWound() | Wound probability: {result}");
+
+            return result;
         }
 
         /// <summary>
@@ -273,6 +283,7 @@ namespace WarhammerCombatMathLibrary
         /// Gets the probability of a normal (non-critical) wound roll success.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
+        /// <param name="defender">The defender data object</param>
         /// <returns>A double containing the probability of a non-critical wound roll</returns>
         private static double GetProbabilityOfNormalWound(AttackerDTO attacker, DefenderDTO defender)
         {
@@ -280,77 +291,44 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Gets the probability of wounding by failing a hit, re-rolling into a successful hit, and succeeding on the wound roll.
+        /// Get the wound probability modifier of the Lethal Hits ability.
         /// </summary>
-        /// <param name="probabilityOfHit"></param>
-        /// <param name="probabilityOfWound"></param>
+        /// <param name="probabilityOfCriticalHit"></param>
         /// <returns>A double value containing the probability modifier</returns>
-        private static double GetHitAndWoundModifier_RerollHits(double probabilityOfHit, double probabilityOfWound)
+        private static double GetWoundModifier_LethalHits(double probabilityOfCriticalHit)
         {
-            return (1 - probabilityOfHit) * probabilityOfHit * probabilityOfWound;
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by rolling a hit roll of 1, re-rolling into a successful hit, and succeeding on the wound roll.
-        /// </summary>
-        /// <param name="probabilityOfHit"></param>
-        /// <param name="probabilityOfWound"></param>
-        /// <returns>A double value containing the modified probability.</returns>
-        private static double GetHitAndWoundModifier_RerollHitsOf1(double probabilityOfHit, double probabilityOfWound)
-        {
-            return 1.0 / POSSIBLE_RESULTS_SIX_SIDED_DIE * probabilityOfHit * probabilityOfWound;
-        }
-
-        /// <summary>
-        /// Gets the probability modifier value for hitting and wounding when the attacker has Lethal Hits.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns>A double value containing the probability modifier</returns>
-        private static double GetHitAndWoundModifier_LethalHits(AttackerDTO attacker)
-        {
-            var probabilityOfCriticalHit = GetProbabilityOfCriticalHit(attacker);
-
             // Lethal hits trigger on a critical hit roll, and auto-succeed the wound roll
-            var lethalHitsModifier = probabilityOfCriticalHit;
-
-            // If the attacker has rerolls rerolls may result in lethal hits
-            if (attacker.WeaponHasRerollHitRolls)
-            {
-                lethalHitsModifier += (1 - GetProbabilityOfNormalHit(attacker)) * probabilityOfCriticalHit;
-            }
-            else if (attacker.WeaponHasRerollHitRollsOf1)
-            {
-                lethalHitsModifier += 1.0 / POSSIBLE_RESULTS_SIX_SIDED_DIE * probabilityOfCriticalHit;
-            }
-
-            return lethalHitsModifier;
+            return probabilityOfCriticalHit;
         }
 
         /// <summary>
-        /// Gets the probability modifier value for rolling a critical hit, triggering sustained hits, and each of the sustained hits succeeding on a wound roll
+        /// Get the wound probability modifier of the Sustained Hits ability.
         /// </summary>
-        /// <param name="attacker"></param>
+        /// <param name="probabilityOfCriticalHit"></param>
+        /// <returns>A double value containing the probability modifier</returns>
+        private static double GetWoundModifier_SustainedHits(double probabilityOfCriticalHit, int sustainedHitsMultiplier, double probabilityOfWound)
+        {
+            return sustainedHitsMultiplier * probabilityOfCriticalHit * probabilityOfWound;
+        }
+
+        /// <summary>
+        /// Get the wound probability modifier of the Reroll Wounds ability.
+        /// </summary>
         /// <param name="probabilityOfWound"></param>
         /// <returns>A double value containing the probability modifier</returns>
-        private static double GetHitAndWoundModifier_SustainedHits(AttackerDTO attacker, double probabilityOfWound)
+        private static double GetWoundModifier_RerollWounds(double probabilityOfWound)
         {
-            var probabilityOfCriticalHit = GetProbabilityOfCriticalHit(attacker);
-            var probabilityOfSustainedHitsAndWound = attacker.WeaponSustainedHitsMultiplier * probabilityOfCriticalHit * probabilityOfWound;
+            return (1 - probabilityOfWound) * probabilityOfWound;
+        }
 
-            // Sustained hits trigger on a critical hit roll, and add additional dice to the wound roll
-            var sustainedHitsModifier = probabilityOfSustainedHitsAndWound;
-
-            // If the attacker has rerolls rerolls may result in sustained hits
-            if (attacker.WeaponHasRerollHitRolls)
-            {
-                sustainedHitsModifier += (1 - GetProbabilityOfNormalHit(attacker)) * probabilityOfSustainedHitsAndWound;
-            }
-            else if (attacker.WeaponHasRerollHitRollsOf1)
-            {
-                sustainedHitsModifier += 1.0 / POSSIBLE_RESULTS_SIX_SIDED_DIE * probabilityOfSustainedHitsAndWound;
-            }
-
-            return sustainedHitsModifier;
+        /// <summary>
+        /// Get the wound probability modifier of the Reroll Wounds of 1 ability.
+        /// </summary>
+        /// <param name="probabilityOfWound"></param>
+        /// <returns>A double value containing the probability modifier</returns>
+        private static double GetWoundModifier_RerollWoundsOf1(double probabilityOfWound)
+        {
+            return (1.0 / POSSIBLE_RESULTS_SIX_SIDED_DIE) * probabilityOfWound;
         }
 
         /// <summary>
@@ -367,218 +345,64 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Gets the base probability of hitting and wounding and the defender failing the save roll.
+        /// Gets the probability modifier value for hitting and wounding when the attacker has Devastating Wounds.
+        /// Devastating Wounds bypass the save roll.
         /// </summary>
-        /// <param name="baseProbabilityOfHit"></param>
-        /// <param name="baseProbabilityOfWound"></param>
-        /// <param name="baseProbabilityOfFailedSave"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfFailedSave_BasicHitAndWoundAndFailedSave(double baseProbabilityOfHit, double baseProbabilityOfWound, double baseProbabilityOfFailedSave)
+        /// <param name="probabilityOfHit"></param>
+        /// <param name="probabilityOfWound"></param>
+        /// <param name="probabilityOfFailedSave"></param>
+        /// <returns>A double value containing the probability modifier</returns>
+        private static double GetHitAndWoundAndSaveModifier_RerollHits(double probabilityOfHit, double probabilityOfWound, double probabilityOfFailedSave)
         {
-            return baseProbabilityOfHit * baseProbabilityOfWound * baseProbabilityOfFailedSave;
+            return (1 - probabilityOfHit) * probabilityOfHit * probabilityOfWound * probabilityOfFailedSave;
         }
 
         /// <summary>
-        /// Gets the probability of hitting and wounding and the defender failing the save roll.
-        /// The attacker has torrent.
+        /// Gets the probability modifier value for hitting and wounding when the attacker has Devastating Wounds.
+        /// Devastating Wounds bypass the save roll.
         /// </summary>
-        /// <param name="baseProbabilityOfWound"></param>
-        /// <param name="baseProbabilityOfFailedSave"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfFailedSave_TorrentAndWoundAndFailedSave(double baseProbabilityOfWound, double baseProbabilityOfFailedSave)
+        /// <param name="probabilityOfHit"></param>
+        /// <param name="probabilityOfWound"></param>
+        /// <param name="probabilityOfFailedSave"></param>
+        /// <returns>A double value containing the probability modifier</returns>
+        private static double GetHitAndWoundAndSaveModifier_RerollHitsOf1(double probabilityOfHit, double probabilityOfWound, double probabilityOfFailedSave)
         {
-            return baseProbabilityOfWound * baseProbabilityOfFailedSave;
+            return (1.0 / POSSIBLE_RESULTS_SIX_SIDED_DIE) * probabilityOfWound * probabilityOfWound * probabilityOfFailedSave;
         }
 
         /// <summary>
-        /// Gets the base probability of hitting and wounding with a normal (non-critical) wound and the defender failing the save roll.
-        /// The attacker has torrent
+        /// Gets the probability modifier value for hitting and wounding when the attacker has Devastating Wounds.
+        /// Devastating Wounds bypass the save roll.
         /// </summary>
-        /// <param name="probabilityOfNormalWound"></param>
-        /// <param name="baseProbabilityOfFailedSave"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfFailedSave_TorrentAndNormalWoundAndFailedSave(double probabilityOfNormalWound, double baseProbabilityOfFailedSave)
-        {
-            return probabilityOfNormalWound * baseProbabilityOfFailedSave;
-        }
-
-        /// <summary>
-        /// Gets the base probability of hitting and wounding with a critical wound, triggering a devastating wound, and the defender failing the save roll.
-        /// The attacker has torrent
-        /// </summary>
+        /// <param name="probabilityOfNormalHit"></param>
+        /// <param name="probabilityOfCriticalHit"></param>
         /// <param name="probabilityOfCriticalWound"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfFailedSave_TorrentAndDevastatingWound(double probabilityOfCriticalWound)
-        {
-            return probabilityOfCriticalWound;
-        }
-
-        /*
-
-        /// <summary>
-        /// Gets the probability of wounding by succeeding on a normal (non-critical) hit and a basic wound roll.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_NormalHitAndWound(double probabilityOfNormalHit, double baseProbabilityOfWound)
-        {
-            return probabilityOfNormalHit * baseProbabilityOfWound;
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by succeeding on a normal (non-critical) hit, successfully re-rolling it into another normal hit, and succeeding on the wound roll.
-        /// </summary>
-        /// <param name="probabilityOfNormalHit"></param>
-        /// <param name="probabilityOfCriticalHit"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_NormalHitAndRerolledNormalHitAndWound(double probabilityOfNormalHit, double baseProbabilityOfWound)
-        {
-            return probabilityOfNormalHit * GetProbabilityOfWound_NormalHitAndWound(probabilityOfNormalHit, baseProbabilityOfWound);
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by succeeding on a normal (non-critical) hit and successfully re-rolling it into a Lethal Hit , bypassing the wound roll.
-        /// </summary>
-        /// <param name="probabilityOfNormalHit"></param>
-        /// <param name="probabilityOfCriticalHit"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_NormalHitAndRerolledLethalHit(double probabilityOfNormalHit, double probabilityOfCriticalHit)
-        {
-            return probabilityOfNormalHit * GetProbabilityOfWound_LethalHit(probabilityOfCriticalHit);
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by succeeding on a normal (non-critical) hit and successfully re-rolling it into a critical hit, triggering sustained hits, 
-        /// with each of those sustained hits succeeding on a wound roll.
-        /// </summary>
-        /// <param name="probabilityOfNormalHit"></param>
-        /// <param name="probabilityOfCriticalHit"></param>
-        /// <param name="sustainedHitsValue"></param>
-        /// <param name="baseProbabilityOfWound"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_NormalHitAndRerolledSustainedHitsAndWound(double probabilityOfNormalHit, double probabilityOfCriticalHit, int sustainedHitsValue, double baseProbabilityOfWound)
-        {
-            return probabilityOfNormalHit * GetProbabilityOfWound_SustainedHitsAndWound(probabilityOfCriticalHit, sustainedHitsValue, baseProbabilityOfWound);
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by failing a hit, re-rolling into a successful hit, and succeeding on the wound roll.
-        /// </summary>
-        /// <param name="baseProbabilityOfHit"></param>
-        /// <param name="baseProbabilityOfWound"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_FailedHitAndRerolledBasicHitAndWound(double baseProbabilityOfHit, double baseProbabilityOfWound)
-        {
-            return (1 - baseProbabilityOfHit) * GetProbabilityOfWound_BasicHitAndWound(baseProbabilityOfHit, baseProbabilityOfWound);
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by failing a hit, successfully re-rolling it into a normal hit, and succeeding on the wound roll.
-        /// </summary>
-        /// <param name="baseProbabilityOfHit"></param>
-        /// <param name="probabilityOfNormalHit"></param>
-        /// <param name="baseProbabilityOfWound"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_FailedHitAndRerolledNormalHitAndWound(double baseProbabilityOfHit, double probabilityOfNormalHit, double baseProbabilityOfWound)
-        {
-            return (1 - baseProbabilityOfHit) * GetProbabilityOfWound_NormalHitAndWound(probabilityOfNormalHit, baseProbabilityOfWound);
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by failing a hit, and successfully re-rolling it into a Lethal Hit, bypassing the wound roll.
-        /// </summary>
-        /// <param name="baseProbabilityOfHit"></param>
-        /// <param name="probabilityOfCriticalHit"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_FailedHitAndRerolledLethalHit(double baseProbabilityOfHit, double probabilityOfCriticalHit)
-        {
-            return (1 - baseProbabilityOfHit) * GetProbabilityOfWound_LethalHit(probabilityOfCriticalHit);
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by failing a hit, successfully re-rolling it into a critical hit, triggering sustained hits, and each of the sustained hits succeeding the wound roll.
-        /// </summary>
-        /// <param name="baseProbabilityOfHit"></param>
-        /// <param name="probabilityOfCriticalHit"></param>
-        /// <param name="sustainedHitsValue"></param>
-        /// <param name="baseProbabilityOfWound"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_FailedHitAndRerolledSustainedHitsAndWound(double baseProbabilityOfHit, double probabilityOfCriticalHit, int sustainedHitsValue, double baseProbabilityOfWound)
-        {
-            return (1 - baseProbabilityOfHit) * GetProbabilityOfWound_SustainedHitsAndWound(probabilityOfCriticalHit, sustainedHitsValue, baseProbabilityOfWound);
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by rolling a hit roll of 1, re-rolling into a successful hit, and succeeding on the wound roll.
-        /// </summary>
-        /// <param name="baseProbabilityOfHit"></param>
-        /// <param name="baseProbabilityOfWound"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_HitRollOf1AndRerolledBasicHitAndWound(double baseProbabilityOfHit, double baseProbabilityOfWound)
-        {
-            return 1.0 / POSSIBLE_RESULTS_SIX_SIDED_DIE * GetProbabilityOfWound_BasicHitAndWound(baseProbabilityOfHit, baseProbabilityOfWound);
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by rolling a hit roll of 1, successfully re-rolling it into a normal hit, and succeeding on the wound roll.
-        /// </summary>
-        /// <param name="probabilityOfNormalHit"></param>
-        /// <param name="baseProbabilityOfWound"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_HitRollOf1AndRerolledNormalHitAndWound(double probabilityOfNormalHit, double baseProbabilityOfWound)
-        {
-            return 1.0 / POSSIBLE_RESULTS_SIX_SIDED_DIE * GetProbabilityOfWound_NormalHitAndWound(probabilityOfNormalHit, baseProbabilityOfWound);
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by rolling a hit roll of 1, and successfully re-rolling it into a Lethal Hit, bypassing the wound roll.
-        /// </summary>
-        /// <param name="probabilityOfCriticalHit"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_HitRollOf1AndRerolledLethalHit(double probabilityOfCriticalHit)
-        {
-            return 1.0 / POSSIBLE_RESULTS_SIX_SIDED_DIE * GetProbabilityOfWound_LethalHit(probabilityOfCriticalHit);
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by rolling a hit roll of 1, successfully re-rolling it into a critical hit, triggering sustained hits, and each of the sustained hits succeeding the wound roll.
-        /// </summary>
-        /// <param name="probabilityOfCriticalHit"></param>
-        /// <param name="sustainedHitsValue"></param>
-        /// <param name="baseProbabilityOfWound"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_HitRollOf1AndRerolledSustainedHitsAndWound(double probabilityOfCriticalHit, int sustainedHitsValue, double baseProbabilityOfWound)
-        {
-            return 1.0 / POSSIBLE_RESULTS_SIX_SIDED_DIE * GetProbabilityOfWound_SustainedHitsAndWound(probabilityOfCriticalHit, sustainedHitsValue, baseProbabilityOfWound);
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by rolling a Lethal Hit, bypassing the wound roll.
-        /// </summary>
-        /// <param name="probabilityOfCriticalHit"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_LethalHit(double probabilityOfCriticalHit)
-        {
-            return probabilityOfCriticalHit;
-        }
-
-        /// <summary>
-        /// Gets the probability of wounding by rolling a critical hit, triggering sustained hits, and each of the sustained hits succeeding on a wound roll
-        /// </summary>
-        /// <param name="probabilityOfCriticalHit"></param>
+        /// <param name="probabilityOfFailedSave"></param>
+        /// <param name="hasLethalHits"></param>
+        /// <param name="hasSustainedHits"></param>
         /// <param name="sustainedHitsMultiplier"></param>
-        /// <param name="baseProbabilityOfWound"></param>
-        /// <returns></returns>
-        private static double GetProbabilityOfWound_SustainedHitsAndWound(double probabilityOfCriticalHit, int sustainedHitsMultiplier, double baseProbabilityOfWound)
+        /// <returns>A double value containing the probability modifier</returns>
+        private static double GetHitAndWoundAndSaveModifier_DevastatingWounds(double probabilityOfNormalHit, double probabilityOfCriticalHit, double probabilityOfCriticalWound, double probabilityOfFailedSave, bool hasLethalHits, bool hasSustainedHits, int sustainedHitsMultiplier)
         {
-            // Return the base hit and wound plus any sustained hits and wounds
-            var criticalHitAndWound = probabilityOfCriticalHit * baseProbabilityOfWound;
-            var sustainedHitsAndWound = sustainedHitsMultiplier * probabilityOfCriticalHit * baseProbabilityOfWound;
-            return criticalHitAndWound + sustainedHitsAndWound;
-        }
+            double devastatingWoundsModifier = 0;
 
-        */
+            // If attacker has Lethal Hits, dev wounds can only trigger on normal hits
+            if (hasLethalHits)
+            {
+                devastatingWoundsModifier += probabilityOfNormalHit * probabilityOfCriticalWound;
+            }
+            else
+            {
+                devastatingWoundsModifier += (probabilityOfNormalHit + probabilityOfCriticalHit) * probabilityOfCriticalWound;
+            }
+
+            if (hasSustainedHits)
+            {
+                devastatingWoundsModifier += sustainedHitsMultiplier * probabilityOfCriticalHit * probabilityOfCriticalWound;
+            }
+
+            return devastatingWoundsModifier;
+        }
 
         /// <summary>
         /// Returns the average amount of damage that the attacker's weapon is able to deal.
@@ -866,6 +690,7 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Returns the attacker's probability of succeeding any single hit roll.
+        /// Includes modifiers for any abilities that affect hit rolls.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <returns>A double value containing the probability of succeeding on any single hit roll.</returns>
@@ -881,6 +706,7 @@ namespace WarhammerCombatMathLibrary
             // If weapon has torrent, no other modifiers are added
             if (attacker.WeaponHasTorrent)
             {
+                Debug.WriteLine($"GetProbabilityOfHit() | Attacker has Torrent. Returning 1");
                 return 1;
             }
 
@@ -893,14 +719,24 @@ namespace WarhammerCombatMathLibrary
             // Full rerolls overrides rerolls of 1
             if (attacker.WeaponHasRerollHitRolls)
             {
-                totalModifiers += GetHitModifier_RerollHits(baseHitProbability);
+                var rerollModifier = GetHitModifier_RerollHits(baseHitProbability);
+                Debug.WriteLine($"GetProbabilityOfHit() | Reroll hits modifier: {rerollModifier}");
+                totalModifiers += rerollModifier;
             }
             else if (attacker.WeaponHasRerollHitRollsOf1)
             {
-                totalModifiers += GetHitModifier_RerollHitsOf1(baseHitProbability);
+                var rerollModifier = GetHitModifier_RerollHitsOf1(baseHitProbability);
+                Debug.WriteLine($"GetProbabilityOfHit() | Reroll hits of 1 modifier: {rerollModifier}");
+                totalModifiers += rerollModifier;
             }
 
-            return Math.Min(1, baseHitProbability + totalModifiers);
+            var result = Math.Min(1, baseHitProbability + totalModifiers);
+
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Base hit probability: {baseHitProbability}");
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Total modifiers: {totalModifiers}");
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Total hit probability: {result}");
+
+            return result;
         }
 
         /// <summary>
@@ -984,6 +820,9 @@ namespace WarhammerCombatMathLibrary
         /// <returns></returns>
         public static int GetSuccessThresholdOfWound(int attackerWeaponStrength, int defenderToughness)
         {
+            Debug.WriteLine($"GetSuccessThresholdOfWound() | Attacker strength: {attackerWeaponStrength}");
+            Debug.WriteLine($"GetSuccessThresholdOfWound() | Defender toughness: {defenderToughness}");
+
             if (attackerWeaponStrength <= 0)
             {
                 Debug.WriteLine($"GetSuccessThresholdOfWound() | Attacker strength is less than or equal to 0. Returning 6+ ...");
@@ -1050,8 +889,6 @@ namespace WarhammerCombatMathLibrary
             // Calculate wound roll probability
             var woundProbability = GetBaseProbabilityOfWound(attacker, defender);
 
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Base wound probability: {woundProbability}");
-
             // A weapon with Torrent will automatically hit, bypassing the hit roll (and any critical hit abilities)
             if (attacker.WeaponHasTorrent)
             {
@@ -1059,49 +896,54 @@ namespace WarhammerCombatMathLibrary
                 return woundProbability;
             }
 
-            // Determine if attacker has critical hit modifiers
-            var attackerHasCriticalHitModifiers = attacker.WeaponHasLethalHits || attacker.WeaponHasSustainedHits;
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Attacker has critical hit modifiers: {attackerHasCriticalHitModifiers}");
+            var baseHitProbability = GetProbabilityOfHit(attacker);
+            var hasWoundBypassModifiers = attacker.WeaponHasLethalHits;
+            var criticalHitProbability = GetProbabilityOfCriticalHit(attacker);
+            var normalHitProbability = baseHitProbability - criticalHitProbability;
+            var hitProbability = hasWoundBypassModifiers ? normalHitProbability : baseHitProbability;
 
-            // Calculate hit probability
-            var baseHitProbability = attackerHasCriticalHitModifiers ? GetProbabilityOfNormalHit(attacker) : GetBaseProbabilityOfHit(attacker);
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Base hit probability: {baseHitProbability}");
+            // DEBUG
+            if (hasWoundBypassModifiers)
+            {
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Attacker has wound bypass modifiers.");
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Separating base hit probability {baseHitProbability} into normal hit {normalHitProbability} and critical hit {criticalHitProbability}");
+            }
 
             // Calculate base hit and wound probability
-            var baseHitAndWoundProbability = baseHitProbability * woundProbability;
-            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Base hit and wound probability: {baseHitProbability} * {woundProbability} = {baseHitAndWoundProbability}");
+            var baseHitAndWoundProbability = hitProbability * woundProbability;
 
             // Calculate modifiers
             double modifiers = 0;
 
-            // Full rerolls overrides rerolls of 1
-            if (attacker.WeaponHasRerollHitRolls)
-            {
-                var rerollHitsModifier = GetHitAndWoundModifier_RerollHits(baseHitProbability, woundProbability);
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Attacker has Reroll Hits. Reroll Hits of 1 modifier: {rerollHitsModifier}");
-                modifiers += rerollHitsModifier;
-            }
-            else if (attacker.WeaponHasRerollHitRollsOf1)
-            {
-                var rerollHitsOf1Modifier = GetHitAndWoundModifier_RerollHitsOf1(baseHitProbability, woundProbability);
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Attacker has Reroll Hits of 1. Reroll Hits of 1 modifier: {rerollHitsOf1Modifier}");
-                modifiers += rerollHitsOf1Modifier;
-            }
-
             if (attacker.WeaponHasLethalHits)
             {
-                var lethalHitsModifier = GetHitAndWoundModifier_LethalHits(attacker);
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Attacker has Lethal Hits. Lethal Hits modifier: {lethalHitsModifier}");
+                var lethalHitsModifier = GetWoundModifier_LethalHits(criticalHitProbability);
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Lethal Hits modifier: {lethalHitsModifier}");
                 modifiers += lethalHitsModifier;
             }
 
             if (attacker.WeaponHasSustainedHits)
             {
-                var sustainedHitsModifier = GetHitAndWoundModifier_SustainedHits(attacker, woundProbability);
-                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Attacker has Sustained Hits. Sustained Hits modifier: {sustainedHitsModifier}");
+                var sustainedHitsModifier = GetWoundModifier_SustainedHits(criticalHitProbability, attacker.WeaponSustainedHitsMultiplier, woundProbability);
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Sustained Hits {attacker.WeaponSustainedHitsMultiplier} modifier: {sustainedHitsModifier}");
                 modifiers += sustainedHitsModifier;
             }
 
+            // Reroll wounds overrides reroll wounds of 1
+            if (attacker.WeaponHasRerollWoundRolls)
+            {
+                var rerollModifier = GetWoundModifier_RerollWounds(woundProbability);
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Reroll wounds modifier: {rerollModifier}");
+                modifiers += rerollModifier;
+            }
+            else if (attacker.WeaponHasRerollWoundRollsOf1)
+            {
+                var rerollModifier = GetWoundModifier_RerollWounds(woundProbability);
+                Debug.WriteLine($"GetProbabilityOfHitAndWound() | Reroll wounds modifier: {rerollModifier}");
+                modifiers += GetWoundModifier_RerollWoundsOf1(rerollModifier);
+            }
+
+            Debug.WriteLine($"GetProbabilityOfHitAndWound() | Base hit and wound probability: {hitProbability} * {woundProbability} = {baseHitAndWoundProbability}");
             Debug.WriteLine($"GetProbabilityOfHitAndWound() | Total modifiers: {modifiers}");
             Debug.WriteLine($"GetProbabilityOfHitAndWound() | Total hit and wound probability: {Math.Min(1, baseHitAndWoundProbability + modifiers)}");
 
@@ -1240,182 +1082,8 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            // Determine base probability of failed save
-            var baseProbabilityOfFailedSave = GetBaseProbabilityOfFailedSave(attacker, defender);
-
-            // Determine base probability of wound
-            var baseProbabilityOfWound = GetBaseProbabilityOfWound(attacker, defender);
-            var probabilityOfCriticalWound = GetProbabilityOfCriticalWound(attacker);
-            var probabilityOfNormalWound = GetProbabilityOfNormalWound(attacker, defender);
-
-            // A weapon with Torrent and Devastating Wounds will:
-            // - Automatically succeed all hit rolls, bypassing any critical hit abilities (Torrent)
-            // - Bypass the save roll on a critical wound (Devastating Wounds)
-            if (attacker.WeaponHasTorrent && attacker.WeaponHasDevastatingWounds)
-            {
-                return GetProbabilityOfFailedSave_TorrentAndNormalWoundAndFailedSave(probabilityOfNormalWound, baseProbabilityOfFailedSave)
-                       + GetProbabilityOfFailedSave_TorrentAndDevastatingWound(probabilityOfCriticalWound);
-            }
-
-            // A weapon with Torrent and will automatically succeed all hit rolls, bypassing any critical hit abilities
-            if (attacker.WeaponHasTorrent)
-            {
-                return GetProbabilityOfFailedSave_TorrentAndWoundAndFailedSave(baseProbabilityOfWound, baseProbabilityOfFailedSave);
-            }
-
-            // For all other calculations, include the hit calculations
-            var baseProbabilityOfHit = GetBaseProbabilityOfHit(attacker);
-            var probabilityOfCriticalHit = GetProbabilityOfCriticalHit(attacker);
-            var probabilityOfNormalHit = GetProbabilityOfNormalHit(attacker);
-
-            // All possible ability combinations:
-            // - reroll hits + reroll wounds + lethal + sustained + dev wounds
-            // - reroll hits + reroll wounds + lethal + sustained + 0
-            // - reroll hits + reroll wounds + lethal + 0 + dev wounds
-            // - reroll hits + reroll wounds + lethal + 0 + 0
-            // - reroll hits + reroll wounds + 0 + sustained + dev wounds
-            // - reroll hits + reroll wounds + 0 + sustained + 0
-            // - reroll hits + reroll wounds + 0 + 0 + dev wounds
-            // - reroll hits + reroll wounds + 0 + 0 + 0
-            // - reroll hits + 0 + lethal + sustained + dev wounds
-            // - reroll hits + 0 + lethal + sustained + 0
-            // - reroll hits + 0 + lethal + 0 + dev wounds
-            // - reroll hits + 0 + lethal + 0 + 0
-            // - reroll hits + 0 + 0 + sustained + dev wounds
-            // - reroll hits + 0 + 0 + sustained + 0
-            // - reroll hits + 0 + 0 + 0 + dev wounds
-            // - reroll hits + 0 + 0 + 0 + 0
-            // - reroll hits + reroll wounds of 1 + lethal + sustained + dev wounds
-            // - reroll hits + reroll wounds of 1 + lethal + sustained + 0
-            // - reroll hits + reroll wounds of 1 + lethal + 0 + dev wounds
-            // - reroll hits + reroll wounds of 1 + lethal + 0 + 0
-            // - reroll hits + reroll wounds of 1 + 0 + sustained + dev wounds
-            // - reroll hits + reroll wounds of 1 + 0 + sustained + 0
-            // - reroll hits + reroll wounds of 1 + 0 + 0 + dev wounds
-            // - reroll hits + reroll wounds of 1 + 0 + 0 + 0
-            // - reroll hits + 0 + lethal + sustained + dev wounds
-            // - reroll hits + 0 + lethal + sustained + 0
-            // - reroll hits + 0 + lethal + 0 + dev wounds
-            // - reroll hits + 0 + lethal + 0 + 0
-            // - reroll hits + 0 + 0 + sustained + dev wounds
-            // - reroll hits + 0 + 0 + sustained + 0
-            // - reroll hits + 0 + 0 + 0 + dev wounds
-            // - reroll hits + 0 + 0 + 0 + 0
-            // - reroll hits of 1 + reroll wounds + lethal + sustained + dev wounds
-            // - reroll hits of 1 + reroll wounds + lethal + sustained + 0
-            // - reroll hits of 1 + reroll wounds + lethal + 0 + dev wounds
-            // - reroll hits of 1 + reroll wounds + lethal + 0 + 0
-            // - reroll hits of 1 + reroll wounds + 0 + sustained + dev wounds
-            // - reroll hits of 1 + reroll wounds + 0 + sustained + 0
-            // - reroll hits of 1 + reroll wounds + 0 + 0 + dev wounds
-            // - reroll hits of 1 + reroll wounds + 0 + 0 + 0
-            // - reroll hits of 1 + 0 + lethal + sustained + dev wounds
-            // - reroll hits of 1 + 0 + lethal + sustained + 0
-            // - reroll hits of 1 + 0 + lethal + 0 + dev wounds
-            // - reroll hits of 1 + 0 + lethal + 0 + 0
-            // - reroll hits of 1 + 0 + 0 + sustained + dev wounds
-            // - reroll hits of 1 + 0 + 0 + sustained + 0
-            // - reroll hits of 1 + 0 + 0 + 0 + dev wounds
-            // - reroll hits of 1 + 0 + 0 + 0 + 0
-            // - reroll hits of 1 + reroll wounds of 1 + lethal + sustained + dev wounds
-            // - reroll hits of 1 + reroll wounds of 1 + lethal + sustained + 0
-            // - reroll hits of 1 + reroll wounds of 1 + lethal + 0 + dev wounds
-            // - reroll hits of 1 + reroll wounds of 1 + lethal + 0 + 0
-            // - reroll hits of 1 + reroll wounds of 1 + 0 + sustained + dev wounds
-            // - reroll hits of 1 + reroll wounds of 1 + 0 + sustained + 0
-            // - reroll hits of 1 + reroll wounds of 1 + 0 + 0 + dev wounds
-            // - reroll hits of 1 + reroll wounds of 1 + 0 + 0 + 0
-            // - reroll hits of 1 + 0 + lethal + sustained + dev wounds
-            // - reroll hits of 1 + 0 + lethal + sustained + 0
-            // - reroll hits of 1 + 0 + lethal + 0 + dev wounds
-            // - reroll hits of 1 + 0 + lethal + 0 + 0
-            // - reroll hits of 1 + 0 + 0 + sustained + dev wounds
-            // - reroll hits of 1 + 0 + 0 + sustained + 0
-            // - reroll hits of 1 + 0 + 0 + 0 + dev wounds
-            // - reroll hits of 1 + 0 + 0 + 0 + 0
-
-
-            /*
-
-            // A weapon with Lethal Hits, Sustained Hits X, and Devastating Wounds will:
-            // - Bypass the wound roll on a critical hit (Lethal Hits)
-            // - Add an additional X attacks to the wound roll (Sustained Hits)
-            // - Bypass the save roll on a critical wound (Devastating Wounds)
-            // - A Lethal Hit will bypass the wound roll and cannot trigger Devastating Wounds
-            if (attacker.WeaponHasLethalHits && attacker.WeaponHasSustainedHits && attacker.WeaponHasDevastatingWounds)
-            {
-                // Calculate expected sustained hits
-                var expectedSustainedHits = attacker.WeaponSustainedHitsMultiplier * probabilityOfCriticalHit;
-
-                // Calculate probabilities for possible successful outcomes
-                var probabilityOfNormalHitAndNormalWoundAndFailedSave = probabilityOfNormalHit * probabilityOfNormalWound * baseProbabilityOfFailedSave;
-                var probabilityOfNormalHitAndDevastatingWound = probabilityOfNormalHit * probabilityOfCriticalWound;
-                var probabilityOfLethalHitAndFailedSave = probabilityOfCriticalHit * baseProbabilityOfFailedSave;
-                var probabilityOfSustainedHitsAndNormalWoundAndFailedSave = expectedSustainedHits * probabilityOfNormalWound * baseProbabilityOfFailedSave;
-                var probabilityOfSustainedHitsAndDevastatingWound = expectedSustainedHits * probabilityOfCriticalWound;
-
-                // Combine probabilities
-                return probabilityOfNormalHitAndNormalWoundAndFailedSave
-                       + probabilityOfNormalHitAndDevastatingWound
-                       + probabilityOfLethalHitAndFailedSave
-                       + probabilityOfSustainedHitsAndNormalWoundAndFailedSave
-                       + probabilityOfSustainedHitsAndDevastatingWound;
-            }
-
-            // A weapon with Lethal Hits, and Devastating Wounds will:
-            // - Bypass the wound roll on a critical hit (Lethal Hits)
-            // - Bypass the save roll on a critical wound (Devastating Wounds)
-            // - A Lethal Hit will bypass the wound roll and cannot trigger Devastating Wounds
-            if (attacker.WeaponHasLethalHits && attacker.WeaponHasDevastatingWounds)
-            {
-                // Calculate probabilities for possible successful outcomes
-                var probabilityOfNormalHitAndNormalWoundAndFailedSave = probabilityOfNormalHit * probabilityOfNormalWound * baseProbabilityOfFailedSave;
-                var probabilityOfNormalHitAndDevastatingWound = probabilityOfNormalHit * probabilityOfCriticalWound;
-                var probabilityOfLethalHitAndFailedSave = probabilityOfCriticalHit * baseProbabilityOfFailedSave;
-
-                // Combine probabilities
-                return probabilityOfNormalHitAndNormalWoundAndFailedSave
-                       + probabilityOfNormalHitAndDevastatingWound
-                       + probabilityOfLethalHitAndFailedSave;
-            }
-
-            // A weapon with Sustained Hits X, and Devastating Wounds will:
-            // - Add an additional X attacks to the wound roll (Sustained Hits)
-            // - Bypass the save roll on a critical wound (Devastating Wounds)
-            if (attacker.WeaponHasSustainedHits && attacker.WeaponHasDevastatingWounds)
-            {
-                // Calculate expected sustained hits
-                var expectedSustainedHits = attacker.WeaponSustainedHitsMultiplier * probabilityOfCriticalHit;
-
-                // Calculate probabilities for possible successful outcomes
-                var probabilityOfNormalHitAndNormalWoundAndFailedSave = probabilityOfNormalHit * probabilityOfNormalWound * baseProbabilityOfFailedSave;
-                var probabilityOfNormalHitAndDevastatingWound = probabilityOfNormalHit * probabilityOfCriticalWound;
-                var probabilityOfSustainedHitsAndNormalWoundAndFailedSave = expectedSustainedHits * probabilityOfNormalWound * baseProbabilityOfFailedSave;
-                var probabilityOfSustainedHitsAndDevastatingWound = expectedSustainedHits * probabilityOfCriticalWound;
-
-                // Combine probabilities
-                return probabilityOfNormalHitAndNormalWoundAndFailedSave
-                       + probabilityOfNormalHitAndDevastatingWound
-                       + probabilityOfSustainedHitsAndNormalWoundAndFailedSave
-                       + probabilityOfSustainedHitsAndDevastatingWound;
-            }
-
-            // Devastating Wounds will bypass the save roll on a critical wound
-            if (attacker.WeaponHasDevastatingWounds)
-            {
-                // Calculate probabilities for possible successful outcomes
-                var probabilityOfHitAndNormalWoundAndFailedSave = baseProbabilityOfHit * probabilityOfNormalWound * baseProbabilityOfFailedSave;
-                var probabilityOfHitAndDevastatingWound = baseProbabilityOfHit * probabilityOfCriticalWound;
-
-                // Combine probabilities
-                return probabilityOfHitAndNormalWoundAndFailedSave
-                       + probabilityOfHitAndDevastatingWound;
-            }
-
-            */
-
             // Probability of unmodified hit, wound, and failed save
-            return GetProbabilityOfFailedSave_BasicHitAndWoundAndFailedSave(baseProbabilityOfHit, baseProbabilityOfWound, baseProbabilityOfFailedSave);
+            return 0;
         }
 
         /// <summary>
