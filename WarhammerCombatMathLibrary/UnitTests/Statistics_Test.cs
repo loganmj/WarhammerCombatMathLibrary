@@ -19,7 +19,7 @@ namespace UnitTests
         [TestMethod]
         public void ProbabilityOfSuccess_NumberOfPossibleResultsLessThanOrEqualTo0()
         {
-            Assert.AreEqual(0, Statistics.ProbabilityOfSuccess(-1, 0));
+            Assert.AreEqual(0, Statistics.GetProbabilityOfSuccess(-1, 0));
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace UnitTests
         [TestMethod]
         public void ProbabilityOfSuccess_NumberOfSuccessfulResultsLessThanOrEqualTo0()
         {
-            Assert.AreEqual(0, Statistics.ProbabilityOfSuccess(1, -1));
+            Assert.AreEqual(0, Statistics.GetProbabilityOfSuccess(1, -1));
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace UnitTests
         [TestMethod]
         public void ProbabilityOfSuccess_SuccessfulResultsGreaterThanPossibleResults()
         {
-            Assert.AreEqual(1, Statistics.ProbabilityOfSuccess(1, 2));
+            Assert.AreEqual(1, Statistics.GetProbabilityOfSuccess(1, 2));
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace UnitTests
         [TestMethod]
         public void ProbabilityOfSuccess_TestParams1()
         {
-            Assert.AreEqual(0.5, Statistics.ProbabilityOfSuccess(2, 1));
+            Assert.AreEqual(0.5, Statistics.GetProbabilityOfSuccess(2, 1));
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace UnitTests
         [TestMethod]
         public void ProbabilityOfSuccess_TestParams2()
         {
-            Assert.AreEqual(0.25, Statistics.ProbabilityOfSuccess(4, 1));
+            Assert.AreEqual(0.25, Statistics.GetProbabilityOfSuccess(4, 1));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace UnitTests
         [TestMethod]
         public void ProbabilityOfSuccess_TestParams3()
         {
-            Assert.AreEqual(0.7, Statistics.ProbabilityOfSuccess(10, 7));
+            Assert.AreEqual(0.7, Statistics.GetProbabilityOfSuccess(10, 7));
         }
 
         #endregion
@@ -78,7 +78,7 @@ namespace UnitTests
         public void AverageResult_PossibleResultsLessThanOrEqualTo0()
         {
             var expected = 0;
-            var actual = Statistics.AverageResult(0);
+            var actual = Statistics.GetMeanResult(0);
             Assert.AreEqual(expected, actual);
         }
 
@@ -90,7 +90,7 @@ namespace UnitTests
         {
             var expected = 2;
             var numberOfResults = 3;
-            var actual = Statistics.AverageResult(numberOfResults);
+            var actual = Statistics.GetMeanResult(numberOfResults);
             Assert.AreEqual(expected, actual);
         }
 
@@ -102,7 +102,7 @@ namespace UnitTests
         {
             var expected = 4;
             var numberOfResults = 6;
-            var actual = Statistics.AverageResult(numberOfResults);
+            var actual = Statistics.GetMeanResult(numberOfResults);
             Assert.AreEqual(expected, actual);
         }
 
@@ -114,7 +114,7 @@ namespace UnitTests
         {
             var expected = 6;
             var numberOfResults = 10;
-            var actual = Statistics.AverageResult(numberOfResults);
+            var actual = Statistics.GetMeanResult(numberOfResults);
             Assert.AreEqual(expected, actual);
         }
 
@@ -128,7 +128,7 @@ namespace UnitTests
         [TestMethod]
         public void Mean_NumberOfTrialsLessThan1()
         {
-            Assert.AreEqual(0, Statistics.Mean(0, 1));
+            Assert.AreEqual(0, Statistics.GetMeanOfDistribution(0, 1));
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace UnitTests
         [TestMethod]
         public void Mean_ProbabilityLessThan0()
         {
-            Assert.AreEqual(0, Statistics.Mean(1, -1));
+            Assert.AreEqual(0, Statistics.GetMeanOfDistribution(1, -1));
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace UnitTests
         [TestMethod]
         public void Mean_TestParams1()
         {
-            Assert.AreEqual(0.5, Statistics.Mean(1, 0.5));
+            Assert.AreEqual(0.5, Statistics.GetMeanOfDistribution(1, 0.5));
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace UnitTests
         [TestMethod]
         public void Mean_TestParams2()
         {
-            Assert.AreEqual(5, Statistics.Mean(10, 0.5));
+            Assert.AreEqual(5, Statistics.GetMeanOfDistribution(10, 0.5));
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace UnitTests
         [TestMethod]
         public void Mean_TestParams3()
         {
-            Assert.AreEqual(25, Statistics.Mean(100, 0.25));
+            Assert.AreEqual(25, Statistics.GetMeanOfDistribution(100, 0.25));
         }
 
         #endregion
@@ -177,7 +177,7 @@ namespace UnitTests
         [TestMethod]
         public void StandardDeviation_NumberOfTrialsLessThan1()
         {
-            Assert.AreEqual(0, Statistics.StandardDeviation(0, 1));
+            Assert.AreEqual(0, Statistics.GetStandardDeviationOfDistribution(0, 1));
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace UnitTests
         [TestMethod]
         public void StandardDeviation_ProbabilityLessThan0()
         {
-            Assert.AreEqual(0, Statistics.StandardDeviation(1, -1));
+            Assert.AreEqual(0, Statistics.GetStandardDeviationOfDistribution(1, -1));
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace UnitTests
         [TestMethod]
         public void StandardDeviation_TestParams1()
         {
-            Assert.AreEqual(0.5, Statistics.Mean(1, 0.5));
+            Assert.AreEqual(0.5, Statistics.GetMeanOfDistribution(1, 0.5));
         }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace UnitTests
         [TestMethod]
         public void StandardDeviation_TestParams2()
         {
-            Assert.AreEqual(1.58, Math.Round(Statistics.StandardDeviation(10, 0.5), 2));
+            Assert.AreEqual(1.58, Math.Round(Statistics.GetStandardDeviationOfDistribution(10, 0.5), 2));
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace UnitTests
         [TestMethod]
         public void StandardDeviation_TestParams3()
         {
-            Assert.AreEqual(4.33, Math.Round(Statistics.StandardDeviation(100, 0.25), 2));
+            Assert.AreEqual(4.33, Math.Round(Statistics.GetStandardDeviationOfDistribution(100, 0.25), 2));
         }
 
         #endregion
@@ -419,7 +419,7 @@ namespace UnitTests
         public void BinomialDistribution_NumberOfTrialsLessThan1()
         {
             var expected = new List<BinomialOutcome>() { new(0, 1) };
-            var actual = Statistics.BinomialDistribution(0, 0.5);
+            var actual = Statistics.GetBinomialDistribution(0, 0.5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -445,7 +445,7 @@ namespace UnitTests
         public void BinomialDistribution_VariableTrials_MinNumberOfTrialsLessThan1()
         {
             var expected = new List<BinomialOutcome>() { new(0, 1) };
-            var actual = Statistics.BinomialDistribution(0, 1, 0.5);
+            var actual = Statistics.GetBinomialDistribution(0, 1, 0.5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -471,7 +471,7 @@ namespace UnitTests
         public void BinomialDistribution_VariableTrials_MaxNumberOfTrialsLessThan1()
         {
             var expected = new List<BinomialOutcome>() { new(0, 1) };
-            var actual = Statistics.BinomialDistribution(1, 0, 0.5);
+            var actual = Statistics.GetBinomialDistribution(1, 0, 0.5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -503,7 +503,7 @@ namespace UnitTests
                 new(2,0),
                 new(3,0)
             };
-            var actual = Statistics.BinomialDistribution(3, -1);
+            var actual = Statistics.GetBinomialDistribution(3, -1);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -536,7 +536,7 @@ namespace UnitTests
                 new(3, 1)
             };
 
-            var actual = Statistics.BinomialDistribution(3, 1);
+            var actual = Statistics.GetBinomialDistribution(3, 1);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -562,7 +562,7 @@ namespace UnitTests
         public void BinomialDistribution_GroupSuccessCountLessThan1()
         {
             var expected = new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
-            var actual = Statistics.BinomialDistribution(3, 0.5, 0);
+            var actual = Statistics.GetBinomialDistribution(3, 0.5, 0);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -588,7 +588,7 @@ namespace UnitTests
         public void BinomialDistribution_GroupSuccessCountGreaterThanNumberOfTrials()
         {
             var expected = new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
-            var actual = Statistics.BinomialDistribution(3, 0.5, 5);
+            var actual = Statistics.GetBinomialDistribution(3, 0.5, 5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -621,7 +621,7 @@ namespace UnitTests
                 new(1, 0.5)
             };
 
-            var actual = Statistics.BinomialDistribution(numberOfTrials, probability);
+            var actual = Statistics.GetBinomialDistribution(numberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -654,7 +654,7 @@ namespace UnitTests
                 new(1, 0.1)
             };
 
-            var actual = Statistics.BinomialDistribution(numberOfTrials, probability);
+            var actual = Statistics.GetBinomialDistribution(numberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -690,7 +690,7 @@ namespace UnitTests
                 new(3, 0.1250)
             };
 
-            var actual = Statistics.BinomialDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
+            var actual = Statistics.GetBinomialDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -729,7 +729,7 @@ namespace UnitTests
                 new(6, 0.0156)
             };
 
-            var actual = Statistics.BinomialDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
+            var actual = Statistics.GetBinomialDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -759,7 +759,7 @@ namespace UnitTests
         public void LowerCumulativeDistribution_NumberOfTrialsLessThan1()
         {
             var expected = new List<BinomialOutcome>() { new(0, 1) };
-            var actual = Statistics.CumulativeDistribution(0, 0.5);
+            var actual = Statistics.GetCumulativeDistribution(0, 0.5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -785,7 +785,7 @@ namespace UnitTests
         public void LowerCumulativeDistribution_VariableTrials_MinNumberOfTrialsLessThan1()
         {
             var expected = new List<BinomialOutcome>() { new(0, 1) };
-            var actual = Statistics.CumulativeDistribution(0, 1, 0.5);
+            var actual = Statistics.GetCumulativeDistribution(0, 1, 0.5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -811,7 +811,7 @@ namespace UnitTests
         public void LowerCumulativeDistribution_VariableTrials_MaxNumberOfTrialsLessThan1()
         {
             var expected = new List<BinomialOutcome>() { new(0, 1) };
-            var actual = Statistics.CumulativeDistribution(1, 0, 0.5);
+            var actual = Statistics.GetCumulativeDistribution(1, 0, 0.5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -843,7 +843,7 @@ namespace UnitTests
                 new(2,1),
                 new(3,1)
             };
-            var actual = Statistics.CumulativeDistribution(3, -1);
+            var actual = Statistics.GetCumulativeDistribution(3, -1);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -876,7 +876,7 @@ namespace UnitTests
                 new(3, 1)
             };
 
-            var actual = Statistics.CumulativeDistribution(3, 1);
+            var actual = Statistics.GetCumulativeDistribution(3, 1);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -902,7 +902,7 @@ namespace UnitTests
         public void LowerCumulativeDistribution_GroupSuccessCountLessThan1()
         {
             var expected = new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
-            var actual = Statistics.CumulativeDistribution(3, 0.5, 0);
+            var actual = Statistics.GetCumulativeDistribution(3, 0.5, 0);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -928,7 +928,7 @@ namespace UnitTests
         public void LowerCumulativeDistribution_GroupSuccessCountGreaterThanNumberOfTrials()
         {
             var expected = new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
-            var actual = Statistics.CumulativeDistribution(3, 0.5, 5);
+            var actual = Statistics.GetCumulativeDistribution(3, 0.5, 5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -961,7 +961,7 @@ namespace UnitTests
                 new(1, 1)
             };
 
-            var actual = Statistics.CumulativeDistribution(numberOfTrials, probability);
+            var actual = Statistics.GetCumulativeDistribution(numberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -994,7 +994,7 @@ namespace UnitTests
                 new(1, 1.0)
             };
 
-            var actual = Statistics.CumulativeDistribution(numberOfTrials, probability);
+            var actual = Statistics.GetCumulativeDistribution(numberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1030,7 +1030,7 @@ namespace UnitTests
                 new(3, 1)
             };
 
-            var actual = Statistics.CumulativeDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
+            var actual = Statistics.GetCumulativeDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1069,7 +1069,7 @@ namespace UnitTests
                 new(6, 1)
             };
 
-            var actual = Statistics.CumulativeDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
+            var actual = Statistics.GetCumulativeDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1099,7 +1099,7 @@ namespace UnitTests
         public void SurvivorDistribution_NumberOfTrialsLessThan1()
         {
             var expected = new List<BinomialOutcome>() { new(0, 1) };
-            var actual = Statistics.SurvivorDistribution(0, 0.5);
+            var actual = Statistics.GetSurvivorDistribution(0, 0.5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1125,7 +1125,7 @@ namespace UnitTests
         public void SurvivorDistribution_VariableTrials_MinNumberOfTrialsLessThan1()
         {
             var expected = new List<BinomialOutcome>() { new(0, 1) };
-            var actual = Statistics.SurvivorDistribution(0, 1, 0.5);
+            var actual = Statistics.GetSurvivorDistribution(0, 1, 0.5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1151,7 +1151,7 @@ namespace UnitTests
         public void SurvivorDistribution_VariableTrials_MaxNumberOfTrialsLessThan1()
         {
             var expected = new List<BinomialOutcome>() { new(0, 1) };
-            var actual = Statistics.SurvivorDistribution(1, 0, 0.5);
+            var actual = Statistics.GetSurvivorDistribution(1, 0, 0.5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1184,7 +1184,7 @@ namespace UnitTests
                 new(3, 0)
             };
 
-            var actual = Statistics.SurvivorDistribution(3, -1);
+            var actual = Statistics.GetSurvivorDistribution(3, -1);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1217,7 +1217,7 @@ namespace UnitTests
                 new(3, 1)
             };
 
-            var actual = Statistics.SurvivorDistribution(3, 1);
+            var actual = Statistics.GetSurvivorDistribution(3, 1);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1243,7 +1243,7 @@ namespace UnitTests
         public void SurvivorDistribution_GroupSuccessCountLessThan1()
         {
             var expected = new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
-            var actual = Statistics.SurvivorDistribution(3, 0.5, 0);
+            var actual = Statistics.GetSurvivorDistribution(3, 0.5, 0);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1269,7 +1269,7 @@ namespace UnitTests
         public void SurvivorDistribution_GroupSuccessCountGreaterThanNumberOfTrials()
         {
             var expected = new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
-            var actual = Statistics.SurvivorDistribution(3, 0.5, 5);
+            var actual = Statistics.GetSurvivorDistribution(3, 0.5, 5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1302,7 +1302,7 @@ namespace UnitTests
 
             var numberOfTrials = 1;
             var probability = 0.5;
-            var actual = Statistics.SurvivorDistribution(numberOfTrials, probability);
+            var actual = Statistics.GetSurvivorDistribution(numberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1335,7 +1335,7 @@ namespace UnitTests
 
             var numberOfTrials = 1;
             var probability = 0.1;
-            var actual = Statistics.SurvivorDistribution(numberOfTrials, probability);
+            var actual = Statistics.GetSurvivorDistribution(numberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1371,7 +1371,7 @@ namespace UnitTests
                 new(3, 0.1250)
             };
 
-            var actual = Statistics.SurvivorDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
+            var actual = Statistics.GetSurvivorDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -1410,7 +1410,7 @@ namespace UnitTests
                 new(6, 0.0156)
             };
 
-            var actual = Statistics.SurvivorDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
+            var actual = Statistics.GetSurvivorDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
 
             // Print expected
             Debug.WriteLine($"Expected: ");

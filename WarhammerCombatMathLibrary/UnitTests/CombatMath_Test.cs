@@ -477,62 +477,46 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker is a single model with no abilities
         /// </summary>
         [TestMethod]
         public void GetMeanHits_SingleModelAttacker()
         {
             var expected = 6.6667;
             var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_SINGLE_MODEL_NO_ABILITIES), 4);
-
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker is a multi model unit with no abilities
         /// </summary>
         [TestMethod]
         public void GetMeanHits_MultiModelAttacker()
         {
             var expected = 13.3333;
             var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_MULTI_MODEL_NO_ABILITIES), 4);
-
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker has a variable number of attacks
         /// </summary>
         [TestMethod]
-        public void GetMeanHits_VariableAttacks_SingleModelAttacker()
+        public void GetMeanHits_VariableAttacks()
         {
             var expected = 4;
             var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS), 4);
-
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker has has variable attacks and torrent.
         /// </summary>
         [TestMethod]
-        public void GetMeanHits_VariableAttacks_MultiModelAttacker()
-        {
-            var expected = 6;
-            var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT), 4);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the attacker's weapon has torrent.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanHits_VariableAttacks_WeaponHasTorrent()
+        public void GetMeanHits_Torrent()
         {
             var expected = 20;
             var actual = Math.Round(CombatMath.GetMeanHits(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT), 4);
-
             Assert.AreEqual(expected, actual);
         }
 
@@ -550,62 +534,46 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker is a single model with no abilities
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationHits_SingleModelAttacker()
         {
             var expected = 1.0541;
             var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_SINGLE_MODEL_NO_ABILITIES), 4);
-
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker is a multi model unit with no abilities
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationHits_MultiModelAttacker()
         {
             var expected = 2.1082;
             var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_MULTI_MODEL_NO_ABILITIES), 4);
-
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker has a variable number of attacks
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationHits_VariableAttacks_SingleModelAttacker()
+        public void GetStandardDeviationHits_VariableAttacks()
         {
-            var expected = 1.1547;
+            var expected = 1.4907;
             var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS), 4);
-
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker has has variable attacks and torrent.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationHits_VariableAttacks_MultiModelAttacker()
+        public void GetStandardDeviationHits_Torrent()
         {
-            var expected = 1.7321;
+            var expected = 1.7078;
             var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT), 4);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the weapon has torrent.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationHits_VariableAttacks_WeaponHasTorrent()
-        {
-            var expected = 0;
-            var actual = Math.Round(CombatMath.GetStandardDeviationHits(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT), 4);
-
             Assert.AreEqual(expected, actual);
         }
 

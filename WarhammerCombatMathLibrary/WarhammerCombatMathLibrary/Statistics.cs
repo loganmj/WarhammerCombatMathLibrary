@@ -361,7 +361,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="numberOfPossibleResults"></param>
         /// <param name="numberOfSuccessfulResults"></param>
         /// <returns>A double value containing the probability of success.</returns>
-        public static double ProbabilityOfSuccess(int numberOfPossibleResults, int numberOfSuccessfulResults)
+        public static double GetProbabilityOfSuccess(int numberOfPossibleResults, int numberOfSuccessfulResults)
         {
             // Validate parameters
             if (numberOfPossibleResults <= 0)
@@ -387,11 +387,11 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Calculates the average result from the number of possible results.
+        /// Calculates the mean result from the number of possible results.
         /// </summary>
         /// <param name="numberOfPossibleResults"></param>
-        /// <returns>An integer value containing the average possible result.</returns>
-        public static int AverageResult(int numberOfPossibleResults)
+        /// <returns>An integer value containing the mean result.</returns>
+        public static int GetMeanResult(int numberOfPossibleResults)
         {
             // Validate inputs
             if (numberOfPossibleResults <= 0)
@@ -406,6 +406,36 @@ namespace WarhammerCombatMathLibrary
             // Calcualte average
             return average;
 
+        }
+
+        /// <summary>
+        /// Determines the variance of results when a trial with a specified number of equally likely results is repeated a number of times.
+        /// </summary>
+        /// <param name="numberOfTrials"></param>
+        /// <param name="numberOfPossibleResults"></param>
+        /// <returns>A double value containing the variance of results for a repeated trial</returns>
+        public static double GetVarianceOfResults(int numberOfTrials, double numberOfPossibleResults)
+        {
+            if (numberOfTrials <= 0 || numberOfPossibleResults <= 1)
+            {
+                return 0;
+            }
+
+            // Variance of a trial = (results^2 - 1) / 12
+            double singleDieVariance = (Math.Pow(numberOfPossibleResults, 2) - 1) / 12.0;
+
+            return numberOfTrials * singleDieVariance;
+        }
+
+        /// <summary>
+        /// Determines the standard deviation of results when a trial with a specified number of equally likely results is repeated a number of times.
+        /// </summary>
+        /// <param name="numberOfTrials"></param>
+        /// <param name="numberOfPossibleResults"></param>
+        /// <returns>A double value containing the standard deviation of results for a repeated trial</returns>
+        public static double GetStandardDeviationOfResults(int numberOfTrials, double numberOfPossibleResults)
+        {
+            return Math.Sqrt(GetVarianceOfResults(numberOfTrials, numberOfPossibleResults));
         }
 
         /// <summary>
@@ -487,7 +517,6 @@ namespace WarhammerCombatMathLibrary
         /// <param name="numberOfSuccesses">The number of successes.</param>
         /// <param name="probability">The probability of success for a single die roll.</param>
         /// <returns></returns>
-
         public static double ProbabilityMassFunction(int numberOfTrials, int numberOfSuccesses, double probability)
         {
             // Create the cache key for this calculation
@@ -521,7 +550,6 @@ namespace WarhammerCombatMathLibrary
             return result;
         }
 
-
         /// <summary>
         /// Calculates the binomial distribution of trial data.
         /// Optionally calculates the binomial distribution of trial data, assuming that a group of a given number of trial successes is considered a single success
@@ -533,7 +561,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="probability">The probability of success for a single trial.</param>
         /// <param name="groupSuccessCount">The number of grouped trial successes that count as a success. Default is 1 (one trial success equals one binomial success)</param>
         /// <returns>A binomial distribution of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> BinomialDistribution(int numberOfTrials, double probability, int groupSuccessCount = 1)
+        public static List<BinomialOutcome> GetBinomialDistribution(int numberOfTrials, double probability, int groupSuccessCount = 1)
         {
             // Validate parameters
             if (numberOfTrials <= 0)
@@ -601,7 +629,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="minGroupSuccessCount">The minimum number of grouped trial successes that count as a success.</param>
         /// <param name="maxGroupSuccessCount">The maximum number of grouped trial successes that count as a success.</param>
         /// <returns>A binomial distribution of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> BinomialDistribution(int numberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
+        public static List<BinomialOutcome> GetBinomialDistribution(int numberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
         {
             // Validate parameters
             if (numberOfTrials <= 0)
@@ -685,7 +713,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="probability">The probability of success for a single trial.</param>
         /// <param name="groupSuccessCount">The number of grouped trial successes that count as a success. Default is 1 (one trial success equals one binomial success)</param>
         /// <returns>A binomial distribution of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> BinomialDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int groupSuccessCount = 1)
+        public static List<BinomialOutcome> GetBinomialDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int groupSuccessCount = 1)
         {
             // Validate parameters
             if (minNumberOfTrials <= 0)
@@ -760,7 +788,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="minGroupSuccessCount">The minimum number of grouped trial successes that count as a success.</param>
         /// <param name="maxGroupSuccessCount">The maximum number of grouped trial successes that count as a success.</param>
         /// <returns>A binomial distribution of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> BinomialDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
+        public static List<BinomialOutcome> GetBinomialDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
         {
             // Validate parameters
             if (minNumberOfTrials <= 0)
@@ -856,7 +884,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="probability"></param>
         /// <param name="groupSuccessCount">The number of grouped trial successes that count as a success. Default is 1 (one trial success equals one binomial success)</param>
         /// <returns>A cumulative distribution P(X≤k) of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> CumulativeDistribution(int numberOfTrials, double probability, int groupSuccessCount = 1)
+        public static List<BinomialOutcome> GetCumulativeDistribution(int numberOfTrials, double probability, int groupSuccessCount = 1)
         {
             // Validate parameters
             if (numberOfTrials <= 0)
@@ -925,7 +953,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="minGroupSuccessCount">The minimum number of grouped trial successes that count as a success.</param>
         /// <param name="maxGroupSuccessCount">The maximum number of grouped trial successes that count as a success.</param>
         /// <returns>A cumulative distribution P(X≤k) of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> CumulativeDistribution(int numberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
+        public static List<BinomialOutcome> GetCumulativeDistribution(int numberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
         {
             // Validate parameters
             if (numberOfTrials <= 0)
@@ -1010,7 +1038,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="probability">The probability of success for a single trial.</param>
         /// <param name="groupSuccessCount">The number of grouped trial successes that count as a success. Default is 1 (one trial success equals one binomial success)</param>
         /// <returns>A cumulative distribution P(X≤k) of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> CumulativeDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int groupSuccessCount = 1)
+        public static List<BinomialOutcome> GetCumulativeDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int groupSuccessCount = 1)
         {
             // Validate parameters
             if (minNumberOfTrials <= 0)
@@ -1092,7 +1120,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="minGroupSuccessCount">The minimum number of grouped trial successes that count as a success.</param>
         /// <param name="maxGroupSuccessCount">The maximum number of grouped trial successes that count as a success.</param>
         /// <returns>A cumulative distribution P(X≤k) of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> CumulativeDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
+        public static List<BinomialOutcome> GetCumulativeDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
         {
             // Validate parameters
             if (minNumberOfTrials <= 0)
@@ -1188,7 +1216,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="probability"></param>
         /// <param name="groupSuccessCount">The number of grouped trial successes that count as a success. Default is 1 (one trial success equals one binomial success)</param>
         /// <returns>A survivor function distribution P(X≥k) of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> SurvivorDistribution(int numberOfTrials, double probability, int groupSuccessCount = 1)
+        public static List<BinomialOutcome> GetSurvivorDistribution(int numberOfTrials, double probability, int groupSuccessCount = 1)
         {
             // Validate parameters
             if (numberOfTrials < 1)
@@ -1256,7 +1284,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="minGroupSuccessCount">The minimum number of grouped trial successes that count as a success.</param>
         /// <param name="maxGroupSuccessCount">The maximum number of grouped trial successes that count as a success.</param>
         /// <returns>A survivor function distribution P(X≥k) of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> SurvivorDistribution(int numberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
+        public static List<BinomialOutcome> GetSurvivorDistribution(int numberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
         {
             // Validate parameters
             if (numberOfTrials <= 0)
@@ -1341,7 +1369,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="probability">The probability of success for a single trial.</param>
         /// <param name="groupSuccessCount">The number of grouped trial successes that count as a success. Default is 1 (one trial success equals one binomial success)</param>
         /// <returns>A survivor function distribution P(X≥k) of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> SurvivorDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int groupSuccessCount = 1)
+        public static List<BinomialOutcome> GetSurvivorDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int groupSuccessCount = 1)
         {
             // Validate parameters
             if (minNumberOfTrials <= 0)
@@ -1422,7 +1450,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="minGroupSuccessCount">The minimum number of grouped trial successes that count as a success.</param>
         /// <param name="maxGroupSuccessCount">The maximum number of grouped trial successes that count as a success.</param>
         /// <returns>A survivor function distribution P(X≥k) of trial results and their respective probabilities.</returns>
-        public static List<BinomialOutcome> SurvivorDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
+        public static List<BinomialOutcome> GetSurvivorDistribution(int minNumberOfTrials, int maxNumberOfTrials, double probability, int minGroupSuccessCount, int maxGroupSuccessCount)
         {
             // Validate parameters
             if (minNumberOfTrials <= 0)
@@ -1512,7 +1540,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="numberOfTrials"></param>
         /// <param name="probability"></param>
         /// <returns></returns>
-        public static double Mean(int numberOfTrials, double probability)
+        public static double GetMeanOfDistribution(int numberOfTrials, double probability)
         {
             if (numberOfTrials < 1)
             {
@@ -1530,12 +1558,12 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Calculates the standard deviation of a probability distribution.
+        /// Calculates the variance of a distribution
         /// </summary>
         /// <param name="numberOfTrials"></param>
         /// <param name="probability"></param>
-        /// <returns></returns>
-        public static double StandardDeviation(int numberOfTrials, double probability)
+        /// <returns>A double value containing the variance of a distribution</returns>
+        public static double GetVarianceOfDistribution(int numberOfTrials, double probability)
         {
             if (numberOfTrials < 0)
             {
@@ -1555,7 +1583,43 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            return Math.Sqrt(numberOfTrials * probability * (1 - probability));
+            return numberOfTrials * probability * (1 - probability);
+        }
+
+        /// <summary>
+        /// Calculates the standard deviation of a distribution.
+        /// </summary>
+        /// <param name="numberOfTrials"></param>
+        /// <param name="probability"></param>
+        /// <returns>A double value containing hte standard deviation of a distribution</returns>
+        public static double GetStandardDeviationOfDistribution(int numberOfTrials, double probability)
+        {
+            return Math.Sqrt(GetVarianceOfDistribution(numberOfTrials, probability));
+        }
+
+        /// <summary>
+        /// Calculates the variance in the number of successes when the number of trials is also variable
+        /// Var(X) = E[N] * p * (1 - p) + Var(N) * p^2
+        /// </summary>
+        /// <param name="expectedNumberOfTrials"></param>
+        /// <param name="varianceOfNumberOfTrials"></param>
+        /// <param name="probability"></param>
+        /// <returns>A double value contining the combined variance of successes</returns>
+        public static double GetCombinedVarianceOfDistribution(int expectedNumberOfTrials, double varianceOfNumberOfTrials, double probability)
+        {
+            return expectedNumberOfTrials * probability * (1 - probability) + varianceOfNumberOfTrials * Math.Pow(probability, 2);
+        }
+
+        /// <summary>
+        /// Calculates the standard deviation of the number of successes when the number of trials is also variable
+        /// </summary>
+        /// <param name="expectedNumberOfTrials"></param>
+        /// <param name="varianceOfNumberOfTrials"></param>
+        /// <param name="probability"></param>
+        /// <returns>A double value contining the combined standard deviation of successes</returns>
+        public static double GetCombinedStandardDeviationOfDistribution(int expectedNumberOfTrials, double varianceOfNumberOfTrials, double probability)
+        {
+            return Math.Sqrt(GetCombinedVarianceOfDistribution(expectedNumberOfTrials, varianceOfNumberOfTrials, probability));
         }
 
         #endregion
