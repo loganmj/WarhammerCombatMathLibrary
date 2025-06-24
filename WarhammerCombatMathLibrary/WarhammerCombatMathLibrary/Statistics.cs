@@ -205,7 +205,6 @@ namespace WarhammerCombatMathLibrary
 
             // Keep track of successes for each group number using a map, for faster lookups
             var probabilitySums = new Dictionary<int, double>();
-            var probabilityWeights = new Dictionary<int, int>();
 
             // Determine the max number of successes k based on the minimum group success count
             var maxK = Math.Floor((double)maxNumberOfTrials / groupSuccessCount);
@@ -214,10 +213,9 @@ namespace WarhammerCombatMathLibrary
             for (int k = 0; k <= maxK; k++)
             {
                 var groupedSuccesses = k * groupSuccessCount;
-                var startingValue = Math.Max(minNumberOfTrials, groupedSuccesses);
                 double combinedProbability = 0;
 
-                for (int n = startingValue; n <= maxNumberOfTrials; n++)
+                for (int n = 1; n <= maxNumberOfTrials; n++)
                 {
                     var discreteProbability = ProbabilityMassFunction(n, groupedSuccesses, probability);
                     combinedProbability += discreteProbability;
@@ -226,20 +224,17 @@ namespace WarhammerCombatMathLibrary
                 // Only need to perform division if combined probability is nonzero
                 if (combinedProbability > 0)
                 {
-                    var denominator = (maxNumberOfTrials - (startingValue - 1));
-                    combinedProbability /= denominator;
+                    combinedProbability /= maxNumberOfTrials;
                 }
 
                 // Add an empty value for k if none exists
                 if (!probabilitySums.ContainsKey(k))
                 {
                     probabilitySums[k] = 0;
-                    probabilityWeights[k] = 0;
                 }
 
                 // Increment the value at key 'k' by the calculated combined probability
                 probabilitySums[k] += combinedProbability;
-                probabilityWeights[k]++;
             }
 
             // Create a distribution list using the average probabilities for each k
@@ -248,7 +243,7 @@ namespace WarhammerCombatMathLibrary
              .Select(pair => new BinomialOutcome
              {
                  Successes = pair.Key,
-                 Probability = pair.Value / probabilityWeights[pair.Key]
+                 Probability = pair.Value
              })
              .OrderBy(outcome => outcome.Successes)
              .ToList();
@@ -302,9 +297,8 @@ namespace WarhammerCombatMathLibrary
                 {
                     var groupedSuccesses = k * g;
                     double combinedProbability = 0;
-                    var startingValue = Math.Max(minNumberOfTrials, groupedSuccesses);
 
-                    for (int n = startingValue; n <= maxNumberOfTrials; n++)
+                    for (int n = 1; n <= maxNumberOfTrials; n++)
                     {
                         var discreteProbability = ProbabilityMassFunction(n, groupedSuccesses, probability);
                         combinedProbability += discreteProbability;
@@ -313,8 +307,7 @@ namespace WarhammerCombatMathLibrary
                     // Only need to perform division if combined probability is nonzero
                     if (combinedProbability > 0)
                     {
-                        var denominator = (maxNumberOfTrials - (startingValue - 1));
-                        combinedProbability /= denominator;
+                        combinedProbability /= maxNumberOfTrials;
                     }
 
                     // Add an empty value for k if none exists
@@ -588,23 +581,6 @@ namespace WarhammerCombatMathLibrary
                 return adjustedDistribution;
             }
 
-            if (probability >= 1)
-            {
-                Debug.WriteLine($"BinomialDistribution() | Probability is greater than or equal to 1.");
-
-                // All probabilities should be 0, except the probability of all successes should be 1.
-                var adjustedDistribution = new List<BinomialOutcome>();
-
-                for (int k = 0; k <= numberOfTrials - 1; k++)
-                {
-                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
-                }
-
-                adjustedDistribution.Add(new BinomialOutcome(numberOfTrials, 1));
-
-                return adjustedDistribution;
-            }
-
             if (groupSuccessCount <= 0)
             {
                 Debug.WriteLine($"BinomialDistribution() | Group success count is less than 1.");
@@ -652,23 +628,6 @@ namespace WarhammerCombatMathLibrary
                 {
                     adjustedDistribution.Add(new BinomialOutcome(k, 0));
                 }
-
-                return adjustedDistribution;
-            }
-
-            if (probability >= 1)
-            {
-                Debug.WriteLine($"BinomialDistributionVariableTrials() | Probability is greater than or equal to 1.");
-
-                // All probabilities should be 0, except the probability of all successes should be 1.
-                var adjustedDistribution = new List<BinomialOutcome>();
-
-                for (int k = 0; k <= numberOfTrials - 1; k++)
-                {
-                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
-                }
-
-                adjustedDistribution.Add(new BinomialOutcome(numberOfTrials, 1));
 
                 return adjustedDistribution;
             }
@@ -746,23 +705,6 @@ namespace WarhammerCombatMathLibrary
                 return adjustedDistribution;
             }
 
-            if (probability >= 1)
-            {
-                Debug.WriteLine($"BinomialDistribution() | Probability is greater than or equal to 1.");
-
-                // All probabilities should be 0, except the probability of all successes should be 1.
-                var adjustedDistribution = new List<BinomialOutcome>();
-
-                for (int k = 0; k <= maxNumberOfTrials - 1; k++)
-                {
-                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
-                }
-
-                adjustedDistribution.Add(new BinomialOutcome(maxNumberOfTrials, 1));
-
-                return adjustedDistribution;
-            }
-
             if (groupSuccessCount <= 0)
             {
                 Debug.WriteLine($"BinomialDistribution() | Group success count is less than 1.");
@@ -772,7 +714,7 @@ namespace WarhammerCombatMathLibrary
             if (groupSuccessCount > maxNumberOfTrials)
             {
                 Debug.WriteLine($"BinomialDistributionVariableTrials() | Group success count is greater than the total number of trials.");
-                return new List<BinomialOutcome> { new BinomialOutcome(0, 1) };
+                return [new BinomialOutcome(0, 1)];
             }
 
             // Create distribution
@@ -823,23 +765,6 @@ namespace WarhammerCombatMathLibrary
                 {
                     adjustedDistribution.Add(new BinomialOutcome(k, 0));
                 }
-
-                return adjustedDistribution;
-            }
-
-            if (probability >= 1)
-            {
-                Debug.WriteLine($"BinomialDistribution() | Probability is greater than or equal to 1.");
-
-                // All probabilities should be 0, except the probability of all successes should be 1.
-                var adjustedDistribution = new List<BinomialOutcome>();
-
-                for (int k = 0; k <= maxNumberOfTrials - 1; k++)
-                {
-                    adjustedDistribution.Add(new BinomialOutcome(k, 0));
-                }
-
-                adjustedDistribution.Add(new BinomialOutcome(maxNumberOfTrials, 1));
 
                 return adjustedDistribution;
             }

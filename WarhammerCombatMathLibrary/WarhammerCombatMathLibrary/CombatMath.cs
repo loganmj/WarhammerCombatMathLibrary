@@ -775,7 +775,7 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns a calculated distribution of hit roll results.
+        /// Returns a distribution of hit roll results.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <param name="distributionType">The type of distribution to create. Defaults to a Binomial distribution.</param>
@@ -1003,17 +1003,19 @@ namespace WarhammerCombatMathLibrary
             }
 
             var averageAttacks = GetAverageAttacks(attacker);
-            var probabilityOfWound = GetProbabilityOfHitAndWound(attacker, defender);
-            return Statistics.GetStandardDeviationOfDistribution(averageAttacks, probabilityOfWound);
+            var varianceAttacks = Statistics.GetVarianceOfResults(attacker.WeaponNumberOfAttackDice, (int)attacker.WeaponAttackDiceType);
+            var probabilityOfHitAndWound = GetProbabilityOfHitAndWound(attacker, defender);
+            return Statistics.GetCombinedStandardDeviationOfDistribution(averageAttacks, varianceAttacks, probabilityOfHitAndWound);
         }
 
         /// <summary>
-        /// Returns a binomial distribution of wound roll results based on the process data.
+        /// Returns a distribution of hit and wound roll results.
         /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static List<BinomialOutcome> GetBinomialDistributionWounds(AttackerDTO? attacker, DefenderDTO? defender)
+        /// <param name="attacker">The attacker data object</param>
+        /// <param name="defender">The defender data object</param>
+        /// <param name="distributionType">The type of distribution to create. Defaults to a Binomial distribution.</param>
+        /// <returns>A List of BinomomialOutcome data objects, representing a distribution of hit roll outcomes.</returns>
+        public static List<BinomialOutcome> GetDistributionWounds(AttackerDTO? attacker, DefenderDTO? defender, DistributionTypes distributionType = DistributionTypes.Binomial)
         {
             if (attacker == null)
             {
@@ -1030,32 +1032,14 @@ namespace WarhammerCombatMathLibrary
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
             var probability = GetProbabilityOfHitAndWound(attacker, defender);
-            return Statistics.GetBinomialDistribution(minimumAttacks, maximumAttacks, probability);
-        }
 
-        /// <summary>
-        /// Gets a distribution of all discrete survivor function values for a successful hit and wound roll.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns></returns>
-        public static List<BinomialOutcome> GetSurvivorDistributionWounds(AttackerDTO? attacker, DefenderDTO? defender)
-        {
-            if (attacker == null)
+            return distributionType switch
             {
-                Debug.WriteLine($"GetSurvivorDistributionWounds() | Attacker is null. Returning empty list ...");
-                return [];
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetSurvivorDistributionWounds() | Defender is null. Returning empty list ...");
-                return [];
-            }
-
-            var minimumAttacks = GetMinimumAttacks(attacker);
-            var maximumAttacks = GetMaximumAttacks(attacker);
-            var probability = GetProbabilityOfHitAndWound(attacker, defender);
-            return Statistics.GetSurvivorDistribution(minimumAttacks, maximumAttacks, probability);
+                DistributionTypes.Binomial => Statistics.GetBinomialDistribution(minimumAttacks, maximumAttacks, probability),
+                DistributionTypes.Cumulative => Statistics.GetCumulativeDistribution(minimumAttacks, maximumAttacks, probability),
+                DistributionTypes.Survivor => Statistics.GetSurvivorDistribution(minimumAttacks, maximumAttacks, probability),
+                _ => Statistics.GetBinomialDistribution(minimumAttacks, maximumAttacks, probability),
+            };
         }
 
         /// <summary>
