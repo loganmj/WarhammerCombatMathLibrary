@@ -14,7 +14,7 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// The maximum cache size for calculation caches.
         /// </summary>
-        private const int MAX_CACHE_SIZE = 1000;
+        private const int MAX_CACHE_SIZE = 5000;
 
         #endregion
 
