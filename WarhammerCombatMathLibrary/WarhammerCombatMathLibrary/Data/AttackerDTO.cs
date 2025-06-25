@@ -8,11 +8,6 @@
         #region Properties
 
         /// <summary>
-        /// The name of the attacking model.
-        /// </summary>
-        public string? Name { get; set; }
-
-        /// <summary>
         /// The number of models in the attacker's unit.
         /// </summary>
         public int NumberOfModels { get; set; }
@@ -134,8 +129,7 @@
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"Attacker: [ Name: '{Name}', "
-                   + $"NumberOfModels: {NumberOfModels}, "
+            return $"Attacker: [ NumberOfModels: {NumberOfModels}, "
                    + $"Weapon Attacks: {(WeaponNumberOfAttackDice > 0 ? $"{WeaponNumberOfAttackDice} {WeaponAttackDiceType} + {WeaponFlatAttacks}" : WeaponFlatAttacks.ToString())}, "
                    + $"WeaponSkill: {WeaponSkill}, "
                    + $"WeaponStrength: {WeaponStrength}, "
@@ -144,7 +138,7 @@
                    + $"WeaponHasTorrent: {WeaponHasTorrent}, "
                    + $"WeaponHasLethalHits: {WeaponHasLethalHits}, "
                    + $"WeaponHasSustainedHits: {WeaponHasSustainedHits}, "
-                   + $"WeaponSustainedHitsValue: {WeaponSustainedHitsMultiplier}, "
+                   + $"WeaponSustainedHitsMultiplier: {WeaponSustainedHitsMultiplier}, "
                    + $"WeaponHasRerollHitRolls: {WeaponHasRerollHitRolls}, "
                    + $"WeaponHasRerollHitRollsOf1: {WeaponHasRerollHitRollsOf1}, "
                    + $"WeaponHasDevastatingWounds: {WeaponHasDevastatingWounds}, "
@@ -171,8 +165,7 @@
         {
             if (other == null) return false;
 
-            return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase)
-                   && NumberOfModels == other.NumberOfModels
+            return NumberOfModels == other.NumberOfModels
                    && WeaponNumberOfAttackDice == other.WeaponNumberOfAttackDice
                    && WeaponAttackDiceType == other.WeaponAttackDiceType
                    && WeaponFlatAttacks == other.WeaponFlatAttacks
