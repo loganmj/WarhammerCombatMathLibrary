@@ -8,11 +8,6 @@
         #region Properties
 
         /// <summary>
-        /// The name of the attacking model.
-        /// </summary>
-        public string? Name { get; set; }
-
-        /// <summary>
         /// The number of models in the attacker's unit.
         /// </summary>
         public int NumberOfModels { get; set; }
@@ -80,15 +75,52 @@
         /// <summary>
         /// The amount of additional hits the weapon gets when Sustained Hits is triggered.
         /// </summary>
-        public int WeaponSustainedHitsValue { get; set; }
-
-        // TODO: Weapon has full reroll hits
-        // TODO: Weapon has reroll hits of 1
+        public int WeaponSustainedHitsMultiplier { get; set; }
 
         /// <summary>
         /// Attacker has DevastatingWounds keyword
         /// </summary>
         public bool WeaponHasDevastatingWounds { get; set; }
+
+        /// <summary>
+        /// Attacker may reroll hit rolls
+        /// </summary>
+        public bool WeaponHasRerollHitRolls { get; set; }
+
+        /// <summary>
+        /// Attacker may reroll hit rolls of 1
+        /// </summary>
+        public bool WeaponHasRerollHitRollsOf1 { get; set; }
+
+        /// <summary>
+        /// Attacker may reroll hit rolls
+        /// </summary>
+        public bool WeaponHasRerollWoundRolls { get; set; }
+
+        /// <summary>
+        /// Attacker may reroll hit rolls of 1
+        /// </summary>
+        public bool WeaponHasRerollWoundRollsOf1 { get; set; }
+
+        /// <summary>
+        /// Attacker may reroll hit rolls
+        /// </summary>
+        public bool WeaponHasRerollDamageRolls { get; set; }
+
+        /// <summary>
+        /// Attacker may reroll hit rolls of 1
+        /// </summary>
+        public bool WeaponHasRerollDamageRollsOf1 { get; set; }
+
+        /// <summary>
+        /// The hit roll result threshold that is considered a critical hit
+        /// </summary>
+        public int CriticalHitThreshold { get; set; }
+
+        /// <summary>
+        /// The wound roll result threshold that is considered a critical wound
+        /// </summary>
+        public int CriticalWoundThreshold { get; set; }
 
         #endregion
 
@@ -97,8 +129,7 @@
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"Attacker: [ Name: '{Name}', "
-                   + $"NumberOfModels: {NumberOfModels}, "
+            return $"Attacker: [ NumberOfModels: {NumberOfModels}, "
                    + $"Weapon Attacks: {(WeaponNumberOfAttackDice > 0 ? $"{WeaponNumberOfAttackDice} {WeaponAttackDiceType} + {WeaponFlatAttacks}" : WeaponFlatAttacks.ToString())}, "
                    + $"WeaponSkill: {WeaponSkill}, "
                    + $"WeaponStrength: {WeaponStrength}, "
@@ -106,7 +137,17 @@
                    + $"WeaponDamage: {(WeaponNumberOfDamageDice > 0 ? $"{WeaponNumberOfDamageDice} {WeaponDamageDiceType} + {WeaponFlatDamage}" : WeaponFlatDamage)}, "
                    + $"WeaponHasTorrent: {WeaponHasTorrent}, "
                    + $"WeaponHasLethalHits: {WeaponHasLethalHits}, "
-                   + $"WeaponHasDevastatingWounds: {WeaponHasDevastatingWounds} ]";
+                   + $"WeaponHasSustainedHits: {WeaponHasSustainedHits}, "
+                   + $"WeaponSustainedHitsMultiplier: {WeaponSustainedHitsMultiplier}, "
+                   + $"WeaponHasRerollHitRolls: {WeaponHasRerollHitRolls}, "
+                   + $"WeaponHasRerollHitRollsOf1: {WeaponHasRerollHitRollsOf1}, "
+                   + $"WeaponHasDevastatingWounds: {WeaponHasDevastatingWounds}, "
+                   + $"WeaponHasRerollWoundRolls: {WeaponHasRerollWoundRolls}, "
+                   + $"WeaponHasRerollWoundRollsOf1: {WeaponHasRerollWoundRollsOf1}, "
+                   + $"WeaponHasRerollDamageRolls: {WeaponHasRerollDamageRolls}, "
+                   + $"WeaponHasRerollDamageRollsOf1: {WeaponHasRerollDamageRollsOf1}, "
+                   + $"CriticalHitThreshold: {CriticalHitThreshold}, "
+                   + $"CriticalWoundThreshold: {CriticalWoundThreshold} ]";
         }
 
         /// <inheritdoc/>
@@ -124,8 +165,7 @@
         {
             if (other == null) return false;
 
-            return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase)
-                   && NumberOfModels == other.NumberOfModels
+            return NumberOfModels == other.NumberOfModels
                    && WeaponNumberOfAttackDice == other.WeaponNumberOfAttackDice
                    && WeaponAttackDiceType == other.WeaponAttackDiceType
                    && WeaponFlatAttacks == other.WeaponFlatAttacks
@@ -137,7 +177,15 @@
                    && WeaponFlatDamage == other.WeaponFlatDamage
                    && WeaponHasTorrent == other.WeaponHasTorrent
                    && WeaponHasLethalHits == other.WeaponHasLethalHits
-                   && WeaponHasDevastatingWounds == other.WeaponHasDevastatingWounds;
+                   && WeaponHasSustainedHits == other.WeaponHasSustainedHits
+                   && WeaponSustainedHitsMultiplier == other.WeaponSustainedHitsMultiplier
+                   && WeaponHasRerollHitRolls == other.WeaponHasRerollHitRolls
+                   && WeaponHasRerollHitRollsOf1 == other.WeaponHasRerollHitRollsOf1
+                   && WeaponHasDevastatingWounds == other.WeaponHasDevastatingWounds
+                   && WeaponHasRerollWoundRolls == other.WeaponHasRerollWoundRolls
+                   && WeaponHasRerollWoundRollsOf1 == other.WeaponHasRerollWoundRollsOf1
+                   && WeaponHasRerollDamageRolls == other.WeaponHasRerollDamageRolls
+                   && WeaponHasRerollDamageRollsOf1 == other.WeaponHasRerollDamageRollsOf1;
         }
 
         /// <inheritdoc/>
@@ -146,16 +194,24 @@
             // Combine the weapon keyword abilities into a single byte
             var weaponKeywordFlags = ((WeaponHasTorrent ? 1 : 0) << 0)
                                      | ((WeaponHasLethalHits ? 1 : 0) << 1)
-                                     | ((WeaponHasDevastatingWounds ? 1 : 0) << 2);
+                                     | ((WeaponHasSustainedHits ? 1 : 0) << 2)
+                                     | ((WeaponHasDevastatingWounds ? 1 : 0) << 3);
 
-            return HashCode.Combine(Name?.ToLowerInvariant(),
-                                    NumberOfModels,
+            // Combine reroll abilities into a single byte
+            var rerollFlags = ((WeaponHasRerollHitRolls ? 1 : 0) << 0)
+                              | ((WeaponHasRerollHitRollsOf1 ? 1 : 0) << 1)
+                              | ((WeaponHasRerollWoundRolls ? 1 : 0) << 2)
+                              | ((WeaponHasRerollWoundRollsOf1 ? 1 : 0) << 3)
+                              | ((WeaponHasRerollDamageRolls ? 1 : 0) << 4)
+                              | ((WeaponHasRerollDamageRollsOf1 ? 1 : 0) << 5);
+
+            return HashCode.Combine(NumberOfModels,
                                     (WeaponNumberOfAttackDice * (int)WeaponAttackDiceType) + WeaponFlatAttacks,
-                                    WeaponSkill,
-                                    WeaponStrength,
-                                    WeaponArmorPierce,
+                                    WeaponSkill + WeaponStrength + WeaponArmorPierce,
                                     (WeaponNumberOfDamageDice * (int)WeaponDamageDiceType) + WeaponFlatDamage,
-                                    weaponKeywordFlags);
+                                    weaponKeywordFlags,
+                                    rerollFlags,
+                                    WeaponSustainedHitsMultiplier);
         }
 
         #endregion
