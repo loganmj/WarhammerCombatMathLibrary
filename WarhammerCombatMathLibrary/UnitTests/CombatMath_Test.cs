@@ -207,41 +207,9 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Attack profile for a unit with variable damage, rolling a D6 type damage die
-        /// </summary>
-        public static readonly AttackerDTO ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE = new()
-        {
-            NumberOfModels = 1,
-            WeaponNumberOfAttackDice = 0,
-            WeaponAttackDiceType = 0,
-            WeaponFlatAttacks = 8,
-            WeaponSkill = 3,
-            WeaponStrength = 14,
-            WeaponArmorPierce = 2,
-            WeaponNumberOfDamageDice = 1,
-            WeaponDamageDiceType = DiceType.D6,
-            WeaponFlatDamage = 1
-        };
-
-        /// <summary>
-        /// Attack profile for a multi-model unit with variable damage, rolling a D6 type damage die
-        /// </summary>
-        public static readonly AttackerDTO ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE = new()
-        {
-            NumberOfModels = 4,
-            WeaponNumberOfAttackDice = 0,
-            WeaponAttackDiceType = 0,
-            WeaponFlatAttacks = 2,
-            WeaponSkill = 4,
-            WeaponStrength = 9,
-            WeaponArmorPierce = 4,
-            WeaponNumberOfDamageDice = 1,
-            WeaponDamageDiceType = DiceType.D6,
-            WeaponFlatDamage = 0
-        };
-
-        /// <summary>
-        /// Attack profile for a unit with Devastating Wounds
+        /// Attacker data profile with:
+        /// - A single model
+        /// - Devastating Wounds
         /// </summary>
         public static readonly AttackerDTO ATTACKER_DEVASTATING_WOUNDS = new()
         {
@@ -255,7 +223,10 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Attack profile for a hyper-elite character with Lethal Hits, Sustained Hits 1, and Devastating Wounds
+        /// Attacker data profile with:
+        /// - A single model
+        /// - Lethal Hits
+        /// - Devastating Wounds
         /// </summary>
         public static readonly AttackerDTO ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS = new()
         {
@@ -270,36 +241,37 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Attack profile for a hyper-elite character with Lethal Hits, Sustained Hits 1, and Devastating Wounds
+        /// Attacker data profile with:
+        /// - A single model
+        /// - Variable D6+1 damage
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_SUSTAINED_HITS_1_DEVASTATING_WOUNDS = new()
+        public static readonly AttackerDTO ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE = new()
         {
             NumberOfModels = 1,
             WeaponFlatAttacks = 8,
-            WeaponSkill = 2,
-            WeaponStrength = 6,
+            WeaponSkill = 3,
+            WeaponStrength = 14,
             WeaponArmorPierce = 2,
-            WeaponFlatDamage = 3,
-            WeaponHasDevastatingWounds = true,
-            WeaponHasSustainedHits = true,
-            WeaponSustainedHitsMultiplier = 1
+            WeaponNumberOfDamageDice = 1,
+            WeaponDamageDiceType = DiceType.D6,
+            WeaponFlatDamage = 1
         };
 
         /// <summary>
-        /// Attack profile for a hyper-elite character with Lethal Hits, Sustained Hits 1, and Devastating Wounds
+        /// Attacker data profile with:
+        /// - Multiple models
+        /// - Variable D6+2 damage
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS = new()
+        public static readonly AttackerDTO ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE = new()
         {
-            NumberOfModels = 1,
-            WeaponFlatAttacks = 8,
-            WeaponSkill = 2,
-            WeaponStrength = 6,
-            WeaponArmorPierce = 2,
-            WeaponFlatDamage = 3,
-            WeaponHasLethalHits = true,
-            WeaponHasDevastatingWounds = true,
-            WeaponHasSustainedHits = true,
-            WeaponSustainedHitsMultiplier = 1
+            NumberOfModels = 5,
+            WeaponFlatAttacks = 3,
+            WeaponSkill = 4,
+            WeaponStrength = 9,
+            WeaponArmorPierce = 3,
+            WeaponNumberOfDamageDice = 1,
+            WeaponDamageDiceType = DiceType.D6,
+            WeaponFlatDamage = 2
         };
 
         /// <summary>
@@ -329,29 +301,18 @@ namespace UnitTests
         };
 
         /// <summary>
-        /// Defense profile for a unit of World Eaters Chaos Spawn
+        /// Defender data profile with:
+        /// - Multiple models
+        /// - Feel No Pain 5+
         /// </summary>
         public static readonly DefenderDTO DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5 = new()
         {
-            NumberOfModels = 2,
+            NumberOfModels = 5,
             Toughness = 5,
-            ArmorSave = 4,
-            InvulnerableSave = 7,
+            ArmorSave = 3,
+            InvulnerableSave = 5,
             FeelNoPain = 5,
-            Wounds = 4
-        };
-
-        /// <summary>
-        /// Defense profile for Mortarian, primarch of the Death Guard
-        /// </summary>
-        public static readonly DefenderDTO DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4 = new()
-        {
-            NumberOfModels = 1,
-            Toughness = 12,
-            ArmorSave = 2,
-            InvulnerableSave = 4,
-            FeelNoPain = 5,
-            Wounds = 16
+            Wounds = 3
         };
 
         #endregion
@@ -1406,7 +1367,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationWounds_RerollWounds()
         {
-            var expected = 0.9799;
+            var expected = 1.0148;
             var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_SINGLE_MODEL_REROLL_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
             Assert.AreEqual(expected, actual);
         }
@@ -1417,7 +1378,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationWounds_RerollWoundsOf1()
         {
-            var expected = 1.0678;
+            var expected = 1.0779;
             var actual = Math.Round(CombatMath.GetStandardDeviationWounds(ATTACKER_SINGLE_MODEL_REROLL_WOUNDS_OF_1, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
             Assert.AreEqual(expected, actual);
         }
@@ -2013,122 +1974,41 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationFailedSaves_SingleModelAttacker()
-        {
-            var expected = 1.3659;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationFailedSaves_MultiModelAttacker()
-        {
-            var expected = 1.6667;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationFailedSaves_DefenderHasInvulnerableSave()
-        {
-            var expected = 1.2669;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationFailedSaves_VariableAttacks_SingleModelAttacker()
+        public void GetStandardDeviationFailedSaves_WeaponHasDevastatingWounds()
         {
-            var expected = 1.0971;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationFailedSaves_VariableAttacks_MultiModelAttacker()
-        {
-            var expected = 1.2910;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationFailedSaves_VariableAttacks_WeaponHasTorrent()
-        {
-            var expected = 2.1082;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationFailedSaves_WeaponHasLethalHits()
-        {
-            var expected = 1.4434;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_SINGLE_MODEL_LETHAL_HITS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationFailedSaves_DevastatingWounds()
-        {
-            var expected = 1.3147;
+            var expected = 1.021;
             var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with a given parameter.
+        /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationFailedSaves_LethalHitsAndDevastatingWounds()
+        public void GetStandardDeviationFailedSaves_WeaponHasLethalHitsAndDevastatingWounds()
         {
-            var expected = 1.412;
-            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
+            var expected = 1.0015;
+            var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         #endregion
 
-        #region Unit Tests - GetBinomialDistributionFailedSaves()
+        #region Unit Tests - GetDistributionFailedSaves()
 
         /// <summary>
         /// Tests the case where the attacker parameter is null.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionFailedSaves_AttackerIsNull()
+        public void GetDistributionFailedSaves_AttackerIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(null, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = CombatMath.GetDistributionFailedSaves(null, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2151,10 +2031,10 @@ namespace UnitTests
         /// Tests the case where the defender parameter is null.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionFailedSaves_DefenderIsNull()
+        public void GetDistributionFailedSaves_DefenderIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SINGLE_MODEL_NO_ABILITIES, null);
+            var actual = CombatMath.GetDistributionFailedSaves(ATTACKER_SINGLE_MODEL_NO_ABILITIES, null);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2177,22 +2057,19 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionFailedSaves_SingleModelAttacker()
+        public void GetDistributionFailedSaves_WeaponHasDevastatingWounds()
         {
-            var expected = new List<BinomialOutcome>
+            var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0247),
-                new(1, 0.1162),
-                new(2, 0.2393),
-                new(3, 0.2815),
-                new(4, 0.2070),
-                new(5, 0.0974),
-                new(6, 0.0287),
-                new(7, 0.0048),
-                new(8, 0.0004)
+                new(0, 0.1726),
+                new(1, 0.3633),
+                new(2, 0.3059),
+                new(3, 0.1288),
+                new(4, 0.0271),
+                new(5, 0.0023)
             };
 
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = CombatMath.GetDistributionFailedSaves(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -2215,947 +2092,19 @@ namespace UnitTests
         /// Tests the method with given parameters.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionFailedSaves_MultiModelAttacker()
+        public void GetDistributionFailedSaves_WeaponHasLethalHitsAndDevastatingWounds()
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.0261),
-                new(1, 0.1043),
-                new(2, 0.1982),
-                new(3, 0.2379),
-                new(4, 0.2022),
-                new(5, 0.1294),
-                new(6, 0.0647),
-                new(7, 0.0259),
-                new(8, 0.0084),
-                new(9, 0.0022),
-                new(10, 0.0005),
-                new(11, 0.0001),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0),
-                new(16, 0),
-                new(17, 0),
-                new(18, 0),
-                new(19, 0),
-                new(20, 0)
+                new(0, 0.1965),
+                new(1, 0.3779),
+                new(2, 0.2907),
+                new(3, 0.1118),
+                new(4, 0.0215),
+                new(5, 0.0017)
             };
 
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionFailedSaves_DefenderHasInvulnerableSave()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0740),
-                new(1, 0.2278),
-                new(2, 0.3066),
-                new(3, 0.2358),
-                new(4, 0.1134),
-                new(5, 0.0349),
-                new(6, 0.0067),
-                new(7, 0.0007),
-                new(8, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionFailedSaves_VariableAttacks_SingleModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.1739),
-                new(1, 0.3211),
-                new(2, 0.2748),
-                new(3, 0.1503),
-                new(4, 0.0689),
-                new(5, 0.0237),
-                new(6, 0.0060),
-                new(7, 0.0011),
-                new(8, 0.0001),
-                new(9, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionFailedSaves_VariableAttacks_MultiModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.1581),
-                new(1, 0.2937),
-                new(2, 0.2696),
-                new(3, 0.1650),
-                new(4, 0.0758),
-                new(5, 0.0275),
-                new(6, 0.0080),
-                new(7, 0.0021),
-                new(8, 0.0004),
-                new(9, 0.0001),
-                new(10, 0),
-                new(11, 0),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0),
-                new(16, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionFailedSaves_VariableAttacks_WeaponHasTorrent()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0152),
-                new(1, 0.0532),
-                new(2, 0.0911),
-                new(3, 0.1099),
-                new(4, 0.1138),
-                new(5, 0.1122),
-                new(6, 0.1119),
-                new(7, 0.1076),
-                new(8, 0.0983),
-                new(9, 0.0841),
-                new(10, 0.0666),
-                new(11, 0.0484),
-                new(12, 0.0320),
-                new(13, 0.0192),
-                new(14, 0.0104),
-                new(15, 0.0051),
-                new(16, 0.0022),
-                new(17, 0.0009),
-                new(18, 0.0003),
-                new(19, 0.0001),
-                new(20, 0),
-                new(21, 0),
-                new(22, 0),
-                new(23, 0),
-                new(24, 0),
-                new(25, 0),
-                new(26, 0),
-                new(27, 0),
-                new(28, 0),
-                new(29, 0),
-                new(30, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionFailedSaves_WeaponHasLethalHits()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0649),
-                new(1, 0.1947),
-                new(2, 0.2726),
-                new(3, 0.2363),
-                new(4, 0.1418),
-                new(5, 0.0624),
-                new(6, 0.0208),
-                new(7, 0.0053),
-                new(8, 0.0011),
-                new(9, 0.0002),
-                new(10, 0),
-                new(11, 0),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_SINGLE_MODEL_LETHAL_HITS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionFailedSaves_WeaponHasDevastatingWounds()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0671),
-                new(1, 0.2115),
-                new(2, 0.2961),
-                new(3, 0.2418),
-                new(4, 0.1270),
-                new(5, 0.0444),
-                new(6, 0.0104),
-                new(7, 0.0016),
-                new(8, 0.0001),
-                new(9, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionFailedSaves_WeaponHasLethalHitsAndDevastatingWounds()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0025),
-                new(1, 0.0221),
-                new(2, 0.0865),
-                new(3, 0.1933),
-                new(4, 0.2701),
-                new(5, 0.2415),
-                new(6, 0.1349),
-                new(7, 0.0431),
-                new(8, 0.0060)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionFailedSaves(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        #endregion
-
-        #region Unit Tests - GetSurvivorDistributionFailedSaves()
-
-        /// <summary>
-        /// Tests the case where the attacker parameter is null.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_AttackerIsNull()
-        {
-            var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(null, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the defender parameter is null.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_DefenderIsNull()
-        {
-            var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SINGLE_MODEL_NO_ABILITIES, null);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_SingleModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>
-            {
-                new(0, 1),
-                new(1, 0.9753),
-                new(2, 0.8591),
-                new(3, 0.6198),
-                new(4, 0.3382),
-                new(5, 0.1312),
-                new(6, 0.0338),
-                new(7, 0.0052),
-                new(8, 0.0004)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_MultiModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.9739),
-                new(2, 0.8696),
-                new(3, 0.6713),
-                new(4, 0.4335),
-                new(5, 0.2313),
-                new(6, 0.1018),
-                new(7, 0.0371),
-                new(8, 0.0113),
-                new(9, 0.0028),
-                new(10, 0.0006),
-                new(11, 0.0001),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0),
-                new(16, 0),
-                new(17, 0),
-                new(18, 0),
-                new(19, 0),
-                new(20, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_DefenderHasInvulnerableSave()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.9260),
-                new(2, 0.6982),
-                new(3, 0.3916),
-                new(4, 0.1558),
-                new(5, 0.0424),
-                new(6, 0.0075),
-                new(7, 0.0008),
-                new(8, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_VariableAttacks_SingleModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.8460),
-                new(2, 0.5250),
-                new(3, 0.2501),
-                new(4, 0.0998),
-                new(5, 0.0309),
-                new(6, 0.0072),
-                new(7, 0.0012),
-                new(8, 0.0001),
-                new(9, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_VariableAttacks_MultiModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.8422),
-                new(2, 0.5485),
-                new(3, 0.2789),
-                new(4, 0.1139),
-                new(5, 0.0381),
-                new(6, 0.0106),
-                new(7, 0.0026),
-                new(8, 0.0005),
-                new(9, 0.0001),
-                new(10, 0),
-                new(11, 0),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0),
-                new(16, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_VariableAttacks_WeaponHasTorrent()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 1),
-                new(2, 1),
-                new(3, 0.9230),
-                new(4, 0.8131),
-                new(5, 0.6993),
-                new(6, 0.5871),
-                new(7, 0.4752),
-                new(8, 0.3676),
-                new(9, 0.2693),
-                new(10, 0.1852),
-                new(11, 0.1186),
-                new(12, 0.0702),
-                new(13, 0.0382),
-                new(14, 0.0190),
-                new(15, 0.0086),
-                new(16, 0.0035),
-                new(17, 0.0013),
-                new(18, 0.0004),
-                new(19, 0.0001),
-                new(20, 0),
-                new(21, 0),
-                new(22, 0),
-                new(23, 0),
-                new(24, 0),
-                new(25, 0),
-                new(26, 0),
-                new(27, 0),
-                new(28, 0),
-                new(29, 0),
-                new(30, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_WeaponHasLethalHits()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.9351),
-                new(2, 0.7404),
-                new(3, 0.4678),
-                new(4, 0.2315),
-                new(5, 0.0898),
-                new(6, 0.0274),
-                new(7, 0.0066),
-                new(8, 0.0013),
-                new(9, 0.0002),
-                new(10, 0),
-                new(11, 0),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SINGLE_MODEL_LETHAL_HITS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_WeaponHasDevastatingWounds()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.9329),
-                new(2, 0.7214),
-                new(3, 0.4253),
-                new(4, 0.1834),
-                new(5, 0.0565),
-                new(6, 0.0121),
-                new(7, 0.0017),
-                new(8, 0.0001),
-                new(9, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_WeaponHasLethalHitsAndDevastatingWounds()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.9975),
-                new(2, 0.9754),
-                new(3, 0.8889),
-                new(4, 0.6956),
-                new(5, 0.4255),
-                new(6, 0.1841),
-                new(7, 0.0491),
-                new(8, 0.0060)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_SustainedHits1()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.9753),
-                new(2, 0.8591),
-                new(3, 0.6198),
-                new(4, 0.3382),
-                new(5, 0.1312),
-                new(6, 0.0338),
-                new(7, 0.0052),
-                new(8, 0.0004)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SINGLE_MODEL_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_SustainedHits2()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.9769),
-                new(2, 0.8781),
-                new(3, 0.6805),
-                new(4, 0.4358),
-                new(5, 0.2260),
-                new(6, 0.0942),
-                new(7, 0.0314),
-                new(8, 0.0083),
-                new(9, 0.0018),
-                new(10, 0.0003),
-                new(11, 0),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SINGLE_MODEL_SUSTAINED_HITS_2, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_LethalHitsAndSustainedHits1()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.9753),
-                new(2, 0.8591),
-                new(3, 0.6198),
-                new(4, 0.3382),
-                new(5, 0.1312),
-                new(6, 0.0338),
-                new(7, 0.0052),
-                new(8, 0.0004)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_SINGLE_MODEL_LETHAL_HITS_SUSTAINED_HITS_1, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with a given parameter.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionFailedSaves_LethalHitsAndSustainedHits1AndDevastatingWounds()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.9975),
-                new(2, 0.9754),
-                new(3, 0.8889),
-                new(4, 0.6956),
-                new(5, 0.4255),
-                new(6, 0.1841),
-                new(7, 0.0491),
-                new(8, 0.0060)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionFailedSaves(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = CombatMath.GetDistributionFailedSaves(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3179,7 +2128,7 @@ namespace UnitTests
         #region Unit Tests - GetMeanDamage()
 
         /// <summary>
-        /// Test the case where the attacker object is null
+        /// Tests the case where the attacker object is null
         /// </summary>
         [TestMethod]
         public void GetMeanDamage_NullAttacker()
@@ -3190,7 +2139,7 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Test the case where the defender object is null
+        /// Tests the case where the defender object is null
         /// </summary>
         [TestMethod]
         public void GetMeanDamage_NullDefender()
@@ -3201,51 +2150,7 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDamage_SingleModelAttacker_NoDefenderSpecialRules()
-        {
-            var expected = 8.8889;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDamage_MultiModelAttacker_NoDefenderSpecialRules()
-        {
-            var expected = 3.3333;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDamage_SingleModelAttacker_DefenderHasFeelNoPains()
-        {
-            var expected = 1.6667;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDamage_MultiModelAttacker_DefenderHasFeelNoPains()
-        {
-            var expected = 2.963;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the case where the defender has an invulnerable save.
         /// </summary>
         [TestMethod]
         public void GetMeanDamage_DefenderHasInvulnerableSave()
@@ -3256,56 +2161,21 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the defender has Feel No Pains
         /// </summary>
         [TestMethod]
-        public void GetMeanDamage_VariableAttacks_SingleModelAttacker()
+        public void GetMeanDamage_DefenderHasFeelNoPains()
         {
-            var expected = 5;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
-
+            var expected = 8.8889;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker has variable attacks
         /// </summary>
         [TestMethod]
         public void GetMeanDamage_VariableAttacks_MultiModelAttacker()
-        {
-            var expected = 4;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDamage_SingleModelAttacker_AttackerHasVariableDamage()
-        {
-            var expected = 14.8148;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDamage_MultiModelAttacker_AttackerHasVariableDamage()
-        {
-            var expected = 13.3333;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDamage_VariableAttacks_WeaponHasTorrent()
         {
             var expected = 6.6667;
             var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
@@ -3314,37 +2184,48 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker has variable damage
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamage_MultiModelAttacker_AttackerHasVariableDamage()
+        {
+            var expected = 31.25;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has Lethal Hits
         /// </summary>
         [TestMethod]
         public void GetMeanDamage_WeaponHasLethalHits()
         {
-            var expected = 5;
+            var expected = 5.5556;
             var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_SINGLE_MODEL_LETHAL_HITS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with a given parameter.
+        /// Tests the case where the attacker has Devastating Wounds
         /// </summary>
         [TestMethod]
         public void GetMeanDamage_DevastatingWounds()
         {
-            var expected = 7;
+            var expected = 4.4444;
             var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with a given parameter.
+        /// Tests the case where the attacker has Lethal Hits and Devastating Wounds
         /// </summary>
         [TestMethod]
         public void GetMeanDamage_LethalHitsAndDevastatingWounds()
         {
-            var expected = 12.6667;
-            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
+            var expected = 4.1667;
+            var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3376,51 +2257,7 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDamage_SingleModelAttacker_NoDefenderSpecialRules()
-        {
-            var expected = 4.0976;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDamage_MultiModelAttacker_NoDefenderSpecialRules()
-        {
-            var expected = 1.6667;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDamage_SingleModelAttacker_DefenderHasFeelNoPains()
-        {
-            var expected = 2.157;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDamage_MultiModelAttacker_DefenderHasFeelNoPains()
-        {
-            var expected = 1.5887;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the case where the defender has an invulnerable save.
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationDamage_DefenderHasInvulnerableSave()
@@ -3431,117 +2268,71 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the defender has Feel No Pains
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationDamage_VariableAttacks_SingleModelAttacker()
+        public void GetStandardDeviationDamage_DefenderHasFeelNoPains()
         {
-            var expected = 3.2914;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
-
+            var expected = 4.0976;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker has variable attacks
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationDamage_VariableAttacks_MultiModelAttacker()
         {
-            var expected = 2.582;
+            var expected = 2.1837;
             var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDamage_MultiModelAttacker_VariableAttacks_DefenderHasFeelNoPains()
-        {
-            var expected = 2.8803;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDamage_SingleModelAttacker_AttackerHasVariableDamage()
-        {
-            var expected = 6.8293;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the case where the attacker has variable damage
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationDamage_MultiModelAttacker_AttackerHasVariableDamage()
         {
-            var expected = 5.5777;
+            var expected = 11.0633;
             var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDamage_MultiModelAttacker_VariableDamage_DefenderHasFeelNoPains()
-        {
-            var expected = 5.3333;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDamage_VariableAttacks_WeaponHasTorrent()
-        {
-            var expected = 2.1082;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker has Lethal Hits
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationDamage_WeaponHasLethalHits()
         {
-            var expected = 2.8868;
+            var expected = 3.2394;
             var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_SINGLE_MODEL_LETHAL_HITS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with a given parameter.
+        /// Tests the case where the attacker has Devastating Wounds
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationDamage_DevastatingWounds()
         {
-            var expected = 3.9441;
+            var expected = 3.0631;
             var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with a given parameter.
+        /// Tests the case where the attacker has Lethal Hits and Devastating Wounds
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationDamage_LethalHitsAndDevastatingWounds()
         {
-            var expected = 4.2361;
-            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
+            var expected = 3.0046;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3573,51 +2364,7 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDestroyedModels_SingleModelAttacker_NoDefenderSpecialRules()
-        {
-            var expected = 2;
-            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDestroyedModels_MultiModelAttacker_NoDefenderSpecialRules()
-        {
-            var expected = 1;
-            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDestroyedModels_SingleModelAttacker_DefenderHasFeelNoPains()
-        {
-            var expected = 0;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDestroyedModels_MultiModelAttacker_DefenderHasFeelNoPains()
-        {
-            var expected = 0;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the case where the defender has an invulnerable save.
         /// </summary>
         [TestMethod]
         public void GetMeanDestroyedModels_DefenderHasInvulnerableSave()
@@ -3628,117 +2375,71 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the defender has Feel No Pains
         /// </summary>
         [TestMethod]
-        public void GetMeanDestroyedModels_VariableAttacks_SingleModelAttacker()
+        public void GetMeanDestroyedModels_DefenderHasFeelNoPains()
         {
             var expected = 1;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
-
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker has variable attacks
         /// </summary>
         [TestMethod]
         public void GetMeanDestroyedModels_VariableAttacks_MultiModelAttacker()
         {
-            var expected = 2;
+            var expected = 3;
             var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDestroyedModels_MultiModelAttacker_VariableAttacks_DefenderHasFeelNoPains()
-        {
-            var expected = 0;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDestroyedModels_SingleModelAttacker_AttackerHasVariableDamage()
-        {
-            var expected = 2;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the case where the attacker has variable damage
         /// </summary>
         [TestMethod]
         public void GetMeanDestroyedModels_MultiModelAttacker_AttackerHasVariableDamage()
         {
-            var expected = 3;
+            var expected = 5;
             var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDestroyedModels_MultiModelAttacker_VariableDamage_DefenderHasFeelNoPains()
-        {
-            var expected = 1;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetMeanDestroyedModels_VariableAttacks_WeaponHasTorrent()
-        {
-            var expected = 3;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker has Lethal Hits
         /// </summary>
         [TestMethod]
         public void GetMeanDestroyedModels_WeaponHasLethalHits()
         {
-            var expected = 2;
+            var expected = 1;
             var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL_LETHAL_HITS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with a given parameter.
+        /// Tests the case where the attacker has Devastating Wounds
         /// </summary>
         [TestMethod]
         public void GetMeanDestroyedModels_DevastatingWounds()
         {
-            var expected = 2;
+            var expected = 1;
             var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with a given parameter.
+        /// Tests the case where the attacker has Lethal Hits and Devastating Wounds
         /// </summary>
         [TestMethod]
         public void GetMeanDestroyedModels_LethalHitsAndDevastatingWounds()
         {
-            var expected = 4;
-            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
+            var expected = 1;
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
@@ -3770,188 +2471,98 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDestroyedModels_SingleModelAttacker_NoDefenderSpecialRules()
-        {
-            var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDestroyedModels_MultiModelAttacker_NoDefenderSpecialRules()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDestroyedModels_SingleModelAttacker_DefenderHasFeelNoPains()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDestroyedModels_MultiModelAttacker_DefenderHasFeelNoPains()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the case where the defender has an invulnerable save.
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationDestroyedModels_DefenderHasInvulnerableSave()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE), 4);
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the defender has Feel No Pains
         /// </summary>
         [TestMethod]
-        public void GetStandardDeviationDestroyedModels_VariableAttacks_SingleModelAttacker()
+        public void GetStandardDeviationDestroyedModels_DefenderHasFeelNoPains()
         {
-            var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
-
+            var expected = 0;
+            var actual = Math.Round(CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5), 4);
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker has variable attacks
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationDestroyedModels_VariableAttacks_MultiModelAttacker()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDestroyedModels_MultiModelAttacker_VariableAttacks_DefenderHasFeelNoPains()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDestroyedModels_SingleModelAttacker_AttackerHasVariableDamage()
-        {
-            var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the case where the attacker has variable damage
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationDestroyedModels_MultiModelAttacker_AttackerHasVariableDamage()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDestroyedModels_MultiModelAttacker_VariableDamage_DefenderHasFeelNoPains()
-        {
-            var expected = 0;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetStandardDeviationDestroyedModels_VariableAttacks_WeaponHasTorrent()
-        {
-            var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker has Lethal Hits
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationDestroyedModels_WeaponHasLethalHits()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL_LETHAL_HITS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_SINGLE_MODEL_LETHAL_HITS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with a given parameter.
+        /// Tests the case where the attacker has Devastating Wounds
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationDestroyedModels_DevastatingWounds()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Tests the method with a given parameter.
+        /// Tests the case where the attacker has Lethal Hits and Devastating Wounds
         /// </summary>
         [TestMethod]
         public void GetStandardDeviationDestroyedModels_LethalHitsAndDevastatingWounds()
         {
             var expected = 1;
-            var actual = CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = Math.Round(CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
         }
 
         #endregion
 
-        #region Unit Tests - GetBinomialDistributionDestroyedModels()
+        #region Unit Tests - GetDistributionDestroyedModels()
 
         /// <summary>
         /// Tests the case where the attacker parameter is null.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_AttackerIsNull()
+        public void GetDistributionDestroyedModels_AttackerIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(null, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = CombatMath.GetDistributionDestroyedModels(null, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3974,10 +2585,10 @@ namespace UnitTests
         /// Tests the case where the defender parameter is null.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_DefenderIsNull()
+        public void GetDistributionDestroyedModels_DefenderIsNull()
         {
             var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, null);
+            var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, null);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3997,156 +2608,12 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the defender has an invulnerable save.
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_SingleModelAttacker_NoDefenderSpecialRules()
+        public void GetDistributionDestroyedModels_DefenderHasInvulnerableSave()
         {
             var expected = new List<BinomialOutcome>
-            {
-                new(0, 0.0247),
-                new(1, 0.1162),
-                new(2, 0.2393),
-                new(3, 0.2815),
-                new(4, 0.2070),
-                new(5, 0.0974),
-                new(6, 0.0287),
-                new(7, 0.0048),
-                new(8, 0.0004)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_MultiModelAttacker_NoDefenderSpecialRules()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0261),
-                new(1, 0.1982),
-                new(2, 0.2022),
-                new(3, 0.0647),
-                new(4, 0.0084),
-                new(5, 0.0005),
-                new(6, 0),
-                new(7, 0),
-                new(8, 0),
-                new(9, 0),
-                new(10, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_SingleModelAttacker_DefenderHasFeelNoPains()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.5623),
-                new(1, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_MultiModelAttacker_DefenderHasFeelNoPains()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0405),
-                new(1, 0.0191),
-                new(2, 0.0002),
-                new(3, 0),
-                new(4, 0),
-                new(5, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_SingleModelAttacker_DefenderHasInvulnerableSave()
-        {
-            var expected = new List<BinomialOutcome>()
             {
                 new(0, 0.0740),
                 new(1, 0.2278),
@@ -4159,7 +2626,7 @@ namespace UnitTests
                 new(8, 0)
             };
 
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
+            var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -4179,708 +2646,25 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the defender has Feel No Pains
         /// </summary>
         [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_VariableAttacks_SingleModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.1739),
-                new(1, 0.3211),
-                new(2, 0.2748),
-                new(3, 0.1503),
-                new(4, 0.0689),
-                new(5, 0.0237),
-                new(6, 0.0060),
-                new(7, 0.0011),
-                new(8, 0.0001),
-                new(9, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_VariableAttacks_MultiModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.1581),
-                new(1, 0.2937),
-                new(2, 0.2696),
-                new(3, 0.1650),
-                new(4, 0.0758),
-                new(5, 0.0275),
-                new(6, 0.0080),
-                new(7, 0.0021),
-                new(8, 0.0004),
-                new(9, 0.0001),
-                new(10, 0),
-                new(11, 0),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0),
-                new(16, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_SingleModelAttacker_VariableAttacks_DefenderHasFeelNoPain()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0225),
-                new(1, 0.1186),
-                new(2, 0.0414),
-                new(3, 0.0145),
-                new(4, 0.0025)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_MultiModelAttacker_VariableAttacks_DefenderHasFeelNoPain()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0849),
-                new(1, 0.0440),
-                new(2, 0.0099),
-                new(3, 0.0016),
-                new(4, 0.0002),
-                new(5, 0),
-                new(6, 0),
-                new(7, 0),
-                new(8, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_MultiModelAttacker_VariableAttacks_WeaponHasTorrent()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0152),
-                new(1, 0.0911),
-                new(2, 0.1138),
-                new(3, 0.1119),
-                new(4, 0.0983),
-                new(5, 0.0666),
-                new(6, 0.0320),
-                new(7, 0.0104),
-                new(8, 0.0022),
-                new(9, 0.0003),
-                new(10, 0),
-                new(11, 0),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_SingleModelAttacker_VariableDamage()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0247),
-                new(1, 0.1162),
-                new(2, 0.2393),
-                new(3, 0.2815),
-                new(4, 0.2070),
-                new(5, 0.0974),
-                new(6, 0.0287),
-                new(7, 0.0048),
-                new(8, 0.0004)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_MultiModelAttacker_VariableDamage()
-        {
-            var expected = new List<BinomialOutcome>()
-                {
-                    new(0, 0.0134),
-                    new(1, 0.1341),
-                    new(2, 0.2179),
-                    new(3, 0.1617),
-                    new(4, 0.1226),
-                    new(5, 0.0698),
-                    new(6, 0.0249),
-                    new(7, 0.0051),
-                    new(8, 0.0005)
-                };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_MultiModelAttacker_VariableDamage_DefenderHasFeelNoPain()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0390),
-                new(1, 0.1068),
-                new(2, 0.0512),
-                new(3, 0.0322),
-                new(4, 0.0190),
-                new(5, 0.0076),
-                new(6, 0.0019),
-                new(7, 0.0003),
-                new(8, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_VariableAttacks_WeaponHasTorrent()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0152),
-                new(1, 0.0911),
-                new(2, 0.1138),
-                new(3, 0.1119),
-                new(4, 0.0983),
-                new(5, 0.0666),
-                new(6, 0.0320),
-                new(7, 0.0104),
-                new(8, 0.0022),
-                new(9, 0.0003),
-                new(10, 0),
-                new(11, 0),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_WeaponHasLethalHits()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0649),
-                new(1, 0.1947),
-                new(2, 0.2726),
-                new(3, 0.2363),
-                new(4, 0.1418),
-                new(5, 0.0624),
-                new(6, 0.0208),
-                new(7, 0.0053),
-                new(8, 0.0011),
-                new(9, 0.0002),
-                new(10, 0),
-                new(11, 0),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_LETHAL_HITS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_WeaponHasDevastatingWounds()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0671),
-                new(1, 0.2115),
-                new(2, 0.2961),
-                new(3, 0.2418),
-                new(4, 0.1270),
-                new(5, 0.0444),
-                new(6, 0.0104),
-                new(7, 0.0016),
-                new(8, 0.0001),
-                new(9, 0)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetBinomialDistributionDestroyedModels_WeaponHasLethalHitsAndDevastatingWounds()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.0025),
-                new(1, 0.0221),
-                new(2, 0.0865),
-                new(3, 0.1933),
-                new(4, 0.2701),
-                new(5, 0.2415),
-                new(6, 0.1349),
-                new(7, 0.0431),
-                new(8, 0.0060)
-            };
-
-            var actual = CombatMath.GetBinomialDistributionDestroyedModels(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        #endregion
-
-        #region Unit Tests - GetSurvivorDistributionDestroyedModels()
-
-        /// <summary>
-        /// Tests the case where the attacker parameter is null.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_AttackerIsNull()
-        {
-            var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(null, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the case where the defender parameter is null.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_DefenderIsNull()
-        {
-            var expected = new List<BinomialOutcome>();
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, null);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_SingleModelAttacker_NoDefenderSpecialRules()
+        public void GetDistributionDestroyedModels_DefenderHasFeelNoPains()
         {
             var expected = new List<BinomialOutcome>
             {
-                new(0, 1),
-                new(1, 0.9753),
-                new(2, 0.8591),
-                new(3, 0.6198),
-                new(4, 0.3382),
-                new(5, 0.1312),
-                new(6, 0.0338),
-                new(7, 0.0052),
-                new(8, 0.0004)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_MultiModelAttacker_NoDefenderSpecialRules()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.4741),
-                new(2, 0.2758),
-                new(3, 0.0736),
-                new(4, 0.0089),
-                new(5, 0.0005),
-                new(6, 0),
-                new(7, 0),
-                new(8, 0),
-                new(9, 0),
-                new(10, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_SingleModelAttacker_DefenderHasFeelNoPains()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_SINGLE_MODEL_FEEL_NO_PAIN_4);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_MultiModelAttacker_DefenderHasFeelNoPains()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.0193),
-                new(2, 0.0002),
-                new(3, 0),
-                new(4, 0),
-                new(5, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_SingleModelAttacker_DefenderHasInvulnerableSave()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.9260),
-                new(2, 0.6982),
-                new(3, 0.3916),
-                new(4, 0.1558),
-                new(5, 0.0424),
-                new(6, 0.0075),
-                new(7, 0.0008),
+                new(0, 0.0247),
+                new(1, 0.1084),
+                new(2, 0.0528),
+                new(3, 0.0345),
+                new(4, 0.0230),
+                new(5, 0.0108),
+                new(6, 0.0032),
+                new(7, 0.0005),
                 new(8, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
+            var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -4900,72 +2684,32 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the method with given parameters.
+        /// Tests the case where the attacker has variable attacks
         /// </summary>
         [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_VariableAttacks_SingleModelAttacker()
+        public void GetDistributionDestroyedModels_VariableAttacks_MultiModelAttacker()
         {
-            var expected = new List<BinomialOutcome>()
+            var expected = new List<BinomialOutcome>
             {
-                new(0, 1),
-                new(1, 0.8460),
-                new(2, 0.5250),
-                new(3, 0.2501),
-                new(4, 0.0998),
-                new(5, 0.0309),
-                new(6, 0.0072),
-                new(7, 0.0012),
-                new(8, 0.0001),
-                new(9, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_VariableAttacks_MultiModelAttacker()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.8422),
-                new(2, 0.5485),
-                new(3, 0.2789),
-                new(4, 0.1139),
-                new(5, 0.0381),
-                new(6, 0.0106),
-                new(7, 0.0026),
-                new(8, 0.0005),
+                new(0, 0.0667),
+                new(1, 0.1000),
+                new(2, 0.0991),
+                new(3, 0.0932),
+                new(4, 0.0754),
+                new(5, 0.0466),
+                new(6, 0.0203),
+                new(7, 0.0059),
+                new(8, 0.0011),
                 new(9, 0.0001),
                 new(10, 0),
                 new(11, 0),
                 new(12, 0),
                 new(13, 0),
                 new(14, 0),
-                new(15, 0),
-                new(16, 0)
+                new(15, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -4985,104 +2729,32 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the case where the attacker has variable damage
         /// </summary>
         [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_SingleModelAttacker_VariableAttacks_DefenderHasFeelNoPain()
+        public void GetDistributionDestroyedModels_MultiModelAttacker_AttackerHasVariableDamage()
         {
-            var expected = new List<BinomialOutcome>()
+            var expected = new List<BinomialOutcome>
             {
-                new(0, 1),
-                new(1, 0.1770),
-                new(2, 0.0584),
-                new(3, 0.0170),
-                new(4, 0.0025)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D3_ATTACKS, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_MultiModelAttacker_VariableAttacks_DefenderHasFeelNoPain()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.0558),
-                new(2, 0.0117),
-                new(3, 0.0018),
-                new(4, 0.0002),
-                new(5, 0),
-                new(6, 0),
-                new(7, 0),
-                new(8, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_MultiModelAttacker_VariableAttacks_WeaponHasTorrent()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.5267),
-                new(2, 0.4356),
-                new(3, 0.3217),
-                new(4, 0.2099),
-                new(5, 0.1116),
-                new(6, 0.0450),
-                new(7, 0.0129),
-                new(8, 0.0025),
-                new(9, 0.0003),
-                new(10, 0),
-                new(11, 0),
-                new(12, 0),
+                new(0, 0.0017),
+                new(1, 0.0133),
+                new(2, 0.0495),
+                new(3, 0.1140),
+                new(4, 0.1820),
+                new(5, 0.2129),
+                new(6, 0.1888),
+                new(7, 0.1291),
+                new(8, 0.0687),
+                new(9, 0.0284),
+                new(10, 0.0091),
+                new(11, 0.0022),
+                new(12, 0.0004),
                 new(13, 0),
                 new(14, 0),
                 new(15, 0)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5102,25 +2774,22 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the case where the attacker has Lethal Hits
         /// </summary>
         [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_SingleModelAttacker_VariableDamage()
+        public void GetDistributionDestroyedModels_WeaponHasLethalHits()
         {
-            var expected = new List<BinomialOutcome>()
+            var expected = new List<BinomialOutcome>
             {
-                new(0, 1),
-                new(1, 0.9753),
-                new(2, 0.8591),
-                new(3, 0.6198),
-                new(4, 0.3382),
-                new(5, 0.1312),
-                new(6, 0.0338),
-                new(7, 0.0052),
-                new(8, 0.0004)
+                new(0, 0.0990),
+                new(1, 0.2910),
+                new(2, 0.3424),
+                new(3, 0.2014),
+                new(4, 0.0592),
+                new(5, 0.0070)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_LETHAL_HITS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5140,25 +2809,22 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the case where the attacker has Devastating Wounds
         /// </summary>
         [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_MultiModelAttacker_VariableDamage()
+        public void GetDistributionDestroyedModels_DevastatingWounds()
         {
-            var expected = new List<BinomialOutcome>()
+            var expected = new List<BinomialOutcome>
             {
-                new(0, 1),
-                new(1, 0.7366),
-                new(2, 0.6025),
-                new(3, 0.3846),
-                new(4, 0.2229),
-                new(5, 0.1003),
-                new(6, 0.0305),
-                new(7, 0.0055),
-                new(8, 0.0005)
+                new(0, 0.1965),
+                new(1, 0.3779),
+                new(2, 0.2907),
+                new(3, 0.1118),
+                new(4, 0.0215),
+                new(5, 0.0017)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -5178,192 +2844,22 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Test the method with given parameters.
+        /// Tests the case where the attacker has Lethal Hits and Devastating Wounds
         /// </summary>
         [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_MultiModelAttacker_VariableDamage_DefenderHasFeelNoPain()
+        public void GetDistributionDestroyedModels_LethalHitsAndDevastatingWounds()
         {
-            var expected = new List<BinomialOutcome>()
+            var expected = new List<BinomialOutcome>
             {
-                new(0, 1),
-                new(1, 0.2190),
-                new(2, 0.1122),
-                new(3, 0.0610),
-                new(4, 0.0288),
-                new(5, 0.0098),
-                new(6, 0.0022),
-                new(7, 0.0003),
-                new(8, 0)
+                new(0, 0.1965),
+                new(1, 0.3779),
+                new(2, 0.2907),
+                new(3, 0.1118),
+                new(4, 0.0215),
+                new(5, 0.0017)
             };
 
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_DAMAGE, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_VariableAttacks_WeaponHasTorrent()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.5267),
-                new(2, 0.4356),
-                new(3, 0.3217),
-                new(4, 0.2099),
-                new(5, 0.1116),
-                new(6, 0.0450),
-                new(7, 0.0129),
-                new(8, 0.0025),
-                new(9, 0.0003),
-                new(10, 0),
-                new(11, 0),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_MULTI_MODEL_VARIABLE_D6_ATTACKS_TORRENT, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_WeaponHasLethalHits()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.9351),
-                new(2, 0.7404),
-                new(3, 0.4678),
-                new(4, 0.2315),
-                new(5, 0.0898),
-                new(6, 0.0274),
-                new(7, 0.0066),
-                new(8, 0.0013),
-                new(9, 0.0002),
-                new(10, 0),
-                new(11, 0),
-                new(12, 0),
-                new(13, 0),
-                new(14, 0),
-                new(15, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_LETHAL_HITS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_WeaponHasDevastatingWounds()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.9329),
-                new(2, 0.7214),
-                new(3, 0.4253),
-                new(4, 0.1834),
-                new(5, 0.0565),
-                new(6, 0.0121),
-                new(7, 0.0017),
-                new(8, 0.0001),
-                new(9, 0)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given parameters.
-        /// </summary>
-        [TestMethod]
-        public void GetSurvivorDistributionDestroyedModels_WeaponHasLethalHitsAndDevastatingWounds()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.9975),
-                new(2, 0.9754),
-                new(3, 0.8889),
-                new(4, 0.6956),
-                new(5, 0.4255),
-                new(6, 0.1841),
-                new(7, 0.0491),
-                new(8, 0.0060)
-            };
-
-            var actual = CombatMath.GetSurvivorDistributionDestroyedModels(ATTACKER_LETHAL_HITS_SUSTAINED_HITS_1_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Print expected
             Debug.WriteLine($"Expected: ");

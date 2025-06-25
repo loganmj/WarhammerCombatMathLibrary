@@ -608,76 +608,10 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the method with given inputs.
-        /// </summary>
-        [TestMethod]
-        public void BinomialDistribution_TestParams1()
-        {
-            var numberOfTrials = 1;
-            var probability = 0.5;
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.5),
-                new(1, 0.5)
-            };
-
-            var actual = Statistics.GetBinomialDistribution(numberOfTrials, probability);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given inputs.
-        /// </summary>
-        [TestMethod]
-        public void BinomialDistribution_TestParams2()
-        {
-            var numberOfTrials = 1;
-            var probability = 0.1;
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.9),
-                new(1, 0.1)
-            };
-
-            var actual = Statistics.GetBinomialDistribution(numberOfTrials, probability);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
         /// Tests the method with given large inputs.
         /// </summary>
         [TestMethod]
-        public void BinomialDistribution_VariableTrials_TestParams1()
+        public void BinomialDistribution_VariableTrials()
         {
             var minNumberOfTrials = 1;
             var maxNumberOfTrials = 3;
@@ -686,47 +620,8 @@ namespace UnitTests
             {
                 new(0, 0.2917),
                 new(1, 0.4583),
-                new(2, 0.3125),
-                new(3, 0.1250)
-            };
-
-            var actual = Statistics.GetBinomialDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given large inputs.
-        /// </summary>
-        [TestMethod]
-        public void BinomialDistribution_VariableTrials_TestParams2()
-        {
-            var minNumberOfTrials = 1;
-            var maxNumberOfTrials = 6;
-            var probability = 0.5;
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.1641),
-                new(1, 0.3125),
-                new(2, 0.3094),
-                new(3, 0.2500),
-                new(4, 0.1510),
-                new(5, 0.0625),
-                new(6, 0.0156)
+                new(2, 0.2083),
+                new(3, 0.0417)
             };
 
             var actual = Statistics.GetBinomialDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
@@ -948,76 +843,10 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the probability mass function with given inputs.
-        /// </summary>
-        [TestMethod]
-        public void LowerCumulativeDistribution_TestParams1()
-        {
-            var numberOfTrials = 1;
-            var probability = 0.5;
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.5),
-                new(1, 1)
-            };
-
-            var actual = Statistics.GetCumulativeDistribution(numberOfTrials, probability);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the probability mass function with given inputs.
-        /// </summary>
-        [TestMethod]
-        public void LowerCumulativeDistribution_TestParams2()
-        {
-            var numberOfTrials = 1;
-            var probability = 0.1;
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.9),
-                new(1, 1.0)
-            };
-
-            var actual = Statistics.GetCumulativeDistribution(numberOfTrials, probability);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
         /// Tests the method with given large inputs.
         /// </summary>
         [TestMethod]
-        public void CumulativeDistribution_VariableTrials_TestParams1()
+        public void CumulativeDistribution_VariableTrials()
         {
             var minNumberOfTrials = 1;
             var maxNumberOfTrials = 3;
@@ -1026,47 +855,8 @@ namespace UnitTests
             {
                 new(0, 0.2917),
                 new(1, 0.7500),
-                new(2, 1),
+                new(2, 0.9583),
                 new(3, 1)
-            };
-
-            var actual = Statistics.GetCumulativeDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given large inputs.
-        /// </summary>
-        [TestMethod]
-        public void CumulativeDistribution_VariableTrials_TestParams2()
-        {
-            var minNumberOfTrials = 1;
-            var maxNumberOfTrials = 6;
-            var probability = 0.5;
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 0.1641),
-                new(1, 0.4766),
-                new(2, 0.7859),
-                new(3, 1),
-                new(4, 1),
-                new(5, 1),
-                new(6, 1)
             };
 
             var actual = Statistics.GetCumulativeDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
@@ -1289,76 +1079,10 @@ namespace UnitTests
         }
 
         /// <summary>
-        /// Tests the probability mass function with given inputs.
+        /// Tests the case where the number of trials is variable.
         /// </summary>
         [TestMethod]
-        public void SurvivorDistribution_TestParams1()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.5)
-            };
-
-            var numberOfTrials = 1;
-            var probability = 0.5;
-            var actual = Statistics.GetSurvivorDistribution(numberOfTrials, probability);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the probability mass function with given inputs.
-        /// </summary>
-        [TestMethod]
-        public void SurvivorDistribution_TestParams2()
-        {
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 0.1)
-            };
-
-            var numberOfTrials = 1;
-            var probability = 0.1;
-            var actual = Statistics.GetSurvivorDistribution(numberOfTrials, probability);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given large inputs.
-        /// </summary>
-        [TestMethod]
-        public void SurvivorDistribution_VariableTrials_TestParams1()
+        public void SurvivorDistribution_VariableTrials()
         {
             var minNumberOfTrials = 1;
             var maxNumberOfTrials = 3;
@@ -1366,48 +1090,9 @@ namespace UnitTests
             var expected = new List<BinomialOutcome>()
             {
                 new(0, 1),
-                new(1, 0.8958),
-                new(2, 0.4375),
-                new(3, 0.1250)
-            };
-
-            var actual = Statistics.GetSurvivorDistribution(minNumberOfTrials, maxNumberOfTrials, probability);
-
-            // Print expected
-            Debug.WriteLine($"Expected: ");
-            foreach (var value in expected)
-            {
-                Debug.WriteLine(value);
-            }
-
-            // Print actual
-            Debug.WriteLine($"Actual: ");
-            foreach (var value in actual)
-            {
-                Debug.WriteLine(value);
-            }
-
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Tests the method with given large inputs.
-        /// </summary>
-        [TestMethod]
-        public void SurvivorDistribution_VariableTrials_TestParams2()
-        {
-            var minNumberOfTrials = 1;
-            var maxNumberOfTrials = 6;
-            var probability = 0.5;
-            var expected = new List<BinomialOutcome>()
-            {
-                new(0, 1),
-                new(1, 1),
-                new(2, 0.7885),
-                new(3, 0.4792),
-                new(4, 0.2292),
-                new(5, 0.0781),
-                new(6, 0.0156)
+                new(1, 0.7083),
+                new(2, 0.2500),
+                new(3, 0.0417)
             };
 
             var actual = Statistics.GetSurvivorDistribution(minNumberOfTrials, maxNumberOfTrials, probability);

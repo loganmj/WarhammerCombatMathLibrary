@@ -497,14 +497,7 @@ namespace WarhammerCombatMathLibrary
 
             // TODO: Account for damage reduction
             var damageReductor = 0;
-            var damageAfterReduction = damagePerAttack - damageReductor;
-
-            Debug.WriteLine($"GetMinimumAdjustedDamagePerAttack() | Raw damage per attack: {damagePerAttack}");
-            Debug.WriteLine($"GetMinimumAdjustedDamagePerAttack() | Damage reductor: {damageReductor}");
-            Debug.WriteLine($"GetMinimumAdjustedDamagePerAttack() | Damage after reduction: {damageAfterReduction}");
-            Debug.WriteLine($"GetMinimumAdjustedDamagePerAttack() | Return value: {damageAfterReduction}");
-
-            return damageAfterReduction;
+            return damagePerAttack - damageReductor;
         }
 
         /// <summary>
@@ -530,16 +523,9 @@ namespace WarhammerCombatMathLibrary
 
             // TODO: Account for damage reduction
             var damageReductor = 0;
-            var damageAfterReduction = damagePerAttack - damageReductor;
-
-            Debug.WriteLine($"GetMaximumAdjustedDamagePerAttack() | Raw damage per attack: {damagePerAttack}");
-            Debug.WriteLine($"GetMaximumAdjustedDamagePerAttack() | Damage reductor: {damageReductor}");
-            Debug.WriteLine($"GetMaximumAdjustedDamagePerAttack() | Damage after reduction: {damageAfterReduction}");
-            Debug.WriteLine($"GetMaximumAdjustedDamagePerAttack() | Feel no pain rolls are assumed to fail");
-            Debug.WriteLine($"GetMaximumAdjustedDamagePerAttack() | Return value: {damageAfterReduction}");
 
             // Feel no pains are ignored, as the maximum amount of damage is done when defender fails all of their feel no pain rolls
-            return damageAfterReduction;
+            return damagePerAttack - damageReductor;
         }
 
         /// <summary>
@@ -712,7 +698,7 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <param name="distributionType">The type of distribution to create. Defaults to a Binomial distribution.</param>
-        /// <returns>A List of BinomomialOutcome data objects, representing a distribution of hit roll outcomes.</returns>
+        /// <returns>A List of BinomomialOutcome data objects, representing a distribution of successful outcomes.</returns>
         public static List<BinomialOutcome> GetDistributionHits(AttackerDTO? attacker, DistributionTypes distributionType = DistributionTypes.Binomial)
         {
             if (attacker == null)
@@ -915,7 +901,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker">The attacker data object</param>
         /// <param name="defender">The defender data object</param>
         /// <param name="distributionType">The type of distribution to create. Defaults to a Binomial distribution.</param>
-        /// <returns>A List of BinomomialOutcome data objects, representing a distribution of hit roll outcomes.</returns>
+        /// <returns>A List of BinomomialOutcome data objects, representing a distribution of successful outcomes.</returns>
         public static List<BinomialOutcome> GetDistributionWounds(AttackerDTO? attacker, DefenderDTO? defender, DistributionTypes distributionType = DistributionTypes.Binomial)
         {
             if (attacker == null)
@@ -983,15 +969,7 @@ namespace WarhammerCombatMathLibrary
 
             // Calculate total failed save probability
             var totalFailedSaveProbability = baseFailedSaveProbability + totalFailedSaveModifiers;
-            var result = hitAndWoundProbability * baseFailedSaveProbability;
-
-            Debug.WriteLine($"Hit and wound probability: {hitAndWoundProbability}");
-            Debug.WriteLine($"Base failed save probability: {baseFailedSaveProbability}");
-            Debug.WriteLine($"Total failed save modifiers: {totalFailedSaveModifiers}");
-            Debug.WriteLine($"Total failed save probability: {totalFailedSaveProbability}");
-            Debug.WriteLine($"Hit and wound and failed save probability: {result}");
-
-            return result;
+            return (double)(hitAndWoundProbability * baseFailedSaveProbability);
         }
 
         /// <summary>
@@ -1050,17 +1028,19 @@ namespace WarhammerCombatMathLibrary
             }
 
             var averageAttacks = GetAverageAttacks(attacker);
-            var probabilityOfFailedSave = GetProbabilityOfHitAndWoundAndFailedSave(attacker, defender);
-            return Statistics.GetStandardDeviationOfDistribution(averageAttacks, probabilityOfFailedSave);
+            var varianceAttacks = Statistics.GetVarianceOfResults(attacker.WeaponNumberOfAttackDice, (int)attacker.WeaponAttackDiceType);
+            var probabilityOfHitAndWoundAndFailedSave = GetProbabilityOfHitAndWoundAndFailedSave(attacker, defender);
+            return Statistics.GetCombinedStandardDeviationOfDistribution(averageAttacks, varianceAttacks, probabilityOfHitAndWoundAndFailedSave);
         }
 
         /// <summary>
-        /// Returns a binomial distribution of rolls where the hit and wound have succeeded, and the opponent failed their save.
+        /// Returns a distribution of hit and wound and failed save roll results.
         /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static List<BinomialOutcome> GetBinomialDistributionFailedSaves(AttackerDTO? attacker, DefenderDTO? defender)
+        /// <param name="attacker">The attacker data object</param>
+        /// <param name="defender">The defender data object</param>
+        /// <param name="distributionType">The type of distribution to create. Defaults to a Binomial distribution.</param>
+        /// <returns>A List of BinomomialOutcome data objects, representing a distribution of successful outcomes.</returns>
+        public static List<BinomialOutcome> GetDistributionFailedSaves(AttackerDTO? attacker, DefenderDTO? defender, DistributionTypes distributionType = DistributionTypes.Binomial)
         {
             if (attacker == null)
             {
@@ -1077,32 +1057,14 @@ namespace WarhammerCombatMathLibrary
             var minimumAttacks = GetMinimumAttacks(attacker);
             var maximumAttacks = GetMaximumAttacks(attacker);
             var probability = GetProbabilityOfHitAndWoundAndFailedSave(attacker, defender);
-            return Statistics.GetBinomialDistribution(minimumAttacks, maximumAttacks, probability);
-        }
 
-        /// <summary>
-        /// Gets a distribution of all discrete survivor function values for a successful hit and wound, and a failed save roll.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns></returns>
-        public static List<BinomialOutcome> GetSurvivorDistributionFailedSaves(AttackerDTO? attacker, DefenderDTO? defender)
-        {
-            if (attacker == null)
+            return distributionType switch
             {
-                Debug.WriteLine($"GetSurvivorDistributionFailedSaves() | Attacker is null. Returning empty list ...");
-                return [];
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetSurvivorDistributionFailedSaves() | Defender is null. Returning empty list ...");
-                return [];
-            }
-
-            var minimumAttacks = GetMinimumAttacks(attacker);
-            var maximumAttacks = GetMaximumAttacks(attacker);
-            var probability = GetProbabilityOfHitAndWoundAndFailedSave(attacker, defender);
-            return Statistics.GetSurvivorDistribution(minimumAttacks, maximumAttacks, probability);
+                DistributionTypes.Binomial => Statistics.GetBinomialDistribution(minimumAttacks, maximumAttacks, probability),
+                DistributionTypes.Cumulative => Statistics.GetCumulativeDistribution(minimumAttacks, maximumAttacks, probability),
+                DistributionTypes.Survivor => Statistics.GetSurvivorDistribution(minimumAttacks, maximumAttacks, probability),
+                _ => Statistics.GetBinomialDistribution(minimumAttacks, maximumAttacks, probability),
+            };
         }
 
         /// <summary>
@@ -1126,9 +1088,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var averageFailedSaves = GetMeanFailedSaves(attacker, defender);
+            var meanFailedSaves = GetMeanFailedSaves(attacker, defender);
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            var averageTotalDamage = averageFailedSaves * averageDamagePerAttack;
+            var averageTotalDamage = meanFailedSaves * averageDamagePerAttack;
 
             return averageTotalDamage;
         }
@@ -1165,9 +1127,11 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
+            var averageAttacks = GetAverageAttacks(attacker);
+            var varianceAttacks = Statistics.GetVarianceOfResults(attacker.WeaponNumberOfAttackDice, (int)attacker.WeaponAttackDiceType);
+            var probabilityOfHitAndWoundAndFailedSave = GetProbabilityOfHitAndWoundAndFailedSave(attacker, defender);
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
-            var standardDeviationFailedSaves = GetStandardDeviationFailedSaves(attacker, defender);
-            return standardDeviationFailedSaves * averageDamagePerAttack;
+            return Statistics.GetCombinedStandardDeviationOfDistribution(averageAttacks, varianceAttacks, probabilityOfHitAndWoundAndFailedSave) * averageDamagePerAttack;
         }
 
         /// <summary>
@@ -1218,7 +1182,7 @@ namespace WarhammerCombatMathLibrary
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns>An integer value containing the standard deviation of destroyed models.</returns>
-        public static int GetStandardDeviationDestroyedModels(AttackerDTO? attacker, DefenderDTO? defender)
+        public static double GetStandardDeviationDestroyedModels(AttackerDTO? attacker, DefenderDTO? defender)
         {
             if (attacker == null)
             {
@@ -1232,26 +1196,28 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var standardDeviationSuccessfulAttacks = Math.Floor(GetStandardDeviationFailedSaves(attacker, defender));
+            // Calculate the standard deviation of failed saves
+            var averageAttacks = GetAverageAttacks(attacker);
+            var varianceAttacks = Statistics.GetVarianceOfResults(attacker.WeaponNumberOfAttackDice, (int)attacker.WeaponAttackDiceType);
+            var probabilityOfHitAndWoundAndFailedSave = GetProbabilityOfHitAndWoundAndFailedSave(attacker, defender);
+            var standardDeviationSuccessfulAttacks = Statistics.GetCombinedStandardDeviationOfDistribution(averageAttacks, varianceAttacks, probabilityOfHitAndWoundAndFailedSave);
+
+            // Calculate the average amount of adjusted damage done per failed save
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
             var adjustedDamagePerAttack = GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender);
-            var standardDeviationDestroyedModels = GetModelsDestroyed((int)standardDeviationSuccessfulAttacks, adjustedDamagePerAttack, defender);
 
-            Debug.WriteLine($"GetStandardDeviationDestroyedModels() | Standard deviation successful attacks: {standardDeviationSuccessfulAttacks}");
-            Debug.WriteLine($"GetStandardDeviationDestroyedModels() | Average damage per attack: {averageDamagePerAttack}");
-            Debug.WriteLine($"GetStandardDeviationDestroyedModels() | Average adjusted damage per attack: {adjustedDamagePerAttack}");
-            Debug.WriteLine($"GetStandardDeviationDestroyedModels() | Standard deviation models destroyed: {standardDeviationDestroyedModels}");
-
-            return standardDeviationDestroyedModels;
+            // Calculate how many models would be destroyed
+            return GetModelsDestroyed((int)standardDeviationSuccessfulAttacks, adjustedDamagePerAttack, defender);
         }
 
         /// <summary>
-        /// Gets the binomial distribution of destroyed models.
+        /// Returns a distribution of destroyed models from an attack.
         /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static List<BinomialOutcome> GetBinomialDistributionDestroyedModels(AttackerDTO? attacker, DefenderDTO? defender)
+        /// <param name="attacker">The attacker data object</param>
+        /// <param name="defender">The defender data object</param>
+        /// <param name="distributionType">The type of distribution to create. Defaults to a Binomial distribution.</param>
+        /// <returns>A List of BinomomialOutcome data objects, representing a distribution of destroyed models.</returns>
+        public static List<BinomialOutcome> GetDistributionDestroyedModels(AttackerDTO? attacker, DefenderDTO? defender, DistributionTypes distributionType = DistributionTypes.Binomial)
         {
             if (attacker == null)
             {
@@ -1285,50 +1251,13 @@ namespace WarhammerCombatMathLibrary
             var maxGroupSuccessCount = maxAttacksRequiredToDestroyOneModel == 0 ? maximumAttacks + 1 : maxAttacksRequiredToDestroyOneModel;
 
             // Get distribution
-            return Statistics.GetBinomialDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
-        }
-
-        /// <summary>
-        /// Gets the survivor distribution of destroyed models.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        public static List<BinomialOutcome> GetSurvivorDistributionDestroyedModels(AttackerDTO? attacker, DefenderDTO? defender)
-        {
-            if (attacker == null)
+            return distributionType switch
             {
-                Debug.WriteLine($"GetSurvivorDistributionDestroyedModels() | Attacker is null. Returning empty list ...");
-                return [];
-            }
-
-            if (defender == null)
-            {
-                Debug.WriteLine($"GetSurvivorDistributionDestroyedModels() | Defender is null. Returning empty list ...");
-                return [];
-            }
-
-            // Get probability of a successful attack
-            var probability = GetProbabilityOfHitAndWoundAndFailedSave(attacker, defender);
-
-            // Get upper and lower bounds for the number of trials
-            var minimumAttacks = GetMinimumAttacks(attacker);
-            var maximumAttacks = GetMaximumAttacks(attacker);
-
-            // Get lower bound of group success count
-            var maximumDamagePerAttack = GetMaximumDamagePerAttack(attacker);
-            var maximumAdjustedDamagePerAttack = GetMaximumAdjustedDamagePerAttack(maximumDamagePerAttack, defender);
-            var minimumAttacksRequiredToDestroyOneModel = GetAttacksRequiredToDestroyOneModel(maximumAdjustedDamagePerAttack, defender);
-            var minGroupSuccessCount = minimumAttacksRequiredToDestroyOneModel;
-
-            // Get upper bound of group success count
-            var minimumDamagePerAttack = GetMinimumDamagePerAttack(attacker);
-            var minimumAdjustedDamagePerAttack = GetMinimumAdjustedDamagePerAttack(minimumDamagePerAttack, defender);
-            var maxAttacksRequiredToDestroyOneModel = GetAttacksRequiredToDestroyOneModel(minimumAdjustedDamagePerAttack, defender);
-            var maxGroupSuccessCount = maxAttacksRequiredToDestroyOneModel == 0 ? maximumAttacks + 1 : maxAttacksRequiredToDestroyOneModel;
-
-            // Get distribution
-            return Statistics.GetSurvivorDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount);
+                DistributionTypes.Binomial => Statistics.GetBinomialDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount),
+                DistributionTypes.Cumulative => Statistics.GetCumulativeDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount),
+                DistributionTypes.Survivor => Statistics.GetSurvivorDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount),
+                _ => Statistics.GetBinomialDistribution(minimumAttacks, maximumAttacks, probability, minGroupSuccessCount, maxGroupSuccessCount),
+            };
         }
 
         #endregion
