@@ -202,33 +202,6 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
-        /// Returns the adjusted armor save of the defender after applying the attacker's armor pierce.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
-        /// <returns></returns>
-        private static int GetAdjustedArmorSaveThreshold(AttackerDTO attacker, DefenderDTO defender)
-        {
-            if ((defender.ArmorSave <= 0 && defender.InvulnerableSave <= 0)
-                || (defender.ArmorSave <= 0 && defender.InvulnerableSave >= 7)
-                || (defender.ArmorSave >= 7 && defender.InvulnerableSave <= 0)
-                || (defender.ArmorSave >= 7 && defender.InvulnerableSave >= 7))
-            {
-                Debug.WriteLine($"GetAdjustedArmorSaveThreshold() | Defender has invalid armor save and invulnverable save values. Returning adjusted save value of 7+ ...");
-                return 6;
-            }
-
-            // If the defender has an invulnerable save, and the invulnerable save is lower than the regular save after applying armor pierce,
-            // then use the invulnerable save.
-            // Compare against minimum armor save to guard against negative armor pierce values.
-            var minimumArmorSave = 2;
-            var effectiveInvulnerableSave = defender.InvulnerableSave <= 0 ? 7 : defender.InvulnerableSave;
-            var piercedArmorSaveThreshold = defender.ArmorSave + attacker.WeaponArmorPierce;
-            var adjustedArmorSave = Math.Min(piercedArmorSaveThreshold, effectiveInvulnerableSave);
-            return Math.Max(minimumArmorSave, adjustedArmorSave);
-        }
-
-        /// <summary>
         /// Gets the base probability of succeeding on a wound roll, based on the attacker and defender stats.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
@@ -927,6 +900,33 @@ namespace WarhammerCombatMathLibrary
                 DistributionTypes.Survivor => Statistics.GetSurvivorDistribution(minimumAttacks, maximumAttacks, probability),
                 _ => Statistics.GetBinomialDistribution(minimumAttacks, maximumAttacks, probability),
             };
+        }
+
+        /// <summary>
+        /// Returns the adjusted armor save of the defender after applying the attacker's armor pierce.
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        /// <returns></returns>
+        public static int GetAdjustedArmorSaveThreshold(AttackerDTO attacker, DefenderDTO defender)
+        {
+            if ((defender.ArmorSave <= 0 && defender.InvulnerableSave <= 0)
+                || (defender.ArmorSave <= 0 && defender.InvulnerableSave >= 7)
+                || (defender.ArmorSave >= 7 && defender.InvulnerableSave <= 0)
+                || (defender.ArmorSave >= 7 && defender.InvulnerableSave >= 7))
+            {
+                Debug.WriteLine($"GetAdjustedArmorSaveThreshold() | Defender has invalid armor save and invulnverable save values. Returning adjusted save value of 7+ ...");
+                return 6;
+            }
+
+            // If the defender has an invulnerable save, and the invulnerable save is lower than the regular save after applying armor pierce,
+            // then use the invulnerable save.
+            // Compare against minimum armor save to guard against negative armor pierce values.
+            var minimumArmorSave = 2;
+            var effectiveInvulnerableSave = defender.InvulnerableSave <= 0 ? 7 : defender.InvulnerableSave;
+            var piercedArmorSaveThreshold = defender.ArmorSave + attacker.WeaponArmorPierce;
+            var adjustedArmorSave = Math.Min(piercedArmorSaveThreshold, effectiveInvulnerableSave);
+            return Math.Max(minimumArmorSave, adjustedArmorSave);
         }
 
         /// <summary>
