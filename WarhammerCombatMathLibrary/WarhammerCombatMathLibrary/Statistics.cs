@@ -47,9 +47,6 @@ namespace WarhammerCombatMathLibrary
                 });
             }
 
-            // P(max) should always be 1
-            cumulativeDistribution[^1].Probability = 1;
-
             return cumulativeDistribution;
         }
 
@@ -73,9 +70,6 @@ namespace WarhammerCombatMathLibrary
                     Probability = Math.Min(cumulative, 1.0)
                 });
             }
-
-            // P(0) should always be 1
-            survivorDistribution[0].Probability = 1;
 
             return survivorDistribution;
         }
