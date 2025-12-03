@@ -454,3 +454,188 @@ where
 - $k$ is the success threshold value
 - $j$ is the attacker's weapon Armor Pierce stat
 - $h$ is the defender's Invulnerable Save stat
+
+## Critical Hits and Critical Wounds
+In Warhammer 40k, certain hit and wound rolls are considered "critical" based on specific thresholds. By default, an unmodified roll of 6 is a critical hit or critical wound. However, some abilities can change these thresholds.
+
+A critical hit threshold determines which hit roll results are considered critical hits. For example, if a weapon has a critical hit threshold of 5+, then rolls of 5 or 6 are critical hits.
+
+Similarly, a critical wound threshold determines which wound roll results are considered critical wounds.
+
+The probability of rolling a critical hit can be calculated as:
+
+$$p_{\text{crit}} = \frac{n - (k_{\text{crit}} - 1)}{n}$$
+
+where
+- $p_{\text{crit}}$ is the probability of a critical hit or wound
+- $n$ is the total number of possible results (6 for a standard die)
+- $k_{\text{crit}}$ is the critical threshold value
+
+Critical hits and wounds are important because they trigger various weapon abilities, which are discussed in the following sections.
+
+## Weapon Abilities
+
+### Torrent
+The Torrent ability allows a weapon to automatically hit without rolling. This means that the probability of a successful hit roll is 1 (or 100%).
+
+When a weapon has Torrent:
+
+$$p_{\text{hit}} = 1$$
+
+This simplifies all subsequent calculations, as every attack automatically succeeds the hit roll.
+
+### Lethal Hits
+The Lethal Hits ability causes critical hits to automatically wound the target without requiring a wound roll. When a critical hit occurs, it bypasses the wound roll entirely and proceeds directly to the save roll.
+
+To calculate the probability of hitting and wounding with Lethal Hits, we must separate critical hits from normal hits:
+
+$$p_{\text{normal hit}} = p_{\text{hit}} - p_{\text{crit hit}}$$
+
+The total probability of hitting and wounding becomes:
+
+$$p_{\text{hit and wound}} = (p_{\text{normal hit}} \times p_{\text{wound}}) + p_{\text{crit hit}}$$
+
+where critical hits automatically succeed the wound roll, contributing their full probability to the hit and wound result.
+
+### Sustained Hits
+The Sustained Hits ability generates additional hit rolls when a critical hit is rolled. The number of additional hits is determined by a multiplier value (typically 1 for Sustained Hits 1, 2 for Sustained Hits 2, etc.).
+
+The additional hits from Sustained Hits must still roll to wound normally. The probability modifier from Sustained Hits can be calculated as:
+
+$$m_{\text{sustained}} = x \times p_{\text{crit hit}} \times p_{\text{wound}}$$
+
+where
+- $m_{\text{sustained}}$ is the probability modifier from Sustained Hits
+- $x$ is the Sustained Hits multiplier value
+- $p_{\text{crit hit}}$ is the probability of a critical hit
+- $p_{\text{wound}}$ is the probability of wounding
+
+This modifier is added to the base hit and wound probability.
+
+### Devastating Wounds
+The Devastating Wounds ability causes critical wound rolls to bypass the save roll entirely, inflicting mortal wounds directly. Similar to Lethal Hits, this requires separating critical wounds from normal wounds.
+
+The probability modifier from Devastating Wounds can be calculated as:
+
+$$m_{\text{dev wounds}} = p_{\text{hit}} \times p_{\text{crit wound}}$$
+
+where
+- $m_{\text{dev wounds}}$ is the probability modifier from Devastating Wounds
+- $p_{\text{hit}}$ is the probability of hitting
+- $p_{\text{crit wound}}$ is the probability of a critical wound
+
+This represents attacks that hit, roll a critical wound, and bypass the save entirely.
+
+### Reroll Abilities
+Several abilities allow rerolling dice under specific conditions. These abilities affect the probability calculations by giving a second chance at success.
+
+#### Reroll All Failed Rolls
+When an ability allows rerolling all failed rolls (for hits, wounds, or damage), the probability modifier is:
+
+$$m_{\text{reroll}} = (1 - p) \times p$$
+
+where
+- $m_{\text{reroll}}$ is the probability modifier from rerolling
+- $p$ is the base probability of success
+
+This represents the chance that a failed roll (probability $1 - p$) succeeds on the reroll (probability $p$).
+
+#### Reroll Rolls of 1
+When an ability allows rerolling only rolls of 1, the probability modifier is:
+
+$$m_{\text{reroll 1}} = \frac{1}{6} \times p$$
+
+where
+- $m_{\text{reroll 1}}$ is the probability modifier from rerolling 1s
+- $p$ is the base probability of success
+
+This represents the chance that a roll of 1 (probability $\frac{1}{6}$) succeeds on the reroll (probability $p$).
+
+These reroll modifiers can be applied to hit rolls, wound rolls, and damage rolls independently.
+
+## Variable Damage
+Similar to variable attacks, weapons can have variable damage values determined by dice rolls. A weapon's damage characteristic can be expressed as:
+
+$$\text{Damage} = (X)(Dy) + Z$$
+
+where
+- $X$ is the number of damage dice to roll
+- $Dy$ is the dice type (D3 or D6)
+- $Z$ is the flat damage value
+
+The average damage per attack can be calculated as:
+
+$$\text{Avg Damage} = (X \times \text{Avg}(Dy)) + Z$$
+
+For example, a weapon with damage D6+2 would have an average damage of $(1 \times 3.5) + 2 = 5.5$ per attack.
+
+The minimum damage per attack is:
+
+$$\text{Min Damage} = X + Z$$
+
+The maximum damage per attack is:
+
+$$\text{Max Damage} = (X \times Dy) + Z$$
+
+## Feel No Pain
+Feel No Pain is a defensive ability that gives the defender a chance to ignore damage. After a model would lose a wound, the Feel No Pain roll is made for each point of damage. Success on the Feel No Pain roll prevents that damage.
+
+The probability of a successful Feel No Pain roll is calculated the same way as other threshold-based rolls:
+
+$$p_{\text{FNP}} = \frac{n - (k - 1)}{n}$$
+
+where
+- $p_{\text{FNP}}$ is the probability of a successful Feel No Pain roll
+- $n$ is 6 (for a standard die)
+- $k$ is the Feel No Pain threshold
+
+To calculate the expected damage after Feel No Pain, we multiply the base damage by the failure rate:
+
+$$\text{Adjusted Damage} = \text{Base Damage} \times (1 - p_{\text{FNP}})$$
+
+For example, if a weapon does 10 damage and the defender has a 5+ Feel No Pain (probability $\frac{2}{6} = 0.3333$), the expected damage after Feel No Pain is:
+
+$$10 \times (1 - 0.3333) = 6.67$$
+
+## Distribution Types
+In addition to the standard binomial distribution, the library supports two other distribution types that are useful for analyzing combat scenarios.
+
+### Cumulative Distribution
+The cumulative distribution function (CDF) shows the probability of getting *at most* $k$ successes, expressed as $P(X \leq k)$. This is calculated by summing the probability mass function from 0 to $k$:
+
+$$F(n,k,p) = P(X \leq k) = \displaystyle\sum_{i=0}^k \binom{n}{i} p^i (1-p)^{n-i}$$
+
+The cumulative distribution is useful for determining the likelihood of not exceeding a certain number of successes.
+
+### Survivor Distribution
+The survivor distribution (also called the complementary cumulative distribution) shows the probability of getting *at least* $k$ successes, expressed as $P(X \geq k)$. This is calculated by summing the probability mass function from $k$ to $n$:
+
+$$S(n,k,p) = P(X \geq k) = \displaystyle\sum_{i=k}^n \binom{n}{i} p^i (1-p)^{n-i}$$
+
+Equivalently, it can be calculated as:
+
+$$S(n,k,p) = 1 - P(X < k) = 1 - F(n,k-1,p)$$
+
+The survivor distribution is particularly useful in combat scenarios for determining the likelihood of achieving at least a certain number of hits, wounds, or destroyed models.
+
+## Calculating Destroyed Models
+The ultimate goal of combat calculations is often to determine how many enemy models will be destroyed. This calculation combines all previous factors: hit rolls, wound rolls, save rolls, damage per attack, and Feel No Pain.
+
+The expected number of destroyed models can be calculated as:
+
+$$\text{Models Destroyed} = \frac{\text{Total Damage}}{\max(\text{Wounds per Model}, \text{Damage per Attack})}$$
+
+where
+- Total Damage is the adjusted damage after Feel No Pain
+- Wounds per Model is the defender's Wounds characteristic
+- Damage per Attack is the attacker's damage per successful attack
+
+The divisor uses the maximum of wounds per model and damage per attack because:
+- If damage per attack exceeds wounds per model, excess damage is wasted (overkill)
+- If wounds per model exceeds damage per attack, multiple attacks may be needed to destroy one model
+
+For example, if an attack sequence results in 20 points of adjusted damage, and the defender has 3 Wounds per model, with each successful attack dealing 2 damage:
+
+$$\text{Models Destroyed} = \frac{20}{\max(3, 2)} = \frac{20}{3} = 6.67$$
+
+This means approximately 6-7 models would be destroyed, with the fractional part representing the damage dealt to a model that hasn't been fully destroyed yet.
