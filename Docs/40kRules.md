@@ -30,3 +30,5 @@ $$\text{Min Attacks} = X + Z$$
 The maximum number of attacks is:
 
 $$\text{Max Attacks} = (X \times Dy) + Z$$
+
+where $Dy$ represents the maximum value of the dice type (3 for D3, 6 for D6).
