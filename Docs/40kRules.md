@@ -15,7 +15,7 @@ $$(0)(Dy) + Z = Z$$
 For example:
 - A weapon with "A:5" has 5 attacks: $(0)(D6) + 5 = 5$
 - A weapon with "A:D6" has variable attacks: $(1)(D6) + 0$, averaging 3.5 attacks
-- A weapon with "A:2D6+3" has $(2)(D6) + 3$, averaging $7 + 3 = 10$ attacks
+- A weapon with "A:2D6+3" has $(2)(D6) + 3$, averaging $(2 \times 3.5) + 3 = 10$ attacks
 
 The average number of attacks can be calculated as:
 

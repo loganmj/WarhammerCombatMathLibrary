@@ -621,21 +621,27 @@ The survivor distribution is particularly useful in combat scenarios for determi
 ## Calculating Destroyed Models
 The ultimate goal of combat calculations is often to determine how many enemy models will be destroyed. This calculation combines all previous factors: hit rolls, wound rolls, save rolls, damage per attack, and Feel No Pain.
 
-The expected number of destroyed models can be calculated as:
+The library calculates destroyed models by first determining the total damage dealt, then dividing by a damage threshold. The damage threshold is determined as:
 
-$$\text{Models Destroyed} = \frac{\text{Total Damage}}{\max(\text{Wounds per Model}, \text{Damage per Attack})}$$
+$$\text{Damage Threshold} = \max(\text{Wounds per Model}, \text{Damage per Attack})$$
+
+Then the expected number of destroyed models is:
+
+$$\text{Models Destroyed} = \frac{\text{Total Damage}}{\text{Damage Threshold}}$$
 
 where
-- Total Damage is the adjusted damage after Feel No Pain
+- Total Damage is the total damage dealt (number of successful attacks × damage per attack) after Feel No Pain is applied
 - Wounds per Model is the defender's Wounds characteristic
 - Damage per Attack is the attacker's damage per successful attack
 
-The divisor uses the maximum of wounds per model and damage per attack because:
-- If damage per attack exceeds wounds per model, excess damage is wasted (overkill)
-- If wounds per model exceeds damage per attack, multiple attacks may be needed to destroy one model
+This approach accounts for scenarios where:
+- High damage weapons (damage per attack > wounds per model): Uses the higher damage value as threshold
+- Low damage weapons (wounds per model > damage per attack): Uses the higher wounds value as threshold
 
-For example, if an attack sequence results in 20 points of adjusted damage, and the defender has 3 Wounds per model, with each successful attack dealing 2 damage:
+For example, if an attack sequence has 4 successful attacks, each dealing 2 damage, against a defender with 3 Wounds per model:
 
-$$\text{Models Destroyed} = \frac{20}{\max(3, 2)} = \frac{20}{3} = 6.67$$
+$$\text{Total Damage} = 4 \times 2 = 8$$
+$$\text{Damage Threshold} = \max(3, 2) = 3$$
+$$\text{Models Destroyed} = \frac{8}{3} = 2.67$$
 
-This means approximately 6-7 models would be destroyed, with the fractional part representing the damage dealt to a model that hasn't been fully destroyed yet.
+This means approximately 2-3 models would be destroyed, with the fractional part representing partial damage to a model.
