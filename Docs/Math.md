@@ -577,6 +577,12 @@ The maximum damage per attack is:
 
 $$\text{Max Damage} = (X \times Dy) + Z$$
 
+where
+- $X$ is the number of damage dice to roll
+- $Dy$ is the **maximum value** of the die type (e.g., 3 for D3, 6 for D6)
+- $Z$ is the flat damage value
+
+> **Note:** In this formula, $Dy$ represents the maximum value of the die type, not just the die type itself.
 ## Feel No Pain
 Feel No Pain is a defensive ability that gives the defender a chance to ignore damage. After a model would lose a wound, the Feel No Pain roll is made for each point of damage. Success on the Feel No Pain roll prevents that damage.
 
