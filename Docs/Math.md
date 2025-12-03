@@ -462,14 +462,14 @@ A critical hit threshold determines which hit roll results are considered critic
 
 Similarly, a critical wound threshold determines which wound roll results are considered critical wounds.
 
-The probability of rolling a critical hit can be calculated as:
+The probability of rolling a critical hit or critical wound can be calculated as:
 
-$$p_{\text{crit}} = \frac{n - (k_{\text{crit}} - 1)}{n}$$
+$$p_{\text{crit }X} = \frac{n - (k_{\text{crit }X} - 1)}{n}$$
 
 where
-- $p_{\text{crit}}$ is the probability of a critical hit or wound
+- $p_{\text{crit }X}$ is the probability of a critical hit (if $X = \text{hit}$) or a critical wound (if $X = \text{wound}$)
 - $n$ is the total number of possible results (6 for a standard die)
-- $k_{\text{crit}}$ is the critical threshold value
+- $k_{\text{crit }X}$ is the critical threshold value for hits or wounds, as appropriate
 
 Critical hits and wounds are important because they trigger various weapon abilities, which are discussed in the following sections.
 
