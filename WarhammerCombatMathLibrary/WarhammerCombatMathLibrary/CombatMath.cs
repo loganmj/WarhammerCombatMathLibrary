@@ -412,8 +412,8 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="damagePerAttack">The amount of damage done per attack.</param>
         /// <param name="defender">The defender object containing defensive attributes such as Feel No Pain.</param>
-        /// <returns>An integer value containing the average amount of damage per attack after applying defensive modifiers</returns>
-        private static int GetAverageAdjustedDamagePerAttack(int damagePerAttack, DefenderDTO? defender)
+        /// <returns>A double value containing the average amount of damage per attack after applying defensive modifiers</returns>
+        private static double GetAverageAdjustedDamagePerAttack(int damagePerAttack, DefenderDTO? defender)
         {
             // Validate inputs
             if (damagePerAttack <= 0)
@@ -435,9 +435,8 @@ namespace WarhammerCombatMathLibrary
             // Account for feel no pains
             var feelNoPainSuccessProbability = Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(defender.FeelNoPain));
             var averageDamageAfterFeelNoPain = damageAfterReduction * (1 - feelNoPainSuccessProbability);
-            var returnValue = (int)Math.Floor(averageDamageAfterFeelNoPain);
 
-            return returnValue;
+            return averageDamageAfterFeelNoPain;
         }
 
         /// <summary>
@@ -507,8 +506,8 @@ namespace WarhammerCombatMathLibrary
         /// <param name="numberOfAttacks">The number of successful attacks</param>
         /// <param name="damagePerAttack">The damage per attack from the attacker's weapon.</param>
         /// <param name="defender">The defending unit data.</param>
-        /// <returns>An integer value representing the number of defending models that will be destroyed by the attack.</returns>
-        private static int GetModelsDestroyed(int numberOfAttacks, int damagePerAttack, DefenderDTO? defender)
+        /// <returns>A double value representing the number of defending models that will be destroyed by the attack.</returns>
+        private static double GetModelsDestroyed(double numberOfAttacks, double damagePerAttack, DefenderDTO? defender)
         {
             // Validate inputs
             if (numberOfAttacks <= 0)
@@ -536,7 +535,7 @@ namespace WarhammerCombatMathLibrary
             var damageThreshold = Math.Max(defender.Wounds, damagePerAttack);
 
             // Calculate the maximum possible number of models destroyed
-            var modelsDestroyed = (int)Math.Floor(totalDamage / damageThreshold);
+            var modelsDestroyed = totalDamage / damageThreshold;
 
             // Return either the max possible models destroyed, or the total number of defending models, whichever comes first
             return Math.Min(modelsDestroyed, defender.NumberOfModels);
@@ -1155,10 +1154,10 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            var expectedSuccessfulAttacks = GetExpectedFailedSaves(attacker, defender);
+            var meanFailedSaves = GetMeanFailedSaves(attacker, defender);
             var averageDamagePerAttack = GetAverageDamagePerAttack(attacker);
             var adjustedDamagePerAttack = GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender);
-            var averageModelsDestroyed = GetModelsDestroyed(expectedSuccessfulAttacks, adjustedDamagePerAttack, defender);
+            var averageModelsDestroyed = GetModelsDestroyed(meanFailedSaves, adjustedDamagePerAttack, defender);
 
             return averageModelsDestroyed;
         }
@@ -1207,7 +1206,7 @@ namespace WarhammerCombatMathLibrary
             var adjustedDamagePerAttack = GetAverageAdjustedDamagePerAttack(averageDamagePerAttack, defender);
 
             // Calculate how many models would be destroyed
-            return GetModelsDestroyed((int)standardDeviationSuccessfulAttacks, adjustedDamagePerAttack, defender);
+            return GetModelsDestroyed(standardDeviationSuccessfulAttacks, adjustedDamagePerAttack, defender);
         }
 
         /// <summary>
