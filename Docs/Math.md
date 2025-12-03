@@ -640,9 +640,7 @@ where
 - Wounds per Model is the defender's Wounds characteristic
 - Damage per Attack is the attacker's damage per successful attack
 
-This approach accounts for scenarios where:
-- High damage weapons (damage per attack > wounds per model): Uses the higher damage value as threshold
-- Low damage weapons (wounds per model > damage per attack): Uses the higher wounds value as threshold
+This approach ensures that damage is not over-counted when the damage per attack exceeds the wounds per model, while also properly accounting for overkill damage on multi-wound models.
 
 For example, if an attack sequence has 4 successful attacks, each dealing 2 damage, against a defender with 3 Wounds per model:
 
