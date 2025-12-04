@@ -88,7 +88,7 @@ where
 For example, say the die must be rolled three times. The success case for the first trial is a roll of 3+, the success case for the second trial is 4+, and the success case for the third roll is 5+. That all three trials will 
 result in success is calculated as:
 
-$$\frac{4}{6} * \frac{3}{6} * frac{2}{6} = \frac{24}{216} = \frac{1}{9}$$ = 0.1111
+$$\frac{4}{6} * \frac{3}{6} * \frac{2}{6} = \frac{24}{216} = \frac{1}{9} = 0.1111$$
 
 or 11.11%
 
@@ -111,7 +111,7 @@ or 3.13%
 ## Probability of Failure for Multiple Trials
 The probability of failure for multiple trials is calculated the same way as the probability of success, using the same conversion between success and failure:
 
-$$q_0 * q_1 * q_2 ... * q_n = (p_0 - 1) * (p_1 - 1) * (p_2 - 1) ... * (p_n - 1)$$
+$$q_0 * q_1 * q_2 ... * q_n = (1 - p_0) * (1 - p_1) * (1 - p_2) ... * (1 - p_n)$$
 
 And if the probability for success/failure is the same in all trials, the probability of failure is calculated as:
 
