@@ -50,7 +50,7 @@ For each successful hit, the attacker rolls to determine if the attack wounds th
 - **Strength ≥ 2× Toughness**: Wound on 2+
 - **Strength > Toughness**: Wound on 3+
 - **Strength = Toughness**: Wound on 4+
-- **Strength < Toughness (but > half)**: Wound on 5+
+- **Strength < Toughness (but > ½ Toughness)**: Wound on 5+
 - **Strength ≤ ½ Toughness**: Wound on 6+
 
 **Key Rules:**
