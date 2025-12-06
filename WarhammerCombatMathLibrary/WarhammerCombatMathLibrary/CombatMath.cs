@@ -214,6 +214,16 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Checks if a threshold value is valid (between 2 and 6 inclusive).
+        /// </summary>
+        /// <param name="threshold">The threshold value to validate</param>
+        /// <returns>True if the threshold is valid, false otherwise</returns>
+        private static bool IsValidThreshold(int threshold)
+        {
+            return threshold >= 2 && threshold <= 6;
+        }
+
+        /// <summary>
         /// Gets the probability of a critical wound.
         /// This is based on the critical wound threshold of the attacker.
         /// If the attacker has Anti X+, wound rolls of X+ also count as critical wounds.
@@ -223,22 +233,20 @@ namespace WarhammerCombatMathLibrary
         private static double GetProbabilityOfCriticalWound(AttackerDTO attacker)
         {
             // Determine the effective critical wound threshold
-            int effectiveCriticalWoundThreshold;
+            bool hasValidAnti = attacker.WeaponHasAnti && IsValidThreshold(attacker.WeaponAntiThreshold);
+            bool hasValidCriticalWound = IsValidThreshold(attacker.CriticalWoundThreshold);
             
-            if (attacker.WeaponHasAnti && attacker.WeaponAntiThreshold >= 2 && attacker.WeaponAntiThreshold <= 6)
+            int effectiveCriticalWoundThreshold;
+            if (hasValidAnti && hasValidCriticalWound)
             {
-                // Anti X+ is active: use the lower threshold (which means higher probability)
-                // If both are set, use the minimum value (e.g., min(4, 6) = 4 means 4+ triggers critical)
-                if (attacker.CriticalWoundThreshold >= 2 && attacker.CriticalWoundThreshold <= 6)
-                {
-                    effectiveCriticalWoundThreshold = Math.Min(attacker.CriticalWoundThreshold, attacker.WeaponAntiThreshold);
-                }
-                else
-                {
-                    effectiveCriticalWoundThreshold = attacker.WeaponAntiThreshold;
-                }
+                // Both are valid: use the lower threshold (which means higher probability)
+                effectiveCriticalWoundThreshold = Math.Min(attacker.CriticalWoundThreshold, attacker.WeaponAntiThreshold);
             }
-            else if (attacker.CriticalWoundThreshold >= 2 && attacker.CriticalWoundThreshold <= 6)
+            else if (hasValidAnti)
+            {
+                effectiveCriticalWoundThreshold = attacker.WeaponAntiThreshold;
+            }
+            else if (hasValidCriticalWound)
             {
                 effectiveCriticalWoundThreshold = attacker.CriticalWoundThreshold;
             }
