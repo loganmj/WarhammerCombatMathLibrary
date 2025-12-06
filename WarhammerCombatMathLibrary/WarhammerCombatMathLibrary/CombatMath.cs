@@ -428,9 +428,8 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            // TODO: Account for damage reduction
-            var damageReductor = 0;
-            var damageAfterReduction = damagePerAttack - damageReductor;
+            // Apply damage reduction (minimum 0 damage)
+            var damageAfterReduction = Math.Max(0, damagePerAttack - defender.DamageReduction);
 
             // Account for feel no pains
             var feelNoPainSuccessProbability = Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(defender.FeelNoPain));
@@ -460,6 +459,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
+            // Apply damage reduction (minimum 0 damage)
+            var damageAfterReduction = Math.Max(0, damagePerAttack - defender.DamageReduction);
+
             // If the defender has feel no pains, then the minimum amount of damage is 0, since it is possible for the defender to succeed in all of their feel no pain rolls.
             if (defender.FeelNoPain >= 2 && defender.FeelNoPain <= 6)
             {
@@ -467,9 +469,7 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            // TODO: Account for damage reduction
-            var damageReductor = 0;
-            return damagePerAttack - damageReductor;
+            return damageAfterReduction;
         }
 
         /// <summary>
@@ -493,11 +493,9 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
-            // TODO: Account for damage reduction
-            var damageReductor = 0;
-
+            // Apply damage reduction (minimum 0 damage)
             // Feel no pains are ignored, as the maximum amount of damage is done when defender fails all of their feel no pain rolls
-            return damagePerAttack - damageReductor;
+            return Math.Max(0, damagePerAttack - defender.DamageReduction);
         }
 
         /// <summary>
