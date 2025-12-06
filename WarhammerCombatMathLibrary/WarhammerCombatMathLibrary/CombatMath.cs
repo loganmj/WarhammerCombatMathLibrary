@@ -216,20 +216,41 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// Gets the probability of a critical wound.
         /// This is based on the critical wound threshold of the attacker.
+        /// If the attacker has Anti X+, wound rolls of X+ also count as critical wounds.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <returns>A double containing the probability of a critical wound roll</returns>
         private static double GetProbabilityOfCriticalWound(AttackerDTO attacker)
         {
-            // If critical hit threshold is out of bounds, return base result
-            if (attacker.CriticalWoundThreshold <= 0 || attacker.CriticalWoundThreshold >= 7)
+            // Determine the effective critical wound threshold
+            int effectiveCriticalWoundThreshold;
+            
+            if (attacker.WeaponHasAnti && attacker.WeaponAntiThreshold >= 2 && attacker.WeaponAntiThreshold <= 6)
             {
-                return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
+                // Anti X+ is active: use the lower threshold (which means higher probability)
+                // If both are set, use the minimum value (e.g., min(4, 6) = 4 means 4+ triggers critical)
+                if (attacker.CriticalWoundThreshold >= 2 && attacker.CriticalWoundThreshold <= 6)
+                {
+                    effectiveCriticalWoundThreshold = Math.Min(attacker.CriticalWoundThreshold, attacker.WeaponAntiThreshold);
+                }
+                else
+                {
+                    effectiveCriticalWoundThreshold = attacker.WeaponAntiThreshold;
+                }
+            }
+            else if (attacker.CriticalWoundThreshold >= 2 && attacker.CriticalWoundThreshold <= 6)
+            {
+                effectiveCriticalWoundThreshold = attacker.CriticalWoundThreshold;
+            }
+            else
+            {
+                // Default to 6+ if nothing is configured
+                effectiveCriticalWoundThreshold = 6;
             }
 
             // Account for the fact that the smallest possible result on the die is considered an automatic failure,
             // and should not count as part of the success threshold
-            var adjustedCriticalWoundThreshold = attacker.CriticalWoundThreshold == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : attacker.CriticalWoundThreshold;
+            var adjustedCriticalWoundThreshold = effectiveCriticalWoundThreshold == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : effectiveCriticalWoundThreshold;
             return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(adjustedCriticalWoundThreshold));
         }
 

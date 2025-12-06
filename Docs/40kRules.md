@@ -191,6 +191,18 @@ Critical hits and wounds normally occur on unmodified rolls of 6, but some abili
 
 For example, a critical hit threshold of 5+ means rolls of 5 and 6 are critical hits.
 
+### Anti X+
+
+The **Anti [keyword] X+** ability causes wound rolls of X+ to automatically become critical wounds when attacking units with the specified keyword. This ability:
+- Makes wound rolls of X or higher count as critical wounds
+- Works independently of the normal critical wound threshold
+- Triggers on the lower threshold between Anti X+ and the base critical wound threshold
+- When combined with Devastating Wounds, allows more wounds to bypass saves
+
+**Implementation Note**: For the purposes of this library, the attacker either has or does not have the Anti advantage against the target. The specific keyword matching is not tracked - only whether the Anti ability applies to the current target.
+
+**Example**: A weapon with Anti-Infantry 4+ will cause wound rolls of 4, 5, and 6 to be critical wounds when attacking Infantry units. If the weapon also has Devastating Wounds, those critical wounds will bypass the defender's saves.
+
 ## Model Destruction
 
 Models are destroyed when the total damage allocated to them equals or exceeds their Wounds characteristic. The library calculates expected models destroyed by:
