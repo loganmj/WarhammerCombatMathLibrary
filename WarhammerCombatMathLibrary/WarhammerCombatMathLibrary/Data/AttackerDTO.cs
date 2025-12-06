@@ -229,7 +229,7 @@
                                     weaponKeywordFlags,
                                     rerollFlags,
                                     WeaponSustainedHitsMultiplier,
-                                    CriticalHitThreshold + CriticalWoundThreshold + WeaponAntiThreshold);
+                                    (CriticalHitThreshold << 8) | (CriticalWoundThreshold << 4) | WeaponAntiThreshold);
         }
 
         #endregion
