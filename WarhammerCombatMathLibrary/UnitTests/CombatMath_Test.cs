@@ -2979,8 +2979,8 @@ namespace UnitTests
             // With Feel No Pain 5+, damage is multiplied by (1 - 2/6) = 2/3
             // Expected calculation:
             // - Mean hits: 8 * 5/6 = 6.6667
-            // - Mean wounds: 6.6667 * 4/6 = 4.4444 (S6 vs T5 wounds on 3+, as 6 > 5)
-            // - Mean failed saves: 4.4444 * 2/3 = 2.963 (Sv 3+ with AP-2 = 5+, or Inv 5+, both are 5+)
+            // - Mean wounds: 6.6667 * 4/6 = 4.4444 (S6 > T5, so wound on 3+, which is 4/6 success)
+            // - Mean failed saves: 4.4444 * 2/3 = 2.963 (3+ save with AP-2 becomes 5+; Inv 5+ is also 5+; use best which is 5+ with 2/6 success, 4/6 fail)
             // - Damage per attack after reduction: 3 - 1 = 2
             // - Damage per attack after FNP: 2 * (1 - 2/6) = 1.3333
             // - Total damage: 2.963 * 1.3333 = 3.9507
