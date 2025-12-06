@@ -315,6 +315,51 @@ namespace UnitTests
             Wounds = 3
         };
 
+        /// <summary>
+        /// Defender data profile with:
+        /// - Multiple models
+        /// - Damage Reduction 1
+        /// </summary>
+        public static readonly DefenderDTO DEFENDER_MULTI_MODEL_DAMAGE_REDUCTION_1 = new()
+        {
+            NumberOfModels = 10,
+            Toughness = 4,
+            ArmorSave = 3,
+            DamageReduction = 1,
+            Wounds = 2
+        };
+
+        /// <summary>
+        /// Defender data profile with:
+        /// - Multiple models
+        /// - Damage Reduction 2
+        /// </summary>
+        public static readonly DefenderDTO DEFENDER_MULTI_MODEL_DAMAGE_REDUCTION_2 = new()
+        {
+            NumberOfModels = 10,
+            Toughness = 4,
+            ArmorSave = 3,
+            DamageReduction = 2,
+            Wounds = 2
+        };
+
+        /// <summary>
+        /// Defender data profile with:
+        /// - Multiple models
+        /// - Damage Reduction 1
+        /// - Feel No Pain 5+
+        /// </summary>
+        public static readonly DefenderDTO DEFENDER_MULTI_MODEL_DAMAGE_REDUCTION_1_FEEL_NO_PAIN_5 = new()
+        {
+            NumberOfModels = 5,
+            Toughness = 5,
+            ArmorSave = 3,
+            InvulnerableSave = 5,
+            FeelNoPain = 5,
+            DamageReduction = 1,
+            Wounds = 3
+        };
+
         #endregion
 
         #region Unit Tests - GetProbabilityOfHit()
@@ -2876,6 +2921,106 @@ namespace UnitTests
             }
 
             CollectionAssert.AreEqual(expected, actual);
+        }
+
+        #endregion
+
+        #region Unit Tests - Damage Reduction
+
+        /// <summary>
+        /// Tests the case where the defender has Damage Reduction 1
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDestroyedModels_DefenderHasDamageReduction1()
+        {
+            // ATTACKER_SINGLE_MODEL_NO_ABILITIES has 3 damage per attack
+            // With damage reduction 1, each attack does 2 damage
+            // Expected calculation:
+            // - Mean hits: 8 * 5/6 = 6.6667
+            // - Mean wounds: 6.6667 * 4/6 = 4.4444 (S6 vs T4 wounds on 3+)
+            // - Mean failed saves: 4.4444 * 2/3 = 2.963 (Sv 3+ with AP-2 = 5+)
+            // - Damage per attack after reduction: 3 - 1 = 2
+            // - Total damage: 2.963 * 2 = 5.9259
+            // - Models destroyed: 5.9259 / max(2, 2) = 2.963
+            var expected = 2.963;
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_DAMAGE_REDUCTION_1), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender has Damage Reduction 2
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDestroyedModels_DefenderHasDamageReduction2()
+        {
+            // ATTACKER_SINGLE_MODEL_NO_ABILITIES has 3 damage per attack
+            // With damage reduction 2, each attack does 1 damage
+            // Expected calculation:
+            // - Mean hits: 8 * 5/6 = 6.6667
+            // - Mean wounds: 6.6667 * 4/6 = 4.4444 (S6 vs T4 wounds on 3+)
+            // - Mean failed saves: 4.4444 * 2/3 = 2.963 (Sv 3+ with AP-2 = 5+)
+            // - Damage per attack after reduction: 3 - 2 = 1
+            // - Total damage: 2.963 * 1 = 2.963
+            // - Models destroyed: 2.963 / max(2, 1) = 1.4815
+            var expected = 1.4815;
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_DAMAGE_REDUCTION_2), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender has both Damage Reduction 1 and Feel No Pain 5+
+        /// Damage reduction is applied before feel no pain rolls
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDestroyedModels_DefenderHasDamageReduction1AndFeelNoPain()
+        {
+            // ATTACKER_SINGLE_MODEL_NO_ABILITIES has 3 damage per attack
+            // With damage reduction 1, each attack does 2 damage
+            // With Feel No Pain 5+, damage is multiplied by (1 - 2/6) = 2/3
+            // Expected calculation:
+            // - Mean hits: 8 * 5/6 = 6.6667
+            // - Mean wounds: 6.6667 * 4/6 = 4.4444 (S6 > T5, so wound on 3+, which is 4/6 success)
+            // - Mean failed saves: 4.4444 * 2/3 = 2.963 (3+ save with AP-2 becomes 5+; Inv 5+ is also 5+; use best which is 5+ with 2/6 success, 4/6 fail)
+            // - Damage per attack after reduction: 3 - 1 = 2
+            // - Damage per attack after FNP: 2 * (1 - 2/6) = 1.3333
+            // - Total damage: 2.963 * 1.3333 = 3.9507
+            // - Models destroyed: 3.9507 / max(3, 1.3333) = 1.3169
+            var expected = 1.3169;
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_DAMAGE_REDUCTION_1_FEEL_NO_PAIN_5), 4);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where damage reduction reduces damage to 0
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDestroyedModels_DamageReductionReducesToZero()
+        {
+            // Create an attacker with low damage (1) and a defender with damage reduction 2
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 10,
+                WeaponSkill = 2,
+                WeaponStrength = 6,
+                WeaponArmorPierce = 2,
+                WeaponFlatDamage = 1
+            };
+
+            var defender = new DefenderDTO()
+            {
+                NumberOfModels = 10,
+                Toughness = 4,
+                ArmorSave = 3,
+                DamageReduction = 2,
+                Wounds = 2
+            };
+
+            // With damage reduction 2 and weapon damage 1, damage is reduced to 0
+            // Expected: 0 models destroyed
+            var expected = 0;
+            var actual = Math.Round(CombatMath.GetMeanDestroyedModels(attacker, defender), 4);
+            Assert.AreEqual(expected, actual);
         }
 
         #endregion

@@ -10,7 +10,8 @@ Combat in Warhammer 40k is resolved through a sequence of dice rolls that determ
 2. **Wound Roll** - Determine if the hit wounds the target
 3. **Save Roll** - The defender attempts to negate the wound
 4. **Damage** - Apply damage to the target unit
-5. **Feel No Pain** (if applicable) - The defender may ignore some damage
+5. **Damage Reduction** (if applicable) - The defender reduces incoming damage
+6. **Feel No Pain** (if applicable) - The defender may ignore some remaining damage
 
 ## Unit and Weapon Characteristics
 
@@ -30,7 +31,8 @@ Combat in Warhammer 40k is resolved through a sequence of dice rolls that determ
 - **Armor Save (Sv)**: The threshold needed to save against an attack
 - **Invulnerable Save (Inv)**: An alternative save that cannot be modified by AP
 - **Wounds (W)**: How many wounds each model can sustain before being destroyed
-- **Feel No Pain (FNP)**: A special save rolled after damage is allocated
+- **Damage Reduction (DR)**: Reduces incoming damage by a fixed amount (minimum 0)
+- **Feel No Pain (FNP)**: A special save rolled after damage is allocated and reduced
 
 ## Combat Phases
 
@@ -76,9 +78,26 @@ Some units have an Invulnerable Save that cannot be modified by AP. The defender
 
 Each attack that successfully wounds and is not saved inflicts damage equal to the weapon's Damage characteristic. When a model accumulates wounds equal to or exceeding its Wounds characteristic, it is destroyed.
 
-### 5. Feel No Pain
+### 5. Damage Reduction
 
-After damage is allocated, if the defender has a Feel No Pain ability, they roll once for each point of damage. Each successful roll prevents that point of damage from being applied.
+Some units have defensive abilities that reduce incoming damage. Damage reduction is applied **before** Feel No Pain rolls:
+
+**How it works:**
+- Each successful attack that inflicts damage has its damage reduced by the Damage Reduction value
+- Damage cannot be reduced below 0
+- This reduction happens before any Feel No Pain rolls are made
+
+For example, if a unit has Damage Reduction 1 and is hit by a weapon that deals 3 damage:
+- The damage is reduced to 2 (3 - 1 = 2)
+- Then Feel No Pain rolls (if any) are made on those 2 points of damage
+
+If the weapon only deals 1 damage and the unit has Damage Reduction 2:
+- The damage is reduced to 0 (max(0, 1 - 2) = 0)
+- No damage is dealt, so no Feel No Pain rolls are needed
+
+### 6. Feel No Pain
+
+After damage is allocated and reduced, if the defender has a Feel No Pain ability, they roll once for each point of damage. Each successful roll prevents that point of damage from being applied.
 
 ## Variable Stats
 

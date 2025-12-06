@@ -38,6 +38,11 @@
         public int FeelNoPain { get; set; }
 
         /// <summary>
+        /// The damage reduction value of the defender. This reduces the damage of each attack by the specified amount (minimum 0).
+        /// </summary>
+        public int DamageReduction { get; set; }
+
+        /// <summary>
         /// The number of wounds the defender has.
         /// </summary>
         public int Wounds { get; set; }
@@ -54,6 +59,7 @@
             $"ArmorSave: {ArmorSave}, " +
             $"InvulnerableSave: {InvulnerableSave}, " +
             $"FeelNoPain: {FeelNoPain}, " +
+            $"DamageReduction: {DamageReduction}, " +
             $"Wounds: {Wounds}]";
         }
 
@@ -77,6 +83,7 @@
                    && ArmorSave == other.ArmorSave
                    && InvulnerableSave == other.InvulnerableSave
                    && FeelNoPain == other.FeelNoPain
+                   && DamageReduction == other.DamageReduction
                    && Wounds == other.Wounds;
         }
 
@@ -89,6 +96,7 @@
                                     ArmorSave,
                                     InvulnerableSave,
                                     FeelNoPain,
+                                    DamageReduction,
                                     Wounds);
         }
 
