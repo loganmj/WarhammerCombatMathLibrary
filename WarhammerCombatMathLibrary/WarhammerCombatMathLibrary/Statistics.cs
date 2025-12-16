@@ -48,7 +48,7 @@ namespace WarhammerCombatMathLibrary
             double totalProbability = distribution.Sum(outcome => outcome.Probability);
 
             // If the total is 0 or already 1, no normalization needed
-            if (totalProbability == 0 || Math.Abs(totalProbability - 1.0) < PROBABILITY_TOLERANCE)
+            if (Math.Abs(totalProbability) < PROBABILITY_TOLERANCE || Math.Abs(totalProbability - 1.0) < PROBABILITY_TOLERANCE)
             {
                 return distribution;
             }
@@ -75,8 +75,16 @@ namespace WarhammerCombatMathLibrary
             {
                 cumulative += distribution[i].Probability;
                 
-                // For the last element, ensure it's exactly 1.0 to handle any floating point errors
-                double probability = (i == distribution.Count - 1) ? 1.0 : Math.Min(cumulative, 1.0);
+                // For the last element, set to exactly 1.0 if it's within tolerance to handle floating point precision
+                double probability;
+                if (i == distribution.Count - 1 && Math.Abs(cumulative - 1.0) < PROBABILITY_TOLERANCE)
+                {
+                    probability = 1.0;
+                }
+                else
+                {
+                    probability = Math.Min(cumulative, 1.0);
+                }
                 
                 cumulativeDistribution.Add(new BinomialOutcome
                 {
@@ -103,8 +111,16 @@ namespace WarhammerCombatMathLibrary
             {
                 cumulative += distribution[i].Probability;
                 
-                // For the first element (i == 0), ensure it's exactly 1.0 to handle any floating point errors
-                double probability = (i == 0) ? 1.0 : Math.Min(cumulative, 1.0);
+                // For the first element (i == 0), set to exactly 1.0 if it's within tolerance to handle floating point precision
+                double probability;
+                if (i == 0 && Math.Abs(cumulative - 1.0) < PROBABILITY_TOLERANCE)
+                {
+                    probability = 1.0;
+                }
+                else
+                {
+                    probability = Math.Min(cumulative, 1.0);
+                }
                 
                 survivorDistribution.Insert(0, new BinomialOutcome
                 {
