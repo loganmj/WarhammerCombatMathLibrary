@@ -3271,9 +3271,9 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfHitAndWound_AntiLessThanNormalWoundThreshold_NoOtherAbilities()
         {
-            // S4 vs T5 means normal wounds on 5+ (S < T), so probability without Anti = 2/6 wound * 4/6 hit = 0.2222
+            // S4 vs T5 means normal wounds on 5+ (S < T), so probability without Anti = 2/6 wound * 4/6 hit = 8/36 ≈ 0.2222
             // Anti 3+ means all wound rolls of 3+ succeed as critical wounds (4/6 wound probability)
-            // With Anti 3+, probability = 4/6 wound * 4/6 hit = 0.4444
+            // With Anti 3+, probability = 4/6 wound * 4/6 hit = 16/36 ≈ 0.4444
             var probWithAnti = CombatMath.GetProbabilityOfHitAndWound(ATTACKER_ANTI_3_PLUS_BETTER_THRESHOLD, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Create equivalent attacker without Anti for comparison
