@@ -203,6 +203,8 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Gets the base probability of succeeding on a wound roll, based on the attacker and defender stats.
+        /// If the attacker has Anti X+, wound rolls of X+ automatically succeed as critical wounds.
+        /// This means the effective wound threshold is the better (lower) of the normal threshold and Anti threshold.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <param name="defender">The defender data object</param>
@@ -210,6 +212,15 @@ namespace WarhammerCombatMathLibrary
         private static double GetBaseProbabilityOfWound(AttackerDTO attacker, DefenderDTO defender)
         {
             var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
+            
+            // If the attacker has Anti X+ and it's better than the normal wound threshold,
+            // use the Anti threshold instead (since all rolls of X+ succeed as critical wounds)
+            if (attacker.WeaponHasAnti && IsValidThreshold(attacker.WeaponAntiThreshold))
+            {
+                // Use the better (lower) threshold
+                woundSuccessThreshold = Math.Min(woundSuccessThreshold, attacker.WeaponAntiThreshold);
+            }
+            
             return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(woundSuccessThreshold));
         }
 
