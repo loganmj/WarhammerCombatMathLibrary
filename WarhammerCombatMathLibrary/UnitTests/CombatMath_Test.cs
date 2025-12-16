@@ -3263,21 +3263,17 @@ namespace UnitTests
         /// Tests the case where a unit has Anti X, but no other abilities, and the Anti X value 
         /// is less than (better than) the normal wound threshold.
         /// Example: Normal wound roll requires a 5+ to succeed (S4 vs T5), but the unit has Anti 3+, 
-        /// so a wound roll of 3+ would critically succeed.
+        /// so a wound roll of 3+ automatically succeeds as a critical wound.
         /// 
         /// Expected behavior: Anti X+ should cause wound rolls of X+ to automatically succeed as critical wounds,
         /// increasing the overall wound success rate when the Anti threshold is lower than the normal wound threshold.
-        /// 
-        /// Note: Without abilities like Devastating Wounds that utilize critical wounds, the wound probability
-        /// may not increase because critical wounds still need to go through the save roll process. The critical
-        /// wound designation primarily matters when combined with abilities like Devastating Wounds.
         /// </summary>
         [TestMethod]
         public void GetProbabilityOfHitAndWound_AntiLessThanNormalWoundThreshold_NoOtherAbilities()
         {
-            // S4 vs T5 means normal wounds on 5+ (S < T), so probability = 2/6 wound * 4/6 hit = 0.2222
-            // Anti 3+ means critical wounds on 3+ (4/6 of wound rolls)
-            // Without Devastating Wounds or similar abilities, the wound probability remains the same
+            // S4 vs T5 means normal wounds on 5+ (S < T), so probability without Anti = 2/6 wound * 4/6 hit = 0.2222
+            // Anti 3+ means all wound rolls of 3+ succeed as critical wounds (4/6 wound probability)
+            // With Anti 3+, probability = 4/6 wound * 4/6 hit = 0.4444
             var probWithAnti = CombatMath.GetProbabilityOfHitAndWound(ATTACKER_ANTI_3_PLUS_BETTER_THRESHOLD, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Create equivalent attacker without Anti for comparison
@@ -3292,11 +3288,17 @@ namespace UnitTests
             };
             var probWithoutAnti = CombatMath.GetProbabilityOfHitAndWound(withoutAnti, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
-            // Without other critical wound abilities, Anti X doesn't change base wound probability
-            // (it only changes the distribution of normal vs critical wounds)
-            Assert.AreEqual(Math.Round(probWithoutAnti, 4), Math.Round(probWithAnti, 4), 
-                $"Anti 3+ with S4 vs T5 should have same wound probability as no Anti when no critical wound abilities. " +
+            // With Anti X+ that is better than the normal wound threshold, wound probability should increase
+            // Expected: With Anti = 0.4444, Without Anti = 0.2222
+            Assert.IsTrue(probWithAnti > probWithoutAnti, 
+                $"Anti 3+ with S4 vs T5 should increase wound probability compared to no Anti. " +
                 $"With Anti: {probWithAnti:F4}, Without: {probWithoutAnti:F4}");
+            
+            // Verify the expected values
+            Assert.AreEqual(0.4444, Math.Round(probWithAnti, 4), 0.0001, 
+                $"Anti 3+ with S4 vs T5 should result in ~0.4444 probability (4/6 wound * 4/6 hit)");
+            Assert.AreEqual(0.2222, Math.Round(probWithoutAnti, 4), 0.0001,
+                $"Without Anti, S4 vs T5 should result in ~0.2222 probability (2/6 wound * 4/6 hit)");
         }
 
         /// <summary>
@@ -3332,19 +3334,15 @@ namespace UnitTests
 
         /// <summary>
         /// Tests that when Anti X is combined with Devastating Wounds, and Anti X is less than the normal
-        /// wound threshold, it increases the probability of critical wounds which can then benefit from
-        /// Devastating Wounds. This test verifies the interaction between Anti X and critical wound abilities.
-        /// 
-        /// Note: Based on current implementation behavior, Anti X affects the critical wound threshold but
-        /// critical wounds from Anti X do not automatically succeed as wounds. The benefit comes from 
-        /// abilities like Devastating Wounds that utilize the critical wound status. This test verifies
-        /// that the implementation at minimum doesn't reduce damage when Anti X is present.
+        /// wound threshold, it increases damage output because more wounds succeed (and as critical wounds
+        /// with Devastating Wounds, they bypass saves).
         /// </summary>
         [TestMethod]
         public void GetMeanDamage_AntiLessThanNormalWoundThreshold_WithDevastatingWounds()
         {
             // S4 vs T5 means normal wounds on 5+ (S < T)
-            // Anti 3+ with Devastating Wounds means 3+ rolls become critical wounds that bypass saves
+            // Anti 3+ means all wound rolls of 3+ succeed as critical wounds
+            // With Devastating Wounds, critical wounds bypass saves
             var attackerWithAntiAndDevWounds = new AttackerDTO()
             {
                 NumberOfModels = 1,
@@ -3374,10 +3372,10 @@ namespace UnitTests
 
             var damageWithoutAnti = CombatMath.GetMeanDamage(attackerWithoutAnti, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
-            // With Anti 3+ and Devastating Wounds, damage should be at least as high as without Anti
-            // (ideally higher, but the current implementation may not fully utilize Anti)
-            Assert.IsTrue(damageWithAnti >= damageWithoutAnti,
-                $"Anti 3+ with Devastating Wounds should not decrease damage. With Anti: {damageWithAnti:F4}, Without: {damageWithoutAnti:F4}");
+            // With Anti 3+ and Devastating Wounds, damage should be significantly higher
+            // because more wounds succeed (4/6 instead of 2/6) and they all bypass saves
+            Assert.IsTrue(damageWithAnti > damageWithoutAnti,
+                $"Anti 3+ with Devastating Wounds should increase damage significantly. With Anti: {damageWithAnti:F4}, Without: {damageWithoutAnti:F4}");
         }
 
         /// <summary>
