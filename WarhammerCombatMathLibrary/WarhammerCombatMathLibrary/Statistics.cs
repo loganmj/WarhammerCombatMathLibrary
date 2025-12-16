@@ -16,6 +16,11 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         private const int MAX_CACHE_SIZE = 5000;
 
+        /// <summary>
+        /// Tolerance for floating point comparisons to determine if probabilities are effectively equal to 1.0.
+        /// </summary>
+        private const double PROBABILITY_TOLERANCE = 1e-10;
+
         #endregion
 
         #region Fields
@@ -32,7 +37,7 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         /// <param name="distribution">The distribution to normalize.</param>
         /// <returns>A normalized distribution where all probabilities sum to 1.0.</returns>
-        private static List<BinomialOutcome> NormalizeDistribution(List<BinomialOutcome>? distribution)
+        private static List<BinomialOutcome> NormalizeDistribution(List<BinomialOutcome> distribution)
         {
             if (distribution == null || distribution.Count == 0)
             {
@@ -43,7 +48,7 @@ namespace WarhammerCombatMathLibrary
             double totalProbability = distribution.Sum(outcome => outcome.Probability);
 
             // If the total is 0 or already 1, no normalization needed
-            if (totalProbability == 0 || Math.Abs(totalProbability - 1.0) < 1e-10)
+            if (totalProbability == 0 || Math.Abs(totalProbability - 1.0) < PROBABILITY_TOLERANCE)
             {
                 return distribution;
             }
