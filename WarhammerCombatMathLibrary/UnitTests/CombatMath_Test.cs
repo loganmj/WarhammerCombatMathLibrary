@@ -3275,7 +3275,7 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfHitAndWound_AntiLessThanNormalWoundThreshold_NoOtherAbilities()
         {
-            // S4 vs T5 means normal wounds on 5+ (S < T), so probability = 2/6 * 2/3 hit = 0.2222
+            // S4 vs T5 means normal wounds on 5+ (S < T), so probability = 2/6 wound * 4/6 hit = 0.2222
             // Anti 3+ means critical wounds on 3+ (4/6 of wound rolls)
             // Without Devastating Wounds or similar abilities, the wound probability remains the same
             var probWithAnti = CombatMath.GetProbabilityOfHitAndWound(ATTACKER_ANTI_3_PLUS_BETTER_THRESHOLD, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
@@ -3335,8 +3335,10 @@ namespace UnitTests
         /// wound threshold, it increases the probability of critical wounds which can then benefit from
         /// Devastating Wounds. This test verifies the interaction between Anti X and critical wound abilities.
         /// 
-        /// Note: The current implementation may not automatically make Anti X+ wounds succeed as critical wounds.
-        /// This test documents the expected behavior based on the issue requirements.
+        /// Note: Based on current implementation behavior, Anti X affects the critical wound threshold but
+        /// critical wounds from Anti X do not automatically succeed as wounds. The benefit comes from 
+        /// abilities like Devastating Wounds that utilize the critical wound status. This test verifies
+        /// that the implementation at minimum doesn't reduce damage when Anti X is present.
         /// </summary>
         [TestMethod]
         public void GetMeanDamage_AntiLessThanNormalWoundThreshold_WithDevastatingWounds()
