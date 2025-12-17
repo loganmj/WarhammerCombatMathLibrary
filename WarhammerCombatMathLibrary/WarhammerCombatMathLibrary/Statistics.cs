@@ -16,6 +16,11 @@ namespace WarhammerCombatMathLibrary
         /// </summary>
         private const int MAX_CACHE_SIZE = 5000;
 
+        /// <summary>
+        /// Tolerance for floating point comparisons to determine if probabilities are effectively equal to 1.0.
+        /// </summary>
+        private const double PROBABILITY_TOLERANCE = 1e-10;
+
         #endregion
 
         #region Fields
@@ -28,6 +33,35 @@ namespace WarhammerCombatMathLibrary
         #region Private Methods
 
         /// <summary>
+        /// Normalizes a binomial distribution so that all probabilities sum to 1.0.
+        /// </summary>
+        /// <param name="distribution">The distribution to normalize.</param>
+        /// <returns>A normalized distribution where all probabilities sum to 1.0.</returns>
+        private static List<BinomialOutcome> NormalizeDistribution(List<BinomialOutcome> distribution)
+        {
+            if (distribution == null || distribution.Count == 0)
+            {
+                return distribution ?? new List<BinomialOutcome>();
+            }
+
+            // Calculate the sum of all probabilities
+            double totalProbability = distribution.Sum(outcome => outcome.Probability);
+
+            // If the total is 0 or already 1, no normalization needed
+            if (Math.Abs(totalProbability) < PROBABILITY_TOLERANCE || Math.Abs(totalProbability - 1.0) < PROBABILITY_TOLERANCE)
+            {
+                return distribution;
+            }
+
+            // Normalize each probability
+            return distribution.Select(outcome => new BinomialOutcome
+            {
+                Successes = outcome.Successes,
+                Probability = outcome.Probability / totalProbability
+            }).ToList();
+        }
+
+        /// <summary>
         /// Applies a cumulative function to a binomial distribution to transform it into a cumulative distribution P(X≤k).
         /// </summary>
         /// <param name="distribution"></param>
@@ -37,13 +71,19 @@ namespace WarhammerCombatMathLibrary
             var cumulativeDistribution = new List<BinomialOutcome>();
             double cumulative = 0;
 
-            foreach (var outcome in distribution)
+            for (int i = 0; i < distribution.Count; i++)
             {
-                cumulative += outcome.Probability;
+                cumulative += distribution[i].Probability;
+                
+                // For the last element, set to exactly 1.0 if it's within tolerance to handle floating point precision
+                double probability = (i == distribution.Count - 1 && Math.Abs(cumulative - 1.0) < PROBABILITY_TOLERANCE)
+                    ? 1.0
+                    : Math.Min(cumulative, 1.0);
+                
                 cumulativeDistribution.Add(new BinomialOutcome
                 {
-                    Successes = outcome.Successes,
-                    Probability = Math.Min(cumulative, 1.0)
+                    Successes = distribution[i].Successes,
+                    Probability = probability
                 });
             }
 
@@ -64,10 +104,17 @@ namespace WarhammerCombatMathLibrary
             for (int i = distribution.Count - 1; i >= 0; i--)
             {
                 cumulative += distribution[i].Probability;
+                
+                // For the first element (i == 0), set to exactly 1.0 if it's within tolerance to handle floating point precision
+                double probability;
+                probability = (i == 0 && Math.Abs(cumulative - 1.0) < PROBABILITY_TOLERANCE)
+                    ? 1.0
+                    : Math.Min(cumulative, 1.0);
+                
                 survivorDistribution.Insert(0, new BinomialOutcome
                 {
                     Successes = distribution[i].Successes,
-                    Probability = Math.Min(cumulative, 1.0)
+                    Probability = probability
                 });
             }
 
@@ -100,6 +147,12 @@ namespace WarhammerCombatMathLibrary
                     Successes = k,
                     Probability = discreteProbability
                 });
+            }
+
+            // Normalize the distribution if groupSuccessCount > 1 to ensure it sums to 1.0
+            if (groupSuccessCount > 1)
+            {
+                baseDistribution = NormalizeDistribution(baseDistribution);
             }
 
             // If applicable, transform the distribution based on the passed in distribution type
@@ -168,6 +221,9 @@ namespace WarhammerCombatMathLibrary
              })
              .OrderBy(outcome => outcome.Successes)
              .ToList();
+
+            // Normalize the distribution to ensure it sums to 1.0
+            baseDistribution = NormalizeDistribution(baseDistribution);
 
             // If applicable, transform the distribution based on the passed in distribution type
             return distributionType switch
@@ -241,6 +297,9 @@ namespace WarhammerCombatMathLibrary
              })
              .OrderBy(outcome => outcome.Successes)
              .ToList();
+
+            // Normalize the distribution to ensure it sums to 1.0
+            baseDistribution = NormalizeDistribution(baseDistribution);
 
             // If applicable, transform the distribution based on the passed in distribution type
             return distributionType switch
@@ -327,6 +386,9 @@ namespace WarhammerCombatMathLibrary
              })
              .OrderBy(outcome => outcome.Successes)
              .ToList();
+
+            // Normalize the distribution to ensure it sums to 1.0
+            baseDistribution = NormalizeDistribution(baseDistribution);
 
             // If applicable, transform the distribution based on the passed in distribution type
             return distributionType switch

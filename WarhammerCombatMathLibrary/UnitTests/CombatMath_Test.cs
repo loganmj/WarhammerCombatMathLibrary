@@ -2698,15 +2698,15 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>
             {
-                new(0, 0.0247),
-                new(1, 0.1084),
-                new(2, 0.0528),
-                new(3, 0.0345),
-                new(4, 0.0230),
-                new(5, 0.0108),
-                new(6, 0.0032),
-                new(7, 0.0005),
-                new(8, 0)
+                new(0, 0.0957),
+                new(1, 0.4201),
+                new(2, 0.2047),
+                new(3, 0.1336),
+                new(4, 0.0893),
+                new(5, 0.0420),
+                new(6, 0.0123),
+                new(7, 0.0021),
+                new(8, 0.0002)
             };
 
             var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_SINGLE_MODEL_NO_ABILITIES, DEFENDER_MULTI_MODEL_FEEL_NO_PAIN_5);
@@ -2736,16 +2736,16 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>
             {
-                new(0, 0.0667),
-                new(1, 0.1000),
-                new(2, 0.0991),
-                new(3, 0.0932),
-                new(4, 0.0754),
-                new(5, 0.0466),
-                new(6, 0.0203),
-                new(7, 0.0059),
-                new(8, 0.0011),
-                new(9, 0.0001),
+                new(0, 0.1311),
+                new(1, 0.1966),
+                new(2, 0.1949),
+                new(3, 0.1834),
+                new(4, 0.1483),
+                new(5, 0.0917),
+                new(6, 0.0399),
+                new(7, 0.0116),
+                new(8, 0.0022),
+                new(9, 0.0003),
                 new(10, 0),
                 new(11, 0),
                 new(12, 0),
