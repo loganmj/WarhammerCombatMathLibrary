@@ -1250,6 +1250,39 @@ namespace UnitTests
             Assert.AreEqual(1.0, sum, 0.0001, $"Sum was {sum}, expected 1.0");
         }
 
+        /// <summary>
+        /// Tests that a cumulative distribution with single groupSuccessCount > 1 reaches exactly 1.0 at its maximum value.
+        /// </summary>
+        [TestMethod]
+        public void CumulativeDistribution_SingleGroupSuccessGreaterThan1_MaxValueIsOne()
+        {
+            var dist = Statistics.GetCumulativeDistribution(10, 0.5, 2);
+            var lastProb = dist[dist.Count - 1].Probability;
+            Assert.AreEqual(1.0, lastProb, 0.0001, $"Last probability was {lastProb}, expected 1.0");
+        }
+
+        /// <summary>
+        /// Tests that a survivor distribution with single groupSuccessCount > 1 starts at exactly 1.0.
+        /// </summary>
+        [TestMethod]
+        public void SurvivorDistribution_SingleGroupSuccessGreaterThan1_FirstValueIsOne()
+        {
+            var dist = Statistics.GetSurvivorDistribution(10, 0.5, 2);
+            var firstProb = dist[0].Probability;
+            Assert.AreEqual(1.0, firstProb, 0.0001, $"First probability was {firstProb}, expected 1.0");
+        }
+
+        /// <summary>
+        /// Tests that a binomial distribution with single groupSuccessCount > 1 sums to exactly 1.0.
+        /// </summary>
+        [TestMethod]
+        public void BinomialDistribution_SingleGroupSuccessGreaterThan1_SumsToOne()
+        {
+            var dist = Statistics.GetBinomialDistribution(10, 0.5, 2);
+            double sum = dist.Sum(x => x.Probability);
+            Assert.AreEqual(1.0, sum, 0.0001, $"Sum was {sum}, expected 1.0");
+        }
+
         #endregion
     }
 }

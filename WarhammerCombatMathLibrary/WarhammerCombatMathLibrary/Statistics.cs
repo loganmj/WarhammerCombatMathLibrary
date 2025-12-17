@@ -149,6 +149,12 @@ namespace WarhammerCombatMathLibrary
                 });
             }
 
+            // Normalize the distribution if groupSuccessCount > 1 to ensure it sums to 1.0
+            if (groupSuccessCount > 1)
+            {
+                baseDistribution = NormalizeDistribution(baseDistribution);
+            }
+
             // If applicable, transform the distribution based on the passed in distribution type
             return distributionType switch
             {
