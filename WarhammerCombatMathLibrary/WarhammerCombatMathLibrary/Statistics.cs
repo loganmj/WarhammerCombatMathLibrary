@@ -76,15 +76,9 @@ namespace WarhammerCombatMathLibrary
                 cumulative += distribution[i].Probability;
                 
                 // For the last element, set to exactly 1.0 if it's within tolerance to handle floating point precision
-                double probability;
-                if (i == distribution.Count - 1 && Math.Abs(cumulative - 1.0) < PROBABILITY_TOLERANCE)
-                {
-                    probability = 1.0;
-                }
-                else
-                {
-                    probability = Math.Min(cumulative, 1.0);
-                }
+                double probability = (i == distribution.Count - 1 && Math.Abs(cumulative - 1.0) < PROBABILITY_TOLERANCE)
+                    ? 1.0
+                    : Math.Min(cumulative, 1.0);
                 
                 cumulativeDistribution.Add(new BinomialOutcome
                 {
