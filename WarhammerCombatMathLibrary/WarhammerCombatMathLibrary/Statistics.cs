@@ -107,14 +107,9 @@ namespace WarhammerCombatMathLibrary
                 
                 // For the first element (i == 0), set to exactly 1.0 if it's within tolerance to handle floating point precision
                 double probability;
-                if (i == 0 && Math.Abs(cumulative - 1.0) < PROBABILITY_TOLERANCE)
-                {
-                    probability = 1.0;
-                }
-                else
-                {
-                    probability = Math.Min(cumulative, 1.0);
-                }
+                probability = (i == 0 && Math.Abs(cumulative - 1.0) < PROBABILITY_TOLERANCE)
+                    ? 1.0
+                    : Math.Min(cumulative, 1.0);
                 
                 survivorDistribution.Insert(0, new BinomialOutcome
                 {
