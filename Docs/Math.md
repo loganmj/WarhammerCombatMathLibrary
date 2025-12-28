@@ -298,10 +298,41 @@ make strategic decisions.
 In Warhammer 40k, the attacker will make an attack using $x$ models, using a weapon with an Attacks stat of $y$. This requires them to makes a hit roll using $x \ast y$ dice. Success is determined by the Ballistic Skill 
 (for ranged weapons) or Weapon Skill (for melee weapons) stat of the attacker's weapon.
 
+### Hit Modifiers
+Hit modifiers affect the success threshold of hit rolls. Both attackers and defenders can have hit modifiers:
+- Attacker hit modifiers: Positive values decrease the threshold (easier to hit), negative values increase it (harder to hit)
+- Defender hit modifiers: Positive values make the defender easier to hit (debuff), negative values make the defender harder to hit (buff)
+
+The combined hit modifier is calculated as:
+
+$$m_{\text{hit}} = \text{clamp}(m_{\text{attacker}} + m_{\text{defender}}, -1, 1)$$
+
+where
+- $m_{\text{hit}}$ is the final combined hit modifier
+- $m_{\text{attacker}}$ is the attacker's hit modifier
+- $m_{\text{defender}}$ is the defender's hit modifier
+- The clamp function limits the result to the range [-1, 1]
+
+The adjusted hit threshold is then:
+
+$$k_{\text{adjusted}} = k - m_{\text{hit}}$$
+
+where
+- $k_{\text{adjusted}}$ is the adjusted hit threshold
+- $k$ is the base Weapon Skill / Ballistic Skill threshold
+- $m_{\text{hit}}$ is the combined hit modifier
+
+For example, if an attacker has Weapon Skill 3+ (threshold = 3) and the combined hit modifier is +1:
+
+$$k_{\text{adjusted}} = 3 - 1 = 2$$
+
+This means the effective threshold becomes 2+, making it easier to hit.
+
+### Hit Roll Probability Calculation
 For example, a Space Marine Intercessor model may make an attack with 10 models, each wielding a Bolt Rifle. The Bolt Rifle has an Attacks stat of 2, and a Ballistic Skill of 3+. This means that a hit roll will consist of 
 rolling 20 dice, and succeeding on a roll of 3, 4, 5, or 6.
 
-The expected mean number of successes and the standard deviation can be calculated as:
+If there are no hit modifiers, the expected mean number of successes and the standard deviation can be calculated as:
 
 $$Mean[B(20, 0.6666)] = (20)(0.6666) = 13.33$$
 

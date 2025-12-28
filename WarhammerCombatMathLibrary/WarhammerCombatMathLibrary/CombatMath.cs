@@ -30,6 +30,22 @@ namespace WarhammerCombatMathLibrary
         #region Private Methods
 
         /// <summary>
+        /// Calculates the combined hit modifier from the attacker and defender, capped at +/- 1.
+        /// </summary>
+        /// <param name="attacker">The attacker data object</param>
+        /// <param name="defender">The defender data object</param>
+        /// <returns>An integer value containing the combined hit modifier, capped at +/- 1</returns>
+        private static int GetCombinedHitModifier(AttackerDTO? attacker, DefenderDTO? defender)
+        {
+            int attackerModifier = attacker?.HitModifier ?? 0;
+            int defenderModifier = defender?.HitModifier ?? 0;
+            int combinedModifier = attackerModifier + defenderModifier;
+
+            // Cap the combined modifier at +/- 1
+            return Math.Clamp(combinedModifier, -1, 1);
+        }
+
+        /// <summary>
         /// Returns the success threshold for succeeding on a given die roll, with a given success threshold.
         /// Note that in Warhammer 40k, a roll of 1 always fails, and a roll of 6 always succeeds.
         /// </summary>
@@ -142,11 +158,12 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Gets the base probability of hit roll success of the attacker.
-        /// This takes into account the attacker's weapon skill.
+        /// This takes into account the attacker's weapon skill and any hit modifiers.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
+        /// <param name="hitModifier">The combined hit modifier to apply to the hit threshold</param>
         /// <returns>A double containing the base probability of a successful hit roll</returns>
-        private static double GetBaseProbabilityOfHit(AttackerDTO attacker)
+        private static double GetBaseProbabilityOfHit(AttackerDTO attacker, int hitModifier)
         {
             // Validate inputs
             if (attacker.WeaponSkill <= 0)
@@ -155,9 +172,13 @@ namespace WarhammerCombatMathLibrary
                 return 0;
             }
 
+            // Apply hit modifier to the weapon skill threshold
+            // Positive modifiers make it easier to hit (lower threshold), negative modifiers make it harder (higher threshold)
+            var adjustedWeaponSkill = attacker.WeaponSkill - hitModifier;
+
             // Account for the fact that the smallest possible result on the die is considered an automatic failure,
             // and should not count as part of the success threshold
-            var hitSuccessThreshold = attacker.WeaponSkill == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : attacker.WeaponSkill;
+            var hitSuccessThreshold = adjustedWeaponSkill == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : adjustedWeaponSkill;
             return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(hitSuccessThreshold));
         }
 
@@ -612,8 +633,9 @@ namespace WarhammerCombatMathLibrary
         /// Includes modifiers for any abilities that affect hit rolls.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
+        /// <param name="defender">The defender data object (optional, used for hit modifiers)</param>
         /// <returns>A double value containing the probability of succeeding on any single hit roll.</returns>
-        public static double GetProbabilityOfHit(AttackerDTO? attacker)
+        public static double GetProbabilityOfHit(AttackerDTO? attacker, DefenderDTO? defender = null)
         {
             // Validate inputs
             if (attacker == null)
@@ -628,8 +650,11 @@ namespace WarhammerCombatMathLibrary
                 return 1;
             }
 
-            // Calculate base hit probability
-            var baseHitProbability = GetBaseProbabilityOfHit(attacker);
+            // Calculate combined hit modifier
+            var combinedHitModifier = GetCombinedHitModifier(attacker, defender);
+
+            // Calculate base hit probability with hit modifier
+            var baseHitProbability = GetBaseProbabilityOfHit(attacker, combinedHitModifier);
 
             // Calculate modifiers
             double totalHitModifiers = 0;

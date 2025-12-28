@@ -132,6 +132,12 @@
         /// </summary>
         public int WeaponAntiThreshold { get; set; }
 
+        /// <summary>
+        /// Hit modifier applied to the attacker's hit rolls. Positive values make it easier to hit, negative values make it harder.
+        /// Combined with defender's hit modifier, the total is capped at +/- 1.
+        /// </summary>
+        public int HitModifier { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -159,7 +165,8 @@
                    + $"CriticalHitThreshold: {CriticalHitThreshold}, "
                    + $"CriticalWoundThreshold: {CriticalWoundThreshold}, "
                    + $"WeaponHasAnti: {WeaponHasAnti}, "
-                   + $"WeaponAntiThreshold: {WeaponAntiThreshold} ]";
+                   + $"WeaponAntiThreshold: {WeaponAntiThreshold}, "
+                   + $"HitModifier: {HitModifier} ]";
         }
 
         /// <inheritdoc/>
@@ -201,7 +208,8 @@
                    && CriticalHitThreshold == other.CriticalHitThreshold
                    && CriticalWoundThreshold == other.CriticalWoundThreshold
                    && WeaponHasAnti == other.WeaponHasAnti
-                   && WeaponAntiThreshold == other.WeaponAntiThreshold;
+                   && WeaponAntiThreshold == other.WeaponAntiThreshold
+                   && HitModifier == other.HitModifier;
         }
 
         /// <inheritdoc/>
@@ -229,7 +237,7 @@
                                     weaponKeywordFlags,
                                     rerollFlags,
                                     WeaponSustainedHitsMultiplier,
-                                    (CriticalHitThreshold << 8) | (CriticalWoundThreshold << 4) | WeaponAntiThreshold);
+                                    HashCode.Combine(CriticalHitThreshold, CriticalWoundThreshold, WeaponAntiThreshold, HitModifier));
         }
 
         #endregion
