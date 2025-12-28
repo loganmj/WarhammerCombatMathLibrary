@@ -936,6 +936,37 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Tests that wound modifiers work correctly with reroll wounds.
+        /// With S4 vs T4 (normally 4+), +1 modifier makes it 3+, and reroll wounds should apply to the modified threshold.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_WoundModifierWithRerollWounds()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S4 vs T4 = 4+ normally (3/6 = 0.5), with +1 modifier = 3+ (4/6 = 0.6667)
+            // Reroll wounds modifier: hitProbability * (1 - baseWoundProbability) * baseWoundProbability
+            //   = 0.6667 * (1 - 0.6667) * 0.6667 = 0.6667 * 0.3333 * 0.6667 = 0.1481
+            // Total wound probability: 0.6667 + 0.1481 = 0.8148
+            // Combined: 0.6667 * 0.8148 = 0.5432
+            var expected = 0.5432;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 4,
+                WoundModifier = 1,
+                WeaponHasRerollWoundRolls = true
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetMeanHits()
