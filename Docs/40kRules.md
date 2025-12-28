@@ -23,6 +23,7 @@ Combat in Warhammer 40k is resolved through a sequence of dice rolls that determ
 - **Strength (S)**: The strength of the weapon used for wounding
 - **Armor Penetration (AP)**: How much the weapon reduces the defender's armor save
 - **Damage (D)**: How much damage each successful attack inflicts (can be fixed or variable)
+- **Hit Modifier**: Modifier applied to hit rolls, positive values make it easier to hit (capped at +/- 1 after combining with defender modifiers)
 
 ### Defender Characteristics
 
@@ -33,6 +34,7 @@ Combat in Warhammer 40k is resolved through a sequence of dice rolls that determ
 - **Wounds (W)**: How many wounds each model can sustain before being destroyed
 - **Damage Reduction (DR)**: Reduces incoming damage by a fixed amount (minimum 0)
 - **Feel No Pain (FNP)**: A special save rolled after damage is allocated and reduced
+- **Hit Modifier**: Modifier that affects attacks against this defender, positive values make the defender easier to hit (capped at +/- 1 after combining with attacker modifiers)
 
 ## Combat Phases
 
@@ -44,6 +46,18 @@ When a model attacks, it rolls dice equal to its Attacks characteristic. Each di
 - An unmodified roll of 1 always fails
 - An unmodified roll of 6 always succeeds
 - Critical hits occur when the roll meets or exceeds the critical hit threshold (default is 6)
+
+**Hit Modifiers:**
+Some abilities add to or subtract from the hit success threshold. Both attackers and defenders can have hit modifiers that affect the hit roll:
+- Attacker hit modifiers: Positive values make it easier to hit (lower threshold), negative values make it harder (higher threshold)
+- Defender hit modifiers: Positive values make the defender easier to hit (debuff), negative values make the defender harder to hit (buff)
+- Combined modifiers are capped at +/- 1 maximum after combining attacker and defender modifiers
+
+For example:
+- An attacker with +2 to hit and a defender with no modifier results in +1 to hit (capped at maximum)
+- An attacker with +1 to hit and a defender with -1 to be hit results in 0 combined modifier
+- A hit modifier of +1 changes a 4+ to hit into a 3+ to hit
+- A hit modifier of -1 changes a 3+ to hit into a 4+ to hit
 
 ### 2. Wound Roll
 
