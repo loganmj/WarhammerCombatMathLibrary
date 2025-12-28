@@ -48,8 +48,8 @@
         public int Wounds { get; set; }
 
         /// <summary>
-        /// Hit modifier applied to hit rolls against this defender. Positive values make it easier for attackers to hit, negative values make it harder.
-        /// Combined with attacker's hit modifier, the total is capped at +/- 1.
+        /// Hit modifier that affects attacks against this defender. Positive values make the defender easier to hit (debuff),
+        /// negative values make the defender harder to hit (buff). Combined with the attacker's hit modifier, the total is capped at +/- 1.
         /// </summary>
         public int HitModifier { get; set; }
 
