@@ -24,6 +24,7 @@ Combat in Warhammer 40k is resolved through a sequence of dice rolls that determ
 - **Armor Penetration (AP)**: How much the weapon reduces the defender's armor save
 - **Damage (D)**: How much damage each successful attack inflicts (can be fixed or variable)
 - **Hit Modifier**: Modifier applied to hit rolls, positive values make it easier to hit (capped at +/- 1 after combining with defender modifiers)
+- **Wound Modifier**: Modifier applied to wound rolls, positive values make it easier to wound (capped at +/- 1 after combining with defender modifiers)
 
 ### Defender Characteristics
 
@@ -35,6 +36,7 @@ Combat in Warhammer 40k is resolved through a sequence of dice rolls that determ
 - **Damage Reduction (DR)**: Reduces incoming damage by a fixed amount (minimum 0)
 - **Feel No Pain (FNP)**: A special save rolled after damage is allocated and reduced
 - **Hit Modifier**: Modifier that affects attacks against this defender, positive values make the defender easier to hit (capped at +/- 1 after combining with attacker modifiers)
+- **Wound Modifier**: Modifier that affects wound rolls against this defender, positive values make the defender easier to wound (capped at +/- 1 after combining with attacker modifiers)
 
 ## Combat Phases
 
@@ -73,6 +75,18 @@ For each successful hit, the attacker rolls to determine if the attack wounds th
 - An unmodified roll of 1 always fails
 - An unmodified roll of 6 always succeeds
 - Critical wounds occur when the roll meets or exceeds the critical wound threshold (default is 6)
+
+**Wound Modifiers:**
+Some abilities add to or subtract from the wound success threshold. Both attackers and defenders can have wound modifiers that affect the wound roll:
+- Attacker wound modifiers: Positive values make it easier to wound (lower threshold), negative values make it harder (higher threshold)
+- Defender wound modifiers: Positive values make the defender easier to wound (debuff), negative values make the defender harder to wound (buff)
+- Combined modifiers are capped at +/- 1 maximum after combining attacker and defender modifiers
+
+For example:
+- An attacker with +2 to wound and a defender with no modifier results in +1 to wound (capped at maximum)
+- An attacker with +1 to wound and a defender with -1 to wound results in 0 combined modifier
+- A wound modifier of +1 changes a 4+ to wound into a 3+ to wound
+- A wound modifier of -1 changes a 3+ to wound into a 4+ to wound
 
 ### 3. Save Roll
 
