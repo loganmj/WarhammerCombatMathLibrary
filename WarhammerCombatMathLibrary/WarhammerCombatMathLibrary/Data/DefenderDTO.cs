@@ -47,6 +47,12 @@
         /// </summary>
         public int Wounds { get; set; }
 
+        /// <summary>
+        /// Hit modifier applied to hit rolls against this defender. Positive values make it easier for attackers to hit, negative values make it harder.
+        /// Combined with attacker's hit modifier, the total is capped at +/- 1.
+        /// </summary>
+        public int HitModifier { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -60,7 +66,8 @@
             $"InvulnerableSave: {InvulnerableSave}, " +
             $"FeelNoPain: {FeelNoPain}, " +
             $"DamageReduction: {DamageReduction}, " +
-            $"Wounds: {Wounds}]";
+            $"Wounds: {Wounds}, " +
+            $"HitModifier: {HitModifier}]";
         }
 
         /// <inheritdoc/>
@@ -84,7 +91,8 @@
                    && InvulnerableSave == other.InvulnerableSave
                    && FeelNoPain == other.FeelNoPain
                    && DamageReduction == other.DamageReduction
-                   && Wounds == other.Wounds;
+                   && Wounds == other.Wounds
+                   && HitModifier == other.HitModifier;
         }
 
         /// <inheritdoc/>
@@ -97,7 +105,7 @@
                                     InvulnerableSave,
                                     FeelNoPain,
                                     DamageReduction,
-                                    Wounds);
+                                    HashCode.Combine(Wounds, HitModifier));
         }
 
 

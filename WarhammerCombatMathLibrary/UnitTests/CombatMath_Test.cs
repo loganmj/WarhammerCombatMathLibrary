@@ -469,6 +469,156 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Tests the case where the attacker has a +2 hit modifier which should be capped at +1.
+        /// With weapon skill 3+ (normally 0.6667 probability), +1 modifier makes it 2+ (0.8333 probability).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_AttackerHitModifierPlus2_CappedAtPlus1()
+        {
+            var expected = 0.8333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                HitModifier = 2
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has a -2 hit modifier which should be capped at -1.
+        /// With weapon skill 3+ (normally 0.6667 probability), -1 modifier makes it 4+ (0.5 probability).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_AttackerHitModifierMinus2_CappedAtMinus1()
+        {
+            var expected = 0.5;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                HitModifier = -2
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has +1 hit modifier and defender has -1 hit modifier, combining to 0.
+        /// With weapon skill 3+ (0.6667 probability), combined modifier of 0 should not change the probability.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_AttackerPlus1DefenderMinus1_CombinesToZero()
+        {
+            var expected = 0.6667;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                HitModifier = 1
+            };
+            var defender = new DefenderDTO()
+            {
+                HitModifier = -1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has +1 hit modifier.
+        /// With weapon skill 4+ (normally 0.5 probability), +1 modifier makes it 3+ (0.6667 probability).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_AttackerHitModifierPlus1()
+        {
+            var expected = 0.6667;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 4,
+                HitModifier = 1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender has -1 hit modifier.
+        /// With weapon skill 4+ (normally 0.5 probability), -1 modifier makes it 5+ (0.3333 probability).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_DefenderHitModifierMinus1()
+        {
+            var expected = 0.3333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 4
+            };
+            var defender = new DefenderDTO()
+            {
+                HitModifier = -1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has +2 and defender has +1 hit modifiers.
+        /// Combined modifier is +3, which should be capped at +1.
+        /// With weapon skill 5+ (normally 0.3333 probability), +1 modifier makes it 4+ (0.5 probability).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_AttackerPlus2DefenderPlus1_CappedAtPlus1()
+        {
+            var expected = 0.5;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 5,
+                HitModifier = 2
+            };
+            var defender = new DefenderDTO()
+            {
+                HitModifier = 1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has -2 and defender has -1 hit modifiers.
+        /// Combined modifier is -3, which should be capped at -1.
+        /// With weapon skill 3+ (normally 0.6667 probability), -1 modifier makes it 4+ (0.5 probability).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_AttackerMinus2DefenderMinus1_CappedAtMinus1()
+        {
+            var expected = 0.5;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                HitModifier = -2
+            };
+            var defender = new DefenderDTO()
+            {
+                HitModifier = -1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetMeanHits()
