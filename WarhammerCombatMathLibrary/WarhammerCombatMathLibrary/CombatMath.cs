@@ -46,6 +46,22 @@ namespace WarhammerCombatMathLibrary
         }
 
         /// <summary>
+        /// Calculates the combined wound modifier from the attacker and defender, capped at +/- 1.
+        /// </summary>
+        /// <param name="attacker">The attacker data object</param>
+        /// <param name="defender">The defender data object</param>
+        /// <returns>An integer value containing the combined wound modifier, capped at +/- 1</returns>
+        private static int GetCombinedWoundModifier(AttackerDTO? attacker, DefenderDTO? defender)
+        {
+            int attackerModifier = attacker?.WoundModifier ?? 0;
+            int defenderModifier = defender?.WoundModifier ?? 0;
+            int combinedModifier = attackerModifier + defenderModifier;
+
+            // Cap the combined modifier at +/- 1
+            return Math.Clamp(combinedModifier, -1, 1);
+        }
+
+        /// <summary>
         /// Returns the success threshold for succeeding on a given die roll, with a given success threshold.
         /// Note that in Warhammer 40k, a roll of 1 always fails, and a roll of 6 always succeeds.
         /// </summary>
@@ -226,12 +242,17 @@ namespace WarhammerCombatMathLibrary
         /// Gets the base probability of succeeding on a wound roll, based on the attacker and defender stats.
         /// If the attacker has Anti X+, wound rolls of X+ automatically succeed as critical wounds.
         /// This means the effective wound threshold is the better (lower) of the normal threshold and Anti threshold.
+        /// Also applies wound modifiers from both attacker and defender, capped at +/- 1.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <param name="defender">The defender data object</param>
         /// <returns></returns>
         private static double GetBaseProbabilityOfWound(AttackerDTO attacker, DefenderDTO defender)
         {
+            // Get the combined wound modifier
+            var combinedWoundModifier = GetCombinedWoundModifier(attacker, defender);
+            
+            // Get base wound threshold from strength vs toughness
             var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
             
             // If the attacker has Anti X+ and it's better than the normal wound threshold,
@@ -242,7 +263,15 @@ namespace WarhammerCombatMathLibrary
                 woundSuccessThreshold = Math.Min(woundSuccessThreshold, attacker.WeaponAntiThreshold);
             }
             
-            return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(woundSuccessThreshold));
+            // Apply wound modifier to the wound threshold
+            // Positive modifiers make it easier to wound (lower threshold), negative modifiers make it harder (higher threshold)
+            var adjustedWoundThreshold = woundSuccessThreshold - combinedWoundModifier;
+            
+            // Account for the fact that the smallest possible result on the die is considered an automatic failure,
+            // and should not count as part of the success threshold
+            var finalWoundThreshold = adjustedWoundThreshold == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : adjustedWoundThreshold;
+            
+            return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(finalWoundThreshold));
         }
 
         /// <summary>
