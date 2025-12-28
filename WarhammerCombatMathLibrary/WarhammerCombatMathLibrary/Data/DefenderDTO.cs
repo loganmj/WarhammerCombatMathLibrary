@@ -53,6 +53,12 @@
         /// </summary>
         public int HitModifier { get; set; }
 
+        /// <summary>
+        /// Wound modifier that affects wound rolls against this defender. Positive values make the defender easier to wound (debuff),
+        /// negative values make the defender harder to wound (buff). Combined with the attacker's wound modifier, the total is capped at +/- 1.
+        /// </summary>
+        public int WoundModifier { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -67,7 +73,8 @@
             $"FeelNoPain: {FeelNoPain}, " +
             $"DamageReduction: {DamageReduction}, " +
             $"Wounds: {Wounds}, " +
-            $"HitModifier: {HitModifier}]";
+            $"HitModifier: {HitModifier}, " +
+            $"WoundModifier: {WoundModifier}]";
         }
 
         /// <inheritdoc/>
@@ -92,7 +99,8 @@
                    && FeelNoPain == other.FeelNoPain
                    && DamageReduction == other.DamageReduction
                    && Wounds == other.Wounds
-                   && HitModifier == other.HitModifier;
+                   && HitModifier == other.HitModifier
+                   && WoundModifier == other.WoundModifier;
         }
 
         /// <inheritdoc/>
@@ -105,7 +113,7 @@
                                     InvulnerableSave,
                                     FeelNoPain,
                                     DamageReduction,
-                                    HashCode.Combine(Wounds, HitModifier));
+                                    HashCode.Combine(Wounds, HitModifier, WoundModifier));
         }
 
 

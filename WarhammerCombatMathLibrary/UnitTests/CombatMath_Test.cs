@@ -659,6 +659,316 @@ namespace UnitTests
 
         #endregion
 
+        #region Unit Tests - GetProbabilityOfHitAndWound() - Wound Modifiers
+
+        /// <summary>
+        /// Tests the case where the attacker has a +2 wound modifier which should be capped at +1.
+        /// With S6 vs T4 (normally wounds on 3+ with 0.6667 probability), +1 modifier makes it 2+ (0.8333 probability on wound).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_AttackerWoundModifierPlus2_CappedAtPlus1()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S6 vs T4 = 3+ normally, with +1 modifier = 2+ = 5/6 = 0.8333
+            // Combined: 0.6667 * 0.8333 = 0.5556
+            var expected = 0.5556;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 6,
+                WoundModifier = 2  // Should be capped at +1
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has a -2 wound modifier which should be capped at -1.
+        /// With S6 vs T4 (normally wounds on 3+ with 0.6667 probability), -1 modifier makes it 4+ (0.5 probability on wound).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_AttackerWoundModifierMinus2_CappedAtMinus1()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S6 vs T4 = 3+ normally, with -1 modifier = 4+ = 3/6 = 0.5
+            // Combined: 0.6667 * 0.5 = 0.3333
+            var expected = 0.3333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 6,
+                WoundModifier = -2  // Should be capped at -1
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has +1 wound modifier and defender has -1 wound modifier, combining to 0.
+        /// With S6 vs T4 (normally wounds on 3+ with 0.6667 probability), combined modifier of 0 should not change the wound probability.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_AttackerPlus1DefenderMinus1Wound_CombinesToZero()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S6 vs T4 = 3+ normally, with 0 modifier = 3+ = 4/6 = 0.6667
+            // Combined: 0.6667 * 0.6667 = 0.4444
+            var expected = 0.4444;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 6,
+                WoundModifier = 1
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4,
+                WoundModifier = -1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has +1 wound modifier.
+        /// With S4 vs T4 (normally wounds on 4+ with 0.5 probability), +1 modifier makes it 3+ (0.6667 probability on wound).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_AttackerWoundModifierPlus1()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S4 vs T4 = 4+ normally, with +1 modifier = 3+ = 4/6 = 0.6667
+            // Combined: 0.6667 * 0.6667 = 0.4444
+            var expected = 0.4444;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 4,
+                WoundModifier = 1
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the defender has -1 wound modifier.
+        /// With S4 vs T4 (normally wounds on 4+ with 0.5 probability), -1 modifier makes it 5+ (0.3333 probability on wound).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_DefenderWoundModifierMinus1()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S4 vs T4 = 4+ normally, with -1 modifier = 5+ = 2/6 = 0.3333
+            // Combined: 0.6667 * 0.3333 = 0.2222
+            var expected = 0.2222;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 4
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4,
+                WoundModifier = -1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has +2 and defender has +1 wound modifiers.
+        /// Combined modifier is +3, which should be capped at +1.
+        /// With S4 vs T5 (normally wounds on 5+ with 0.3333 probability), +1 modifier makes it 4+ (0.5 probability on wound).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_AttackerPlus2DefenderPlus1Wound_CappedAtPlus1()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S4 vs T5 = 5+ normally, with +1 modifier = 4+ = 3/6 = 0.5
+            // Combined: 0.6667 * 0.5 = 0.3333
+            var expected = 0.3333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 4,
+                WoundModifier = 2
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 5,
+                WoundModifier = 1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the case where the attacker has -2 and defender has -1 wound modifiers.
+        /// Combined modifier is -3, which should be capped at -1.
+        /// With S6 vs T4 (normally wounds on 3+ with 0.6667 probability), -1 modifier makes it 4+ (0.5 probability on wound).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_AttackerMinus2DefenderMinus1Wound_CappedAtMinus1()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S6 vs T4 = 3+ normally, with -1 modifier = 4+ = 3/6 = 0.5
+            // Combined: 0.6667 * 0.5 = 0.3333
+            var expected = 0.3333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 6,
+                WoundModifier = -2
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4,
+                WoundModifier = -1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the edge case where S6 vs T4 normally wounds on 3+ and +1 modifier is applied.
+        /// This would adjust to 2+, which is valid.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_WoundThreshold3WithPlus1()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S6 vs T4 = 3+ normally, with +1 modifier = 2+ = 5/6 = 0.8333
+            // Combined: 0.6667 * 0.8333 = 0.5556
+            var expected = 0.5556;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 6,
+                WoundModifier = 1
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the edge case where S4 vs T8 normally wounds on 6+ and -1 modifier is applied.
+        /// This would adjust to 7+, which is impossible on a d6, so probability should be 0.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_WoundThreshold6WithMinus1_ImpossibleThreshold()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S4 vs T8 = 6+ normally, with -1 modifier = 7+ = impossible = 0
+            // Combined: 0.6667 * 0 = 0
+            var expected = 0.0;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 4,
+                WoundModifier = -1
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 8
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the edge case where S8 vs T4 normally wounds on 2+ and +1 modifier is applied.
+        /// This would adjust to 1+, but rolls of 1 always fail, so it should still be treated as 2+.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_WoundThreshold2WithPlus1_TreatedAs2Plus()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S8 vs T4 = 2+ normally, with +1 modifier = 1+ but treated as 2+ = 5/6 = 0.8333
+            // Combined: 0.6667 * 0.8333 = 0.5556
+            var expected = 0.5556;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 8,
+                WoundModifier = 1
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests that wound modifiers work correctly with reroll wounds.
+        /// With S4 vs T4 (normally 4+), +1 modifier makes it 3+, and reroll wounds should apply to the modified threshold.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_WoundModifierWithRerollWounds()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S4 vs T4 = 4+ normally (3/6 = 0.5), with +1 modifier = 3+ (4/6 = 0.6667)
+            // Reroll wounds modifier: hitProbability * (1 - baseWoundProbability) * baseWoundProbability
+            //   = 0.6667 * (1 - 0.6667) * 0.6667 = 0.6667 * 0.3333 * 0.6667 = 0.1481
+            // Total wound probability: 0.6667 + 0.1481 = 0.8148
+            // Combined: 0.6667 * 0.8148 = 0.5432
+            var expected = 0.5432;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 4,
+                WoundModifier = 1,
+                WeaponHasRerollWoundRolls = true
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
+
         #region Unit Tests - GetMeanHits()
 
         /// <summary>
@@ -3740,6 +4050,138 @@ namespace UnitTests
             Assert.IsTrue(attacker1.Equals(attacker2));
             // Different Anti thresholds should not be equal
             Assert.IsFalse(attacker1.Equals(attacker3));
+        }
+
+        /// <summary>
+        /// Tests wound modifier with Anti 4+ where the modified normal threshold becomes better than Anti.
+        /// S6 vs T4 = 3+ normally. With +1 wound modifier, it becomes 2+.
+        /// Anti 4+ stays at 4+ (unmodified roll).
+        /// Should use the better threshold (2+ from modified normal wound).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_WoundModifierWithAnti_ModifiedNormalBetter()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Normal wound: S6 vs T4 = 3+ normally, with +1 modifier = 2+ = 5/6 = 0.8333
+            // Anti 4+: stays at 4+ = 3/6 = 0.5
+            // Best threshold: 2+ (modified normal) = 0.8333
+            // Combined: 0.6667 * 0.8333 = 0.5556
+            var expected = 0.5556;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 6,
+                WoundModifier = 1,
+                WeaponHasAnti = true,
+                WeaponAntiThreshold = 4
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests wound modifier with Anti 4+ where Anti remains better even after wound modifier.
+        /// S4 vs T5 = 5+ normally. With +1 wound modifier, it becomes 4+.
+        /// Anti 4+ stays at 4+ (unmodified roll).
+        /// Both are 4+, so they should give the same probability.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_WoundModifierWithAnti_BothEqual()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Normal wound: S4 vs T5 = 5+ normally, with +1 modifier = 4+ = 3/6 = 0.5
+            // Anti 4+: stays at 4+ = 3/6 = 0.5
+            // Best threshold: 4+ (both equal) = 0.5
+            // Combined: 0.6667 * 0.5 = 0.3333
+            var expected = 0.3333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 4,
+                WoundModifier = 1,
+                WeaponHasAnti = true,
+                WeaponAntiThreshold = 4
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 5
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests wound modifier with Anti 3+ where Anti is already better than normal wound threshold.
+        /// S4 vs T5 = 5+ normally. With +1 wound modifier, it becomes 4+.
+        /// Anti 3+ stays at 3+ (unmodified roll).
+        /// Should use the better threshold (3+ from Anti).
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_WoundModifierWithAnti_AntiBetter()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Normal wound: S4 vs T5 = 5+ normally, with +1 modifier = 4+ = 3/6 = 0.5
+            // Anti 3+: stays at 3+ = 4/6 = 0.6667
+            // Best threshold: 3+ (Anti) = 0.6667
+            // Combined: 0.6667 * 0.6667 = 0.4444
+            var expected = 0.4444;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 4,
+                WoundModifier = 1,
+                WeaponHasAnti = true,
+                WeaponAntiThreshold = 3
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 5
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests negative wound modifier with Anti where the penalty makes Anti the better option.
+        /// S6 vs T4 = 3+ normally. With -1 wound modifier, it becomes 4+.
+        /// Anti 4+ stays at 4+ (unmodified roll).
+        /// Both are 4+, so they should give the same probability.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_NegativeWoundModifierWithAnti()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Normal wound: S6 vs T4 = 3+ normally, with -1 modifier = 4+ = 3/6 = 0.5
+            // Anti 4+: stays at 4+ = 3/6 = 0.5
+            // Best threshold: 4+ (both equal) = 0.5
+            // Combined: 0.6667 * 0.5 = 0.3333
+            var expected = 0.3333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 6,
+                WoundModifier = -1,
+                WeaponHasAnti = true,
+                WeaponAntiThreshold = 4
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
         }
 
         #endregion
