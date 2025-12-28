@@ -619,6 +619,44 @@ namespace UnitTests
             Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Tests the edge case where WeaponSkill is 2 and +1 modifier is applied.
+        /// This would adjust to 1+, but rolls of 1 always fail, so it should still be treated as 2+.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_WeaponSkill2WithPlus1_TreatedAs2Plus()
+        {
+            var expected = 0.8333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 2,
+                HitModifier = 1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the edge case where WeaponSkill is 6 and -1 modifier is applied.
+        /// This would adjust to 7+, which is impossible on a d6, so probability should be 0.
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_WeaponSkill6WithMinus1_ImpossibleThreshold()
+        {
+            var expected = 0.0;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 6,
+                HitModifier = -1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region Unit Tests - GetMeanHits()
