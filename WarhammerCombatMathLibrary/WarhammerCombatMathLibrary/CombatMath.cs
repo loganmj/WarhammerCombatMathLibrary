@@ -241,7 +241,8 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// Gets the base probability of succeeding on a wound roll, based on the attacker and defender stats.
         /// If the attacker has Anti X+, wound rolls of X+ automatically succeed as critical wounds.
-        /// This means the effective wound threshold is the better (lower) of the normal threshold and Anti threshold.
+        /// Wound modifiers are applied to the normal wound threshold, but not to the Anti threshold (which is based on unmodified rolls).
+        /// The final threshold used is whichever gives the higher probability of success (lower threshold number).
         /// Also applies wound modifiers from both attacker and defender, capped at +/- 1.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
@@ -253,25 +254,34 @@ namespace WarhammerCombatMathLibrary
             var combinedWoundModifier = GetCombinedWoundModifier(attacker, defender);
             
             // Get base wound threshold from strength vs toughness
-            var woundSuccessThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
+            var normalWoundThreshold = GetSuccessThresholdOfWound(attacker.WeaponStrength, defender.Toughness);
             
-            // If the attacker has Anti X+ and it's better than the normal wound threshold,
-            // use the Anti threshold instead (since all rolls of X+ succeed as critical wounds)
+            // Apply wound modifier to the normal wound threshold
+            // Positive modifiers make it easier to wound (lower threshold), negative modifiers make it harder (higher threshold)
+            var adjustedNormalThreshold = normalWoundThreshold - combinedWoundModifier;
+            
+            // Determine the final wound threshold to use
+            int finalWoundThreshold;
+            
+            // If the attacker has Anti X+ and it's valid, compare it with the adjusted normal threshold
+            // and use whichever gives the better (lower) threshold
             if (attacker.WeaponHasAnti && IsValidThreshold(attacker.WeaponAntiThreshold))
             {
-                // Use the better (lower) threshold
-                woundSuccessThreshold = Math.Min(woundSuccessThreshold, attacker.WeaponAntiThreshold);
+                // Use the better (lower) threshold between adjusted normal and Anti
+                // Note: Anti threshold is NOT modified by wound modifiers (it's based on unmodified die rolls)
+                finalWoundThreshold = Math.Min(adjustedNormalThreshold, attacker.WeaponAntiThreshold);
             }
-            
-            // Apply wound modifier to the wound threshold
-            // Positive modifiers make it easier to wound (lower threshold), negative modifiers make it harder (higher threshold)
-            var adjustedWoundThreshold = woundSuccessThreshold - combinedWoundModifier;
+            else
+            {
+                // No Anti, just use the adjusted normal threshold
+                finalWoundThreshold = adjustedNormalThreshold;
+            }
             
             // Account for the fact that the smallest possible result on the die is considered an automatic failure,
             // and should not count as part of the success threshold
-            var finalWoundThreshold = adjustedWoundThreshold == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : adjustedWoundThreshold;
+            var validatedThreshold = finalWoundThreshold == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : finalWoundThreshold;
             
-            return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(finalWoundThreshold));
+            return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(validatedThreshold));
         }
 
         /// <summary>
