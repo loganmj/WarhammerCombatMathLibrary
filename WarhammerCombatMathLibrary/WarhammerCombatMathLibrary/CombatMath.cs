@@ -1058,18 +1058,27 @@ namespace WarhammerCombatMathLibrary
             var baseFailedSaveProbability = GetBaseProbabilityOfFailedSave(attacker, defender);
             var hitAndWoundProbability = GetProbabilityOfHitAndWound(attacker, defender);
 
-            // Calculate Devastating Wounds (only from normal hits that roll critical wounds)
-            double totalFailedSaveModifiers = 0;
-
+            // If Devastating Wounds is active, we need to split the calculation:
+            // - Normal wounds go through saves
+            // - Critical wounds bypass saves entirely
             if (attacker.WeaponHasDevastatingWounds)
             {
-                // Adjust hit probability if Lethal Hits are active
+                // Adjust hit probability if Lethal Hits are active (to avoid double-counting critical hits)
                 var hitProbability = attacker.WeaponHasLethalHits && !attacker.WeaponHasTorrent ? normalHitProbability : baseHitProbability;
-                totalFailedSaveModifiers += GetFailedSaveModifier_DevastatingWounds(hitProbability, GetProbabilityOfCriticalWound(attacker));
+                
+                // Calculate probability of critical wounds (which bypass saves with Devastating Wounds)
+                var criticalWoundProbability = GetFailedSaveModifier_DevastatingWounds(hitProbability, GetProbabilityOfCriticalWound(attacker));
+                
+                // Calculate probability of non-critical wounds (which must go through saves)
+                // This is total hit-and-wound probability minus the critical wound probability
+                // Use Math.Max to prevent negative values due to floating point precision issues
+                var normalWoundProbability = Math.Max(0, hitAndWoundProbability - criticalWoundProbability);
+                
+                // Normal wounds go through saves, critical wounds bypass saves
+                return (normalWoundProbability * baseFailedSaveProbability) + criticalWoundProbability;
             }
-
-            // Calculate total failed save probability
-            var totalFailedSaveProbability = baseFailedSaveProbability + totalFailedSaveModifiers;
+            
+            // Without Devastating Wounds, all wounds go through normal save rolls
             return (double)(hitAndWoundProbability * baseFailedSaveProbability);
         }
 

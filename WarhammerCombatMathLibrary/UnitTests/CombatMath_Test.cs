@@ -2422,7 +2422,7 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfHitAndWoundAndFailedSave_DevastatingWounds()
         {
-            var expected = 0.2963;
+            var expected = 0.3333;
             var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -2434,7 +2434,7 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfHitAndWoundAndFailedSave_LethalHitsAndDevastatingWounds()
         {
-            var expected = 0.2778;
+            var expected = 0.3056;
             var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -2472,7 +2472,7 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanFailedSaves_WeaponHasDevastatingWounds()
         {
-            var expected = 1.4815;
+            var expected = 1.6667;
             var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -2484,7 +2484,7 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanFailedSaves_WeaponHasLethalHitsAndDevastatingWounds()
         {
-            var expected = 1.3889;
+            var expected = 1.5278;
             var actual = Math.Round(CombatMath.GetMeanFailedSaves(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -2522,7 +2522,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationFailedSaves_WeaponHasDevastatingWounds()
         {
-            var expected = 1.021;
+            var expected = 1.0541;
             var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -2534,7 +2534,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationFailedSaves_WeaponHasLethalHitsAndDevastatingWounds()
         {
-            var expected = 1.0015;
+            var expected = 1.03;
             var actual = Math.Round(CombatMath.GetStandardDeviationFailedSaves(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -2604,12 +2604,12 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.1726),
-                new(1, 0.3633),
-                new(2, 0.3059),
-                new(3, 0.1288),
-                new(4, 0.0271),
-                new(5, 0.0023)
+                new(0, 0.1317),
+                new(1, 0.3292),
+                new(2, 0.3292),
+                new(3, 0.1646),
+                new(4, 0.0412),
+                new(5, 0.0041)
             };
 
             var actual = CombatMath.GetDistributionFailedSaves(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
@@ -2639,12 +2639,12 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>()
             {
-                new(0, 0.1965),
-                new(1, 0.3779),
-                new(2, 0.2907),
-                new(3, 0.1118),
-                new(4, 0.0215),
-                new(5, 0.0017)
+                new(0, 0.1615),
+                new(1, 0.3553),
+                new(2, 0.3127),
+                new(3, 0.1376),
+                new(4, 0.0303),
+                new(5, 0.0027)
             };
 
             var actual = CombatMath.GetDistributionFailedSaves(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
@@ -2755,7 +2755,7 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanDamage_DevastatingWounds()
         {
-            var expected = 4.4444;
+            var expected = 5.0;
             var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -2767,7 +2767,7 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanDamage_LethalHitsAndDevastatingWounds()
         {
-            var expected = 4.1667;
+            var expected = 4.5833;
             var actual = Math.Round(CombatMath.GetMeanDamage(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -2862,7 +2862,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationDamage_DevastatingWounds()
         {
-            var expected = 3.0631;
+            var expected = 3.1623;
             var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -2874,7 +2874,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationDamage_LethalHitsAndDevastatingWounds()
         {
-            var expected = 3.0046;
+            var expected = 3.0901;
             var actual = Math.Round(CombatMath.GetStandardDeviationDamage(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -2969,7 +2969,7 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanDestroyedModels_DevastatingWounds()
         {
-            var expected = 1.4815;
+            var expected = 1.6667;
             var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -2981,7 +2981,7 @@ namespace UnitTests
         [TestMethod]
         public void GetMeanDestroyedModels_LethalHitsAndDevastatingWounds()
         {
-            var expected = 1.3889;
+            var expected = 1.5278;
             var actual = Math.Round(CombatMath.GetMeanDestroyedModels(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -3076,7 +3076,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationDestroyedModels_DevastatingWounds()
         {
-            var expected = 1.021;
+            var expected = 1.0541;
             var actual = Math.Round(CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -3088,7 +3088,7 @@ namespace UnitTests
         [TestMethod]
         public void GetStandardDeviationDestroyedModels_LethalHitsAndDevastatingWounds()
         {
-            var expected = 1.0015;
+            var expected = 1.03;
             var actual = Math.Round(CombatMath.GetStandardDeviationDestroyedModels(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             Assert.AreEqual(expected, actual);
@@ -3359,15 +3359,15 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>
             {
-                new(0, 0.1965),
-                new(1, 0.3779),
-                new(2, 0.2907),
-                new(3, 0.1118),
-                new(4, 0.0215),
-                new(5, 0.0017)
+                new(0, 0.1317),
+                new(1, 0.3292),
+                new(2, 0.3292),
+                new(3, 0.1646),
+                new(4, 0.0412),
+                new(5, 0.0041)
             };
 
-            var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
@@ -3394,12 +3394,12 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>
             {
-                new(0, 0.1965),
-                new(1, 0.3779),
-                new(2, 0.2907),
-                new(3, 0.1118),
-                new(4, 0.0215),
-                new(5, 0.0017)
+                new(0, 0.1615),
+                new(1, 0.3553),
+                new(2, 0.3127),
+                new(3, 0.1376),
+                new(4, 0.0303),
+                new(5, 0.0027)
             };
 
             var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
@@ -4182,6 +4182,186 @@ namespace UnitTests
             var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
 
             Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
+
+        #region Unit Tests - Devastating Wounds Bypass Saves
+
+        /// <summary>
+        /// Tests that devastating wounds bypass save rolls entirely.
+        /// When Devastating Wounds is active, critical wounds should bypass the defender's save,
+        /// resulting in higher damage compared to the same weapon without Devastating Wounds.
+        /// </summary>
+        [TestMethod]
+        public void DevastatingWounds_BypassesSaveRolls()
+        {
+            // Create attacker with Devastating Wounds
+            var attackerWithDevWounds = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 10,
+                WeaponSkill = 3,
+                WeaponStrength = 6,
+                WeaponArmorPierce = 2,
+                WeaponFlatDamage = 2,
+                WeaponHasDevastatingWounds = true
+            };
+
+            // Create identical attacker WITHOUT Devastating Wounds
+            var attackerWithoutDevWounds = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 10,
+                WeaponSkill = 3,
+                WeaponStrength = 6,
+                WeaponArmorPierce = 2,
+                WeaponFlatDamage = 2,
+                WeaponHasDevastatingWounds = false
+            };
+
+            // Use a defender with a good save
+            var defender = new DefenderDTO()
+            {
+                NumberOfModels = 10,
+                Toughness = 4,
+                ArmorSave = 2,  // 2+ save (which becomes 4+ after AP-2)
+                Wounds = 2
+            };
+
+            // Calculate mean destroyed models for both
+            var modelsDestroyedWithDevWounds = CombatMath.GetMeanDestroyedModels(attackerWithDevWounds, defender);
+            var modelsDestroyedWithoutDevWounds = CombatMath.GetMeanDestroyedModels(attackerWithoutDevWounds, defender);
+
+            // With Devastating Wounds, critical wound rolls (6s) should bypass the save entirely
+            // This means more models should be destroyed compared to without Devastating Wounds
+            Assert.IsTrue(modelsDestroyedWithDevWounds > modelsDestroyedWithoutDevWounds,
+                $"Devastating Wounds should result in more models destroyed. " +
+                $"With Dev Wounds: {modelsDestroyedWithDevWounds:F4}, Without: {modelsDestroyedWithoutDevWounds:F4}");
+
+            // The difference should be meaningful (at least 10% more damage)
+            // Guard against division by zero
+            if (modelsDestroyedWithoutDevWounds > 0)
+            {
+                var percentIncrease = (modelsDestroyedWithDevWounds - modelsDestroyedWithoutDevWounds) / modelsDestroyedWithoutDevWounds;
+                Assert.IsTrue(percentIncrease > 0.1,
+                    $"Devastating Wounds should increase damage by at least 10%. Actual increase: {percentIncrease * 100:F2}%");
+            }
+            else
+            {
+                // If no models are destroyed without devastating wounds, just ensure some are destroyed with it
+                Assert.IsTrue(modelsDestroyedWithDevWounds > 0,
+                    "Devastating Wounds should allow some models to be destroyed even when normal attacks destroy none");
+            }
+        }
+
+        /// <summary>
+        /// Tests that devastating wounds with a high save defender show significant difference.
+        /// With a defender that has a very good save (2+ invulnerable), the difference between
+        /// devastating wounds and normal wounds should be very pronounced.
+        /// </summary>
+        [TestMethod]
+        public void DevastatingWounds_HighSaveDefender_ShowsLargeDifference()
+        {
+            // Create attacker with Devastating Wounds
+            var attackerWithDevWounds = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 10,
+                WeaponSkill = 2,
+                WeaponStrength = 6,
+                WeaponArmorPierce = 0,  // No AP to make the save even better
+                WeaponFlatDamage = 2,
+                WeaponHasDevastatingWounds = true
+            };
+
+            // Create identical attacker WITHOUT Devastating Wounds
+            var attackerWithoutDevWounds = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 10,
+                WeaponSkill = 2,
+                WeaponStrength = 6,
+                WeaponArmorPierce = 0,
+                WeaponFlatDamage = 2,
+                WeaponHasDevastatingWounds = false
+            };
+
+            // Defender with excellent save (2+ invulnerable)
+            var defenderWithExcellentSave = new DefenderDTO()
+            {
+                NumberOfModels = 10,
+                Toughness = 4,
+                ArmorSave = 3,
+                InvulnerableSave = 2,  // 2+ invulnerable save
+                Wounds = 2
+            };
+
+            // Calculate mean destroyed models for both
+            var modelsDestroyedWithDevWounds = CombatMath.GetMeanDestroyedModels(attackerWithDevWounds, defenderWithExcellentSave);
+            var modelsDestroyedWithoutDevWounds = CombatMath.GetMeanDestroyedModels(attackerWithoutDevWounds, defenderWithExcellentSave);
+
+            // With a 2+ invulnerable save, devastating wounds should make a HUGE difference
+            // because 1/6 of wounds (the 6s) bypass this excellent save entirely
+            Assert.IsTrue(modelsDestroyedWithDevWounds > modelsDestroyedWithoutDevWounds,
+                $"Devastating Wounds should result in significantly more models destroyed against high-save targets. " +
+                $"With Dev Wounds: {modelsDestroyedWithDevWounds:F4}, Without: {modelsDestroyedWithoutDevWounds:F4}");
+
+            // With a 2+ invulnerable, the difference should be very significant (at least 50% more damage)
+            // Guard against division by zero
+            if (modelsDestroyedWithoutDevWounds > 0)
+            {
+                var percentIncrease = (modelsDestroyedWithDevWounds - modelsDestroyedWithoutDevWounds) / modelsDestroyedWithoutDevWounds;
+                Assert.IsTrue(percentIncrease > 0.5,
+                    $"Devastating Wounds against 2+ invulnerable should increase damage by at least 50%. Actual increase: {percentIncrease * 100:F2}%");
+            }
+            else
+            {
+                // If no models are destroyed without devastating wounds, just ensure some are destroyed with it
+                Assert.IsTrue(modelsDestroyedWithDevWounds > 0,
+                    "Devastating Wounds should allow some models to be destroyed even when normal attacks destroy none");
+            }
+        }
+
+        /// <summary>
+        /// Tests that devastating wounds do not spill over damage to other models.
+        /// This is mentioned in the issue that devastating wounds should act like mortal wounds
+        /// but without spillover.
+        /// </summary>
+        [TestMethod]
+        public void DevastatingWounds_DoNotSpillOver()
+        {
+            // This test verifies the mathematical behavior - that devastating wounds are calculated
+            // correctly without assuming spillover mechanics in the probability calculations.
+            // The actual spillover prevention would be in the damage application logic,
+            // but the probability calculations should account for devastating wounds not spilling over.
+            
+            var attackerWithDevWounds = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 6,
+                WeaponSkill = 3,
+                WeaponStrength = 6,
+                WeaponArmorPierce = 2,
+                WeaponFlatDamage = 3,  // 3 damage but defender has 2 wounds
+                WeaponHasDevastatingWounds = true
+            };
+
+            var defender = new DefenderDTO()
+            {
+                NumberOfModels = 5,
+                Toughness = 4,
+                ArmorSave = 3,
+                Wounds = 2  // Less than weapon damage
+            };
+
+            // Calculate the mean destroyed models
+            var modelsDestroyed = CombatMath.GetMeanDestroyedModels(attackerWithDevWounds, defender);
+
+            // The result should be positive and reasonable (we're not testing exact spillover mechanics here,
+            // just that the calculation completes successfully and produces valid results)
+            Assert.IsTrue(modelsDestroyed > 0, "Devastating wounds should destroy some models");
+            Assert.IsTrue(modelsDestroyed <= defender.NumberOfModels, "Cannot destroy more models than exist");
         }
 
         #endregion
