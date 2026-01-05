@@ -1071,7 +1071,8 @@ namespace WarhammerCombatMathLibrary
                 
                 // Calculate probability of non-critical wounds (which must go through saves)
                 // This is total hit-and-wound probability minus the critical wound probability
-                var normalWoundProbability = hitAndWoundProbability - criticalWoundProbability;
+                // Use Math.Max to prevent negative values due to floating point precision issues
+                var normalWoundProbability = Math.Max(0, hitAndWoundProbability - criticalWoundProbability);
                 
                 // Normal wounds go through saves, critical wounds bypass saves
                 return (normalWoundProbability * baseFailedSaveProbability) + criticalWoundProbability;

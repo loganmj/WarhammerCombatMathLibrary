@@ -4240,9 +4240,19 @@ namespace UnitTests
                 $"With Dev Wounds: {modelsDestroyedWithDevWounds:F4}, Without: {modelsDestroyedWithoutDevWounds:F4}");
 
             // The difference should be meaningful (at least 10% more damage)
-            var percentIncrease = (modelsDestroyedWithDevWounds - modelsDestroyedWithoutDevWounds) / modelsDestroyedWithoutDevWounds;
-            Assert.IsTrue(percentIncrease > 0.1,
-                $"Devastating Wounds should increase damage by at least 10%. Actual increase: {percentIncrease * 100:F2}%");
+            // Guard against division by zero
+            if (modelsDestroyedWithoutDevWounds > 0)
+            {
+                var percentIncrease = (modelsDestroyedWithDevWounds - modelsDestroyedWithoutDevWounds) / modelsDestroyedWithoutDevWounds;
+                Assert.IsTrue(percentIncrease > 0.1,
+                    $"Devastating Wounds should increase damage by at least 10%. Actual increase: {percentIncrease * 100:F2}%");
+            }
+            else
+            {
+                // If no models are destroyed without devastating wounds, just ensure some are destroyed with it
+                Assert.IsTrue(modelsDestroyedWithDevWounds > 0,
+                    "Devastating Wounds should allow some models to be destroyed even when normal attacks destroy none");
+            }
         }
 
         /// <summary>
@@ -4298,9 +4308,19 @@ namespace UnitTests
                 $"With Dev Wounds: {modelsDestroyedWithDevWounds:F4}, Without: {modelsDestroyedWithoutDevWounds:F4}");
 
             // With a 2+ invulnerable, the difference should be very significant (at least 50% more damage)
-            var percentIncrease = (modelsDestroyedWithDevWounds - modelsDestroyedWithoutDevWounds) / modelsDestroyedWithoutDevWounds;
-            Assert.IsTrue(percentIncrease > 0.5,
-                $"Devastating Wounds against 2+ invulnerable should increase damage by at least 50%. Actual increase: {percentIncrease * 100:F2}%");
+            // Guard against division by zero
+            if (modelsDestroyedWithoutDevWounds > 0)
+            {
+                var percentIncrease = (modelsDestroyedWithDevWounds - modelsDestroyedWithoutDevWounds) / modelsDestroyedWithoutDevWounds;
+                Assert.IsTrue(percentIncrease > 0.5,
+                    $"Devastating Wounds against 2+ invulnerable should increase damage by at least 50%. Actual increase: {percentIncrease * 100:F2}%");
+            }
+            else
+            {
+                // If no models are destroyed without devastating wounds, just ensure some are destroyed with it
+                Assert.IsTrue(modelsDestroyedWithDevWounds > 0,
+                    "Devastating Wounds should allow some models to be destroyed even when normal attacks destroy none");
+            }
         }
 
         /// <summary>
