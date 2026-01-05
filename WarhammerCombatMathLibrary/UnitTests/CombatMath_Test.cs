@@ -3359,15 +3359,15 @@ namespace UnitTests
         {
             var expected = new List<BinomialOutcome>
             {
-                new(0, 0.1615),
-                new(1, 0.3553),
-                new(2, 0.3127),
-                new(3, 0.1376),
-                new(4, 0.0303),
-                new(5, 0.0027)
+                new(0, 0.1317),
+                new(1, 0.3292),
+                new(2, 0.3292),
+                new(3, 0.1646),
+                new(4, 0.0412),
+                new(5, 0.0041)
             };
 
-            var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_LETHAL_HITS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = CombatMath.GetDistributionDestroyedModels(ATTACKER_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Print expected
             Debug.WriteLine($"Expected: ");
