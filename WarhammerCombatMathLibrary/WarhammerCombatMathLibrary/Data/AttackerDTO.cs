@@ -123,16 +123,6 @@
         public int CriticalWoundThreshold { get; set; }
 
         /// <summary>
-        /// Attacker has Anti [keyword] X+ ability against the target
-        /// </summary>
-        public bool WeaponHasAnti { get; set; }
-
-        /// <summary>
-        /// The wound roll result threshold (X+) at which Anti triggers critical wounds
-        /// </summary>
-        public int WeaponAntiThreshold { get; set; }
-
-        /// <summary>
         /// Hit modifier applied to the attacker's hit rolls. Positive values make it easier to hit, negative values make it harder.
         /// Combined with defender's hit modifier, the total is capped at +/- 1.
         /// </summary>
@@ -170,8 +160,6 @@
                    + $"WeaponHasRerollDamageRollsOf1: {WeaponHasRerollDamageRollsOf1}, "
                    + $"CriticalHitThreshold: {CriticalHitThreshold}, "
                    + $"CriticalWoundThreshold: {CriticalWoundThreshold}, "
-                   + $"WeaponHasAnti: {WeaponHasAnti}, "
-                   + $"WeaponAntiThreshold: {WeaponAntiThreshold}, "
                    + $"HitModifier: {HitModifier}, "
                    + $"WoundModifier: {WoundModifier} ]";
         }
@@ -214,8 +202,6 @@
                    && WeaponHasRerollDamageRollsOf1 == other.WeaponHasRerollDamageRollsOf1
                    && CriticalHitThreshold == other.CriticalHitThreshold
                    && CriticalWoundThreshold == other.CriticalWoundThreshold
-                   && WeaponHasAnti == other.WeaponHasAnti
-                   && WeaponAntiThreshold == other.WeaponAntiThreshold
                    && HitModifier == other.HitModifier
                    && WoundModifier == other.WoundModifier;
         }
@@ -227,8 +213,7 @@
             var weaponKeywordFlags = ((WeaponHasTorrent ? 1 : 0) << 0)
                                      | ((WeaponHasLethalHits ? 1 : 0) << 1)
                                      | ((WeaponHasSustainedHits ? 1 : 0) << 2)
-                                     | ((WeaponHasDevastatingWounds ? 1 : 0) << 3)
-                                     | ((WeaponHasAnti ? 1 : 0) << 4);
+                                     | ((WeaponHasDevastatingWounds ? 1 : 0) << 3);
 
             // Combine reroll abilities into a single byte
             var rerollFlags = ((WeaponHasRerollHitRolls ? 1 : 0) << 0)
@@ -245,7 +230,7 @@
                                     weaponKeywordFlags,
                                     rerollFlags,
                                     WeaponSustainedHitsMultiplier,
-                                    HashCode.Combine(CriticalHitThreshold, CriticalWoundThreshold, WeaponAntiThreshold, HitModifier, WoundModifier));
+                                    HashCode.Combine(CriticalHitThreshold, CriticalWoundThreshold, HitModifier, WoundModifier));
         }
 
         #endregion
