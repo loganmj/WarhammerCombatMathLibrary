@@ -640,12 +640,15 @@ namespace UnitTests
 
         /// <summary>
         /// Tests the edge case where WeaponSkill is 6 and -1 modifier is applied.
-        /// This would adjust to 7+, which is impossible on a d6, so probability should be 0.
+        /// This would adjust to 7+, which is impossible on a d6.
+        /// However, with the default CriticalHitThreshold of 6, rolls of 6 automatically succeed.
+        /// Therefore, the probability should be 1/6 (0.1667).
         /// </summary>
         [TestMethod]
         public void GetProbabilityOfHit_WeaponSkill6WithMinus1_ImpossibleThreshold()
         {
-            var expected = 0.0;
+            // With default CriticalHitThreshold of 6, rolls of 6 automatically succeed
+            var expected = 0.1667;
             var attacker = new AttackerDTO()
             {
                 WeaponSkill = 6,
@@ -1250,15 +1253,18 @@ namespace UnitTests
 
         /// <summary>
         /// Tests the edge case where S4 vs T8 normally wounds on 6+ and -1 modifier is applied.
-        /// This would adjust to 7+, which is impossible on a d6, so probability should be 0.
+        /// This would adjust to 7+, which is impossible on a d6.
+        /// However, with the default CriticalWoundThreshold of 6, rolls of 6 automatically succeed as critical wounds.
+        /// Therefore, wound probability is 1/6 (0.1667).
         /// </summary>
         [TestMethod]
         public void GetProbabilityOfHitAndWound_WoundThreshold6WithMinus1_ImpossibleThreshold()
         {
             // Hit: WS3+ = 4/6 = 0.6667
-            // Wound: S4 vs T8 = 6+ normally, with -1 modifier = 7+ = impossible = 0
-            // Combined: 0.6667 * 0 = 0
-            var expected = 0.0;
+            // Wound: S4 vs T8 = 6+ normally, with -1 modifier = 7+ would be impossible,
+            //        but with default CriticalWoundThreshold of 6, rolls of 6 automatically wound = 1/6 = 0.1667
+            // Combined: 0.6667 * 0.1667 = 0.1111
+            var expected = 0.1111;
             var attacker = new AttackerDTO()
             {
                 WeaponSkill = 3,
@@ -4706,6 +4712,81 @@ namespace UnitTests
             // just that the calculation completes successfully and produces valid results)
             Assert.IsTrue(modelsDestroyed > 0, "Devastating wounds should destroy some models");
             Assert.IsTrue(modelsDestroyed <= defender.NumberOfModels, "Cannot destroy more models than exist");
+        }
+
+        /// <summary>
+        /// Tests that CriticalHitThreshold defaults to 6 when not explicitly set
+        /// </summary>
+        [TestMethod]
+        public void AttackerDTO_CriticalHitThreshold_DefaultValue()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 6,
+                WeaponSkill = 3
+            };
+
+            // Default value should be 6
+            Assert.AreEqual(6, attacker.CriticalHitThreshold, "CriticalHitThreshold should default to 6");
+        }
+
+        /// <summary>
+        /// Tests that CriticalWoundThreshold defaults to 6 when not explicitly set
+        /// </summary>
+        [TestMethod]
+        public void AttackerDTO_CriticalWoundThreshold_DefaultValue()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 6,
+                WeaponSkill = 3
+            };
+
+            // Default value should be 6
+            Assert.AreEqual(6, attacker.CriticalWoundThreshold, "CriticalWoundThreshold should default to 6");
+        }
+
+        /// <summary>
+        /// Tests that attacker with default CriticalHitThreshold (6) behaves correctly
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_DefaultCriticalHitThreshold()
+        {
+            // Create attacker without explicitly setting CriticalHitThreshold
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 4
+            };
+
+            // WS4+ = 3/6 = 0.5, and with default critical hit of 6, behavior should be standard
+            var expected = 0.5;
+            Assert.AreEqual(expected, Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4));
+        }
+
+        /// <summary>
+        /// Tests that attacker with default CriticalWoundThreshold (6) behaves correctly
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_DefaultCriticalWoundThreshold()
+        {
+            // Create attacker without explicitly setting CriticalWoundThreshold
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 4
+            };
+
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            // WS3+ = 4/6 = 0.6667, S4 vs T4 = 4+ = 3/6 = 0.5
+            // Combined: 0.6667 * 0.5 = 0.3333
+            var expected = 0.3333;
+            Assert.AreEqual(expected, Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4));
         }
 
         #endregion

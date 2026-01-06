@@ -113,14 +113,16 @@
         public bool WeaponHasRerollDamageRollsOf1 { get; set; }
 
         /// <summary>
-        /// The hit roll result threshold that is considered a critical hit
+        /// The hit roll result threshold that is considered a critical hit.
+        /// Default is 6. Valid range is 2-6 (1 always fails, 6 is maximum die result).
         /// </summary>
-        public int CriticalHitThreshold { get; set; }
+        public int CriticalHitThreshold { get; set; } = 6;
 
         /// <summary>
-        /// The wound roll result threshold that is considered a critical wound
+        /// The wound roll result threshold that is considered a critical wound.
+        /// Default is 6. Valid range is 2-6 (1 always fails, 6 is maximum die result).
         /// </summary>
-        public int CriticalWoundThreshold { get; set; }
+        public int CriticalWoundThreshold { get; set; } = 6;
 
         /// <summary>
         /// Hit modifier applied to the attacker's hit rolls. Positive values make it easier to hit, negative values make it harder.

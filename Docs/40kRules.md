@@ -47,11 +47,12 @@ When a model attacks, it rolls dice equal to its Attacks characteristic. Each di
 **Key Rules:**
 - An unmodified roll of 1 always fails
 - An unmodified roll of 6 always succeeds
-- Critical hits occur when the roll meets or exceeds the critical hit threshold (default is 6)
+- Critical hits occur when the roll meets or exceeds the critical hit threshold (default is 6, valid range is 2-6)
 - **Critical Hit Threshold**: When a unit has an ability that modifies the critical hit threshold (e.g., critical hits on 5+), hit rolls at or above that threshold automatically succeed and count as critical hits
   - These rolls always succeed regardless of the weapon skill requirement
   - They trigger critical hit abilities like Lethal Hits and Sustained Hits
   - The critical hit threshold is based on unmodified die rolls and is not affected by hit modifiers
+  - Valid range is 2-6 (1 always fails, 6 is the maximum die result)
 
 **Hit Modifiers:**
 Some abilities add to or subtract from the hit success threshold. Both attackers and defenders can have hit modifiers that affect the hit roll:
@@ -78,7 +79,7 @@ For each successful hit, the attacker rolls to determine if the attack wounds th
 **Key Rules:**
 - An unmodified roll of 1 always fails
 - An unmodified roll of 6 always succeeds
-- Critical wounds occur when the roll meets or exceeds the critical wound threshold (default is 6)
+- Critical wounds occur when the roll meets or exceeds the critical wound threshold (default is 6, valid range is 2-6)
 
 **Wound Modifiers:**
 Some abilities add to or subtract from the wound success threshold. Both attackers and defenders can have wound modifiers that affect the wound roll:
@@ -218,11 +219,12 @@ Various abilities allow rerolling dice:
 ### Critical Thresholds
 
 Critical hits and wounds normally occur on unmodified rolls of 6, but some abilities modify these thresholds:
-- **Critical Hit Threshold**: The roll value (or higher) needed for a critical hit. Critically important: rolls that meet or exceed this threshold **automatically succeed as hits** and count as critical hits, triggering abilities like Lethal Hits and Sustained Hits. For example, a critical hit threshold of 5+ means rolls of 5 and 6 automatically hit and are critical hits.
-- **Critical Wound Threshold**: The roll value (or higher) needed for a critical wound. For example, a critical wound threshold of 5+ means rolls of 5 and 6 are critical wounds.
+- **Critical Hit Threshold**: The roll value (or higher) needed for a critical hit. **Default is 6. Valid range is 2-6** (1 always fails, 6 is the maximum die result). Critically important: rolls that meet or exceed this threshold **automatically succeed as hits** and count as critical hits, triggering abilities like Lethal Hits and Sustained Hits. For example, a critical hit threshold of 5+ means rolls of 5 and 6 automatically hit and are critical hits.
+- **Critical Wound Threshold**: The roll value (or higher) needed for a critical wound. **Default is 6. Valid range is 2-6** (1 always fails, 6 is the maximum die result). For example, a critical wound threshold of 5+ means rolls of 5 and 6 are critical wounds.
 
 **Important Notes:**
 - Critical hit/wound thresholds are based on **unmodified die rolls** and are not affected by hit/wound modifiers
+- Values outside the range 2-6 are invalid and will be ignored (treated as if no critical threshold was specified)
 - When a critical hit threshold is lower than the normal hit threshold (e.g., critical hits on 5+ with WS 4+), the critical hit threshold takes precedence for those rolls, causing them to automatically succeed
 - This is similar to how the Anti X+ ability works for wound rolls
 
