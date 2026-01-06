@@ -196,22 +196,14 @@ namespace WarhammerCombatMathLibrary
             var adjustedWeaponSkill = attacker.WeaponSkill - hitModifier;
 
             // Determine the final hit threshold to use
-            int finalHitThreshold;
-
             // If the attacker has a valid critical hit threshold, compare it with the adjusted weapon skill
             // and use whichever gives the better (lower) threshold
             // Critical hit threshold causes those rolls to automatically succeed (like Anti for wounds)
-            if (IsValidThreshold(attacker.CriticalHitThreshold))
-            {
-                // Use the better (lower) threshold between adjusted weapon skill and critical hit threshold
-                // Note: Critical hit threshold is NOT modified by hit modifiers (it's based on unmodified die rolls)
-                finalHitThreshold = Math.Min(adjustedWeaponSkill, attacker.CriticalHitThreshold);
-            }
-            else
-            {
-                // No valid critical hit threshold, just use the adjusted weapon skill
-                finalHitThreshold = adjustedWeaponSkill;
-            }
+            // Note: Critical hit threshold is NOT modified by hit modifiers (it's based on unmodified die rolls)
+            // No valid critical hit threshold means we just use the adjusted weapon skill
+            int finalHitThreshold = IsValidThreshold(attacker.CriticalHitThreshold)
+                ? Math.Min(adjustedWeaponSkill, attacker.CriticalHitThreshold)
+                : adjustedWeaponSkill;
 
             // Account for the fact that the smallest possible result on the die is considered an automatic failure,
             // and should not count as part of the success threshold
