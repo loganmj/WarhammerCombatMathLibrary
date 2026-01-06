@@ -4080,7 +4080,7 @@ namespace UnitTests
         /// Example: CriticalWoundThreshold 5+ when wounds are already on 3+ (S6 vs T4), CriticalWoundThreshold should not increase wound probability.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHitAndWound_AntiGreaterThanNormalWoundThreshold_NoOtherAbilities()
+        public void GetProbabilityOfHitAndWound_CriticalWoundGreaterThanNormalWoundThreshold_NoOtherAbilities()
         {
             // Create attacker with S6 vs T4 (wounds on 3+) with CriticalWoundThreshold 5+
             // Critical Wound 5+ is worse than the normal 3+ wound threshold
