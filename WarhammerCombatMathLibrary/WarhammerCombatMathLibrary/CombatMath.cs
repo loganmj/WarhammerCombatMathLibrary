@@ -228,7 +228,7 @@ namespace WarhammerCombatMathLibrary
         private static double GetProbabilityOfCriticalHit(AttackerDTO attacker)
         {
             // If critical hit threshold is out of bounds, return base result
-            if (attacker.CriticalHitThreshold <= 1 || attacker.CriticalHitThreshold >= 7)
+            if (!IsValidThreshold(attacker.CriticalHitThreshold))
             {
                 return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
             }

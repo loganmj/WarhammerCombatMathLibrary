@@ -917,8 +917,8 @@ namespace UnitTests
 
             // With critical hit threshold of 5+ being better than WS6+:
             // - Hit probability = 2/6 = 0.3333 (using critical threshold)
-            // - Of those, only rolls of 6 are critical hits (1/6 of all rolls) and trigger Lethal Hits
-            // - Rolls of 5 are regular hits that still need to wound on 4+ (S4 vs T4)
+            // - Of those, rolls of 5 and 6 are both critical hits (2/6 of all rolls) and trigger Lethal Hits
+            // - Since all hits come from the critical threshold range, all hits are critical and trigger Lethal Hits
             var result = CombatMath.GetProbabilityOfHitAndWound(attacker, defender);
 
             // Verify the calculation produces a valid result
