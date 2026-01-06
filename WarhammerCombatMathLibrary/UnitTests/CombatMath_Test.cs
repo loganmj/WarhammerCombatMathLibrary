@@ -687,9 +687,10 @@ namespace UnitTests
         [TestMethod]
         public void GetProbabilityOfHit_CriticalHitThreshold5Plus_WithWS4Plus()
         {
-            // WS4+ normally = 3/6 = 0.5
-            // Critical hit threshold of 5+ means rolls of 5+ auto-succeed, but WS4+ is better (3+)
-            // So hit probability should use WS4+ = 0.5
+            // WS4+ (threshold 4) normally = 3/6 = 0.5
+            // Critical hit threshold of 5+ (threshold 5) means rolls of 5+ auto-succeed = 2/6 = 0.3333
+            // The implementation uses the better (lower) threshold, so WS4+ threshold of 4 is used
+            // Hit probability should be 0.5
             var expected = 0.5;
             var attacker = new AttackerDTO()
             {
@@ -901,8 +902,8 @@ namespace UnitTests
             {
                 NumberOfModels = 1,
                 WeaponFlatAttacks = 10,
-                WeaponSkill = 6,  // WS6+ normally would be very poor (1/6 = 0.1667)
-                CriticalHitThreshold = 5,  // But 5+ auto-succeeds (2/6 = 0.3333)
+                WeaponSkill = 6,  // WS6+ (threshold 6) normally would be very poor (1/6 = 0.1667)
+                CriticalHitThreshold = 5,  // Critical threshold 5 is better, so 5+ auto-succeeds (2/6 = 0.3333)
                 WeaponHasLethalHits = true,
                 WeaponStrength = 4
             };
@@ -914,9 +915,10 @@ namespace UnitTests
                 Wounds = 2
             };
 
-            // With critical hit threshold of 5+, hit probability = 2/6 = 0.3333
-            // Of those hits, critical hits (5-6) = 2/6 trigger Lethal Hits
-            // Non-critical hits (no longer exist since WS6+ < critical threshold 5+) would need to wound on 4+ (S4 vs T4)
+            // With critical hit threshold of 5+ being better than WS6+:
+            // - Hit probability = 2/6 = 0.3333 (using critical threshold)
+            // - Of those, only rolls of 6 are critical hits (1/6 of all rolls) and trigger Lethal Hits
+            // - Rolls of 5 are regular hits that still need to wound on 4+ (S4 vs T4)
             var result = CombatMath.GetProbabilityOfHitAndWound(attacker, defender);
 
             // Verify the calculation produces a valid result
