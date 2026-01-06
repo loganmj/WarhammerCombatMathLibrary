@@ -3682,7 +3682,7 @@ namespace UnitTests
         /// This verifies that CriticalWoundThreshold doesn't change the overall wound probability when the thresholds match.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHitAndWound_AntiEqualsNormalWoundThreshold_NoOtherAbilities()
+        public void GetProbabilityOfHitAndWound_CriticalWoundEqualsNormalWoundThreshold_NoOtherAbilities()
         {
             // S4 vs T4 means normal wounds on 4+ (S = T)
             // CriticalWoundThreshold 4+ means crits on 4+
