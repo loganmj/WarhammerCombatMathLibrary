@@ -3896,7 +3896,7 @@ namespace UnitTests
         /// - A single model
         /// - Critical Wound on 4+
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_ANTI_4_PLUS = new()
+        public static readonly AttackerDTO ATTACKER_CRITICAL_WOUND_4_PLUS = new()
         {
             NumberOfModels = 1,
             WeaponFlatAttacks = 6,
@@ -3912,7 +3912,7 @@ namespace UnitTests
         /// - A single model
         /// - Critical Wound on 5+
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_ANTI_5_PLUS = new()
+        public static readonly AttackerDTO ATTACKER_CRITICAL_WOUND_5_PLUS = new()
         {
             NumberOfModels = 1,
             WeaponFlatAttacks = 6,
@@ -3929,7 +3929,7 @@ namespace UnitTests
         /// - Critical Wound on 4+
         /// - Devastating Wounds
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_ANTI_4_PLUS_DEVASTATING_WOUNDS = new()
+        public static readonly AttackerDTO ATTACKER_CRITICAL_WOUND_4_PLUS_DEVASTATING_WOUNDS = new()
         {
             NumberOfModels = 1,
             WeaponFlatAttacks = 6,
@@ -3947,7 +3947,7 @@ namespace UnitTests
         /// - Critical Wound on 5+
         /// - Devastating Wounds
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_ANTI_5_PLUS_DEVASTATING_WOUNDS = new()
+        public static readonly AttackerDTO ATTACKER_CRITICAL_WOUND_5_PLUS_DEVASTATING_WOUNDS = new()
         {
             NumberOfModels = 1,
             WeaponFlatAttacks = 6,
@@ -3965,7 +3965,7 @@ namespace UnitTests
         /// - Critical Wound on 4+
         /// - Lethal Hits
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_ANTI_4_PLUS_LETHAL_HITS = new()
+        public static readonly AttackerDTO ATTACKER_CRITICAL_WOUND_4_PLUS_LETHAL_HITS = new()
         {
             NumberOfModels = 1,
             WeaponFlatAttacks = 6,
@@ -3983,7 +3983,7 @@ namespace UnitTests
         /// - Critical Wound on 4+ (same as normal wound threshold)
         /// - Strength 4 vs Toughness 4 (wounds on 4+)
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_ANTI_4_PLUS_SAME_THRESHOLD = new()
+        public static readonly AttackerDTO ATTACKER_CRITICAL_WOUND_4_PLUS_SAME_THRESHOLD = new()
         {
             NumberOfModels = 1,
             WeaponFlatAttacks = 6,
@@ -4019,7 +4019,7 @@ namespace UnitTests
         /// Tests that CriticalWoundThreshold 4+ increases the probability of critical wounds
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHitAndWound_Anti4Plus()
+        public void GetProbabilityOfHitAndWound_CriticalWound4Plus()
         {
             // With CriticalWoundThreshold 4+, wound rolls of 4+ become critical wounds
             // This should increase the probability compared to no CriticalWoundThreshold
@@ -4034,7 +4034,7 @@ namespace UnitTests
             };
 
             var probWithoutAnti = CombatMath.GetProbabilityOfHitAndWound(withoutAnti, DEFENDER_MULTI_MODEL_NO_ABILITIES);
-            var probWithAnti = CombatMath.GetProbabilityOfHitAndWound(ATTACKER_ANTI_4_PLUS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var probWithAnti = CombatMath.GetProbabilityOfHitAndWound(ATTACKER_CRITICAL_WOUND_4_PLUS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Probability should be the same (CriticalWoundThreshold only affects critical wounds, not total wounds)
             Assert.AreEqual(Math.Round(probWithoutAnti, 4), Math.Round(probWithAnti, 4));
@@ -4053,7 +4053,7 @@ namespace UnitTests
             // S4 vs T4 means normal wounds on 4+ (S = T)
             // CriticalWoundThreshold 4+ means crits on 4+
             // The critical wound threshold matches the normal wound threshold
-            var probWithAnti = CombatMath.GetProbabilityOfHitAndWound(ATTACKER_ANTI_4_PLUS_SAME_THRESHOLD, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var probWithAnti = CombatMath.GetProbabilityOfHitAndWound(ATTACKER_CRITICAL_WOUND_4_PLUS_SAME_THRESHOLD, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Create equivalent attacker without CriticalWoundThreshold for comparison
             var withoutAnti = new AttackerDTO()
@@ -4125,12 +4125,12 @@ namespace UnitTests
         /// increasing the overall wound success rate when the threshold is lower than the normal wound threshold.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHitAndWound_AntiLessThanNormalWoundThreshold_NoOtherAbilities()
+        public void GetProbabilityOfHitAndWound_CriticalWoundLessThanNormalWoundThreshold_NoOtherAbilities()
         {
             // S4 vs T5 means normal wounds on 5+ (S < T), so probability without CriticalWoundThreshold = 2/6 wound * 4/6 hit = 8/36 ≈ 0.2222
             // CriticalWoundThreshold 3+ means all wound rolls of 3+ succeed as critical wounds (4/6 wound probability)
             // With CriticalWoundThreshold 3+, probability = 4/6 wound * 4/6 hit = 16/36 ≈ 0.4444
-            var probWithAnti = CombatMath.GetProbabilityOfHitAndWound(ATTACKER_ANTI_3_PLUS_BETTER_THRESHOLD, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
+            var probWithAnti = CombatMath.GetProbabilityOfHitAndWound(ATTACKER_CRITICAL_WOUND_3_PLUS_BETTER_THRESHOLD, DEFENDER_MULTI_MODEL_INVULNERABLE_SAVE);
 
             // Create equivalent attacker without CriticalWoundThreshold for comparison
             var withoutAnti = new AttackerDTO()
@@ -4161,11 +4161,11 @@ namespace UnitTests
         /// Tests CriticalWoundThreshold 5+ with Devastating Wounds
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHitAndWoundAndFailedSave_Anti5PlusDevastatingWounds()
+        public void GetProbabilityOfHitAndWoundAndFailedSave_CriticalWound5PlusDevastatingWounds()
         {
             // With CriticalWoundThreshold 5+ and Devastating Wounds:
             // - Wound rolls of 5+ (33.33% of successful wounds) become critical wounds
-            var actual = CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_ANTI_5_PLUS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = CombatMath.GetProbabilityOfHitAndWoundAndFailedSave(ATTACKER_CRITICAL_WOUND_5_PLUS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Note: Due to the current implementation, CriticalWoundThreshold may not increase failed save probability
             // as expected with Devastating Wounds. The critical wound probability does increase,
@@ -4178,11 +4178,11 @@ namespace UnitTests
         /// Tests that CriticalWoundThreshold 4+ works correctly with Lethal Hits
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHitAndWound_Anti4PlusLethalHits()
+        public void GetProbabilityOfHitAndWound_CriticalWound4PlusLethalHits()
         {
             // CriticalWoundThreshold affects wound rolls, Lethal Hits affects hit rolls
             // They should work independently
-            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_ANTI_4_PLUS_LETHAL_HITS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(ATTACKER_CRITICAL_WOUND_4_PLUS_LETHAL_HITS, DEFENDER_MULTI_MODEL_NO_ABILITIES), 4);
 
             // Just verify the calculation runs without error and produces a reasonable result
             Assert.IsTrue(actual > 0 && actual <= 1, $"Probability should be between 0 and 1, got {actual}");
@@ -4194,7 +4194,7 @@ namespace UnitTests
         /// with Devastating Wounds, they bypass saves).
         /// </summary>
         [TestMethod]
-        public void GetMeanDamage_AntiLessThanNormalWoundThreshold_WithDevastatingWounds()
+        public void GetMeanDamage_CriticalWoundLessThanNormalWoundThreshold_WithDevastatingWounds()
         {
             // S4 vs T5 means normal wounds on 5+ (S < T)
             // Critical Wound 3+ means all wound rolls of 3+ succeed as critical wounds
@@ -4238,7 +4238,7 @@ namespace UnitTests
         /// Devastating Wounds, it should have minimal or no increased effect compared to Devastating Wounds alone.
         /// </summary>
         [TestMethod]
-        public void GetMeanDamage_AntiGreaterThanOrEqualNormalWoundThreshold_WithDevastatingWounds()
+        public void GetMeanDamage_CriticalWoundGreaterThanOrEqualNormalWoundThreshold_WithDevastatingWounds()
         {
             // S6 vs T4 means normal wounds on 3+ (S > T)
             // Critical Wound 4+ with Devastating Wounds - Critical Wound threshold is worse than normal wound threshold
@@ -4281,7 +4281,7 @@ namespace UnitTests
         /// Tests that Critical Wound with invalid threshold values is handled correctly
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHitAndWound_AntiWithInvalidThreshold()
+        public void GetProbabilityOfHitAndWound_CriticalWoundWithInvalidThreshold()
         {
             var attackerAnti0 = new AttackerDTO()
             {
@@ -4317,9 +4317,9 @@ namespace UnitTests
         /// Tests mean destroyed models with CriticalWoundThreshold 4+ and Devastating Wounds
         /// </summary>
         [TestMethod]
-        public void GetMeanDestroyedModels_Anti4PlusDevastatingWounds()
+        public void GetMeanDestroyedModels_CriticalWound4PlusDevastatingWounds()
         {
-            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_ANTI_4_PLUS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
+            var actual = CombatMath.GetMeanDestroyedModels(ATTACKER_CRITICAL_WOUND_4_PLUS_DEVASTATING_WOUNDS, DEFENDER_MULTI_MODEL_NO_ABILITIES);
 
             // Note: Due to the current implementation where GetProbabilityOfHitAndWoundAndFailedSave
             // may not fully utilize the increased critical wound probability from CriticalWoundThreshold,
@@ -4332,7 +4332,7 @@ namespace UnitTests
         /// Tests that CriticalWoundThreshold is properly considered in hash code
         /// </summary>
         [TestMethod]
-        public void AttackerDTO_HashCode_IncludesAnti()
+        public void AttackerDTO_HashCode_IncludesCriticalWoundThreshold()
         {
             var attacker1 = new AttackerDTO()
             {
@@ -4368,7 +4368,7 @@ namespace UnitTests
         /// Tests that CriticalWoundThreshold is properly considered in equality
         /// </summary>
         [TestMethod]
-        public void AttackerDTO_Equals_IncludesAnti()
+        public void AttackerDTO_Equals_IncludesCriticalWoundThreshold()
         {
             var attacker1 = new AttackerDTO()
             {
@@ -4407,7 +4407,7 @@ namespace UnitTests
         /// Should use the better threshold (2+ from modified normal wound).
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHitAndWound_WoundModifierWithAnti_ModifiedNormalBetter()
+        public void GetProbabilityOfHitAndWound_WoundModifierWithCriticalWound_ModifiedNormalBetter()
         {
             // Hit: WS3+ = 4/6 = 0.6667
             // Normal wound: S6 vs T4 = 3+ normally, with +1 modifier = 2+ = 5/6 = 0.8333
@@ -4439,7 +4439,7 @@ namespace UnitTests
         /// Both are 4+, so they should give the same probability.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHitAndWound_WoundModifierWithAnti_BothEqual()
+        public void GetProbabilityOfHitAndWound_WoundModifierWithCriticalWound_BothEqual()
         {
             // Hit: WS3+ = 4/6 = 0.6667
             // Normal wound: S4 vs T5 = 5+ normally, with +1 modifier = 4+ = 3/6 = 0.5
@@ -4471,7 +4471,7 @@ namespace UnitTests
         /// Should use the better threshold (3+ from CriticalWound).
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHitAndWound_WoundModifierWithAnti_AntiBetter()
+        public void GetProbabilityOfHitAndWound_WoundModifierWithCriticalWound_CriticalWoundBetter()
         {
             // Hit: WS3+ = 4/6 = 0.6667
             // Normal wound: S4 vs T5 = 5+ normally, with +1 modifier = 4+ = 3/6 = 0.5
@@ -4503,7 +4503,7 @@ namespace UnitTests
         /// Both are 4+, so they should give the same probability.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHitAndWound_NegativeWoundModifierWithAnti()
+        public void GetProbabilityOfHitAndWound_NegativeWoundModifierWithCriticalWound()
         {
             // Hit: WS3+ = 4/6 = 0.6667
             // Normal wound: S6 vs T4 = 3+ normally, with -1 modifier = 4+ = 3/6 = 0.5

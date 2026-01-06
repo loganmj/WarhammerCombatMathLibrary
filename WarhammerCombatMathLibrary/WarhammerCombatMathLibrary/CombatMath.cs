@@ -275,21 +275,11 @@ namespace WarhammerCombatMathLibrary
             var adjustedNormalThreshold = normalWoundThreshold - combinedWoundModifier;
             
             // Determine the final wound threshold to use
-            int finalWoundThreshold;
-            
             // If the attacker has a valid CriticalWoundThreshold, compare it with the adjusted normal threshold
             // and use whichever gives the better (lower) threshold
-            if (IsValidThreshold(attacker.CriticalWoundThreshold))
-            {
-                // Use the better (lower) threshold between adjusted normal and Critical Wound threshold
-                // Note: Critical Wound threshold is NOT modified by wound modifiers (it's based on unmodified die rolls)
-                finalWoundThreshold = Math.Min(adjustedNormalThreshold, attacker.CriticalWoundThreshold);
-            }
-            else
-            {
-                // No valid Critical Wound threshold, just use the adjusted normal threshold
-                finalWoundThreshold = adjustedNormalThreshold;
-            }
+            int finalWoundThreshold = IsValidThreshold(attacker.CriticalWoundThreshold)
+                ? Math.Min(adjustedNormalThreshold, attacker.CriticalWoundThreshold)
+                : adjustedNormalThreshold;
             
             // Account for the fact that the smallest possible result on the die is considered an automatic failure,
             // and should not count as part of the success threshold
