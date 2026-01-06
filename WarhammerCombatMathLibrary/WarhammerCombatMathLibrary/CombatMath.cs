@@ -178,6 +178,7 @@ namespace WarhammerCombatMathLibrary
         /// If the attacker has a critical hit threshold, hit rolls at or above that threshold automatically succeed.
         /// Hit modifiers are applied to the normal hit threshold, but not to the critical hit threshold (which is based on unmodified rolls).
         /// The final threshold used is whichever gives the higher probability of success (lower threshold number).
+        /// Roll thresholds cannot be modified to be better than 2+ (rolls of 1 always fail).
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <param name="hitModifier">The combined hit modifier to apply to the hit threshold</param>
@@ -194,6 +195,9 @@ namespace WarhammerCombatMathLibrary
             // Apply hit modifier to the weapon skill threshold
             // Positive modifiers make it easier to hit (lower threshold), negative modifiers make it harder (higher threshold)
             var adjustedWeaponSkill = attacker.WeaponSkill - hitModifier;
+            
+            // Roll thresholds cannot be modified to be better than 2+ (rolls of 1 always fail)
+            adjustedWeaponSkill = Math.Max(2, adjustedWeaponSkill);
 
             // Determine the final hit threshold to use
             // If the attacker has a valid critical hit threshold, compare it with the adjusted weapon skill
@@ -201,14 +205,12 @@ namespace WarhammerCombatMathLibrary
             // Critical hit threshold causes those rolls to automatically succeed (like Anti for wounds)
             // Note: Critical hit threshold is NOT modified by hit modifiers (it's based on unmodified die rolls)
             // No valid critical hit threshold means we just use the adjusted weapon skill
+            // When the modified threshold is worse than the critical threshold, the critical threshold takes precedence
             int finalHitThreshold = IsValidThreshold(attacker.CriticalHitThreshold)
                 ? Math.Min(adjustedWeaponSkill, attacker.CriticalHitThreshold)
                 : adjustedWeaponSkill;
 
-            // Account for the fact that the smallest possible result on the die is considered an automatic failure,
-            // and should not count as part of the success threshold
-            var hitSuccessThreshold = finalHitThreshold == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : finalHitThreshold;
-            return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(hitSuccessThreshold));
+            return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(finalHitThreshold));
         }
 
         /// <summary>
@@ -258,6 +260,7 @@ namespace WarhammerCombatMathLibrary
         /// Wound modifiers are applied to the normal wound threshold, but not to the critical wound threshold (which is based on unmodified rolls).
         /// The final threshold used is whichever gives the higher probability of success (lower threshold number).
         /// Also applies wound modifiers from both attacker and defender, capped at +/- 1.
+        /// Roll thresholds cannot be modified to be better than 2+ (rolls of 1 always fail).
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <param name="defender">The defender data object</param>
@@ -274,18 +277,18 @@ namespace WarhammerCombatMathLibrary
             // Positive modifiers make it easier to wound (lower threshold), negative modifiers make it harder (higher threshold)
             var adjustedNormalThreshold = normalWoundThreshold - combinedWoundModifier;
             
+            // Roll thresholds cannot be modified to be better than 2+ (rolls of 1 always fail)
+            adjustedNormalThreshold = Math.Max(2, adjustedNormalThreshold);
+            
             // Determine the final wound threshold to use
             // If the attacker has a valid CriticalWoundThreshold, compare it with the adjusted normal threshold
             // and use whichever gives the better (lower) threshold
+            // When the modified threshold is worse than the critical threshold, the critical threshold takes precedence
             int finalWoundThreshold = IsValidThreshold(attacker.CriticalWoundThreshold)
                 ? Math.Min(adjustedNormalThreshold, attacker.CriticalWoundThreshold)
                 : adjustedNormalThreshold;
             
-            // Account for the fact that the smallest possible result on the die is considered an automatic failure,
-            // and should not count as part of the success threshold
-            var validatedThreshold = finalWoundThreshold == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : finalWoundThreshold;
-            
-            return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(validatedThreshold));
+            return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(finalWoundThreshold));
         }
 
         /// <summary>
