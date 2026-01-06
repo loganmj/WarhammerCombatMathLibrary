@@ -253,8 +253,9 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Gets the base probability of succeeding on a wound roll, based on the attacker and defender stats.
-        /// If the attacker has Anti X+, wound rolls of X+ automatically succeed as critical wounds.
-        /// Wound modifiers are applied to the normal wound threshold, but not to the Anti threshold (which is based on unmodified rolls).
+        /// If the attacker has a CriticalWoundThreshold that is lower than the normal wound threshold,
+        /// those rolls automatically succeed as critical wounds.
+        /// Wound modifiers are applied to the normal wound threshold, but not to the critical wound threshold (which is based on unmodified rolls).
         /// The final threshold used is whichever gives the higher probability of success (lower threshold number).
         /// Also applies wound modifiers from both attacker and defender, capped at +/- 1.
         /// </summary>
@@ -274,21 +275,11 @@ namespace WarhammerCombatMathLibrary
             var adjustedNormalThreshold = normalWoundThreshold - combinedWoundModifier;
             
             // Determine the final wound threshold to use
-            int finalWoundThreshold;
-            
-            // If the attacker has Anti X+ and it's valid, compare it with the adjusted normal threshold
+            // If the attacker has a valid CriticalWoundThreshold, compare it with the adjusted normal threshold
             // and use whichever gives the better (lower) threshold
-            if (attacker.WeaponHasAnti && IsValidThreshold(attacker.WeaponAntiThreshold))
-            {
-                // Use the better (lower) threshold between adjusted normal and Anti
-                // Note: Anti threshold is NOT modified by wound modifiers (it's based on unmodified die rolls)
-                finalWoundThreshold = Math.Min(adjustedNormalThreshold, attacker.WeaponAntiThreshold);
-            }
-            else
-            {
-                // No Anti, just use the adjusted normal threshold
-                finalWoundThreshold = adjustedNormalThreshold;
-            }
+            int finalWoundThreshold = IsValidThreshold(attacker.CriticalWoundThreshold)
+                ? Math.Min(adjustedNormalThreshold, attacker.CriticalWoundThreshold)
+                : adjustedNormalThreshold;
             
             // Account for the fact that the smallest possible result on the die is considered an automatic failure,
             // and should not count as part of the success threshold
@@ -310,27 +301,16 @@ namespace WarhammerCombatMathLibrary
         /// <summary>
         /// Gets the probability of a critical wound.
         /// This is based on the critical wound threshold of the attacker.
-        /// If the attacker has Anti X+, wound rolls of X+ also count as critical wounds.
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <returns>A double containing the probability of a critical wound roll</returns>
         private static double GetProbabilityOfCriticalWound(AttackerDTO attacker)
         {
             // Determine the effective critical wound threshold
-            bool hasValidAnti = attacker.WeaponHasAnti && IsValidThreshold(attacker.WeaponAntiThreshold);
             bool hasValidCriticalWound = IsValidThreshold(attacker.CriticalWoundThreshold);
             
             int effectiveCriticalWoundThreshold;
-            if (hasValidAnti && hasValidCriticalWound)
-            {
-                // Both are valid: use the lower threshold (which means higher probability)
-                effectiveCriticalWoundThreshold = Math.Min(attacker.CriticalWoundThreshold, attacker.WeaponAntiThreshold);
-            }
-            else if (hasValidAnti)
-            {
-                effectiveCriticalWoundThreshold = attacker.WeaponAntiThreshold;
-            }
-            else if (hasValidCriticalWound)
+            if (hasValidCriticalWound)
             {
                 effectiveCriticalWoundThreshold = attacker.CriticalWoundThreshold;
             }
