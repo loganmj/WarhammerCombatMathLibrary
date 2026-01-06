@@ -621,16 +621,56 @@ namespace UnitTests
 
         /// <summary>
         /// Tests the edge case where WeaponSkill is 2 and +1 modifier is applied.
-        /// This would adjust to 1+, but rolls of 1 always fail, so it should still be treated as 2+.
+        /// This would adjust to 1+, but roll thresholds cannot be better than 2+ (rolls of 1 always fail),
+        /// so it should be capped at 2+, giving 5/6 = 0.8333 probability.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHit_WeaponSkill2WithPlus1_TreatedAs2Plus()
+        public void GetProbabilityOfHit_WeaponSkill2WithPlus1_CappedAt2Plus()
         {
             var expected = 0.8333;
             var attacker = new AttackerDTO()
             {
                 WeaponSkill = 2,
                 HitModifier = 1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the edge case where WeaponSkill is 3 and +2 modifier is applied (capped at +1).
+        /// WS 3+ with +1 modifier = 2+. This should be capped at 2+ (rolls of 1 always fail).
+        /// Expected probability: 5/6 = 0.8333
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_WeaponSkill3WithPlus2_CappedAt2Plus()
+        {
+            var expected = 0.8333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                HitModifier = 2  // Will be capped at +1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the edge case where WeaponSkill is 1 (invalid in normal play, but should be handled).
+        /// Even with WS 1+, rolls of 1 always fail, so it should be capped at 2+.
+        /// Expected probability: 5/6 = 0.8333
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_WeaponSkill1_CappedAt2Plus()
+        {
+            var expected = 0.8333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 1
             };
 
             var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
@@ -653,6 +693,50 @@ namespace UnitTests
             {
                 WeaponSkill = 6,
                 HitModifier = -1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests that when a modified hit threshold is worse than the critical hit threshold,
+        /// the critical hit threshold takes precedence.
+        /// WS 4+ with -1 modifier = 5+ (worse), but CriticalHitThreshold 3+ should take precedence.
+        /// Expected: Use 3+ threshold = 4/6 = 0.6667
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_ModifiedThresholdWorseButCriticalThresholdBetter()
+        {
+            var expected = 0.6667;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 4,
+                HitModifier = -1,  // Makes it 5+
+                CriticalHitThreshold = 3  // Better than modified 5+, so should use 3+
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests that when a modified hit threshold is better than the critical hit threshold,
+        /// the modified threshold is used (better threshold wins).
+        /// WS 4+ with +1 modifier = 3+, but CriticalHitThreshold 5+. Should use modified 3+.
+        /// Expected: Use 3+ threshold = 4/6 = 0.6667
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_ModifiedThresholdBetterThanCriticalThreshold()
+        {
+            var expected = 0.6667;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 4,
+                HitModifier = 1,  // Makes it 3+
+                CriticalHitThreshold = 5  // Worse than modified 3+, so should use 3+
             };
 
             var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
@@ -1283,13 +1367,14 @@ namespace UnitTests
 
         /// <summary>
         /// Tests the edge case where S8 vs T4 normally wounds on 2+ and +1 modifier is applied.
-        /// This would adjust to 1+, but rolls of 1 always fail, so it should still be treated as 2+.
+        /// This would adjust to 1+, but roll thresholds cannot be better than 2+ (rolls of 1 always fail),
+        /// so it should be capped at 2+, giving 5/6 = 0.8333 probability on wound.
         /// </summary>
         [TestMethod]
-        public void GetProbabilityOfHitAndWound_WoundThreshold2WithPlus1_TreatedAs2Plus()
+        public void GetProbabilityOfHitAndWound_WoundThreshold2WithPlus1_CappedAt2Plus()
         {
             // Hit: WS3+ = 4/6 = 0.6667
-            // Wound: S8 vs T4 = 2+ normally, with +1 modifier = 1+ but treated as 2+ = 5/6 = 0.8333
+            // Wound: S8 vs T4 = 2+ normally, with +1 modifier = 1+ but capped at 2+ = 5/6 = 0.8333
             // Combined: 0.6667 * 0.8333 = 0.5556
             var expected = 0.5556;
             var attacker = new AttackerDTO()
@@ -1297,6 +1382,96 @@ namespace UnitTests
                 WeaponSkill = 3,
                 WeaponStrength = 8,
                 WoundModifier = 1
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the edge case where S10 vs T3 normally wounds on 2+ and +2 modifier is applied (capped at +1).
+        /// With +1 capped modifier, wound threshold would be 1+, but should be capped at 2+.
+        /// Expected wound probability: 5/6 = 0.8333
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_WoundThreshold2WithPlus2_CappedAt2Plus()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S10 vs T3 = 2+ normally, with +2 modifier (capped at +1) = 1+ but capped at 2+ = 5/6 = 0.8333
+            // Combined: 0.6667 * 0.8333 = 0.5556
+            var expected = 0.5556;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 10,
+                WoundModifier = 2  // Will be capped at +1
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 3
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests that when a modified wound threshold is worse than the critical wound threshold,
+        /// the critical wound threshold takes precedence.
+        /// S4 vs T5 = 5+ normally, with -1 modifier = 6+ (worse), but CriticalWoundThreshold 3+ should take precedence.
+        /// Expected: Use 3+ threshold = 4/6 = 0.6667 for wounds
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_ModifiedWoundThresholdWorseButCriticalThresholdBetter()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S4 vs T5 = 5+ normally, with -1 modifier = 6+ (worse)
+            // CriticalWoundThreshold 3+ is better, so use 3+ = 4/6 = 0.6667
+            // Combined: 0.6667 * 0.6667 = 0.4444
+            var expected = 0.4444;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 4,
+                WoundModifier = -1,  // Makes it 6+
+                CriticalWoundThreshold = 3  // Better than modified 6+, so should use 3+
+            };
+            var defender = new DefenderDTO()
+            {
+                Toughness = 5
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHitAndWound(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests that when a modified wound threshold is better than the critical wound threshold,
+        /// the modified threshold is used (better threshold wins).
+        /// S6 vs T4 = 3+ normally, with +1 modifier = 2+, but CriticalWoundThreshold 5+. Should use modified 2+.
+        /// Expected: Use 2+ threshold = 5/6 = 0.8333 for wounds
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_ModifiedWoundThresholdBetterThanCriticalThreshold()
+        {
+            // Hit: WS3+ = 4/6 = 0.6667
+            // Wound: S6 vs T4 = 3+ normally, with +1 modifier = 2+ = 5/6 = 0.8333
+            // CriticalWoundThreshold 5+ is worse than modified 2+, so should use 2+
+            // Combined: 0.6667 * 0.8333 = 0.5556
+            var expected = 0.5556;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                WeaponStrength = 6,
+                WoundModifier = 1,  // Makes it 2+
+                CriticalWoundThreshold = 5  // Worse than modified 2+, so should use 2+
             };
             var defender = new DefenderDTO()
             {

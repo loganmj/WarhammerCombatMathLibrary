@@ -59,12 +59,16 @@ Some abilities add to or subtract from the hit success threshold. Both attackers
 - Attacker hit modifiers: Positive values make it easier to hit (lower threshold), negative values make it harder (higher threshold)
 - Defender hit modifiers: Positive values make the defender easier to hit (debuff), negative values make the defender harder to hit (buff)
 - Combined modifiers are capped at +/- 1 maximum after combining attacker and defender modifiers
+- **Modified roll thresholds cannot be better than 2+** - rolls of 1 always fail, so the best possible threshold is 2+
+- **When a modified threshold is worse than the critical hit threshold, the critical hit threshold takes precedence** - the better (lower) threshold is always used
 
 For example:
 - An attacker with +2 to hit and a defender with no modifier results in +1 to hit (capped at maximum)
 - An attacker with +1 to hit and a defender with -1 to be hit results in 0 combined modifier
 - A hit modifier of +1 changes a 4+ to hit into a 3+ to hit
 - A hit modifier of -1 changes a 3+ to hit into a 4+ to hit
+- A weapon with 2+ to hit and +1 modifier stays at 2+ (cannot be better than 2+)
+- A weapon with 4+ to hit, -1 modifier (making it 5+), and critical hit threshold 3+ uses the 3+ threshold
 
 ### 2. Wound Roll
 
@@ -86,12 +90,16 @@ Some abilities add to or subtract from the wound success threshold. Both attacke
 - Attacker wound modifiers: Positive values make it easier to wound (lower threshold), negative values make it harder (higher threshold)
 - Defender wound modifiers: Positive values make the defender easier to wound (debuff), negative values make the defender harder to wound (buff)
 - Combined modifiers are capped at +/- 1 maximum after combining attacker and defender modifiers
+- **Modified roll thresholds cannot be better than 2+** - rolls of 1 always fail, so the best possible threshold is 2+
+- **When a modified threshold is worse than the critical wound threshold, the critical wound threshold takes precedence** - the better (lower) threshold is always used
 
 For example:
 - An attacker with +2 to wound and a defender with no modifier results in +1 to wound (capped at maximum)
 - An attacker with +1 to wound and a defender with -1 to wound results in 0 combined modifier
 - A wound modifier of +1 changes a 4+ to wound into a 3+ to wound
 - A wound modifier of -1 changes a 3+ to wound into a 4+ to wound
+- A weapon wounding on 2+ with +1 modifier stays at 2+ (cannot be better than 2+)
+- A weapon normally wounding on 5+ with -1 modifier (making it 6+) and critical wound threshold 3+ uses the 3+ threshold
 
 ### 3. Save Roll
 
