@@ -487,11 +487,11 @@ where
 - $h$ is the defender's Invulnerable Save stat
 
 ## Critical Hits and Critical Wounds
-In Warhammer 40k, certain hit and wound rolls are considered "critical" based on specific thresholds. By default, an unmodified roll of 6 is a critical hit or critical wound. However, some abilities can change these thresholds.
+In Warhammer 40k, certain hit and wound rolls are considered "critical" based on specific thresholds. By default, an unmodified roll of 6 is a critical hit or critical wound. However, some abilities can change these thresholds. The valid range for critical thresholds is 2-6 (since a roll of 1 always fails, and 6 is the maximum result on a standard die).
 
-A critical hit threshold determines which hit roll results are considered critical hits. For example, if a weapon has a critical hit threshold of 5+, then rolls of 5 or 6 are critical hits.
+A critical hit threshold determines which hit roll results are considered critical hits. For example, if a weapon has a critical hit threshold of 5+, then rolls of 5 or 6 are critical hits. Rolls that meet or exceed the critical hit threshold automatically succeed as hits, regardless of the weapon skill requirement.
 
-Similarly, a critical wound threshold determines which wound roll results are considered critical wounds.
+Similarly, a critical wound threshold determines which wound roll results are considered critical wounds. Rolls that meet or exceed the critical wound threshold automatically succeed as wounds.
 
 The probability of rolling a critical hit or critical wound can be calculated as:
 
