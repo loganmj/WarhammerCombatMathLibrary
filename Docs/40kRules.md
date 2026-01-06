@@ -48,6 +48,10 @@ When a model attacks, it rolls dice equal to its Attacks characteristic. Each di
 - An unmodified roll of 1 always fails
 - An unmodified roll of 6 always succeeds
 - Critical hits occur when the roll meets or exceeds the critical hit threshold (default is 6)
+- **Critical Hit Threshold**: When a unit has an ability that modifies the critical hit threshold (e.g., critical hits on 5+), hit rolls at or above that threshold automatically succeed and count as critical hits
+  - These rolls always succeed regardless of the weapon skill requirement
+  - They trigger critical hit abilities like Lethal Hits and Sustained Hits
+  - The critical hit threshold is based on unmodified die rolls and is not affected by hit modifiers
 
 **Hit Modifiers:**
 Some abilities add to or subtract from the hit success threshold. Both attackers and defenders can have hit modifiers that affect the hit roll:
@@ -214,10 +218,13 @@ Various abilities allow rerolling dice:
 ### Critical Thresholds
 
 Critical hits and wounds normally occur on unmodified rolls of 6, but some abilities modify these thresholds:
-- **Critical Hit Threshold**: The roll value (or higher) needed for a critical hit
-- **Critical Wound Threshold**: The roll value (or higher) needed for a critical wound
+- **Critical Hit Threshold**: The roll value (or higher) needed for a critical hit. Critically important: rolls that meet or exceed this threshold **automatically succeed as hits** and count as critical hits, triggering abilities like Lethal Hits and Sustained Hits. For example, a critical hit threshold of 5+ means rolls of 5 and 6 automatically hit and are critical hits.
+- **Critical Wound Threshold**: The roll value (or higher) needed for a critical wound. For example, a critical wound threshold of 5+ means rolls of 5 and 6 are critical wounds.
 
-For example, a critical hit threshold of 5+ means rolls of 5 and 6 are critical hits.
+**Important Notes:**
+- Critical hit/wound thresholds are based on **unmodified die rolls** and are not affected by hit/wound modifiers
+- When a critical hit threshold is lower than the normal hit threshold (e.g., critical hits on 5+ with WS 4+), the critical hit threshold takes precedence for those rolls, causing them to automatically succeed
+- This is similar to how the Anti X+ ability works for wound rolls
 
 ### Anti X+
 
