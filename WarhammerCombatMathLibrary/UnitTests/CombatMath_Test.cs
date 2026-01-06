@@ -3634,7 +3634,7 @@ namespace UnitTests
         /// - Critical Wound on 3+ (better than normal wound threshold)
         /// - Strength 4 vs Toughness 5 (wounds on 5+, but critical wounds on 3+)
         /// </summary>
-        public static readonly AttackerDTO ATTACKER_ANTI_3_PLUS_BETTER_THRESHOLD = new()
+        public static readonly AttackerDTO ATTACKER_CRITICAL_WOUND_3_PLUS_BETTER_THRESHOLD = new()
         {
             NumberOfModels = 1,
             WeaponFlatAttacks = 6,
