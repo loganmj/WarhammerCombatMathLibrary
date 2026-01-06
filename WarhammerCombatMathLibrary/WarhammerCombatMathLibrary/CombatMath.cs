@@ -174,7 +174,10 @@ namespace WarhammerCombatMathLibrary
 
         /// <summary>
         /// Gets the base probability of hit roll success of the attacker.
-        /// This takes into account the attacker's weapon skill and any hit modifiers.
+        /// This takes into account the attacker's weapon skill, any hit modifiers, and critical hit threshold.
+        /// If the attacker has a critical hit threshold, hit rolls at or above that threshold automatically succeed.
+        /// Hit modifiers are applied to the normal hit threshold, but not to the critical hit threshold (which is based on unmodified rolls).
+        /// The final threshold used is whichever gives the higher probability of success (lower threshold number).
         /// </summary>
         /// <param name="attacker">The attacker data object</param>
         /// <param name="hitModifier">The combined hit modifier to apply to the hit threshold</param>
@@ -192,9 +195,19 @@ namespace WarhammerCombatMathLibrary
             // Positive modifiers make it easier to hit (lower threshold), negative modifiers make it harder (higher threshold)
             var adjustedWeaponSkill = attacker.WeaponSkill - hitModifier;
 
+            // Determine the final hit threshold to use
+            // If the attacker has a valid critical hit threshold, compare it with the adjusted weapon skill
+            // and use whichever gives the better (lower) threshold
+            // Critical hit threshold causes those rolls to automatically succeed (like Anti for wounds)
+            // Note: Critical hit threshold is NOT modified by hit modifiers (it's based on unmodified die rolls)
+            // No valid critical hit threshold means we just use the adjusted weapon skill
+            int finalHitThreshold = IsValidThreshold(attacker.CriticalHitThreshold)
+                ? Math.Min(adjustedWeaponSkill, attacker.CriticalHitThreshold)
+                : adjustedWeaponSkill;
+
             // Account for the fact that the smallest possible result on the die is considered an automatic failure,
             // and should not count as part of the success threshold
-            var hitSuccessThreshold = adjustedWeaponSkill == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : adjustedWeaponSkill;
+            var hitSuccessThreshold = finalHitThreshold == AUTOMATIC_FAIL_RESULT ? AUTOMATIC_FAIL_RESULT + 1 : finalHitThreshold;
             return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, GetNumberOfSuccessfulResults(hitSuccessThreshold));
         }
 
@@ -207,7 +220,7 @@ namespace WarhammerCombatMathLibrary
         private static double GetProbabilityOfCriticalHit(AttackerDTO attacker)
         {
             // If critical hit threshold is out of bounds, return base result
-            if (attacker.CriticalHitThreshold <= 1 || attacker.CriticalHitThreshold >= 7)
+            if (!IsValidThreshold(attacker.CriticalHitThreshold))
             {
                 return Statistics.GetProbabilityOfSuccess(POSSIBLE_RESULTS_SIX_SIDED_DIE, 1);
             }

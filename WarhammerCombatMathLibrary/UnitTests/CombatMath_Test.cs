@@ -659,6 +659,372 @@ namespace UnitTests
 
         #endregion
 
+        #region Unit Tests - GetProbabilityOfHit() - Critical Hit Threshold
+
+        /// <summary>
+        /// Tests that CriticalHitThreshold of 6+ (default) does not change behavior
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_CriticalHitThreshold6Plus_NoChange()
+        {
+            // WS3+ normally = 4/6 = 0.6667
+            // Critical hit threshold of 6+ should not change hit probability
+            var expected = 0.6667;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 3,
+                CriticalHitThreshold = 6
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests that CriticalHitThreshold of 5+ causes 5+ to auto-succeed as hits
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_CriticalHitThreshold5Plus_WithWS4Plus()
+        {
+            // WS4+ (threshold 4) normally = 3/6 = 0.5
+            // Critical hit threshold of 5+ (threshold 5) means rolls of 5+ auto-succeed = 2/6 = 0.3333
+            // The implementation uses the better (lower) threshold, so WS4+ threshold of 4 is used
+            // Hit probability should be 0.5
+            var expected = 0.5;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 4,
+                CriticalHitThreshold = 5
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests that CriticalHitThreshold of 5+ improves hit probability when it's better than weapon skill
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_CriticalHitThreshold5Plus_BetterThanWS()
+        {
+            // WS6+ normally = 1/6 = 0.1667
+            // Critical hit threshold of 5+ means rolls of 5+ auto-succeed = 2/6 = 0.3333
+            // Should use the better threshold (5+)
+            var expected = 0.3333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 6,
+                CriticalHitThreshold = 5
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests that CriticalHitThreshold of 4+ significantly improves hit probability
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_CriticalHitThreshold4Plus()
+        {
+            // WS5+ normally = 2/6 = 0.3333
+            // Critical hit threshold of 4+ means rolls of 4+ auto-succeed = 3/6 = 0.5
+            // Should use the better threshold (4+)
+            var expected = 0.5;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 5,
+                CriticalHitThreshold = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests that CriticalHitThreshold of 3+ greatly improves hit probability
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_CriticalHitThreshold3Plus()
+        {
+            // WS6+ normally = 1/6 = 0.1667
+            // Critical hit threshold of 3+ means rolls of 3+ auto-succeed = 4/6 = 0.6667
+            // Should use the better threshold (3+)
+            var expected = 0.6667;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 6,
+                CriticalHitThreshold = 3
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests that CriticalHitThreshold of 2+ maximizes hit probability (except for 1s which always fail)
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_CriticalHitThreshold2Plus()
+        {
+            // WS5+ normally = 2/6 = 0.3333
+            // Critical hit threshold of 2+ means rolls of 2+ auto-succeed = 5/6 = 0.8333
+            // Should use the better threshold (2+)
+            var expected = 0.8333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 5,
+                CriticalHitThreshold = 2
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests that invalid CriticalHitThreshold values (0, 1, 7+) are ignored
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_CriticalHitThreshold_InvalidValues()
+        {
+            // WS4+ = 3/6 = 0.5
+            var expected = 0.5;
+            
+            // Test with threshold of 0 (invalid)
+            var attacker0 = new AttackerDTO()
+            {
+                WeaponSkill = 4,
+                CriticalHitThreshold = 0
+            };
+            Assert.AreEqual(expected, Math.Round(CombatMath.GetProbabilityOfHit(attacker0), 4));
+
+            // Test with threshold of 1 (invalid)
+            var attacker1 = new AttackerDTO()
+            {
+                WeaponSkill = 4,
+                CriticalHitThreshold = 1
+            };
+            Assert.AreEqual(expected, Math.Round(CombatMath.GetProbabilityOfHit(attacker1), 4));
+
+            // Test with threshold of 7 (invalid)
+            var attacker7 = new AttackerDTO()
+            {
+                WeaponSkill = 4,
+                CriticalHitThreshold = 7
+            };
+            Assert.AreEqual(expected, Math.Round(CombatMath.GetProbabilityOfHit(attacker7), 4));
+        }
+
+        /// <summary>
+        /// Tests CriticalHitThreshold with positive hit modifier
+        /// Critical hit threshold is not affected by modifiers (based on unmodified rolls)
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_CriticalHitThreshold5Plus_WithHitModifierPlus1()
+        {
+            // WS5+ with +1 modifier = 4+ = 3/6 = 0.5
+            // Critical hit threshold of 5+ (unmodified) = 2/6 = 0.3333
+            // Should use the better threshold (modified WS at 4+)
+            var expected = 0.5;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 5,
+                HitModifier = 1,
+                CriticalHitThreshold = 5
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests CriticalHitThreshold with negative hit modifier where critical threshold becomes better
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_CriticalHitThreshold4Plus_WithHitModifierMinus1()
+        {
+            // WS4+ with -1 modifier = 5+ = 2/6 = 0.3333
+            // Critical hit threshold of 4+ (unmodified) = 3/6 = 0.5
+            // Should use the better threshold (critical hit at 4+)
+            var expected = 0.5;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 4,
+                HitModifier = -1,
+                CriticalHitThreshold = 4
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests CriticalHitThreshold with defender hit modifier
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHit_CriticalHitThreshold5Plus_WithDefenderHitModifier()
+        {
+            // WS4+ with defender -1 modifier = 5+ = 2/6 = 0.3333
+            // Critical hit threshold of 5+ (unmodified) = 2/6 = 0.3333
+            // Both are equal, should get 0.3333
+            var expected = 0.3333;
+            var attacker = new AttackerDTO()
+            {
+                WeaponSkill = 4,
+                CriticalHitThreshold = 5
+            };
+            var defender = new DefenderDTO()
+            {
+                HitModifier = -1
+            };
+
+            var actual = Math.Round(CombatMath.GetProbabilityOfHit(attacker, defender), 4);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests that CriticalHitThreshold works with Lethal Hits
+        /// Critical hits from the threshold should trigger Lethal Hits
+        /// </summary>
+        [TestMethod]
+        public void GetProbabilityOfHitAndWound_CriticalHitThreshold5Plus_WithLethalHits()
+        {
+            var attacker = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 10,
+                WeaponSkill = 6,  // WS6+ (threshold 6) normally would be very poor (1/6 = 0.1667)
+                CriticalHitThreshold = 5,  // Critical threshold 5 is better, so 5+ auto-succeeds (2/6 = 0.3333)
+                WeaponHasLethalHits = true,
+                WeaponStrength = 4
+            };
+            var defender = new DefenderDTO()
+            {
+                NumberOfModels = 5,
+                Toughness = 4,
+                ArmorSave = 3,
+                Wounds = 2
+            };
+
+            // With critical hit threshold of 5+ being better than WS6+:
+            // - Hit probability = 2/6 = 0.3333 (using critical threshold)
+            // - Of those, rolls of 5 and 6 are both critical hits (2/6 of all rolls) and trigger Lethal Hits
+            // - Since all hits come from the critical threshold range, all hits are critical and trigger Lethal Hits
+            var result = CombatMath.GetProbabilityOfHitAndWound(attacker, defender);
+
+            // Verify the calculation produces a valid result
+            Assert.IsTrue(result >= 0 && result <= 1, $"Probability should be between 0 and 1, got {result}");
+            
+            // The result should be better than without critical hit threshold
+            var attackerWithoutCritThreshold = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 10,
+                WeaponSkill = 6,
+                CriticalHitThreshold = 6,  // Default
+                WeaponHasLethalHits = true,
+                WeaponStrength = 4
+            };
+            var resultWithout = CombatMath.GetProbabilityOfHitAndWound(attackerWithoutCritThreshold, defender);
+            
+            Assert.IsTrue(result >= resultWithout, 
+                $"Critical hit threshold 5+ should improve or maintain probability. With: {result:F4}, Without: {resultWithout:F4}");
+        }
+
+        /// <summary>
+        /// Tests that CriticalHitThreshold works with Sustained Hits
+        /// </summary>
+        [TestMethod]
+        public void GetMeanHits_CriticalHitThreshold5Plus_WithSustainedHits()
+        {
+            var attackerWithCritThreshold = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 10,
+                WeaponSkill = 6,  // Poor WS
+                CriticalHitThreshold = 5,  // But critical on 5+
+                WeaponHasSustainedHits = true,
+                WeaponSustainedHitsMultiplier = 1
+            };
+
+            var attackerWithoutCritThreshold = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 10,
+                WeaponSkill = 6,
+                CriticalHitThreshold = 6,  // Default
+                WeaponHasSustainedHits = true,
+                WeaponSustainedHitsMultiplier = 1
+            };
+
+            var meanWithCrit = CombatMath.GetMeanHits(attackerWithCritThreshold);
+            var meanWithoutCrit = CombatMath.GetMeanHits(attackerWithoutCritThreshold);
+
+            // With critical threshold 5+, should get more hits due to sustained hits triggering more often
+            Assert.IsTrue(meanWithCrit > meanWithoutCrit,
+                $"Critical hit threshold 5+ should increase mean hits with Sustained Hits. With: {meanWithCrit:F4}, Without: {meanWithoutCrit:F4}");
+        }
+
+        /// <summary>
+        /// Tests that CriticalHitThreshold increases damage output
+        /// </summary>
+        [TestMethod]
+        public void GetMeanDamage_CriticalHitThreshold4Plus_IncreasedDamage()
+        {
+            var attackerWithCritThreshold = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 10,
+                WeaponSkill = 6,  // Poor WS (6+)
+                CriticalHitThreshold = 4,  // But critical on 4+ (much better)
+                WeaponStrength = 4,
+                WeaponArmorPierce = 0,
+                WeaponFlatDamage = 2
+            };
+
+            var attackerWithoutCritThreshold = new AttackerDTO()
+            {
+                NumberOfModels = 1,
+                WeaponFlatAttacks = 10,
+                WeaponSkill = 6,
+                CriticalHitThreshold = 6,
+                WeaponStrength = 4,
+                WeaponArmorPierce = 0,
+                WeaponFlatDamage = 2
+            };
+
+            var defender = new DefenderDTO()
+            {
+                NumberOfModels = 10,
+                Toughness = 4,
+                ArmorSave = 3,
+                Wounds = 2
+            };
+
+            var damageWithCrit = CombatMath.GetMeanDamage(attackerWithCritThreshold, defender);
+            var damageWithoutCrit = CombatMath.GetMeanDamage(attackerWithoutCritThreshold, defender);
+
+            // Critical hit threshold should significantly increase damage
+            Assert.IsTrue(damageWithCrit > damageWithoutCrit,
+                $"Critical hit threshold 4+ should increase mean damage. With: {damageWithCrit:F4}, Without: {damageWithoutCrit:F4}");
+            
+            // Should be at least 50% more damage with 4+ vs 6+ critical threshold
+            var percentIncrease = (damageWithCrit - damageWithoutCrit) / damageWithoutCrit;
+            Assert.IsTrue(percentIncrease > 0.5,
+                $"Critical hit threshold 4+ should increase damage by >50%. Actual: {percentIncrease * 100:F2}%");
+        }
+
+        #endregion
+
         #region Unit Tests - GetProbabilityOfHitAndWound() - Wound Modifiers
 
         /// <summary>
